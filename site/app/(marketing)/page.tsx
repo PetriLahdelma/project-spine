@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { TerminalMock } from "../components/terminal-mock";
 import { InstallCommand } from "../components/install-command";
+import { HeroWordmark } from "../components/hero-wordmark";
 
 async function fetchStars(): Promise<number | null> {
   try {
@@ -147,43 +148,52 @@ export default async function Home() {
   const stars = await fetchStars();
   return (
     <main className="landing">
-      {/* Hero */}
-      <section className="hero-v2">
-        <p className="hero-v2__eyebrow">v0.9.0 alpha · now with Figma tokens import</p>
-        <h1>
-          The context layer your coding agents are missing.
-        </h1>
-        <p className="hero-v2__lede">
-          Compile your brief, repo, and design tokens into AGENTS.md,
-          CLAUDE.md, and copilot-instructions from one deterministic source.
-          With drift detection that fails CI before it fails trust.
-        </p>
-        <div className="hero-v2__ctas">
-          <Link href="/login?next=/workspaces/new" className="btn-primary">
-            Create a workspace
-          </Link>
-          <a
-            href="https://github.com/PetriLahdelma/project-spine"
-            className="btn-secondary"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <GitHubIcon />
-            View on GitHub
-            {typeof stars === "number" && stars > 0 ? (
-              <span className="btn-secondary__count">
-                <StarIcon />
-                {stars.toLocaleString()}
-              </span>
-            ) : null}
-          </a>
-        </div>
-        <div className="hero-v2__install">
-          <InstallCommand />
-          <p className="hero-v2__install-caption">
-            CLI is MIT-licensed and runs fully offline. Node 20+. Workspace
-            features are opt-in.
+      {/* Poster hero */}
+      <section className="poster-hero">
+        <div className="poster-hero__inner">
+          <p className="poster-hero__eyebrow">v0.9.0 alpha · now with Figma tokens import</p>
+          <HeroWordmark line1="PROJECT" line2="SPINE" />
+          <p className="poster-hero__tagline">
+            The context layer your coding agents are missing.
           </p>
+        </div>
+      </section>
+
+      {/* Hero content band */}
+      <section className="hero-band">
+        <div className="hero-band__inner">
+          <p className="hero-band__lede">
+            Compile your brief, repo, and design tokens into AGENTS.md,
+            CLAUDE.md, and copilot-instructions from one deterministic source.
+            With drift detection that fails CI before it fails trust.
+          </p>
+          <div className="hero-band__ctas">
+            <Link href="/login?next=/workspaces/new" className="btn-primary">
+              Create a workspace
+            </Link>
+            <a
+              href="https://github.com/PetriLahdelma/project-spine"
+              className="btn-secondary"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <GitHubIcon />
+              View on GitHub
+              {typeof stars === "number" && stars > 0 ? (
+                <span className="btn-secondary__count">
+                  <StarIcon />
+                  {stars.toLocaleString()}
+                </span>
+              ) : null}
+            </a>
+          </div>
+          <div className="hero-band__install">
+            <InstallCommand />
+            <p className="hero-band__install-caption">
+              CLI is MIT-licensed and runs fully offline. Node 20+. Workspace
+              features are opt-in.
+            </p>
+          </div>
         </div>
       </section>
 

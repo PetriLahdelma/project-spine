@@ -508,45 +508,93 @@ main.landing {
   max-width: 560px;
 }
 
-/* ---- Hero (restrained) ----------------------------------------- */
-.hero-v2 {
-  max-width: 1040px;
-  margin: 0 auto;
-  padding: 112px 24px 56px;
+/* ---- Poster hero (brand) --------------------------------------- */
+:root {
+  --poster-blue: #1e9bff;
+  --poster-pink: #ff79de;
+  --poster-ink: #0a0f1a;
 }
-.hero-v2__eyebrow {
+.poster-hero {
+  position: relative;
+  background: var(--poster-blue);
+  padding: 72px 24px 96px;
+  overflow: hidden;
+  border-bottom: 4px solid var(--poster-ink);
+}
+.poster-hero::before {
+  /* scattered stars across the blue field, softer than inside the shadow */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 12% 18%, rgba(255, 255, 255, 0.7), transparent 60%),
+    radial-gradient(1px 1px at 84% 22%, rgba(255, 255, 255, 0.55), transparent 60%),
+    radial-gradient(1.3px 1.3px at 62% 14%, rgba(255, 255, 255, 0.6), transparent 60%),
+    radial-gradient(1px 1px at 8% 72%, rgba(255, 255, 255, 0.5), transparent 60%),
+    radial-gradient(1.2px 1.2px at 30% 88%, rgba(255, 255, 255, 0.6), transparent 60%),
+    radial-gradient(1px 1px at 90% 80%, rgba(255, 255, 255, 0.55), transparent 60%),
+    radial-gradient(1px 1px at 50% 46%, rgba(255, 255, 255, 0.4), transparent 60%),
+    radial-gradient(1.4px 1.4px at 22% 42%, rgba(255, 255, 255, 0.5), transparent 60%),
+    radial-gradient(1px 1px at 74% 56%, rgba(255, 255, 255, 0.55), transparent 60%);
+  pointer-events: none;
+}
+.poster-hero__inner {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.poster-hero__eyebrow {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 12px;
-  letter-spacing: 0.06em;
-  color: var(--ink-muted);
-  margin: 0 0 20px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--poster-ink);
+  margin: 0 0 24px;
+  opacity: 0.85;
 }
-.hero-v2 h1 {
-  font-size: clamp(34px, 4.8vw, 52px);
-  line-height: 1.08;
-  letter-spacing: -0.025em;
-  font-weight: 600;
-  margin: 0 0 20px;
-  max-width: 820px;
-  color: var(--ink);
+.hero-wordmark {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 420px;
+  font-style: italic;
 }
-.hero-v2__lede {
+.poster-hero__tagline {
+  margin: 24px 0 0;
+  max-width: 680px;
+  font-size: clamp(18px, 2.2vw, 24px);
+  line-height: 1.35;
+  color: var(--poster-ink);
+  font-weight: 500;
+}
+
+/* ---- Hero content band (below the poster) ---------------------- */
+.hero-band {
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+  padding: 64px 24px 80px;
+}
+.hero-band__inner {
+  max-width: 1040px;
+  margin: 0 auto;
+}
+.hero-band__lede {
   font-size: clamp(16px, 1.6vw, 18px);
   line-height: 1.55;
   color: var(--ink-soft);
   max-width: 620px;
   margin: 0 0 28px;
 }
-.hero-v2__ctas {
+.hero-band__ctas {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+  margin-bottom: 40px;
 }
-.hero-v2__install {
-  margin-top: 40px;
+.hero-band__install {
   max-width: 560px;
 }
-.hero-v2__install-caption {
+.hero-band__install-caption {
   margin: 14px 0 0;
   font-size: 13px;
   color: var(--ink-muted);
