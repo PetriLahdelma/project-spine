@@ -3,15 +3,18 @@ import { resolve, join } from "node:path";
 import { analyzeRepo } from "../analyzer/index.js";
 import { parseBriefFromFile } from "../brief/parse.js";
 import { parseDesignFromFile } from "../design/parse.js";
+import { parseTokensFromFile, tokensIngestToDesignRules, mergeDesignRules } from "../design/tokens.js";
 import { compileSpine } from "../compiler/compile.js";
 import { getTemplate } from "../templates/registry.js";
 import { buildManifest, sha256OfFile } from "../compiler/manifest.js";
+import type { DesignRules } from "../model/design-rules.js";
 import { ExportManifest, type FileFingerprint } from "../model/export-manifest.js";
 import type { SpineModel } from "../model/spine.js";
 
 export type DriftKind =
   | "input:brief"
   | "input:design"
+  | "input:tokens"
   | "input:template"
   | "input:repo-profile"
   | "spine:hash"
@@ -90,9 +93,17 @@ export async function checkDrift(opts: CheckOptions): Promise<DriftReport> {
   if (designPath && !(await exists(designPath))) {
     throw new Error(`design-rules referenced by manifest is missing: ${designPath}`);
   }
+  const tokensPath = stored.inputs.tokensPath ? resolve(root, stored.inputs.tokensPath) : null;
+  if (tokensPath && !(await exists(tokensPath))) {
+    throw new Error(`tokens file referenced by manifest is missing: ${tokensPath}`);
+  }
 
   const [brief, repo] = await Promise.all([parseBriefFromFile(briefPath), analyzeRepo(root)]);
-  const design = designPath ? await parseDesignFromFile(designPath) : null;
+  const designFromFile: DesignRules | null = designPath ? await parseDesignFromFile(designPath) : null;
+  const designFromTokens: DesignRules | null = tokensPath
+    ? tokensIngestToDesignRules(await parseTokensFromFile(tokensPath))
+    : null;
+  const design = mergeDesignRules(designFromFile, designFromTokens);
   const template = stored.inputs.templateName
     ? (await getTemplate(stored.inputs.templateName)).manifest
     : null;
@@ -105,16 +116,19 @@ export async function checkDrift(opts: CheckOptions): Promise<DriftReport> {
     now,
   });
 
+  const tokensSha256 = tokensPath ? await sha256OfFile(tokensPath) : null;
   const currentManifest = buildManifest({
     spine: currentSpine,
     brief,
     briefPath,
     repo,
-    design,
+    // Keep design hash scoped to the file-based design only; tokens changes
+    // surface through tokensSha256 so we don't double-report.
+    design: designFromFile,
     designPath,
+    tokensPath,
+    tokensSha256,
     template,
-    // exports will be re-fingerprinted below; pass empty for now, we populate
-    // the per-file comparison against disk separately
     exports: [],
     repoRoot: root,
     now,
@@ -130,6 +144,20 @@ export async function checkDrift(opts: CheckOptions): Promise<DriftReport> {
       stored: stored.inputs.briefSha256,
       current: currentManifest.inputs.briefSha256,
       detail: "brief.md changed since last compile.",
+    });
+  }
+  const storedTokensSha = stored.inputs.tokensSha256 ?? null;
+  if ((currentManifest.inputs.tokensSha256 ?? null) !== storedTokensSha) {
+    items.push({
+      kind: "input:tokens",
+      path: stored.inputs.tokensPath ?? null,
+      stored: storedTokensSha,
+      current: currentManifest.inputs.tokensSha256 ?? null,
+      detail: stored.inputs.tokensPath
+        ? "design tokens file changed since last compile."
+        : currentManifest.inputs.tokensSha256
+          ? "a tokens file was added since last compile."
+          : "the tokens file used at last compile is no longer configured.",
     });
   }
   if (currentManifest.inputs.designSha256 !== stored.inputs.designSha256) {

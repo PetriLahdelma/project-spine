@@ -12,6 +12,8 @@ export const InputFingerprint = z.object({
   briefSha256: z.string(),
   designPath: z.string().nullable(),
   designSha256: z.string().nullable(),
+  tokensPath: z.string().nullable().optional(),
+  tokensSha256: z.string().nullable().optional(),
   templateName: z.string().nullable(),
   templateSha256: z.string().nullable(),
   repoProfileSha256: z.string(),

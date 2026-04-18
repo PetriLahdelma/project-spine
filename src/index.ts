@@ -6,6 +6,13 @@ export type { TemplateManifest, ResolvedTemplate } from "./templates/model.js";
 export { analyzeRepo } from "./analyzer/index.js";
 export { parseBrief, parseBriefFromFile } from "./brief/parse.js";
 export { parseDesign, parseDesignFromFile } from "./design/parse.js";
+export {
+  parseTokens,
+  parseTokensFromFile,
+  tokensIngestToDesignRules,
+  mergeDesignRules,
+} from "./design/tokens.js";
+export type { TokensIngest, Token, TokenFormat } from "./design/tokens.js";
 export { compileSpine } from "./compiler/compile.js";
 export { listTemplates, getTemplate, templatesRoot } from "./templates/registry.js";
 export { renderArchitectureSummary } from "./reporters/architecture-summary.js";

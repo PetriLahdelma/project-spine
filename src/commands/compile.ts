@@ -4,13 +4,14 @@ import { resolve, join } from "node:path";
 import { analyzeRepo } from "../analyzer/index.js";
 import { parseBriefFromFile } from "../brief/parse.js";
 import { parseDesignFromFile } from "../design/parse.js";
+import { parseTokensFromFile, tokensIngestToDesignRules, mergeDesignRules } from "../design/tokens.js";
 import { compileSpine } from "../compiler/compile.js";
 import { renderArchitectureSummary } from "../reporters/architecture-summary.js";
 import { renderBriefSummary } from "../reporters/brief-summary.js";
 import { renderWarningsJson } from "../reporters/warnings.js";
 import { writeAllExports } from "../exporters/index.js";
 import { getTemplate } from "../templates/registry.js";
-import { buildManifest } from "../compiler/manifest.js";
+import { buildManifest, sha256OfFile } from "../compiler/manifest.js";
 import { resolveLlmConfig } from "../llm/index.js";
 import { enrichRationaleIntro } from "../llm/enrich.js";
 
@@ -25,6 +26,11 @@ export default defineCommand({
     brief: { type: "string", description: "Path to brief.md", required: true },
     repo: { type: "string", description: "Path to repo root", default: "." },
     design: { type: "string", description: "Optional path to design-rules.md", required: false },
+    tokens: {
+      type: "string",
+      description: "Optional path to a design tokens JSON file (DTCG or Tokens Studio format). Merges with --design if both are given.",
+      required: false,
+    },
     template: { type: "string", description: "Preset name", required: false },
     out: { type: "string", description: "Output directory (relative to repo)", default: ".project-spine" },
     name: { type: "string", description: "Project name override", required: false },
@@ -45,10 +51,13 @@ export default defineCommand({
     const root = resolve(process.cwd(), args.repo);
     const briefPath = resolve(process.cwd(), args.brief);
     const designPath = args.design ? resolve(process.cwd(), args.design) : null;
+    const tokensPath = args.tokens ? resolve(process.cwd(), args.tokens) : null;
     const failOn = parseFailOn(args["fail-on"]);
 
     const [brief, repo] = await Promise.all([parseBriefFromFile(briefPath), analyzeRepo(root)]);
-    const design = designPath ? await parseDesignFromFile(designPath) : null;
+    const designFromFile = designPath ? await parseDesignFromFile(designPath) : null;
+    const designFromTokens = tokensPath ? tokensIngestToDesignRules(await parseTokensFromFile(tokensPath)) : null;
+    const design = mergeDesignRules(designFromFile, designFromTokens);
     const template = args.template ? (await getTemplate(args.template)).manifest : null;
 
     const spine = compileSpine({
@@ -103,13 +112,19 @@ export default defineCommand({
       ...(rationaleIntro !== undefined && { extras: { rationaleIntroParagraph: rationaleIntro } }),
     });
 
+    const tokensSha256 = tokensPath ? await sha256OfFile(tokensPath) : null;
     const manifest = buildManifest({
       spine,
       brief,
       briefPath,
       repo,
-      design,
+      // Only hash the file-based design for the manifest's designSha256 so
+      // that a tokens-file edit triggers `input:tokens` drift rather than
+      // double-firing `input:design` as well.
+      design: designFromFile,
       designPath,
+      tokensPath,
+      tokensSha256,
       template,
       exports: fingerprints,
       repoRoot: root,

@@ -62,8 +62,10 @@ Requires Node ≥ 20.
 # 1. scaffold a brief from a preset
 spine init --template saas-marketing
 
-# 2. compile brief + repo (+ optional template) into spine.json and exports
+# 2. compile brief + repo (+ optional template + optional tokens) into spine.json and exports
 spine compile --brief ./brief.md --repo . --template saas-marketing
+# or with a Figma / Tokens Studio JSON export:
+spine compile --brief ./brief.md --repo . --tokens ./tokens.json
 
 # 3. regenerate a subset without recompiling
 spine export --targets claude,copilot

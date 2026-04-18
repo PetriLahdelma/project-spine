@@ -66,6 +66,14 @@ spine compile --brief ./brief.md --repo . --template <template-name>
 
 (Omit `--template` if you skipped Step 1.)
 
+If the user has a design-tokens export from Figma or Tokens Studio, pass it in too — tokens are merged into the design rules so agents know the brand palette and spacing scale:
+
+```bash
+spine compile --brief ./brief.md --repo . --tokens ./tokens.json
+```
+
+The parser auto-detects DTCG (`$value`/`$type`) and Tokens Studio (`value`/`type`) formats. Aliases like `{color.primary}` resolve across the file. See `spine compile --help` for all input flags.
+
 ## Step 5 — read the output summary
 
 The compile prints a summary. The three things that matter:

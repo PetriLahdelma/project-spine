@@ -32,9 +32,11 @@ The command prints a summary with three counters and writes `drift-report.md` + 
 
 ### Input drift
 
-One or more of: `brief.md`, `design-rules.md`, repo profile, or the spine hash itself changed.
+One or more of: `brief.md`, `design-rules.md`, `tokens.json`, repo profile, or the spine hash itself changed.
 
-**Fix:** `spine compile --brief ./brief.md --repo .` (add the same `--template` the project uses). This regenerates all exports from the new inputs.
+**Fix:** `spine compile --brief ./brief.md --repo .` (add the same `--template`, `--design`, or `--tokens` the project uses). This regenerates all exports from the new inputs.
+
+The `[input:tokens]` drift kind fires specifically when the design tokens JSON file (DTCG or Tokens Studio) changed — typical when the design team re-exports from Figma.
 
 ### Export hand-edits
 

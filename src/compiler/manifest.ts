@@ -42,6 +42,8 @@ export function buildManifest(params: {
   repo: RepoProfile;
   design: DesignRules | null;
   designPath: string | null;
+  tokensPath?: string | null;
+  tokensSha256?: string | null;
   template: TemplateManifest | null;
   exports: FileFingerprint[];
   repoRoot: string;
@@ -67,6 +69,8 @@ export function buildManifest(params: {
       briefSha256: sha256OfObject(briefPayload),
       designPath: params.designPath ? toRepoRelative(params.designPath, params.repoRoot) : null,
       designSha256: designPayload ? sha256OfObject(designPayload) : null,
+      tokensPath: params.tokensPath ? toRepoRelative(params.tokensPath, params.repoRoot) : null,
+      tokensSha256: params.tokensSha256 ?? null,
       templateName: templatePayload ? templatePayload.name : null,
       templateSha256: templatePayload ? sha256OfObject(templatePayload) : null,
       repoProfileSha256: sha256OfObject(repoPayload),
