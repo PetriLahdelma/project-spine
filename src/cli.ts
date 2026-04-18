@@ -5,7 +5,7 @@ import { printBanner, TAGLINE } from "./ui/banner.js";
 const main = defineCommand({
   meta: {
     name: "spine",
-    version: "0.7.2-alpha.0",
+    version: "0.8.0-alpha.0",
     description: `Project Spine — ${TAGLINE}.`,
   },
   subCommands: {

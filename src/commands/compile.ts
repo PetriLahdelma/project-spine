@@ -11,6 +11,8 @@ import { renderWarningsJson } from "../reporters/warnings.js";
 import { writeAllExports } from "../exporters/index.js";
 import { getTemplate } from "../templates/registry.js";
 import { buildManifest } from "../compiler/manifest.js";
+import { resolveLlmConfig } from "../llm/index.js";
+import { enrichRationaleIntro } from "../llm/enrich.js";
 
 type FailOn = "never" | "info" | "warn" | "error";
 
@@ -31,6 +33,12 @@ export default defineCommand({
       type: "string",
       description: "Exit non-zero if any warning meets this severity: never | info | warn | error",
       default: "never",
+    },
+    enrich: {
+      type: "boolean",
+      description:
+        "Opt-in LLM enrichment of prose artefacts (rationale intro). Requires ANTHROPIC_API_KEY. Never load-bearing — deterministic output is preserved on any failure.",
+      default: false,
     },
   },
   async run({ args }) {
@@ -65,9 +73,34 @@ export default defineCommand({
       writeFile(join(exportsDir, "architecture-summary.md"), renderArchitectureSummary(repo), "utf8"),
     ]);
 
+    // Optional LLM enrichment. Opt-in via --enrich; requires an API key in env.
+    // Skipped silently if the key is missing so the compile command stays
+    // offline-safe. Enrichment failures fall back to the deterministic output.
+    const llmCfg = args.enrich ? resolveLlmConfig() : null;
+    let rationaleIntro: string | undefined;
+    let enrichmentStatus = "disabled";
+    if (args.enrich && !llmCfg) {
+      enrichmentStatus = "no ANTHROPIC_API_KEY — skipped";
+    } else if (llmCfg) {
+      const res = await enrichRationaleIntro({
+        baseline: "",
+        projectName: spine.metadata.name,
+        goals: spine.goals.map((g) => g.text),
+        audience: spine.audience.map((a) => a.text),
+        cfg: llmCfg,
+      });
+      if (res.enriched) {
+        rationaleIntro = res.text;
+        enrichmentStatus = `enriched (${res.scrubbedHits} secrets scrubbed)`;
+      } else {
+        enrichmentStatus = "attempted, fell back to deterministic";
+      }
+    }
+
     const { written: exportedFiles, fingerprints } = await writeAllExports(spine, {
       repoRoot: root,
       outDir,
+      ...(rationaleIntro !== undefined && { extras: { rationaleIntroParagraph: rationaleIntro } }),
     });
 
     const manifest = buildManifest({
@@ -93,6 +126,7 @@ export default defineCommand({
     console.log(`  constraints:  ${spine.constraints.length}`);
     console.log(`  qa rules:     ${spine.qaGuardrails.length}`);
     console.log(`  warnings:     ${warnSummary}`);
+    if (args.enrich) console.log(`  enrichment:   ${enrichmentStatus}`);
     console.log("");
     console.log(`wrote ${exportedFiles.length + 7} files under ${outDir} and repo root.`);
 

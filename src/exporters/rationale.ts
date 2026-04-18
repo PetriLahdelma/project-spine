@@ -1,14 +1,27 @@
 import type { SpineModel } from "../model/spine.js";
 import { renderHeader, section } from "./shared.js";
 
+export type RationaleExtras = {
+  /** Optional intro paragraph rendered between the header and the first section. */
+  introParagraph?: string;
+};
+
 /**
  * Client-facing rationale. Translates the compiled spine into prose a non-technical
  * stakeholder can read. No inline rule traces — keep it narrative. Everything
  * here is derived from brief + repo + design, so content is honest by construction.
+ *
+ * `extras.introParagraph` is the one LLM-friendly slot — callers who want to pass
+ * enriched prose can inject it here. The default (no extras) renders identically
+ * to the offline build.
  */
-export function renderRationale(spine: SpineModel): string {
+export function renderRationale(spine: SpineModel, extras: RationaleExtras = {}): string {
   const lines: string[] = [];
   lines.push(...renderHeader(spine, `${spine.metadata.name} — Project rationale`, "Why the project is set up this way. Shareable with clients and non-technical stakeholders."));
+
+  if (extras.introParagraph && extras.introParagraph.trim().length > 0) {
+    lines.push(extras.introParagraph.trim(), "");
+  }
 
   lines.push(...section("What we are building", spine.goals.length > 0
     ? spine.goals.map((g) => `- ${g.text}`)

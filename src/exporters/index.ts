@@ -38,7 +38,12 @@ export const ALL_TARGETS: ExportTarget[] = [
 
 export type RenderedExports = Record<ExportTarget, string>;
 
-export function renderAllExports(spine: SpineModel): RenderedExports {
+export type RenderExtras = {
+  /** Optional LLM-enriched rationale intro paragraph. */
+  rationaleIntroParagraph?: string;
+};
+
+export function renderAllExports(spine: SpineModel, extras: RenderExtras = {}): RenderedExports {
   return {
     agents: renderAgentsMd(spine),
     claude: renderClaudeMd(spine),
@@ -48,7 +53,9 @@ export function renderAllExports(spine: SpineModel): RenderedExports {
     components: renderComponentPlan(spine),
     qa: renderQaGuardrails(spine),
     backlog: renderSprint1Backlog(spine),
-    rationale: renderRationale(spine),
+    rationale: renderRationale(spine, {
+      ...(extras.rationaleIntroParagraph !== undefined && { introParagraph: extras.rationaleIntroParagraph }),
+    }),
   };
 }
 
@@ -56,6 +63,7 @@ export type WriteOptions = {
   repoRoot: string;
   outDir: string; // absolute path to .project-spine/
   targets?: ExportTarget[];
+  extras?: RenderExtras;
 };
 
 /**
@@ -71,7 +79,7 @@ export async function writeAllExports(
   opts: WriteOptions
 ): Promise<{ written: string[]; fingerprints: FileFingerprint[] }> {
   const targets = opts.targets ?? ALL_TARGETS;
-  const rendered = renderAllExports(spine);
+  const rendered = renderAllExports(spine, opts.extras ?? {});
   const exportsDir = join(opts.outDir, "exports");
   await mkdir(exportsDir, { recursive: true });
 
