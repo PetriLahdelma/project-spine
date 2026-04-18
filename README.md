@@ -1,4 +1,27 @@
+```
+██████╗ ██████╗  ██████╗      ██╗███████╗ ██████╗████████╗
+██╔══██╗██╔══██╗██╔═══██╗     ██║██╔════╝██╔════╝╚══██╔══╝
+██████╔╝██████╔╝██║   ██║     ██║█████╗  ██║        ██║
+██╔═══╝ ██╔══██╗██║   ██║██   ██║██╔══╝  ██║        ██║
+██║     ██║  ██║╚██████╔╝╚█████╔╝███████╗╚██████╗   ██║
+╚═╝     ╚═╝  ╚═╝ ╚═════╝  ╚════╝ ╚══════╝ ╚═════╝   ╚═╝
+     ███████╗██████╗ ██╗███╗   ██╗███████╗
+     ██╔════╝██╔══██╗██║████╗  ██║██╔════╝
+     ███████╗██████╔╝██║██╔██╗ ██║█████╗
+     ╚════██║██╔═══╝ ██║██║╚██╗██║██╔══╝
+     ███████║██║     ██║██║ ╚████║███████╗
+     ╚══════╝╚═╝     ╚═╝╚═╝  ╚═══╝╚══════╝
+     the missing context layer for software delivery
+```
+
 # Project Spine
+
+[![CI](https://github.com/PetriLahdelma/project-spine/actions/workflows/ci.yml/badge.svg)](https://github.com/PetriLahdelma/project-spine/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+[![Node.js](https://img.shields.io/badge/node-%E2%89%A520-43853d)](./package.json)
+[![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6)](./tsconfig.json)
+[![Status](https://img.shields.io/badge/status-pre--alpha-orange)](./PRD.md)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](./CONTRIBUTING.md)
 
 **A context compiler for software projects.**
 

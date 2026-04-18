@@ -2,6 +2,7 @@ import { defineCommand } from "citty";
 import { mkdir, writeFile, access, readFile, copyFile } from "node:fs/promises";
 import { join } from "node:path";
 import { getTemplate } from "../templates/registry.js";
+import { printBanner } from "../ui/banner.js";
 
 const defaultBrief = `---
 name: ""
@@ -44,6 +45,7 @@ export default defineCommand({
     force: { type: "boolean", description: "Overwrite existing brief.md", default: false },
   },
   async run({ args }) {
+    printBanner();
     const root = join(process.cwd(), args.cwd);
     const spineDir = join(root, ".project-spine");
     const briefPath = join(root, "brief.md");
