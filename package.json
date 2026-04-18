@@ -1,5 +1,5 @@
 {
-  "name": "@project-spine/cli",
+  "name": "project-spine",
   "version": "0.1.0-alpha.0",
   "description": "Context compiler for software projects. Turns brief + repo + design inputs into a repo-native operating layer.",
   "type": "module",
@@ -70,6 +70,7 @@
     "vitest": "^2.1.0"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "tag": "next"
   }
 }

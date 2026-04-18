@@ -734,7 +734,7 @@ v0.1 is ready when all of the following are true, verified on 3 fixture repos an
 - [ ] 3 case studies documented (input brief, compile output, what was kept/edited/discarded).
 - [ ] `warnings.json` produces actionable items on all 3 test repos.
 - [ ] Human reviewer (Petri + 1 external dev) would keep ≥60% of output files unmodified.
-- [ ] CLI is installed globally via `npm i -g @project-spine/cli`.
+- [ ] CLI is installed globally via `npm i -g project-spine@next`.
 - [ ] MIT-licensed public repo with README, PRD, and sample outputs.
 
 ---

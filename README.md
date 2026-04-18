@@ -41,8 +41,8 @@ The gap isn't more AI. It's a repo-native, drift-aware compiler that turns actua
 ## Install
 
 ```bash
-# once the package is on npm (pending)
-npm install -g @project-spine/cli
+# from npm (alpha — @latest and @next both point here until we ship stable)
+npm install -g project-spine@next
 
 # today: from source
 git clone https://github.com/PetriLahdelma/project-spine.git
