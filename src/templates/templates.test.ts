@@ -11,8 +11,11 @@ const repoRoot = resolve(__dirname, "..", "..");
 describe("template registry", () => {
   it("lists all 4 bundled templates", async () => {
     const all = await listTemplates();
-    const names = all.map((t) => t.manifest.name).sort();
-    expect(names).toEqual(["app-dashboard", "design-system", "docs-portal", "saas-marketing"]);
+    const bundledNames = all
+      .filter((t) => t.source === "bundled")
+      .map((t) => t.manifest.name)
+      .sort();
+    expect(bundledNames).toEqual(["app-dashboard", "design-system", "docs-portal", "saas-marketing"]);
   });
 
   it("each template manifest validates and has a brief", async () => {
