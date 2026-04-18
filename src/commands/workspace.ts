@@ -1,6 +1,6 @@
 import { defineCommand } from "citty";
 import { apiFetch, ApiError } from "../cli-client/api.js";
-import { readConfig, writeConfig } from "../cli-client/config.js";
+import { readConfig, resolveActiveWorkspace, resolveToken, writeConfig } from "../cli-client/config.js";
 
 type WorkspaceSummary = {
   slug: string;
@@ -119,7 +119,7 @@ const invite = defineCommand({
   async run({ args }) {
     await requireAuth();
     const cfg = await readConfig();
-    const workspace = args.workspace ?? cfg.activeWorkspace;
+    const workspace = args.workspace ?? resolveActiveWorkspace(cfg);
     if (!workspace) {
       console.error("no active workspace. run `spine workspace switch <slug>` or pass --workspace.");
       process.exit(1);
@@ -159,7 +159,7 @@ const members = defineCommand({
   async run({ args }) {
     await requireAuth();
     const cfg = await readConfig();
-    const workspace = args.workspace ?? cfg.activeWorkspace;
+    const workspace = args.workspace ?? resolveActiveWorkspace(cfg);
     if (!workspace) {
       console.error("no active workspace.");
       process.exit(1);
@@ -193,8 +193,8 @@ export default defineCommand({
 
 async function requireAuth(): Promise<void> {
   const cfg = await readConfig();
-  if (!cfg.auth?.token) {
-    console.error("not signed in. run `spine login` first.");
+  if (!resolveToken(cfg)) {
+    console.error("not signed in. run `spine login` first, or set SPINE_API_TOKEN.");
     process.exit(1);
   }
 }

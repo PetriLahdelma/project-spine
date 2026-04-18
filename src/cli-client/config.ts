@@ -67,6 +67,20 @@ export function resolveApiUrl(cfg: Config): string {
   return cfg.apiUrl.replace(/\/$/, "");
 }
 
+/** Return the effective bearer token — SPINE_API_TOKEN env beats stored config. */
+export function resolveToken(cfg: Config): string | null {
+  const envToken = process.env["SPINE_API_TOKEN"];
+  if (envToken && envToken.trim().length > 0) return envToken.trim();
+  return cfg.auth?.token ?? null;
+}
+
+/** Return the effective active workspace — SPINE_WORKSPACE env beats stored config. */
+export function resolveActiveWorkspace(cfg: Config): string | null {
+  const envWs = process.env["SPINE_WORKSPACE"];
+  if (envWs && envWs.trim().length > 0) return envWs.trim();
+  return cfg.activeWorkspace;
+}
+
 export async function clearAuth(): Promise<void> {
   const cfg = await readConfig();
   await writeConfig({ ...cfg, auth: null, activeWorkspace: null });

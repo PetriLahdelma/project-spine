@@ -1,4 +1,4 @@
-import { readConfig, resolveApiUrl, type Config } from "./config.js";
+import { readConfig, resolveApiUrl, resolveToken, type Config } from "./config.js";
 
 export class ApiError extends Error {
   constructor(
@@ -42,7 +42,7 @@ export async function apiFetchWithConfig<T = unknown>(
     Accept: "application/json",
   };
   if (opts.body !== undefined) headers["Content-Type"] = "application/json";
-  const token = opts.token === undefined ? cfg.auth?.token : opts.token;
+  const token = opts.token === undefined ? resolveToken(cfg) : opts.token;
   if (token) headers["Authorization"] = `Bearer ${token}`;
 
   const controller = new AbortController();

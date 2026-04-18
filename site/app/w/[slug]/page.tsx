@@ -12,6 +12,8 @@ import {
   workspaces,
 } from "@/db/schema";
 import { getWebSessionUser } from "@/lib/web-auth";
+import { listInvitesAction } from "./actions";
+import { InvitePanel } from "./invite-panel";
 
 export const dynamic = "force-dynamic";
 
@@ -109,6 +111,8 @@ export default async function WorkspacePage({
 
   const accent = data.ws.brandColor && /^#[0-9a-fA-F]{6}$/.test(data.ws.brandColor) ? data.ws.brandColor : "#ff4fb4";
   const canManage = data.ws.role === "owner" || data.ws.role === "admin";
+
+  const initialInvites = canManage ? await listInvitesAction(data.ws.slug) : [];
 
   return (
     <main style={{ maxWidth: 880, margin: "0 auto", padding: "48px 24px 96px" }}>
@@ -226,16 +230,21 @@ export default async function WorkspacePage({
       </Grid>
 
       {canManage ? (
-        <Panel title="Invite a teammate">
-          <p style={{ color: "var(--ink-soft)", fontSize: 14 }}>
-            Generate an invite link from the CLI:
-          </p>
-          <pre style={code}>
-            <span style={{ color: accent }}>$ </span>spine workspace invite --role member
-            {"\n"}
-            <span style={{ color: "var(--ink-muted)" }}># prints a URL; share it with the person you want to add</span>
-          </pre>
-        </Panel>
+        <InvitePanel
+          workspaceSlug={data.ws.slug}
+          accent={accent}
+          initialInvites={
+            Array.isArray(initialInvites)
+              ? initialInvites.map((i) => ({
+                  ...i,
+                  expiresAt: new Date(i.expiresAt),
+                  acceptedAt: i.acceptedAt ? new Date(i.acceptedAt) : null,
+                  revokedAt: i.revokedAt ? new Date(i.revokedAt) : null,
+                  createdAt: new Date(i.createdAt),
+                }))
+              : []
+          }
+        />
       ) : null}
     </main>
   );
