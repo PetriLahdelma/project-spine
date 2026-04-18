@@ -768,9 +768,9 @@ main.landing {
 
 /* ---- Section tail (link below a content block) ----------------- */
 .section-tail {
-  margin-top: 72px;
-  padding-top: 32px;
-  border-top: 1px solid var(--line);
+  margin-top: 48px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--line);
   font-size: 14px;
 }
 .section-tail a {
