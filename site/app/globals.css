@@ -688,7 +688,8 @@ main.landing {
   gap: 10px;
   flex-wrap: wrap;
   justify-content: center;
-  margin-bottom: 40px;
+  margin-top: 32px;
+  margin-bottom: 0;
 }
 .hero-band__install {
   width: 100%;
