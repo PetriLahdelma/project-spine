@@ -1,11 +1,15 @@
 import Link from "next/link";
+import { HeaderLogo } from "./header-logo";
 
 export function SiteFooter() {
   return (
     <footer className="site-footer">
       <div className="site-footer__inner">
         <div className="site-footer__brand">
-          <strong>Project Spine</strong>
+          <Link href="/" className="site-footer__brand-lockup" aria-label="Project Spine home">
+            <HeaderLogo />
+            <strong>Project Spine</strong>
+          </Link>
           <span>
             Context compiler for software projects. Deterministic, drift-aware,
             portable across coding agents.
@@ -54,9 +58,10 @@ export function SiteFooter() {
           </ul>
         </div>
       </div>
+
       <div className="site-footer__legal">
         <span>© {new Date().getFullYear()} Petri Lahdelma · Project Spine</span>
-        <span>Built in the open. No tracking on this site.</span>
+        <span>Built in the open. Cookieless, anonymized analytics only.</span>
       </div>
     </footer>
   );

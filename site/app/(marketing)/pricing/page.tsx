@@ -4,6 +4,15 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Pricing · Project Spine",
   description: "Free CLI. Free hosted workspace during alpha. Clear pricing honestly.",
+  alternates: { canonical: "https://projectspine.dev/pricing" },
+  openGraph: {
+    type: "article",
+    url: "https://projectspine.dev/pricing",
+    siteName: "Project Spine",
+    title: "Pricing · Project Spine",
+    description: "Free CLI. Free hosted workspace during alpha. Clear pricing honestly.",
+    images: [{ url: "/banner.png", width: 2400, height: 1500, alt: "Project Spine" }],
+  },
 };
 
 export default function PricingPage() {

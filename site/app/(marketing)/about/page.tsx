@@ -4,6 +4,15 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "About · Project Spine",
   description: "Who makes Project Spine, why it exists, and how to get in touch.",
+  alternates: { canonical: "https://projectspine.dev/about" },
+  openGraph: {
+    type: "article",
+    url: "https://projectspine.dev/about",
+    siteName: "Project Spine",
+    title: "About · Project Spine",
+    description: "Who makes Project Spine, why it exists, and how to get in touch.",
+    images: [{ url: "/banner.png", width: 2400, height: 1500, alt: "Project Spine" }],
+  },
 };
 
 export default function AboutPage() {

@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Privacy · Project Spine",
   description: "What Project Spine stores, why, and how to get it deleted.",
+  alternates: { canonical: "https://projectspine.dev/privacy" },
 };
 
 export default function PrivacyPage() {

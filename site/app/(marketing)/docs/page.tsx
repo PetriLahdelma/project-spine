@@ -1,9 +1,19 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { TerminalMock } from "../../components/terminal-mock";
 
 export const metadata: Metadata = {
   title: "Documentation · Project Spine",
   description: "Guides, references, and sample outputs for Project Spine.",
+  alternates: { canonical: "https://projectspine.dev/docs" },
+  openGraph: {
+    type: "article",
+    url: "https://projectspine.dev/docs",
+    siteName: "Project Spine",
+    title: "Documentation · Project Spine",
+    description: "Guides, references, and sample outputs for Project Spine.",
+    images: [{ url: "/banner.png", width: 2400, height: 1500, alt: "Project Spine" }],
+  },
 };
 
 const DOCS: Array<{ title: string; href: string; blurb: string; external?: boolean }> = [
@@ -108,25 +118,26 @@ export default function DocsPage() {
         Every CLI command ships with <code>--help</code>. For the full list,
         run:
       </p>
-      <pre>
-{`$ spine --help
-
-USAGE  spine [command] [options]
-
-COMMANDS
-  init        Scaffold a brief and .project-spine/ directory
-  compile     Compile brief + repo (+ optional design + tokens + template)
-  inspect     Analyse any repo without a brief
-  export      Regenerate a subset of exports without recompiling
-  template    List / show / save / pull templates
-  explain     Print the fix for a given warning id
-  drift       Check for drift · push to workspace
-  login       Start device-flow auth against projectspine.dev
-  whoami      Show current user + active workspace
-  workspace   Create / list / switch / invite / members
-  publish     Publish a rationale to /r/<slug>
-  rationale   List / revoke published rationales`}
-      </pre>
+      <TerminalMock title="~ — spine --help">
+        <span className="tok-prompt">$ </span>
+        <span className="tok-command">spine --help</span>
+        {"\n\n"}
+        <span className="tok-dim">USAGE</span>  spine [command] [options]
+        {"\n\n"}
+        <span className="tok-dim">COMMANDS</span>
+        {"\n  "}<span className="tok-accent">init</span>        Scaffold a brief and .project-spine/ directory
+        {"\n  "}<span className="tok-accent">compile</span>     Compile brief + repo (+ optional design + tokens + template)
+        {"\n  "}<span className="tok-accent">inspect</span>     Analyse any repo without a brief
+        {"\n  "}<span className="tok-accent">export</span>      Regenerate a subset of exports without recompiling
+        {"\n  "}<span className="tok-accent">template</span>    List / show / save / pull templates
+        {"\n  "}<span className="tok-accent">explain</span>     Print the fix for a given warning id
+        {"\n  "}<span className="tok-accent">drift</span>       Check for drift · push to workspace
+        {"\n  "}<span className="tok-accent">login</span>       Start device-flow auth against projectspine.dev
+        {"\n  "}<span className="tok-accent">whoami</span>      Show current user + active workspace
+        {"\n  "}<span className="tok-accent">workspace</span>   Create / list / switch / invite / members
+        {"\n  "}<span className="tok-accent">publish</span>     Publish a rationale to /r/&lt;slug&gt;
+        {"\n  "}<span className="tok-accent">rationale</span>   List / revoke published rationales
+      </TerminalMock>
 
       <div className="cta-row">
         <a href="https://github.com/PetriLahdelma/project-spine">GitHub →</a>

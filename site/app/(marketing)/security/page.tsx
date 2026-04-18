@@ -4,6 +4,15 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Security · Project Spine",
   description: "How Project Spine handles your code, your tokens, and your data.",
+  alternates: { canonical: "https://projectspine.dev/security" },
+  openGraph: {
+    type: "article",
+    url: "https://projectspine.dev/security",
+    siteName: "Project Spine",
+    title: "Security · Project Spine",
+    description: "How Project Spine handles your code, your tokens, and your data.",
+    images: [{ url: "/banner.png", width: 2400, height: 1500, alt: "Project Spine" }],
+  },
 };
 
 export default function SecurityPage() {

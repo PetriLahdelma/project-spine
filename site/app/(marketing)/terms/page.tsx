@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Terms · Project Spine",
   description: "Project Spine terms of use for the hosted service.",
+  alternates: { canonical: "https://projectspine.dev/terms" },
 };
 
 export default function TermsPage() {

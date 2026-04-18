@@ -9,7 +9,7 @@ type Props = {
   initialInvites: InviteRow[];
 };
 
-export function InvitePanel({ workspaceSlug, accent, initialInvites }: Props) {
+export function InvitePanel({ workspaceSlug, initialInvites }: Props) {
   const [invites, setInvites] = useState<InviteRow[]>(initialInvites);
   const [role, setRole] = useState<"member" | "admin">("member");
   const [fresh, setFresh] = useState<{ url: string; code: string } | null>(null);
@@ -28,7 +28,6 @@ export function InvitePanel({ workspaceSlug, accent, initialInvites }: Props) {
         return;
       }
       setFresh(res);
-      // Optimistically add to pending list
       setInvites((prev) => [
         {
           code: res.code,
@@ -61,116 +60,54 @@ export function InvitePanel({ workspaceSlug, accent, initialInvites }: Props) {
     try {
       await navigator.clipboard.writeText(url);
     } catch {
-      // ignore — the value is still selectable in the input
+      /* input remains selectable */
     }
   }
 
   return (
-    <section
-      style={{
-        border: "1px solid var(--line)",
-        borderRadius: 10,
-        padding: 20,
-        background: "#fff",
-        marginBottom: 24,
-      }}
-    >
-      <h2
-        style={{
-          fontSize: 13,
-          letterSpacing: "0.08em",
-          textTransform: "uppercase",
-          color: "var(--ink-muted)",
-          margin: "0 0 16px",
-          fontWeight: 600,
-        }}
-      >
-        Invite a teammate
-      </h2>
+    <section className="ws-panel ws-panel--invite">
+      <header className="ws-panel__header">
+        <h2 className="ws-panel__title">Invite a teammate</h2>
+      </header>
 
-      <form onSubmit={onCreate} style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
-        <label style={{ fontSize: 13, color: "var(--ink-muted)", display: "flex", alignItems: "center", gap: 8 }}>
-          Role:
+      <form onSubmit={onCreate} className="ws-invite__form">
+        <label className="ws-invite__field">
+          <span>Role</span>
           <select
             value={role}
             onChange={(e) => setRole(e.target.value as "member" | "admin")}
             disabled={isPending}
-            style={{
-              padding: "6px 10px",
-              border: "1px solid var(--line)",
-              borderRadius: 6,
-              fontSize: 14,
-            }}
+            className="ws-invite__select"
           >
             <option value="member">member</option>
             <option value="admin">admin</option>
           </select>
         </label>
-        <button
-          type="submit"
-          disabled={isPending}
-          style={{
-            padding: "8px 14px",
-            borderRadius: 6,
-            border: 0,
-            background: "var(--ink)",
-            color: "#fff",
-            fontSize: 14,
-            fontWeight: 600,
-            cursor: isPending ? "default" : "pointer",
-            opacity: isPending ? 0.6 : 1,
-          }}
-        >
+        <button type="submit" disabled={isPending} className="ws-invite__submit">
           {isPending ? "Creating…" : "Create invite link"}
         </button>
       </form>
 
       {error && (
-        <p role="alert" style={{ marginTop: 12, fontSize: 13, color: "#b91c1c" }}>
+        <p role="alert" className="ws-invite__error">
           {errorMessage(error)}
         </p>
       )}
 
       {fresh && (
-        <div
-          style={{
-            marginTop: 16,
-            padding: "12px 14px",
-            background: "#f1f5fa",
-            border: `1px solid ${accent}`,
-            borderRadius: 8,
-          }}
-        >
-          <p style={{ margin: "0 0 8px", fontSize: 13, color: "var(--ink-soft)" }}>
-            Share this link. The invitee signs in via GitHub and is auto-added.
+        <div className="ws-invite__fresh">
+          <p className="ws-invite__fresh-msg">
+            Share this link. The invitee signs in via GitHub and joins automatically.
           </p>
-          <div style={{ display: "flex", gap: 8 }}>
+          <div className="ws-invite__copy-row">
             <input
               readOnly
               value={fresh.url}
               onFocus={(e) => e.currentTarget.select()}
-              style={{
-                flex: 1,
-                padding: "8px 10px",
-                fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
-                fontSize: 13,
-                border: "1px solid var(--line)",
-                borderRadius: 6,
-                background: "#fff",
-              }}
+              className="ws-invite__url"
+              aria-label="Invite URL"
             />
-            <button
-              type="button"
-              onClick={() => copyUrl(fresh.url)}
-              style={{
-                padding: "8px 12px",
-                borderRadius: 6,
-                border: "1px solid var(--line)",
-                background: "#fff",
-                fontSize: 13,
-                cursor: "pointer",
-              }}
-            >
+            <button type="button" onClick={() => copyUrl(fresh.url)} className="ws-invite__copy">
               Copy
             </button>
           </div>
@@ -178,41 +115,22 @@ export function InvitePanel({ workspaceSlug, accent, initialInvites }: Props) {
       )}
 
       {pending.length > 0 && (
-        <div style={{ marginTop: 20 }}>
-          <h3 style={{ fontSize: 12, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--ink-muted)", margin: "0 0 8px", fontWeight: 600 }}>
-            Pending ({pending.length})
-          </h3>
-          <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+        <div className="ws-invite__pending">
+          <h3 className="ws-invite__pending-title">Pending · {pending.length}</h3>
+          <ul className="ws-rows">
             {pending.map((i) => (
-              <li
-                key={i.code}
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  padding: "8px 0",
-                  borderBottom: "1px solid var(--line)",
-                  fontSize: 14,
-                }}
-              >
-                <span>
-                  <strong>{i.role}</strong>
-                  <span style={{ color: "var(--ink-muted)", marginLeft: 8 }}>
+              <li key={i.code} className="ws-row">
+                <span className="ws-row__main">
+                  <span className={`ws-badge ws-badge--${i.role}`}>{i.role}</span>
+                  <span className="ws-row__dim">
                     expires {new Date(i.expiresAt).toLocaleDateString()}
                   </span>
                 </span>
-                <span style={{ display: "flex", gap: 8 }}>
+                <span className="ws-invite__actions">
                   <button
                     type="button"
                     onClick={() => copyUrl(i.url)}
-                    style={{
-                      padding: "4px 10px",
-                      border: "1px solid var(--line)",
-                      borderRadius: 4,
-                      background: "#fff",
-                      fontSize: 12,
-                      cursor: "pointer",
-                    }}
+                    className="ws-invite__mini"
                   >
                     Copy URL
                   </button>
@@ -220,15 +138,7 @@ export function InvitePanel({ workspaceSlug, accent, initialInvites }: Props) {
                     type="button"
                     onClick={() => onRevoke(i.code)}
                     disabled={isPending}
-                    style={{
-                      padding: "4px 10px",
-                      border: "1px solid var(--line)",
-                      borderRadius: 4,
-                      background: "#fff",
-                      fontSize: 12,
-                      cursor: "pointer",
-                      color: "#b91c1c",
-                    }}
+                    className="ws-invite__mini ws-invite__mini--danger"
                   >
                     Revoke
                   </button>
