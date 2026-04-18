@@ -6,6 +6,7 @@ import { deviceCodes } from "@/db/schema";
 import { githubAuthorizeUrl } from "@/lib/github";
 import { newDeviceCode } from "@/lib/ids";
 import { requireServerConfig } from "@/lib/config";
+import { callerIp, rateLimit } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -19,6 +20,14 @@ export const dynamic = "force-dynamic";
 export async function POST(req: Request) {
   const cfg = requireServerConfig();
   if (cfg instanceof NextResponse) return cfg;
+
+  // Per-IP limit protects against brute-forcing user_codes. A user_code is
+  // 8 characters from a 32-character alphabet (ids.ts) → ~1e12 combinations,
+  // but we harden anyway.
+  const rl = await rateLimit({ key: `auth:verify:${callerIp(req)}`, limit: 20, windowMs: 60_000 });
+  if (!rl.allowed) {
+    return redirectWithError(cfg.baseUrl, "rate-limited");
+  }
 
   const form = await req.formData().catch(() => null);
   const userCodeRaw = form?.get("code");

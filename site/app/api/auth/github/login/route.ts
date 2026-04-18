@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { randomBytes } from "node:crypto";
 import { githubAuthorizeUrl } from "@/lib/github";
 import { requireServerConfig } from "@/lib/config";
+import { callerIp, rateLimit } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -15,6 +16,11 @@ export const dynamic = "force-dynamic";
 export async function GET(req: Request) {
   const cfg = requireServerConfig();
   if (cfg instanceof NextResponse) return cfg;
+
+  const rl = await rateLimit({ key: `auth:github-login:${callerIp(req)}`, limit: 20, windowMs: 60_000 });
+  if (!rl.allowed) {
+    return NextResponse.redirect(`${cfg.baseUrl}/login?error=rate-limited`, { status: 303 });
+  }
 
   const url = new URL(req.url);
   const next = url.searchParams.get("next") ?? "/";

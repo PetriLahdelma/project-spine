@@ -47,6 +47,13 @@ The hosted service at `projectspine.dev` exists to sync templates, publish ratio
 - **GitHub OAuth client secret:** stored only in Vercel's encrypted env vars, marked sensitive so it's write-only in the dashboard.
 - **Database:** one single-tenant Neon Postgres instance in `iad1`. Row-level isolation is enforced at query time by joining on `memberships.user_id`.
 - **Secrets in flight:** a device_code is never returned to anyone except the CLI that created it; the user_code is the user-facing half of the pair and is only useful together with an active session cookie.
+- **Rate limits:** every auth endpoint is throttled per caller (fixed-window, Postgres-backed):
+  - `POST /api/auth/device` — 10/min per IP
+  - `POST /api/auth/device/poll` — 30/min per device_code
+  - `POST /api/auth/device/verify` — 20/min per IP
+  - `GET /api/auth/github/login` — 20/min per IP
+  - `GET /api/auth/github/callback` — 30/min per IP
+  Excess requests return 429 with `Retry-After`. Limiter fails open on DB errors so auth never becomes unreachable because of a rate-limiter bug.
 
 Operational details that matter to auditors:
 

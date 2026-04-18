@@ -7,6 +7,7 @@ import { exchangeCodeForToken, fetchGitHubUser } from "@/lib/github";
 import { newId } from "@/lib/ids";
 import { requireServerConfig } from "@/lib/config";
 import { createWebSession, setSessionCookie } from "@/lib/web-auth";
+import { callerIp, rateLimit } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -22,6 +23,12 @@ export const dynamic = "force-dynamic";
 export async function GET(req: Request) {
   const cfg = requireServerConfig();
   if (cfg instanceof NextResponse) return cfg;
+
+  // Defends the OAuth exchange from a thundering-herd or replay flood.
+  const rl = await rateLimit({ key: `auth:callback:${callerIp(req)}`, limit: 30, windowMs: 60_000 });
+  if (!rl.allowed) {
+    return redirect(cfg.baseUrl, "/login?error=rate-limited");
+  }
 
   const url = new URL(req.url);
   const code = url.searchParams.get("code");

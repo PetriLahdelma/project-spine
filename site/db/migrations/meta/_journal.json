@@ -29,6 +29,13 @@
       "when": 1776505058213,
       "tag": "0003_web_sessions_invites",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1776508545403,
+      "tag": "0004_rate_limits",
+      "breakpoints": true
     }
   ]
 }

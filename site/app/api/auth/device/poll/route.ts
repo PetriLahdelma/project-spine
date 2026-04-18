@@ -5,6 +5,7 @@ import { authTokens, deviceCodes } from "@/db/schema";
 import { newBearerToken, newId } from "@/lib/ids";
 import { hashToken } from "@/lib/auth";
 import { requireServerConfig } from "@/lib/config";
+import { rateLimit, rateLimitHeaders } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -27,6 +28,17 @@ export async function POST(req: Request) {
   const deviceCode = body?.device_code;
   if (!deviceCode || typeof deviceCode !== "string") {
     return NextResponse.json({ error: "bad_request", message: "missing device_code" }, { status: 400 });
+  }
+
+  // Per-device_code limit. Client's advertised interval is 5s, so 30/min gives
+  // a 2× safety margin for retries without enabling spin loops. A malicious
+  // caller forging many device_codes is handled at the /api/auth/device limit.
+  const rl = await rateLimit({ key: `auth:poll:${deviceCode}`, limit: 30, windowMs: 60_000 });
+  if (!rl.allowed) {
+    return NextResponse.json(
+      { error: "slow_down", message: "Polling too fast — respect the interval field." },
+      { status: 429, headers: rateLimitHeaders(rl) },
+    );
   }
 
   const [row] = await db

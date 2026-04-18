@@ -3,6 +3,7 @@ import { db } from "@/db";
 import { deviceCodes } from "@/db/schema";
 import { newDeviceCode, newUserCode } from "@/lib/ids";
 import { requireServerConfig } from "@/lib/config";
+import { callerIp, rateLimit, rateLimitHeaders } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -18,6 +19,14 @@ const POLL_INTERVAL_S = 5;
 export async function POST(req: Request) {
   const cfg = requireServerConfig();
   if (cfg instanceof NextResponse) return cfg;
+
+  const rl = await rateLimit({ key: `auth:device:${callerIp(req)}`, limit: 10, windowMs: 60_000 });
+  if (!rl.allowed) {
+    return NextResponse.json(
+      { error: "rate_limited", message: "Too many device-flow starts. Try again in a minute." },
+      { status: 429, headers: rateLimitHeaders(rl) },
+    );
+  }
 
   // Light payload — `label` lets the CLI name the token in the DB,
   // so a user can see "MacBook Pro" vs "CI bot" when reviewing sessions.

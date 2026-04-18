@@ -2,6 +2,7 @@ import { sql } from "drizzle-orm";
 import {
   bigint,
   boolean,
+  integer,
   jsonb,
   pgEnum,
   pgTable,
@@ -249,6 +250,17 @@ export const workspaceInvites = pgTable(
   (t) => [uniqueIndex("workspace_invites_workspace_idx").on(t.workspaceId, t.code)],
 );
 
+/**
+ * Fixed-window rate limit counters. One row per (key, windowStart) tuple.
+ * Keys are caller-defined strings like "auth:device:1.2.3.4" or "auth:poll:<device_code>".
+ * Rows older than their window get GC'd opportunistically on write.
+ */
+export const rateLimits = pgTable("rate_limits", {
+  key: text("key").primaryKey(),
+  windowStart: timestamp("window_start", { withTimezone: true }).notNull(),
+  count: integer("count").notNull().default(0),
+});
+
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 export type Workspace = typeof workspaces.$inferSelect;
@@ -266,3 +278,4 @@ export type DriftSnapshot = typeof driftSnapshots.$inferSelect;
 export type NewDriftSnapshot = typeof driftSnapshots.$inferInsert;
 export type WebSession = typeof webSessions.$inferSelect;
 export type WorkspaceInvite = typeof workspaceInvites.$inferSelect;
+export type RateLimit = typeof rateLimits.$inferSelect;
