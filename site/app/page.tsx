@@ -155,8 +155,50 @@ SMB product line within 6 weeks.
           <strong>Security by default.</strong>
           <span>
             Deterministic pipeline. No implicit network calls. No uninvited
-            uploads. Matches the #1 reason developers reject AI tools in the 2025
-            Stack Overflow survey.
+            uploads. Hosted side is hardened with per-request CSP nonces,
+            rate-limited auth, sha256 bearer-token hashes, and HSTS preload —
+            full posture in{" "}
+            <a href="https://github.com/PetriLahdelma/project-spine/blob/main/SECURITY.md">
+              SECURITY.md
+            </a>
+            .
+          </span>
+        </li>
+      </ul>
+
+      <h2>What it&apos;s not</h2>
+      <ul className="features">
+        <li>
+          <strong>Not a replacement for a real brief.</strong>
+          <span>
+            Generic input produces generic output. Spine compiles what you
+            write; it doesn&apos;t guess what you meant. A one-line brief
+            gives you a one-line <code>spine.json</code>.
+          </span>
+        </li>
+        <li>
+          <strong>Not a refactoring engine.</strong>
+          <span>
+            Spine reads your repo to detect stack and conventions. It never
+            rewrites your code. <code>AGENTS.md</code> is a contract with the
+            agent — enforcement lives in the agent and in code review, not
+            in this tool.
+          </span>
+        </li>
+        <li>
+          <strong>Not a replacement for human review.</strong>
+          <span>
+            Every compile surfaces warnings with source pointers so review is
+            faster, not skipped. If you rubber-stamp the output you get
+            rubber-stamp quality.
+          </span>
+        </li>
+        <li>
+          <strong>Not optimised for million-line monorepos yet.</strong>
+          <span>
+            First run under 30 seconds on a typical Next.js / Remix / library
+            repo. Very large trees (10k+ files) haven&apos;t been profiled;
+            expect it to work but not be fast.
           </span>
         </li>
       </ul>
@@ -182,6 +224,29 @@ SMB product line within 6 weeks.
           Sample output →
         </a>
       </div>
+
+      <section
+        aria-label="From the maintainer"
+        style={{
+          borderLeft: "3px solid var(--accent, #ff4fb4)",
+          paddingLeft: 16,
+          margin: "48px 0",
+          color: "var(--ink, #1c1b22)",
+        }}
+      >
+        <p style={{ margin: "0 0 8px", fontSize: 13, color: "var(--ink-muted, #52525b)" }}>
+          From the maintainer
+        </p>
+        <p style={{ margin: 0 }}>
+          Hi — I&apos;m Petri. Project Spine is a solo-maintainer project.
+          I&apos;m building it because the <code>AGENTS.md</code> files I kept
+          handing agents went stale the moment the brief moved, and no
+          existing tool treated that as a real problem. If you try Spine and
+          it breaks, or you hate a choice I made, email{" "}
+          <a href="mailto:support@projectspine.dev">support@projectspine.dev</a>
+          . I read every message myself.
+        </p>
+      </section>
 
       <footer>
         <p>
