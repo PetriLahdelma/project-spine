@@ -1651,6 +1651,48 @@ main.landing {
   color: var(--ink-muted);
 }
 .ws-row__meta-time { color: var(--ink-muted); }
+.ws-row__meta-label {
+  color: var(--ink-muted);
+  letter-spacing: 0.04em;
+}
+
+/* Row-level action buttons — inline with row meta */
+.ws-action {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--ink-soft);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11.5px;
+  line-height: 1.3;
+  cursor: pointer;
+  transition: border-color 120ms ease, color 120ms ease, background 120ms ease;
+}
+.ws-action:hover {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+.ws-action:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.ws-action--danger { color: #b91c1c; }
+.ws-action--danger:hover { border-color: #b91c1c; color: #b91c1c; background: #fef2f2; }
+.ws-action--done {
+  border-color: #bbf7d0;
+  color: #15803d;
+  background: #ecfdf5;
+  cursor: default;
+}
+.ws-action__error {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11.5px;
+  color: #b91c1c;
+  margin-left: 6px;
+}
 
 /* Role badges */
 .ws-badge {

@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { and, desc, eq, isNull } from "drizzle-orm";
 import { randomBytes } from "node:crypto";
 import { db } from "@/db";
-import { memberships, workspaceInvites, workspaces } from "@/db/schema";
+import { memberships, rationales, workspaceInvites, workspaces } from "@/db/schema";
 import { newId } from "@/lib/ids";
 import { getWebSessionUser } from "@/lib/web-auth";
 
@@ -101,6 +101,24 @@ export async function revokeInviteAction(
         isNull(workspaceInvites.revokedAt),
       ),
     );
+  revalidatePath(`/w/${workspaceSlug}`);
+  return { ok: true };
+}
+
+export async function revokeRationaleAction(
+  workspaceSlug: string,
+  publicSlug: string,
+): Promise<{ ok: true } | { error: string }> {
+  const auth = await requireManager(workspaceSlug);
+  if ("error" in auth) return { error: auth.error };
+
+  const result = await db
+    .update(rationales)
+    .set({ revokedAt: new Date() })
+    .where(and(eq(rationales.workspaceId, auth.workspaceId), eq(rationales.publicSlug, publicSlug), isNull(rationales.revokedAt)))
+    .returning({ publicSlug: rationales.publicSlug });
+
+  if (result.length === 0) return { error: "not_found" };
   revalidatePath(`/w/${workspaceSlug}`);
   return { ok: true };
 }
