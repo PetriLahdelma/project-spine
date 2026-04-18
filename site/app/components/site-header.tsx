@@ -7,10 +7,18 @@ import { getWebSessionUser } from "@/lib/web-auth";
 type Props = { activePath?: string };
 
 const NAV: Array<{ label: string; href: string }> = [
-  { label: "Product", href: "/product" },
   { label: "Pricing", href: "/pricing" },
   { label: "Docs", href: "/docs" },
   { label: "Changelog", href: "/changelog" },
+];
+
+const PRODUCT_MENU: Array<{ label: string; href: string; desc: string }> = [
+  { label: "Overview", href: "/product", desc: "The compile pipeline and every capability." },
+  { label: "Drift detection", href: "https://github.com/PetriLahdelma/project-spine/blob/main/docs/drift.md", desc: "sha256-backed manifest, CI-friendly exit codes." },
+  { label: "Design tokens", href: "https://github.com/PetriLahdelma/project-spine/blob/main/docs/tokens.md", desc: "DTCG and Tokens Studio JSON, alias resolution." },
+  { label: "Agent skills", href: "https://github.com/PetriLahdelma/project-spine/tree/main/skills", desc: "Six SKILL.md files for Claude Code, Codex, Cursor." },
+  { label: "Rationales", href: "/product#rationale", desc: "Branded, shareable, revocable client URLs." },
+  { label: "Security", href: "/security", desc: "CSP nonces, rate limits, hashed tokens, no tracking." },
 ];
 
 function GitHubIcon() {
@@ -46,6 +54,27 @@ export async function SiteHeader({ activePath }: Props) {
           Project Spine
         </Link>
         <nav className="site-header__nav" aria-label="Primary">
+          <div className="nav-group">
+            <Link
+              href="/product"
+              className="nav-group__trigger"
+              aria-haspopup="menu"
+              aria-current={activePath && activePath.startsWith("/product") ? "page" : undefined}
+            >
+              Product
+              <svg className="nav-group__chevron" width={10} height={10} viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M2 3.5l3 3 3-3" />
+              </svg>
+            </Link>
+            <div className="nav-group__panel" role="menu">
+              {PRODUCT_MENU.map((item) => (
+                <Link key={item.href} href={item.href} role="menuitem" className="nav-group__item">
+                  <span className="nav-group__item-label">{item.label}</span>
+                  <span className="nav-group__item-desc">{item.desc}</span>
+                </Link>
+              ))}
+            </div>
+          </div>
           {NAV.map((item) => (
             <Link
               key={item.href}

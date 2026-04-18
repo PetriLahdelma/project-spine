@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { TerminalMock } from "../components/terminal-mock";
+import { InstallCommand } from "../components/install-command";
 
 async function fetchStars(): Promise<number | null> {
   try {
@@ -177,6 +178,13 @@ export default async function Home() {
             ) : null}
           </a>
         </div>
+        <div className="hero-v2__install">
+          <InstallCommand />
+          <p className="hero-v2__install-caption">
+            CLI is MIT-licensed and runs fully offline. Node 20+. Workspace
+            features are opt-in.
+          </p>
+        </div>
       </section>
 
       {/* Terminal artifact */}
@@ -337,11 +345,11 @@ export default async function Home() {
             </ul>
           </div>
         </div>
-        <p style={{ marginTop: 40, fontSize: 14 }}>
+        <div className="section-tail">
           <a href="https://github.com/PetriLahdelma/project-spine/blob/main/docs/positioning.md">
             Read the full moat analysis →
           </a>
-        </p>
+        </div>
       </section>
 
       {/* Features — editorial list */}
