@@ -121,7 +121,8 @@ export default async function WorkspacePage({
         <span>workspace</span>{" · "}
         <span style={{ color: accent }}>{data.ws.slug}</span>
         <span style={{ float: "right" }}>
-          {user.githubLogin} · <Link href="/logout">log out</Link>
+          <Link href={`/w/${data.ws.slug}/settings`}>settings</Link> · {user.githubLogin} ·{" "}
+          <Link href="/logout">log out</Link>
         </span>
       </nav>
 
