@@ -287,6 +287,15 @@ footer a {
   border-color: var(--accent);
   color: var(--accent);
 }
+.site-header__signout {
+  font-size: 13px;
+  color: var(--ink-muted);
+  text-decoration: none;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+.site-header__signout:hover {
+  color: var(--accent);
+}
 
 .site-footer {
   border-top: 1px solid var(--line);

@@ -1,4 +1,8 @@
 import Link from "next/link";
+import { desc, eq } from "drizzle-orm";
+import { db } from "@/db";
+import { memberships, workspaces } from "@/db/schema";
+import { getWebSessionUser } from "@/lib/web-auth";
 
 type Props = { activePath?: string };
 
@@ -17,7 +21,22 @@ function GitHubIcon() {
   );
 }
 
-export function SiteHeader({ activePath }: Props) {
+async function firstWorkspaceSlug(userId: string): Promise<string | null> {
+  const [row] = await db
+    .select({ slug: workspaces.slug })
+    .from(workspaces)
+    .innerJoin(memberships, eq(memberships.workspaceId, workspaces.id))
+    .where(eq(memberships.userId, userId))
+    .orderBy(desc(workspaces.createdAt))
+    .limit(1);
+  return row?.slug ?? null;
+}
+
+export async function SiteHeader({ activePath }: Props) {
+  const user = await getWebSessionUser();
+  const wsSlug = user ? await firstWorkspaceSlug(user.id) : null;
+  const dashboardHref = wsSlug ? `/w/${wsSlug}` : "/workspaces/new";
+
   return (
     <header className="site-header">
       <div className="site-header__inner">
@@ -46,9 +65,20 @@ export function SiteHeader({ activePath }: Props) {
           >
             <GitHubIcon />
           </a>
-          <Link href="/login" className="site-header__cta">
-            Log in
-          </Link>
+          {user ? (
+            <>
+              <Link href={dashboardHref} className="site-header__cta">
+                {wsSlug ? "Dashboard" : "Create workspace"}
+              </Link>
+              <Link href="/logout" className="site-header__signout" aria-label="Log out">
+                {user.githubLogin}
+              </Link>
+            </>
+          ) : (
+            <Link href="/login" className="site-header__cta">
+              Log in
+            </Link>
+          )}
         </div>
       </div>
     </header>
