@@ -6,7 +6,7 @@ const errors: Record<string, string> = {
   "missing-code": "No code was submitted. Please enter the code shown in your terminal.",
   "unknown-code": "That code wasn't found. Check for typos or try running `spine login` again.",
   "already-used": "That code has already been used. Run `spine login` again to get a fresh one.",
-  expired: "That code expired. Codes last 15 minutes — run `spine login` again.",
+  expired: "That code expired. Codes last 15 minutes. Run `spine login` again.",
   "state-mismatch": "Something went wrong during the GitHub redirect. Please try again.",
   "bad-callback": "The GitHub callback was malformed. Please try again.",
   "oauth-exchange-failed":

@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "About — Project Spine",
+  title: "About · Project Spine",
   description: "Who makes Project Spine, why it exists, and how to get in touch.",
 };
 
@@ -15,7 +15,7 @@ export default function AboutPage() {
         <p className="lede">
           Project Spine is a solo-maintainer pre-alpha project. I&apos;m
           building it because the <code>AGENTS.md</code> files I kept handing
-          coding agents went stale the moment the brief moved — and no
+          coding agents went stale the moment the brief moved, and no
           existing tool treated that as a real problem.
         </p>
       </header>
@@ -27,8 +27,8 @@ export default function AboutPage() {
         instruction. In practice those files are generic boilerplate at worst
         and hand-written once-and-never-updated at best. Nobody tracks when
         they fall out of sync with the brief, the stack, or the design system.
-        Agencies running 15 concurrent client projects feel this most —
-        every kickoff re-invents the same scaffold, and every re-kickoff
+        Agencies running 15 concurrent client projects feel this most.
+        Every kickoff re-invents the same scaffold, and every re-kickoff
         quietly drifts.
       </p>
 
@@ -90,7 +90,7 @@ export default function AboutPage() {
           <strong>Tracking.</strong>
           <span>
             No analytics, no third-party scripts, no cookie banner theatre.
-            Check the site&apos;s CSP — it&apos;s{" "}
+            Check the site&apos;s CSP. It&apos;s{" "}
             <a href="https://github.com/PetriLahdelma/project-spine/blob/main/SECURITY.md">
               documented
             </a>

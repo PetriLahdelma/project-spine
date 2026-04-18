@@ -11,11 +11,11 @@ import "./globals.css";
 export const dynamic = "force-dynamic";
 
 const description =
-  "Project Spine turns a client brief, a repo, and optional design inputs into a repo-native operating layer — AGENTS.md, CLAUDE.md, copilot-instructions, scaffold plan, QA guardrails, and a sprint-1 backlog.";
+  "Project Spine turns a client brief, a repo, and optional design inputs into a repo-native operating layer: AGENTS.md, CLAUDE.md, copilot-instructions, scaffold plan, QA guardrails, and a sprint-1 backlog.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://projectspine.dev"),
-  title: "Project Spine — context compiler for software projects",
+  title: "Project Spine · context compiler for software projects",
   description,
   applicationName: "Project Spine",
   authors: [{ name: "Petri Lahdelma", url: "https://github.com/PetriLahdelma" }],

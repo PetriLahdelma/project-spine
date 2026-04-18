@@ -28,7 +28,7 @@ export default function Home() {
       <h1>A context compiler for software projects.</h1>
       <p className="lede">
         You already have Claude, Cursor, or Copilot. Project Spine is the
-        context layer they&apos;re missing — compile your brief, repo, and
+        context layer they&apos;re missing. It compiles your brief, repo, and
         design tokens into <code>AGENTS.md</code>, <code>CLAUDE.md</code>, and{" "}
         <code>copilot-instructions</code> from one deterministic source, with
         CI-grade drift detection so the files stay honest as the project evolves.
@@ -57,7 +57,7 @@ export default function Home() {
       <pre>
 {`# AGENTS.md
 
-**Project Spine** — Launch a marketing site for Acme Payroll's new
+**Project Spine**: Launch a marketing site for Acme Payroll's new
 SMB product line within 6 weeks.
 
 **Stack:** node-library · typescript · tests: vitest · pm: npm
@@ -65,7 +65,7 @@ SMB product line within 6 weeks.
 
 > Source of truth: .project-spine/spine.json (hash 3333f867f40d3e43).
 > Every rule below has a traceable source. Fix the upstream input
-> and rerun \`spine compile\` — don't hand-edit this file.
+> and rerun \`spine compile\`. Don't hand-edit this file.
 
 ## Repo conventions
 - TypeScript strict. Never use \`any\`; prefer \`unknown\` + narrow.
@@ -98,7 +98,7 @@ SMB product line within 6 weeks.
           <span>
             Generates <code>AGENTS.md</code>, <code>CLAUDE.md</code>, and{" "}
             <code>.github/copilot-instructions.md</code> from your actual brief
-            and detected stack — not generic boilerplate.
+            and detected stack. Not generic boilerplate.
           </span>
         </li>
         <li>
@@ -106,7 +106,7 @@ SMB product line within 6 weeks.
           <span>
             <code>export-manifest.json</code> records a sha256 of every input
             and every export. <code>spine drift check</code> flags hand-edits,
-            missing files, and input changes — CI-friendly exit codes.
+            missing files, and input changes, with CI-friendly exit codes.
           </span>
         </li>
         <li>

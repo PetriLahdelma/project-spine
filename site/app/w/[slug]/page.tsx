@@ -89,7 +89,7 @@ async function loadWorkspacePage(slug: string, userId: string) {
 export async function generateMetadata({ params }: { params: Promise<RouteParams> }): Promise<Metadata> {
   const { slug } = await params;
   return {
-    title: `${slug} — Project Spine workspace`,
+    title: `${slug} · Project Spine workspace`,
     robots: { index: false, follow: false },
   };
 }
@@ -205,7 +205,7 @@ export default async function WorkspacePage({
 
         <Panel title="Projects (drift)" count={data.projects.length}>
           {data.projects.length === 0 ? (
-            <Empty>no drift data yet — run <code>spine drift check --push</code> in CI</Empty>
+            <Empty>no drift data yet. run <code>spine drift check --push</code> in CI</Empty>
           ) : (
             <ul style={ulReset}>
               {data.projects.map((p) => (

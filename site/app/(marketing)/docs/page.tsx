@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Documentation — Project Spine",
+  title: "Documentation · Project Spine",
   description: "Guides, references, and sample outputs for Project Spine.",
 };
 
@@ -52,7 +52,7 @@ const DOCS: Array<{ title: string; href: string; blurb: string; external?: boole
   {
     title: "Sample output",
     href: "https://github.com/PetriLahdelma/project-spine/tree/main/docs/sample-output",
-    blurb: "A complete compile of the saas-marketing template — 18 files you can read end-to-end.",
+    blurb: "A complete compile of the saas-marketing template. 18 files you can read end-to-end.",
     external: true,
   },
   {
@@ -64,7 +64,7 @@ const DOCS: Array<{ title: string; href: string; blurb: string; external?: boole
   {
     title: "Field notes",
     href: "https://github.com/PetriLahdelma/project-spine/blob/main/docs/field-notes.md",
-    blurb: "Honest dogfood notes — what worked, what didn't, what we'd rebuild if we started again.",
+    blurb: "Honest dogfood notes: what worked, what didn't, what we'd rebuild if we started again.",
     external: true,
   },
   {

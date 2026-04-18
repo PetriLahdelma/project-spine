@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Changelog — Project Spine",
+  title: "Changelog · Project Spine",
   description: "Every release, pulled from GitHub. Nothing hidden.",
 };
 
@@ -95,7 +95,7 @@ export default async function ChangelogPage() {
                         month: "short",
                         day: "numeric",
                       })
-                    : "—"}
+                    : "unknown"}
                   {r.prerelease ? " · pre-release" : ""}
                 </span>
               </div>

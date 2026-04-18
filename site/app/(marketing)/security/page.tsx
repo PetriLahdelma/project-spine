@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Security — Project Spine",
+  title: "Security · Project Spine",
   description: "How Project Spine handles your code, your tokens, and your data.",
 };
 
@@ -17,8 +17,8 @@ export default function SecurityPage() {
           designed to fail safe. Full posture in{" "}
           <a href="https://github.com/PetriLahdelma/project-spine/blob/main/SECURITY.md">
             SECURITY.md
-          </a>{" "}
-          — this page is the summary.
+          </a>
+          . This page is the summary.
         </p>
       </header>
 
@@ -75,8 +75,8 @@ export default function SecurityPage() {
         <li>
           <strong>CSP with per-request nonce.</strong>
           <span>
-            <code>script-src 'self' 'nonce-&lt;fresh&gt;' 'strict-dynamic'</code>{" "}
-            — no <code>'unsafe-inline'</code> on scripts. Middleware mints a
+            <code>script-src 'self' 'nonce-&lt;fresh&gt;' 'strict-dynamic'</code>
+            , with no <code>'unsafe-inline'</code> on scripts. Middleware mints a
             fresh nonce per request; every route renders dynamically so Next
             stamps it onto its inline RSC payload scripts.
           </span>
@@ -120,7 +120,7 @@ export default function SecurityPage() {
           <strong>Your repo source.</strong>
           <span>
             The CLI runs offline for compile and drift. Workspace commands
-            upload only what you explicitly push — templates, rationales,
+            upload only what you explicitly push: templates, rationales,
             drift summaries. Never the full repo.
           </span>
         </li>
@@ -128,7 +128,7 @@ export default function SecurityPage() {
           <strong>Analytics or third-party trackers.</strong>
           <span>
             Zero. Check the site&apos;s Content-Security-Policy header in
-            devtools — <code>connect-src</code> allows{" "}
+            devtools. <code>connect-src</code> allows{" "}
             <code>&apos;self&apos;</code>,{" "}
             <code>api.github.com</code>, and{" "}
             <code>registry.npmjs.org</code>. Nothing else.
@@ -138,7 +138,7 @@ export default function SecurityPage() {
           <strong>Request bodies in logs.</strong>
           <span>
             Vercel logs access lines (IP, path, status, timestamp) only,
-            retained per Vercel&apos;s policy. Tokens never appear in logs —
+            retained per Vercel&apos;s policy. Tokens never appear in logs;
             API routes don&apos;t print auth headers.
           </span>
         </li>

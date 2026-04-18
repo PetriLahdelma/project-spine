@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Product — Project Spine",
+  title: "Product · Project Spine",
   description:
     "Compile briefs, repos, and design tokens into verifiable agent instructions. Drift-aware, portable across Claude, Cursor, and Copilot.",
 };
@@ -17,7 +17,7 @@ export default function ProductPage() {
           Project Spine reads a brief, a repo, and optional design tokens and
           writes <code>AGENTS.md</code>, <code>CLAUDE.md</code>,{" "}
           <code>.github/copilot-instructions.md</code>, a scaffold plan, QA
-          guardrails, and a sprint-1 backlog — all with source pointers back
+          guardrails, and a sprint-1 backlog. All with source pointers back
           to the inputs, all covered by a drift check you can put in CI.
         </p>
       </header>
@@ -31,7 +31,7 @@ design.md  ──┘                     sprint-1-backlog.md · rationale.md`}
       </pre>
       <p>
         Every rule in <code>spine.json</code> carries a{" "}
-        <code>source</code> pointer — <code>brief.md#section0/item3</code>,{" "}
+        <code>source</code> pointer: <code>brief.md#section0/item3</code>,{" "}
         <code>repo-profile#framework</code>,{" "}
         <code>design:tokens.json#color/primary</code>, or{" "}
         <code>inferred:&lt;reason&gt;</code>. Reviewers can audit{" "}
@@ -46,7 +46,7 @@ design.md  ──┘                     sprint-1-backlog.md · rationale.md`}
           <span>
             Generates <code>AGENTS.md</code>, <code>CLAUDE.md</code>, and{" "}
             <code>.github/copilot-instructions.md</code> from your actual brief
-            and detected stack — not generic boilerplate. Switch agents without
+            and detected stack. Not generic boilerplate. Switch agents without
             re-briefing.
           </span>
         </li>
@@ -82,7 +82,7 @@ design.md  ──┘                     sprint-1-backlog.md · rationale.md`}
             <code>saas-marketing</code>, <code>app-dashboard</code>,{" "}
             <code>design-system</code>, <code>docs-portal</code>. Each
             contributes routes, components, QA, UX, a11y, and agent rules
-            additively — and you can save your own with{" "}
+            additively, and you can save your own with{" "}
             <code>spine template save</code>.
           </span>
         </li>
@@ -120,7 +120,7 @@ design.md  ──┘                     sprint-1-backlog.md · rationale.md`}
           <span>
             Spine reads your repo to detect stack and conventions. It never
             rewrites your code. <code>AGENTS.md</code> is a contract with the
-            agent — enforcement lives in the agent and in code review.
+            agent. Enforcement lives in the agent and in code review.
           </span>
         </li>
         <li>

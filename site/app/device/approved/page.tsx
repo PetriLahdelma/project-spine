@@ -27,7 +27,7 @@ export default async function ApprovedPage({
         You&apos;re signed in as {login ?? "your GitHub account"}.
       </h1>
       <p style={{ color: "var(--ink-soft)", marginBottom: 32 }}>
-        Return to your terminal — the CLI will pick up the authorization within a few seconds
+        Return to your terminal. The CLI will pick up the authorization within a few seconds
         and print a success line.
       </p>
 
@@ -45,7 +45,7 @@ export default async function ApprovedPage({
       >
         $ spine whoami
         <br />
-        {login ? `${login} — ready to sync workspace templates.` : "signed in"}
+        {login ? `${login} · ready to sync workspace templates.` : "signed in"}
       </div>
 
       <p style={{ fontSize: 13, color: "var(--ink-muted)" }}>

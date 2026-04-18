@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Pricing — Project Spine",
+  title: "Pricing · Project Spine",
   description: "Free CLI. Free hosted workspace during alpha. Clear pricing honestly.",
 };
 
@@ -14,8 +14,8 @@ export default function PricingPage() {
         <h1>Free while we&apos;re figuring it out.</h1>
         <p className="lede">
           Project Spine is pre-alpha. The CLI is and will remain free and open
-          source under MIT. The hosted workspace is free during alpha —
-          we&apos;ll tell you before that changes, and any paid tier will only
+          source under MIT. The hosted workspace is free during alpha. We&apos;ll
+          tell you before that changes, and any paid tier will only
           exist for features that cost us money to run (hosted sync, fleet
           drift telemetry, rationale branding).
         </p>
@@ -103,7 +103,7 @@ export default function PricingPage() {
         <li>
           <strong>No feature gating of the open-source CLI.</strong>
           <span>
-            Compile, drift, templates, exports, tokens — all free. Paid tiers
+            Compile, drift, templates, exports, tokens: all free. Paid tiers
             only touch shared infrastructure, never the core pipeline.
           </span>
         </li>

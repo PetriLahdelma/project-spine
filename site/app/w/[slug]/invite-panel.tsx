@@ -142,7 +142,7 @@ export function InvitePanel({ workspaceSlug, accent, initialInvites }: Props) {
           }}
         >
           <p style={{ margin: "0 0 8px", fontSize: 13, color: "var(--ink-soft)" }}>
-            Share this link — the invitee signs in via GitHub and is auto-added.
+            Share this link. The invitee signs in via GitHub and is auto-added.
           </p>
           <div style={{ display: "flex", gap: 8 }}>
             <input

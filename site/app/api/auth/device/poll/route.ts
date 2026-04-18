@@ -36,7 +36,7 @@ export async function POST(req: Request) {
   const rl = await rateLimit({ key: `auth:poll:${deviceCode}`, limit: 30, windowMs: 60_000 });
   if (!rl.allowed) {
     return NextResponse.json(
-      { error: "slow_down", message: "Polling too fast — respect the interval field." },
+      { error: "slow_down", message: "Polling too fast. Respect the interval field." },
       { status: 429, headers: rateLimitHeaders(rl) },
     );
   }

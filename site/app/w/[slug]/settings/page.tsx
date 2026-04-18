@@ -14,7 +14,7 @@ type RouteParams = { slug: string };
 export async function generateMetadata({ params }: { params: Promise<RouteParams> }): Promise<Metadata> {
   const { slug } = await params;
   return {
-    title: `${slug} settings — Project Spine`,
+    title: `${slug} settings · Project Spine`,
     robots: { index: false, follow: false },
   };
 }
@@ -110,7 +110,7 @@ function ReadOnlyView({
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
       <Row label="Name" value={name} />
-      <Row label="Description" value={description ?? "—"} />
+      <Row label="Description" value={description ?? "not set"} />
       <Row
         label="Brand color"
         value={
@@ -137,12 +137,12 @@ function ReadOnlyView({
               {logoUrl}
             </a>
           ) : (
-            "—"
+            "not set"
           )
         }
       />
       <p style={{ fontSize: 13, color: "var(--ink-muted)", marginTop: 16 }}>
-        You're signed in as a <strong>{role}</strong> — ask the workspace owner to change any of these.
+        You're signed in as a <strong>{role}</strong>. Ask the workspace owner to change any of these.
       </p>
     </div>
   );

@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Privacy — Project Spine",
+  title: "Privacy · Project Spine",
   description: "What Project Spine stores, why, and how to get it deleted.",
 };
 
@@ -23,7 +23,7 @@ export default function PrivacyPage() {
       </div>
       <h1 style={{ fontSize: 32, letterSpacing: "-0.01em", marginBottom: 24 }}>Privacy</h1>
       <p style={{ color: "var(--ink-soft)", marginBottom: 32 }}>
-        Project Spine is a pre-alpha developer tool. This page is plain-English — the short
+        Project Spine is a pre-alpha developer tool. This page is plain-English, the short
         version of what we do with your data. If something here is unclear, email{" "}
         <a href="mailto:support@projectspine.dev">support@projectspine.dev</a>.
       </p>

@@ -33,9 +33,9 @@ async function loadRationale(publicSlug: string) {
 export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
   const { publicSlug } = await params;
   const row = await loadRationale(publicSlug);
-  if (!row) return { title: "Rationale — Project Spine" };
+  if (!row) return { title: "Rationale · Project Spine" };
   return {
-    title: `${row.title} — ${row.workspaceName}`,
+    title: `${row.title} · ${row.workspaceName}`,
     description: `Project rationale for ${row.projectName} by ${row.workspaceName}.`,
     robots: { index: false, follow: false },
   };
@@ -132,8 +132,8 @@ export default async function RationalePage({ params }: { params: Promise<Params
           Published via{" "}
           <a href="https://projectspine.dev" style={{ color: accent }}>
             Project Spine
-          </a>{" "}
-          — compiled from brief, repo, and design inputs. Revoke anytime with{" "}
+          </a>
+          , compiled from brief, repo, and design inputs. Revoke anytime with{" "}
           <code>spine rationale revoke</code>.
         </p>
       </footer>

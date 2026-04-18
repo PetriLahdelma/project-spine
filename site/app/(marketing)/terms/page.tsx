@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Terms — Project Spine",
+  title: "Terms · Project Spine",
   description: "Project Spine terms of use for the hosted service.",
 };
 
@@ -28,7 +28,7 @@ export default function TermsPage() {
         separately licensed under MIT (see the repository).
       </p>
 
-      <Section title="Status — pre-alpha">
+      <Section title="Status: pre-alpha">
         <p>
           The service is pre-alpha. Interfaces, data shapes, and pricing may change without
           notice. There is no SLA. You should not rely on the hosted service for anything
@@ -49,7 +49,7 @@ export default function TermsPage() {
       <Section title="Your content">
         <p>
           You keep ownership of the briefs, templates, design rules, rationales, and drift
-          snapshots you upload. You grant us the rights we need to run the service — storing,
+          snapshots you upload. You grant us the rights we need to run the service: storing,
           rendering, serving public rationale URLs, showing the content back to you in the web
           UI, and displaying it to other members of workspaces you authorize.
         </p>
