@@ -158,8 +158,8 @@ export default async function Home() {
           With drift detection that fails CI before it fails trust.
         </p>
         <div className="hero-v2__ctas">
-          <Link href="/docs" className="btn-primary">
-            Get started
+          <Link href="/login?next=/workspaces/new" className="btn-primary">
+            Create a workspace
           </Link>
           <a
             href="https://github.com/PetriLahdelma/project-spine"

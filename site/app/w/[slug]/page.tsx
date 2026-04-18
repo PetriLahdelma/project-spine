@@ -131,10 +131,71 @@ export default async function WorkspacePage({
         {data.ws.description ? (
           <p style={{ color: "var(--ink-muted)", margin: "6px 0 0" }}>{data.ws.description}</p>
         ) : null}
-        {sp.welcome ? (
-          <p style={{ marginTop: 12, color: accent, fontSize: 14 }}>Welcome! You just joined.</p>
-        ) : null}
       </header>
+
+      {sp.welcome ? (
+        <section
+          style={{
+            border: "1px solid var(--line)",
+            borderRadius: 10,
+            background: "#fff",
+            padding: 24,
+            marginBottom: 32,
+          }}
+        >
+          <p
+            style={{
+              fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
+              fontSize: 12,
+              letterSpacing: "0.06em",
+              color: accent,
+              margin: "0 0 10px",
+              textTransform: "uppercase",
+            }}
+          >
+            Welcome · next steps
+          </p>
+          <h2
+            style={{
+              fontSize: 20,
+              fontWeight: 600,
+              letterSpacing: "-0.015em",
+              margin: "0 0 8px",
+              textTransform: "none",
+              color: "var(--ink)",
+            }}
+          >
+            Pair your CLI to this workspace.
+          </h2>
+          <p style={{ color: "var(--ink-soft)", margin: "0 0 16px", fontSize: 15 }}>
+            Workspaces work with the Project Spine CLI. Install it, sign in, and
+            switch to{" "}
+            <code>{data.ws.slug}</code> to start pushing shared templates and
+            drift reports from this machine.
+          </p>
+          <pre
+            style={{
+              background: "var(--code-bg)",
+              color: "var(--code-ink)",
+              padding: "14px 18px",
+              borderRadius: 8,
+              fontSize: 13,
+              fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
+              lineHeight: 1.7,
+              overflow: "auto",
+              margin: 0,
+            }}
+          >
+{`npm install -g project-spine@next
+spine login
+spine workspace switch ${data.ws.slug}`}
+          </pre>
+          <p style={{ marginTop: 16, marginBottom: 0, fontSize: 13, color: "var(--ink-muted)" }}>
+            Next: invite a teammate below, or read the{" "}
+            <a href="https://github.com/PetriLahdelma/project-spine#quickstart">CLI quickstart</a>.
+          </p>
+        </section>
+      ) : null}
 
       <Grid>
         <Panel title="Members" count={data.members.length}>

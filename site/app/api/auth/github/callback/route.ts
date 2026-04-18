@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { cookies, headers as nextHeaders } from "next/headers";
 import { and, eq, isNull } from "drizzle-orm";
 import { db } from "@/db";
-import { deviceCodes, users } from "@/db/schema";
+import { deviceCodes, memberships, users } from "@/db/schema";
 import { exchangeCodeForToken, fetchGitHubUser } from "@/lib/github";
 import { newId } from "@/lib/ids";
 import { requireServerConfig } from "@/lib/config";
@@ -118,7 +118,20 @@ export async function GET(req: Request) {
   const ua = h.get("user-agent") ?? null;
   const sessionId = await createWebSession(userId, ua);
   await setSessionCookie(sessionId);
-  return redirect(cfg.baseUrl, safeNext(webNext));
+
+  // First-time users with no memberships land on the onboarding flow so
+  // signing in actually means something. Users who came here via a
+  // specific `next` (invite acceptance, deep link, etc.) keep that target.
+  const next = safeNext(webNext);
+  if (next === "/") {
+    const [hasMembership] = await db
+      .select({ id: memberships.userId })
+      .from(memberships)
+      .where(eq(memberships.userId, userId))
+      .limit(1);
+    if (!hasMembership) return redirect(cfg.baseUrl, "/workspaces/new?welcome=1");
+  }
+  return redirect(cfg.baseUrl, next);
 }
 
 function redirect(baseUrl: string, path: string): NextResponse {

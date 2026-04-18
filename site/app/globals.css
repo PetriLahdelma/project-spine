@@ -811,6 +811,88 @@ main.landing {
   max-width: 540px;
 }
 
+/* ---- Create-workspace form ------------------------------------- */
+.ws-form { display: flex; flex-direction: column; gap: 24px; }
+.ws-field { display: flex; flex-direction: column; gap: 6px; }
+.ws-field > span {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.ws-field > span em { font-style: normal; font-weight: 400; color: var(--ink-muted); }
+.ws-field > small { color: var(--ink-muted); font-size: 12.5px; }
+.ws-field input[type="text"],
+.ws-field textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 14px;
+  font-family: inherit;
+  background: #fff;
+  color: var(--ink);
+  outline: none;
+  transition: border-color 160ms ease;
+}
+.ws-field input[type="text"]:focus,
+.ws-field textarea:focus { border-color: var(--ink); }
+.ws-field textarea { resize: vertical; min-height: 60px; }
+.ws-field__prefix {
+  display: flex;
+  align-items: stretch;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+  transition: border-color 160ms ease;
+}
+.ws-field__prefix:focus-within { border-color: var(--ink); }
+.ws-field__prefix-text {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 13px;
+  color: var(--ink-muted);
+  padding: 10px 10px 10px 12px;
+  background: #fafbfd;
+  border-right: 1px solid var(--line);
+  white-space: nowrap;
+}
+.ws-field__prefix input {
+  border: 0 !important;
+  border-radius: 0 !important;
+  flex: 1;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 13px;
+}
+.ws-field__prefix input:focus { border: 0 !important; }
+.ws-field__color { display: flex; align-items: center; gap: 10px; }
+.ws-field__color input {
+  flex: 1;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 13px;
+}
+.ws-field__swatch {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  flex-shrink: 0;
+}
+.ws-form__actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-top: 8px;
+}
+.ws-form__actions button[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.ws-form__error {
+  font-size: 13.5px;
+  color: #b91c1c;
+}
+
 /* ---- Maintainer quote (plain block) ---------------------------- */
 .maintainer-quote {
   max-width: 680px;
