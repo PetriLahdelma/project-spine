@@ -1,0 +1,74 @@
+{
+  "name": "@project-spine/cli",
+  "version": "0.1.0-pre",
+  "description": "Context compiler for software projects. Turns brief + repo + design inputs into a repo-native operating layer.",
+  "type": "module",
+  "bin": {
+    "spine": "./dist/cli.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "templates",
+    "README.md",
+    "PRD.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsc -p tsconfig.json --watch",
+    "start": "node dist/cli.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src"
+  },
+  "keywords": [
+    "ai",
+    "coding-agents",
+    "agents.md",
+    "claude",
+    "copilot",
+    "cursor",
+    "context-engineering",
+    "project-kickoff",
+    "design-system",
+    "cli"
+  ],
+  "author": "Petri Lahdelma",
+  "license": "MIT",
+  "homepage": "https://github.com/PetriLahdelma/project-spine#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PetriLahdelma/project-spine.git"
+  },
+  "bugs": {
+    "url": "https://github.com/PetriLahdelma/project-spine/issues"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "citty": "^0.1.6",
+    "fast-glob": "^3.3.2",
+    "remark": "^15.0.1",
+    "remark-frontmatter": "^5.0.0",
+    "remark-parse": "^11.0.0",
+    "unified": "^11.0.5",
+    "yaml": "^2.6.1",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/mdast": "^4.0.4",
+    "@types/node": "^22.10.0",
+    "typescript": "^5.7.0",
+    "vitest": "^2.1.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -1,0 +1,36 @@
+schemaVersion: 1
+name: docs-portal
+title: Documentation portal
+description: Technical docs site with guides, API reference, search, and versioning.
+projectType: docs-portal
+
+contributes:
+  routes:
+    - "/ — Landing with quickstart CTA and top guides."
+    - "/quickstart — Minimum viable setup in under 5 minutes."
+    - "/guides — Topic index; each guide is task-oriented."
+    - "/reference — Generated API reference."
+    - "/changelog — Release notes, newest first."
+  components:
+    - "Sidebar — Nested nav with active-state highlighting and collapsible sections."
+    - "TOC — Right-rail table of contents with scroll-spy."
+    - "CodeBlock — Copy button, language label, line highlights."
+    - "Callout — Info / warning / success variants with proper semantics."
+    - "SearchBar — Instant search with keyboard-only navigation of results."
+    - "VersionSwitcher — Version-aware navigation where applicable."
+  qa:
+    - "Docs build passes on every PR; broken-link check enforced."
+    - "Search index rebuild runs on each deploy."
+    - "Every code block is copy-verified (pastes + runs without edit)."
+    - "All generated reference pages link back to source."
+  uxRules:
+    - "Guides are task-oriented, not concept-oriented; each one ends with 'Next steps' that link forward."
+    - "Landing hero contains a runnable quickstart, not marketing."
+  a11yRules:
+    - "Skip-to-content link is the first focusable element."
+    - "Code block copy buttons have an aria-label and visible focus state."
+  agentDos:
+    - "When adding a guide, cross-link it from the nearest landing / index page and the top-level guides index."
+  agentDonts:
+    - "Do not write guides as prose walls. Use headings, code blocks, and short paragraphs."
+  unsafeActions: []

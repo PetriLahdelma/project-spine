@@ -1,0 +1,41 @@
+schemaVersion: 1
+name: saas-marketing
+title: SaaS marketing site
+description: Marketing site with hero, product pages, pricing, customer stories, and compliance pages. Conversion-focused, fast, accessible.
+projectType: saas-marketing
+
+contributes:
+  routes:
+    - "/ — Home: hero, social proof, primary CTA above the fold."
+    - "/product — Core product overview and key features."
+    - "/pricing — Plans, tiers, FAQ."
+    - "/customers — Customer stories / case studies."
+    - "/security — Security posture and compliance certifications."
+    - "/legal/privacy — Privacy policy."
+    - "/legal/terms — Terms of service."
+  components:
+    - "Hero — full-width headline, sub-copy, primary + secondary CTA, optional product image."
+    - "FeatureGrid — responsive grid of feature cards with icon, title, description."
+    - "LogoStrip — customer logos row with grayscale treatment and alt text."
+    - "Testimonial — quote block with avatar, name, role, company."
+    - "PricingTable — tier cards with features list, highlight recommended tier, keyboard navigable."
+    - "FAQ — accordion with proper ARIA state."
+    - "CTABanner — full-width conversion block for mid-page and footer."
+  qa:
+    - "LCP under 2.0s on mobile (p75), CLS under 0.1, INP under 200ms."
+    - "Total transferred page weight under 250KB on /, /product, /pricing at mobile viewport."
+    - "Every CTA path tested from keyboard; no click-only interactions."
+    - "Forms validate inline and expose errors to screen readers via aria-live."
+  uxRules:
+    - "Exactly one primary CTA per page, above the fold; secondaries must visually yield."
+    - "Copy passes the Hemingway 'ops lead can skim in 30s' bar on long-form pages."
+  a11yRules:
+    - "Images decorative vs informative is explicit; informative images have real alt text."
+    - "Hero headline uses a single h1; no competing h1s on the page."
+  agentDos:
+    - "Prefer server components and static rendering for content pages; lean on revalidation for pricing."
+  agentDonts:
+    - "Do not introduce client-only JS for above-the-fold content; it blocks LCP."
+    - "Do not add third-party tracking without privacy review — note the vendor and data sent in the PR."
+  unsafeActions:
+    - "Never hardcode pricing numbers in templates; reference a single source (MDX frontmatter or CMS)."

@@ -1,0 +1,32 @@
+schemaVersion: 1
+name: design-system
+title: Design system repo
+description: Monorepo-friendly design system with tokens, primitives, Storybook, and docs. Consumed by downstream apps.
+projectType: design-system
+
+contributes:
+  routes: []
+  components:
+    - "Token schema — colors, spacing, radius, motion, typography; all values live as tokens."
+    - "Primitive set — Button, Input, Field, Select, Checkbox, Radio, Switch, Tooltip, Dialog, Toast."
+    - "Layout primitives — Stack, Inline, Grid, Box with consistent spacing scale."
+    - "Icon set — single source, tree-shakeable, accessible by default (role, title)."
+    - "Theme surfaces — light/dark/high-contrast themes wired through tokens."
+  qa:
+    - "Every primitive has at least one Storybook story covering default, hover, focus, disabled, and loading where applicable."
+    - "Visual regression (Chromatic / Playwright snapshots) runs on every PR."
+    - "Axe accessibility check passes per primitive at default and interactive states."
+    - "Bundle-size budget enforced per primitive; new primitives require a budget entry."
+  uxRules:
+    - "Props follow a consistent shape across primitives (size, tone, variant, disabled, loading)."
+    - "Primitives never embed business logic; they are purely presentational."
+  a11yRules:
+    - "Every interactive primitive exposes a focus ring by default; removal requires an explicit prop."
+    - "Labels, descriptions, and error states are composable via documented slot props."
+  agentDos:
+    - "Add a story, an axe test, and a docs entry whenever a primitive is added or changed."
+  agentDonts:
+    - "Do not introduce hardcoded colors, radii, or spacings in primitives — reference tokens only."
+    - "Do not import app-level code into the design system."
+  unsafeActions:
+    - "Never fork a token inside a primitive; update it at the token layer."

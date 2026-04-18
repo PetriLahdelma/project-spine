@@ -1,0 +1,38 @@
+schemaVersion: 1
+name: app-dashboard
+title: Product dashboard (authenticated app)
+description: Multi-role authenticated dashboard with data tables, settings, and role-gated surfaces.
+projectType: app-dashboard
+
+contributes:
+  routes:
+    - "/login — Auth entry; supports SSO and email/password paths as configured."
+    - "/app — Default authenticated surface, role-aware landing."
+    - "/app/settings — User/workspace settings."
+    - "/app/team — Members, roles, invites."
+    - "/app/billing — Subscription and invoices (admin-only)."
+  components:
+    - "AppShell — Sidebar + TopBar + main content area; handles collapsed/expanded states."
+    - "Sidebar — Nav with role-gated items; keyboard and screen-reader navigable."
+    - "TopBar — Search, notifications, user menu."
+    - "DataTable — Sortable, paginated, keyboard-navigable; supports row selection."
+    - "EmptyState — First-run / no-data copy with suggested next action."
+    - "FormDialog — Consistent modal with focus trap and escape-to-close."
+    - "PermissionGate — Hides or disables UI based on the current user's role."
+  qa:
+    - "Every data surface has loading, empty, error, and partial states covered."
+    - "Role-gated routes denied with a clear affordance, never a silent 404."
+    - "No PII in client-side logs or analytics payloads."
+    - "Session timeout and re-auth flow tested end-to-end."
+  uxRules:
+    - "Destructive actions require confirmation and always present an undo path when feasible."
+    - "Bulk operations show progress and a cancel affordance."
+  a11yRules:
+    - "Modals trap focus and restore focus to the trigger on close."
+    - "All interactive tables are keyboard-navigable (ArrowKeys, Home/End, Enter/Space)."
+  agentDos:
+    - "Favor server actions or RPC over ad-hoc fetches in client components."
+  agentDonts:
+    - "Do not paper over permission checks at the component level; they belong at the data layer."
+  unsafeActions:
+    - "Never log, serialize, or include tokens/emails/IDs in Sentry or analytics payloads without scrubbing."

@@ -1,0 +1,34 @@
+# deps
+node_modules/
+
+# build
+dist/
+*.tsbuildinfo
+
+# test
+coverage/
+
+# env
+.env
+.env.local
+.env.*.local
+
+# editor
+.DS_Store
+.vscode/
+.idea/
+
+# logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# project-spine compile outputs at repo root — the tool's own output.
+# Regenerate with `spine compile`. A committed snapshot lives in docs/sample-output/.
+/.project-spine/
+/AGENTS.md
+/CLAUDE.md
+/.github/copilot-instructions.md
+
+# OS
+Thumbs.db

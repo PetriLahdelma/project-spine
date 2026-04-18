@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [20, 22]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build
+        run: npm run build
+
+      - name: Test
+        run: npm test
+
+      - name: Smoke — compile against sample brief
+        run: |
+          node dist/cli.js compile \
+            --brief ./examples/brief.md \
+            --repo . \
+            --template saas-marketing \
+            --name "ci-smoke" \
+            --version "0.0.0-ci"
+          test -f .project-spine/spine.json
+          test -f AGENTS.md
+          test -f CLAUDE.md
+          test -f .github/copilot-instructions.md

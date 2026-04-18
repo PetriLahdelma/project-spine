@@ -1,0 +1,66 @@
+# Contributing to Project Spine
+
+Thanks for the interest. This is an early-stage project; the surface area is small on purpose. Keep contributions focused and the discussion sharp.
+
+## Before you start
+
+- Open an issue first for anything non-trivial. Bugfixes and small polish can go straight to a PR.
+- Read [PRD.md](./PRD.md) before proposing features — the MVP scope is deliberately narrow. "Useful for drift detection or kickoff" is the two-way test.
+- The codebase is TypeScript-strict. No `any`. Prefer `unknown` and narrow at the boundary.
+
+## Getting set up
+
+```bash
+git clone https://github.com/PetriLahdelma/project-spine.git
+cd project-spine
+npm install
+npm run typecheck
+npm test
+```
+
+Everything should pass on a fresh clone. If it doesn't on your machine, that's a bug — open an issue.
+
+## Working agreement
+
+- **One concern per PR.** If you're fixing a bug and notice something else, open a separate PR or issue.
+- **Tests for new behavior.** Every new rule, detector, or export target gets at least one test. Determinism tests (identical inputs → identical output) are required for anything that touches the compiler or exporters.
+- **Source pointers stay honest.** Every generated rule in `spine.json` must trace back to a real input: `brief.md#...`, `repo-profile#...`, `design.md#...`, `template:name/...`, or `inferred:...`. Never invent sources.
+- **Deterministic before enriched.** The core pipeline (parser → analyzer → compiler → exporter) is deterministic and offline. LLM calls, if you introduce them, are opt-in and never load-bearing.
+- **No implicit network calls.** Reading the repo is allowed. Uploading it anywhere without the user opting in is not.
+- **Small files.** Every generated Markdown file should stay human-readable. If an export exceeds ~200 lines by default, break it up or restructure.
+
+## Commit and PR style
+
+- Commit messages: imperative subject, meaningful body for non-trivial changes (the *why*). Reference an issue if there is one.
+- PR description: link to the issue, describe the user-visible change, call out any behavior change that affects the spine hash or export content.
+- Keep PRs small enough to review in one sitting.
+
+## Adding a template
+
+1. Create `templates/<name>/template.yaml` with the manifest (see [src/templates/model.ts](./src/templates/model.ts)).
+2. Add `templates/<name>/brief.md` — a starter brief with prompts keyed to the template's project type.
+3. Optionally add `templates/<name>/design-rules.md`.
+4. Add a test in `src/templates/templates.test.ts` that asserts the template's contributions land in the compiled spine.
+5. Update the README template table.
+
+## Adding a detector (repo analyzer)
+
+New detectors live under `src/analyzer/`. The contract: take `(root, pkg)` and return a `Detection<T>` with `value`, `confidence`, and `evidence[]`. Confidence must be calibrated — don't return `1` unless you're certain. Add a fixture and a test.
+
+## Adding an exporter
+
+New exporters live under `src/exporters/`. The contract: take a `SpineModel` and return a string. No file I/O in the renderer — the orchestrator in `src/exporters/index.ts` handles writes. Add a test verifying non-empty output, stable content across identical inputs, and any invariants (e.g., "no rule traces leak into client-facing rationale").
+
+## Releasing
+
+Not yet automated. Until the first npm publish, version bumps happen manually in `package.json` and the repo tag.
+
+## Non-goals for contributions
+
+- Making this "another AI coding tool." It isn't.
+- Making it do everything. It's a context compiler.
+- Replacing the design system tool. Consume its exports, don't become one.
+
+## Code of conduct
+
+See [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md).
