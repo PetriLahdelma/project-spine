@@ -1,6 +1,6 @@
 {
   "name": "@project-spine/cli",
-  "version": "0.1.0-pre",
+  "version": "0.1.0-alpha.0",
   "description": "Context compiler for software projects. Turns brief + repo + design inputs into a repo-native operating layer.",
   "type": "module",
   "bin": {
@@ -25,7 +25,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "prepublishOnly": "npm run typecheck && npm test && npm run build"
   },
   "keywords": [
     "ai",
