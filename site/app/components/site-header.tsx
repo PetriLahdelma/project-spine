@@ -3,6 +3,7 @@ import { desc, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { memberships, workspaces } from "@/db/schema";
 import { getWebSessionUser } from "@/lib/web-auth";
+import { HeaderLogo } from "./header-logo";
 
 type Props = { activePath?: string };
 
@@ -49,8 +50,7 @@ export async function SiteHeader({ activePath }: Props) {
     <header className="site-header">
       <div className="site-header__inner">
         <Link href="/" className="site-header__brand" aria-label="Project Spine home">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo.svg" alt="" className="site-header__logo" width={13} height={18} />
+          <HeaderLogo />
           Project Spine
         </Link>
         <nav className="site-header__nav" aria-label="Primary">
