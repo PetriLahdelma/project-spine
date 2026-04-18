@@ -234,12 +234,10 @@ footer a {
 .site-header__brand:hover {
   color: var(--ink);
 }
-.site-header__dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--accent);
-  display: inline-block;
+.site-header__logo {
+  display: block;
+  width: auto;
+  height: 22px;
 }
 .site-header__nav {
   display: flex;

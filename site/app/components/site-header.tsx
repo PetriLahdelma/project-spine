@@ -22,7 +22,8 @@ export function SiteHeader({ activePath }: Props) {
     <header className="site-header">
       <div className="site-header__inner">
         <Link href="/" className="site-header__brand" aria-label="Project Spine — home">
-          <span className="site-header__dot" aria-hidden="true" />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo.svg" alt="" className="site-header__logo" width={18} height={25} />
           Project Spine
         </Link>
         <nav className="site-header__nav" aria-label="Primary">
