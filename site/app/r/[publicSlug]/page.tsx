@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { marked } from "marked";
 import { db } from "@/db";
 import { rationales, workspaces } from "@/db/schema";
+import { sanitizeRationaleHtml } from "@/lib/sanitize";
 
 export const dynamic = "force-dynamic";
 
@@ -45,9 +46,12 @@ export default async function RationalePage({ params }: { params: Promise<Params
   const row = await loadRationale(publicSlug);
   if (!row) notFound();
 
-  // marked is safe-by-default for our use (we author the input); still we
-  // pass `async: false` and rely on its default HTML-escaping of text nodes.
-  const html = await marked.parse(row.contentMd, { async: true, gfm: true, breaks: false });
+  // Rationale markdown lands on a PUBLIC URL. Any workspace member could
+  // publish `.md` with inline <script>; marked passes raw HTML through by
+  // default. Render via marked, then sanitize through an allowlist before
+  // injecting with dangerouslySetInnerHTML.
+  const rawHtml = await marked.parse(row.contentMd, { async: true, gfm: true, breaks: false });
+  const html = sanitizeRationaleHtml(rawHtml);
   const accent = row.brandColor && /^#[0-9a-fA-F]{6}$/.test(row.brandColor) ? row.brandColor : "#ff4fb4";
 
   return (

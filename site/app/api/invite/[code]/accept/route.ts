@@ -41,20 +41,21 @@ export async function POST(req: Request, { params }: RouteParams) {
     return NextResponse.redirect(`${cfg.baseUrl}/invite/${encodeURIComponent(code)}?error=expired`, { status: 303 });
   }
 
-  // Already a member? Just bounce to the workspace page.
-  const [existingMember] = await db
-    .select({ role: memberships.role })
-    .from(memberships)
-    .where(and(eq(memberships.workspaceId, invite.workspaceId), eq(memberships.userId, user.id)))
-    .limit(1);
-
-  if (!existingMember) {
-    await db.insert(memberships).values({
+  // Upsert the membership. The (workspace_id, user_id) primary key prevents
+  // duplicates if two clicks race — the second INSERT no-ops silently instead
+  // of throwing, so the user always lands on the welcome page.
+  await db
+    .insert(memberships)
+    .values({
       workspaceId: invite.workspaceId,
       userId: user.id,
       role: invite.role,
-    });
-  }
+    })
+    .onConflictDoNothing({ target: [memberships.workspaceId, memberships.userId] });
+
+  // Atomically mark the invite as accepted (only the first accept wins the
+  // update; subsequent accepts leave acceptedBy/acceptedAt unchanged but
+  // still redirect to the workspace).
   await db
     .update(workspaceInvites)
     .set({ acceptedBy: user.id, acceptedAt: new Date() })
