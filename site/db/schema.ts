@@ -129,6 +129,36 @@ export const authTokens = pgTable("auth_tokens", {
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
+/**
+ * Client-facing rationale documents published from a workspace to a
+ * public URL. The CLI's `spine publish rationale` uploads a compiled
+ * rationale.md; the `/r/:slug` page renders it with workspace branding.
+ * `publicSlug` is unguessable and the canonical public identifier.
+ */
+export const rationales = pgTable(
+  "rationales",
+  {
+    id: text("id").primaryKey(),
+    workspaceId: text("workspace_id")
+      .notNull()
+      .references(() => workspaces.id, { onDelete: "cascade" }),
+    publicSlug: text("public_slug").notNull().unique(),
+    projectName: text("project_name").notNull(),
+    title: text("title").notNull(),
+    spineHash: text("spine_hash").notNull(),
+    contentMd: text("content_md").notNull(),
+    /** sha256 of content_md + metadata for idempotent re-publish */
+    contentHash: text("content_hash").notNull(),
+    publishedBy: text("published_by")
+      .notNull()
+      .references(() => users.id, { onDelete: "restrict" }),
+    revokedAt: timestamp("revoked_at", { withTimezone: true }),
+    publishedAt: timestamp("published_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex("rationales_workspace_project_idx").on(t.workspaceId, t.projectName)],
+);
+
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 export type Workspace = typeof workspaces.$inferSelect;
@@ -138,3 +168,5 @@ export type Template = typeof templates.$inferSelect;
 export type NewTemplate = typeof templates.$inferInsert;
 export type DeviceCode = typeof deviceCodes.$inferSelect;
 export type AuthToken = typeof authTokens.$inferSelect;
+export type Rationale = typeof rationales.$inferSelect;
+export type NewRationale = typeof rationales.$inferInsert;
