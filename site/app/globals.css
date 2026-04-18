@@ -807,37 +807,40 @@ main.landing {
   height: 14px;
 }
 
-/* ---- Button system (solid, flat, no gradient) ------------------ */
+/* ---- Button system (sticker-press, unified with .btn-on-cyan) -- */
 .btn-primary,
 .btn-secondary {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 16px;
+  padding: 11px 18px;
   border-radius: 8px;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 14.5px;
   text-decoration: none;
   line-height: 1;
-  transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
-  border: 1px solid transparent;
+  border: 2px solid var(--ink);
+  transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease, color 120ms ease;
 }
 .btn-primary {
   background: var(--ink);
   color: #fff;
 }
 .btn-primary:hover {
-  color: #fff;
+  color: var(--ink);
   background: var(--accent);
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 var(--ink);
 }
 .btn-secondary {
   background: #fff;
   color: var(--ink);
-  border-color: var(--line);
 }
 .btn-secondary:hover {
   color: var(--ink);
-  border-color: var(--ink-muted);
+  background: #fff;
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 var(--ink);
 }
 .btn-secondary__count {
   display: inline-flex;
@@ -1156,9 +1159,9 @@ main.landing {
   color: #fff;
 }
 .btn-on-cyan--primary:hover {
-  color: #fff;
+  color: var(--poster-ink);
   background: var(--poster-pink);
-  border-color: var(--poster-pink);
+  border-color: var(--poster-ink);
   transform: translate(-1px, -1px);
   box-shadow: 3px 3px 0 var(--poster-ink);
 }
