@@ -22,6 +22,13 @@
       "when": 1776504727218,
       "tag": "0002_projects_drift",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1776505058213,
+      "tag": "0003_web_sessions_invites",
+      "breakpoints": true
     }
   ]
 }

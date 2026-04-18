@@ -1,25 +1,23 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
+import { cookies, headers as nextHeaders } from "next/headers";
 import { and, eq, isNull } from "drizzle-orm";
 import { db } from "@/db";
 import { deviceCodes, users } from "@/db/schema";
 import { exchangeCodeForToken, fetchGitHubUser } from "@/lib/github";
 import { newId } from "@/lib/ids";
 import { requireServerConfig } from "@/lib/config";
+import { createWebSession, setSessionCookie } from "@/lib/web-auth";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 /**
- * GitHub redirects here after the user approves. We:
- *  1. Verify the state matches our short-lived cookie.
- *  2. Exchange the code for an access token.
- *  3. Fetch the user, upsert by github_id.
- *  4. Attach user_id to the pending device_code row.
- *  5. Redirect to /device/approved — CLI picks up the token via /poll.
- *
- * We do NOT store GitHub's access token long-term. We only needed it to
- * identify the user. Our bearer tokens are issued at /poll.
+ * Unified GitHub OAuth callback. Distinguishes:
+ *   - device flow: `spine_device_session` cookie is set → bind user to the
+ *     pending device_code row, redirect to /device/approved.
+ *   - web flow: `spine_web_state` cookie is set → create a web session,
+ *     redirect to the stored next path.
+ * A mismatch or missing state sends the user back to /device with a reason.
  */
 export async function GET(req: Request) {
   const cfg = requireServerConfig();
@@ -28,16 +26,17 @@ export async function GET(req: Request) {
   const url = new URL(req.url);
   const code = url.searchParams.get("code");
   const state = url.searchParams.get("state");
-  if (!code || !state) {
-    return redirectWithError(cfg.baseUrl, "bad-callback");
-  }
+  if (!code || !state) return redirect(cfg.baseUrl, "/device?error=bad-callback");
 
   const jar = await cookies();
-  const expectedState = jar.get("spine_device_session")?.value;
-  const pendingDeviceCode = jar.get("spine_device_code")?.value;
-  if (!expectedState || !pendingDeviceCode || expectedState !== state) {
-    return redirectWithError(cfg.baseUrl, "state-mismatch");
-  }
+  const deviceState = jar.get("spine_device_session")?.value;
+  const devicePending = jar.get("spine_device_code")?.value;
+  const webState = jar.get("spine_web_state")?.value;
+  const webNext = jar.get("spine_web_next")?.value ?? "/";
+
+  const isDevice = deviceState && devicePending && deviceState === state;
+  const isWeb = webState && webState === state;
+  if (!isDevice && !isWeb) return redirect(cfg.baseUrl, "/device?error=state-mismatch");
 
   let ghUser;
   try {
@@ -50,10 +49,9 @@ export async function GET(req: Request) {
     ghUser = await fetchGitHubUser(accessToken);
   } catch (err) {
     console.error("[github-callback]", err);
-    return redirectWithError(cfg.baseUrl, "oauth-exchange-failed");
+    return redirect(cfg.baseUrl, "/device?error=oauth-exchange-failed");
   }
 
-  // Upsert the user.
   const [existing] = await db
     .select()
     .from(users)
@@ -85,29 +83,43 @@ export async function GET(req: Request) {
     });
   }
 
-  // Bind the user to the pending device_code row — but only if it's
-  // still pending (not expired, not already bound, not consumed).
-  const bound = await db
-    .update(deviceCodes)
-    .set({ userId })
-    .where(and(eq(deviceCodes.deviceCode, pendingDeviceCode), isNull(deviceCodes.userId), isNull(deviceCodes.consumedAt)))
-    .returning({ userCode: deviceCodes.userCode });
-
-  // Clear the cookies regardless.
   jar.delete("spine_device_session");
   jar.delete("spine_device_code");
+  jar.delete("spine_web_state");
+  jar.delete("spine_web_next");
 
-  if (bound.length === 0) {
-    return redirectWithError(cfg.baseUrl, "device-code-unavailable");
+  if (isDevice) {
+    const bound = await db
+      .update(deviceCodes)
+      .set({ userId })
+      .where(
+        and(
+          eq(deviceCodes.deviceCode, devicePending!),
+          isNull(deviceCodes.userId),
+          isNull(deviceCodes.consumedAt),
+        ),
+      )
+      .returning({ userCode: deviceCodes.userCode });
+    if (bound.length === 0) return redirect(cfg.baseUrl, "/device?error=device-code-unavailable");
+    return redirect(
+      cfg.baseUrl,
+      `/device/approved?login=${encodeURIComponent(ghUser.login)}`,
+    );
   }
 
-  return NextResponse.redirect(`${cfg.baseUrl}/device/approved?login=${encodeURIComponent(ghUser.login)}`, {
-    status: 303,
-  });
+  const h = await nextHeaders();
+  const ua = h.get("user-agent") ?? null;
+  const sessionId = await createWebSession(userId, ua);
+  await setSessionCookie(sessionId);
+  return redirect(cfg.baseUrl, safeNext(webNext));
 }
 
-function redirectWithError(baseUrl: string, reason: string) {
-  return NextResponse.redirect(`${baseUrl}/device?error=${encodeURIComponent(reason)}`, {
-    status: 303,
-  });
+function redirect(baseUrl: string, path: string): NextResponse {
+  return NextResponse.redirect(`${baseUrl}${path}`, { status: 303 });
+}
+
+function safeNext(path: string): string {
+  if (!path || !path.startsWith("/")) return "/";
+  if (path.startsWith("//")) return "/";
+  return path;
 }

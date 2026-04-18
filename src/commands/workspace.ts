@@ -105,9 +105,90 @@ const current = defineCommand({
   },
 });
 
+const invite = defineCommand({
+  meta: { name: "invite", description: "Create an invite URL for a teammate (owner/admin only)." },
+  args: {
+    role: {
+      type: "string",
+      required: false,
+      default: "member",
+      description: "member | admin",
+    },
+    workspace: { type: "string", required: false, description: "Workspace slug (default: active)" },
+  },
+  async run({ args }) {
+    await requireAuth();
+    const cfg = await readConfig();
+    const workspace = args.workspace ?? cfg.activeWorkspace;
+    if (!workspace) {
+      console.error("no active workspace. run `spine workspace switch <slug>` or pass --workspace.");
+      process.exit(1);
+    }
+    if (args.role !== "member" && args.role !== "admin") {
+      console.error(`invalid --role "${args.role}" — expected member or admin.`);
+      process.exit(1);
+    }
+    try {
+      const { body } = await apiFetch<{
+        workspace: string;
+        role: string;
+        code: string;
+        expiresAt: string;
+        url: string;
+      }>(`/api/workspaces/${encodeURIComponent(workspace)}/invites`, {
+        method: "POST",
+        body: { role: args.role },
+      });
+      console.log(`invite created for "${body.workspace}" as ${body.role}`);
+      console.log("");
+      console.log(`  ${body.url}`);
+      console.log("");
+      console.log(`  expires: ${new Date(body.expiresAt).toLocaleString()}`);
+      console.log(`  share this link — invitee signs in via GitHub and is auto-added.`);
+    } catch (err) {
+      handleError(err);
+    }
+  },
+});
+
+const members = defineCommand({
+  meta: { name: "members", description: "List members of the active workspace." },
+  args: {
+    workspace: { type: "string", required: false, description: "Workspace slug (default: active)" },
+  },
+  async run({ args }) {
+    await requireAuth();
+    const cfg = await readConfig();
+    const workspace = args.workspace ?? cfg.activeWorkspace;
+    if (!workspace) {
+      console.error("no active workspace.");
+      process.exit(1);
+    }
+    try {
+      const { body } = await apiFetch<{
+        slug: string;
+        name: string;
+        members: Array<{
+          githubLogin: string;
+          name: string | null;
+          role: string;
+          joinedAt: string;
+        }>;
+      }>(`/api/workspaces/${encodeURIComponent(workspace)}`);
+      const nameWidth = Math.max(...body.members.map((m) => m.githubLogin.length), 4);
+      console.log(`${body.name} (${body.slug}) — ${body.members.length} member${body.members.length === 1 ? "" : "s"}`);
+      for (const m of body.members) {
+        console.log(`  ${m.githubLogin.padEnd(nameWidth)}  [${m.role}]${m.name ? `  ${m.name}` : ""}`);
+      }
+    } catch (err) {
+      handleError(err);
+    }
+  },
+});
+
 export default defineCommand({
-  meta: { name: "workspace", description: "Create and switch hosted workspaces." },
-  subCommands: { create, list, switch: switchWs, current },
+  meta: { name: "workspace", description: "Create, switch, invite into, and inspect hosted workspaces." },
+  subCommands: { create, list, switch: switchWs, current, invite, members },
 });
 
 async function requireAuth(): Promise<void> {

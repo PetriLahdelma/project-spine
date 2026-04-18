@@ -207,6 +207,48 @@ export const driftSnapshots = pgTable("drift_snapshots", {
   capturedAt: timestamp("captured_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
+/**
+ * Long-lived browser session for the web UI. Separate from the CLI's
+ * bearer tokens — web sessions use cookies and have their own TTL.
+ */
+export const webSessions = pgTable("web_sessions", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+  userAgent: text("user_agent"),
+  revokedAt: timestamp("revoked_at", { withTimezone: true }),
+  lastUsedAt: timestamp("last_used_at", { withTimezone: true }),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+/**
+ * Short-lived invite code for a workspace. Owner/admin creates one, shares
+ * the URL, recipient signs in and accepts — becomes a member with the
+ * requested role. Single-use by default; expires in 7 days.
+ */
+export const workspaceInvites = pgTable(
+  "workspace_invites",
+  {
+    id: text("id").primaryKey(),
+    workspaceId: text("workspace_id")
+      .notNull()
+      .references(() => workspaces.id, { onDelete: "cascade" }),
+    code: text("code").notNull().unique(),
+    role: membershipRoleEnum("role").notNull().default("member"),
+    createdBy: text("created_by")
+      .notNull()
+      .references(() => users.id, { onDelete: "restrict" }),
+    expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+    acceptedBy: text("accepted_by").references(() => users.id, { onDelete: "set null" }),
+    acceptedAt: timestamp("accepted_at", { withTimezone: true }),
+    revokedAt: timestamp("revoked_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex("workspace_invites_workspace_idx").on(t.workspaceId, t.code)],
+);
+
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 export type Workspace = typeof workspaces.$inferSelect;
@@ -222,3 +264,5 @@ export type Project = typeof projects.$inferSelect;
 export type NewProject = typeof projects.$inferInsert;
 export type DriftSnapshot = typeof driftSnapshots.$inferSelect;
 export type NewDriftSnapshot = typeof driftSnapshots.$inferInsert;
+export type WebSession = typeof webSessions.$inferSelect;
+export type WorkspaceInvite = typeof workspaceInvites.$inferSelect;
