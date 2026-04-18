@@ -4,7 +4,7 @@
 
 If you find a security issue in Project Spine, please report it privately:
 
-- **Email:** petri.lahdelma@gmail.com
+- **Email:** security@projectspine.dev
 - **GitHub:** use GitHub's [private vulnerability reporting](https://docs.github.com/en/code-security/security-advisories/guidance-on-reporting-and-writing-information-about-vulnerabilities/privately-reporting-a-security-vulnerability) on this repo.
 
 Please do **not** open a public issue for a suspected vulnerability.

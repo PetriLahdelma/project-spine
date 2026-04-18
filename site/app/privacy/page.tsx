@@ -25,7 +25,7 @@ export default function PrivacyPage() {
       <p style={{ color: "var(--ink-soft)", marginBottom: 32 }}>
         Project Spine is a pre-alpha developer tool. This page is plain-English — the short
         version of what we do with your data. If something here is unclear, email{" "}
-        <a href="mailto:petri.lahdelma@gmail.com">petri.lahdelma@gmail.com</a>.
+        <a href="mailto:support@projectspine.dev">support@projectspine.dev</a>.
       </p>
 
       <Section title="What we collect">
@@ -98,7 +98,7 @@ export default function PrivacyPage() {
         <p>
           You can ask us to export, correct, or permanently delete anything associated with your
           account by emailing{" "}
-          <a href="mailto:petri.lahdelma@gmail.com">petri.lahdelma@gmail.com</a> from the address
+          <a href="mailto:support@projectspine.dev">support@projectspine.dev</a> from the address
           on your GitHub account. We will respond within 30 days. If we can&apos;t identify you,
           we&apos;ll tell you what we&apos;d need.
         </p>
