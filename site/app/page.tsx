@@ -15,17 +15,19 @@ function GitHubIcon() {
 }
 
 function NpmIcon() {
+  // Simple Icons 24x24 square glyph — content fills the viewBox so it
+  // vertically centers predictably next to an 18px-tall GitHub mark.
   return (
     <svg
       role="img"
       aria-hidden="true"
       focusable="false"
-      width={22}
+      width={18}
       height={18}
-      viewBox="0 0 780 250"
+      viewBox="0 0 24 24"
       fill="currentColor"
     >
-      <path d="M240,250h100v-50h100V0H240V250z M340,50h50v100h-50V50z M480,0v200h100V50h50v150h50V50h50v150h50V0H480z M0,200h100V50h50v150h50V0H0V200z" />
+      <path d="M1.763 0C.786 0 0 .786 0 1.763v20.474C0 23.214.786 24 1.763 24h20.474c.977 0 1.763-.786 1.763-1.763V1.763C23.99.786 23.214 0 22.237 0zM5.13 5.323l13.837.019-.009 13.836h-3.464l.01-10.382h-3.456L12.04 19.17H5.113z" />
     </svg>
   );
 }
@@ -106,9 +108,9 @@ export default function Home() {
           <span>GitHub</span>
           <span aria-hidden="true">→</span>
         </a>
-        <a href="https://www.npmjs.com/package/project-spine" aria-label="npm">
+        <a href="https://www.npmjs.com/package/project-spine" aria-label="Node Package Manager">
           <NpmIcon />
-          <span>npm</span>
+          <span>Node Package Manager</span>
           <span aria-hidden="true">→</span>
         </a>
         <a href="https://github.com/PetriLahdelma/project-spine/blob/main/PRD.md">
