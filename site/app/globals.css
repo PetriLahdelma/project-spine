@@ -466,12 +466,12 @@ main.landing {
 .section {
   max-width: 1040px;
   margin: 0 auto;
-  padding: 96px 24px;
+  padding: 128px 24px;
 }
-.section--tight { padding: 48px 24px; }
+.section--tight { padding: 72px 24px; }
 .section-header {
   text-align: left;
-  margin: 0 0 40px;
+  margin: 0 0 56px;
   max-width: 640px;
 }
 .section-header .eyebrow {
@@ -503,7 +503,7 @@ main.landing {
 .hero-v2 {
   max-width: 1040px;
   margin: 0 auto;
-  padding: 80px 24px 32px;
+  padding: 112px 24px 56px;
 }
 .hero-v2__eyebrow {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -833,8 +833,10 @@ main.landing {
 @media (max-width: 900px) {
   .site-footer__inner { grid-template-columns: 1fr 1fr; }
   .vs-grid { grid-template-columns: 1fr; }
-  .features-list { grid-template-columns: 1fr; row-gap: 28px; column-gap: 0; }
-  .section { padding: 64px 20px; }
+  .features-list { grid-template-columns: 1fr; row-gap: 32px; column-gap: 0; }
+  .section { padding: 96px 20px; }
+  .section--tight { padding: 56px 20px; }
+  .section-header { margin-bottom: 40px; }
 }
 @media (max-width: 560px) {
   main { padding: 24px 20px 64px; }
@@ -844,7 +846,8 @@ main.landing {
   .site-header__nav { display: none; }
   .site-footer__inner { grid-template-columns: 1fr; padding: 32px 20px; }
   .page-header h1 { font-size: 28px; }
-  .hero-v2 { padding: 56px 20px 24px; }
-  .section { padding: 48px 20px; }
+  .hero-v2 { padding: 72px 20px 32px; }
+  .section { padding: 72px 20px; }
+  .section--tight { padding: 48px 20px; }
   .terminal__body { padding: 18px 20px; font-size: 12px; }
 }

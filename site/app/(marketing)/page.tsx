@@ -337,7 +337,7 @@ export default async function Home() {
             </ul>
           </div>
         </div>
-        <p style={{ marginTop: 24, fontSize: 14 }}>
+        <p style={{ marginTop: 40, fontSize: 14 }}>
           <a href="https://github.com/PetriLahdelma/project-spine/blob/main/docs/positioning.md">
             Read the full moat analysis →
           </a>
