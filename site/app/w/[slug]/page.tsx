@@ -111,218 +111,173 @@ export default async function WorkspacePage({
 
   const accent = data.ws.brandColor && /^#[0-9a-fA-F]{6}$/.test(data.ws.brandColor) ? data.ws.brandColor : "#ff4fb4";
   const canManage = data.ws.role === "owner" || data.ws.role === "admin";
-
   const initialInvites = canManage ? await listInvitesAction(data.ws.slug) : [];
 
   return (
-    <main style={{ maxWidth: 880, margin: "0 auto", padding: "48px 24px 96px" }}>
-      <nav style={{ fontSize: 13, color: "var(--ink-muted)", marginBottom: 24 }}>
-        <Link href="/">Project Spine</Link>{" · "}
-        <span>workspace</span>{" · "}
-        <span style={{ color: accent }}>{data.ws.slug}</span>
-        <span style={{ float: "right" }}>
-          <Link href={`/w/${data.ws.slug}/settings`}>settings</Link> · {user.githubLogin} ·{" "}
-          <Link href="/logout">log out</Link>
-        </span>
-      </nav>
-
-      <header style={{ borderBottom: "1px solid var(--line)", paddingBottom: 24, marginBottom: 32 }}>
-        <h1 style={{ fontSize: 28, letterSpacing: "-0.01em", margin: 0 }}>{data.ws.name}</h1>
-        {data.ws.description ? (
-          <p style={{ color: "var(--ink-muted)", margin: "6px 0 0" }}>{data.ws.description}</p>
-        ) : null}
+    <div className="ws" style={{ ["--ws-accent" as string]: accent }}>
+      <header className="ws-chrome">
+        <div className="ws-chrome__inner">
+          <nav className="ws-crumbs" aria-label="Workspace navigation">
+            <Link href="/" className="ws-crumbs__brand">Project Spine</Link>
+            <span className="ws-crumbs__sep" aria-hidden>/</span>
+            <span className="ws-crumbs__label">workspace</span>
+            <span className="ws-crumbs__sep" aria-hidden>/</span>
+            <span className="ws-crumbs__slug">
+              <span className="ws-crumbs__dot" aria-hidden />
+              {data.ws.slug}
+            </span>
+          </nav>
+          <div className="ws-chrome__actions">
+            <Link href={`/w/${data.ws.slug}/settings`} className="ws-chrome__link">Settings</Link>
+            <span className="ws-chrome__user">
+              <span className="ws-chrome__avatar" aria-hidden>
+                {user.githubLogin.slice(0, 1).toUpperCase()}
+              </span>
+              {user.githubLogin}
+            </span>
+            <Link href="/logout" className="ws-chrome__signout">Log out</Link>
+          </div>
+        </div>
       </header>
 
-      {sp.welcome ? (
-        <section
-          style={{
-            border: "1px solid var(--line)",
-            borderRadius: 10,
-            background: "#fff",
-            padding: 24,
-            marginBottom: 32,
-          }}
-        >
-          <p
-            style={{
-              fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
-              fontSize: 12,
-              letterSpacing: "0.06em",
-              color: accent,
-              margin: "0 0 10px",
-              textTransform: "uppercase",
-            }}
-          >
-            Welcome · next steps
-          </p>
-          <h2
-            style={{
-              fontSize: 20,
-              fontWeight: 600,
-              letterSpacing: "-0.015em",
-              margin: "0 0 8px",
-              textTransform: "none",
-              color: "var(--ink)",
-            }}
-          >
-            Pair your CLI to this workspace.
-          </h2>
-          <p style={{ color: "var(--ink-soft)", margin: "0 0 16px", fontSize: 15 }}>
-            Workspaces work with the Project Spine CLI. Install it, sign in, and
-            switch to{" "}
-            <code>{data.ws.slug}</code> to start pushing shared templates and
-            drift reports from this machine.
-          </p>
-          <pre
-            style={{
-              background: "var(--code-bg)",
-              color: "var(--code-ink)",
-              padding: "14px 18px",
-              borderRadius: 8,
-              fontSize: 13,
-              fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
-              lineHeight: 1.7,
-              overflow: "auto",
-              margin: 0,
-            }}
-          >
+      <main className="ws-main">
+        <header className="ws-hero">
+          <p className="ws-hero__eyebrow">{data.ws.role}</p>
+          <h1 className="ws-hero__title">{data.ws.name}</h1>
+          {data.ws.description ? (
+            <p className="ws-hero__sub">{data.ws.description}</p>
+          ) : null}
+        </header>
+
+        {sp.welcome ? (
+          <section className="ws-welcome">
+            <p className="ws-welcome__eyebrow">Welcome · next steps</p>
+            <h2 className="ws-welcome__title">Pair your CLI to this workspace.</h2>
+            <p className="ws-welcome__body">
+              Workspaces run on the Project Spine CLI. Install it, sign in, then
+              switch to <code>{data.ws.slug}</code> to push shared templates and
+              drift reports from this machine.
+            </p>
+            <pre className="ws-welcome__code">
 {`npm install -g project-spine@next
 spine login
 spine workspace switch ${data.ws.slug}`}
-          </pre>
-          <p style={{ marginTop: 16, marginBottom: 0, fontSize: 13, color: "var(--ink-muted)" }}>
-            Next: invite a teammate below, or read the{" "}
-            <a href="https://github.com/PetriLahdelma/project-spine#quickstart">CLI quickstart</a>.
-          </p>
-        </section>
-      ) : null}
-
-      <Grid>
-        <Panel title="Members" count={data.members.length}>
-          <ul style={ulReset}>
-            {data.members.map((m) => (
-              <li key={m.login} style={liRow}>
-                <span>
-                  <strong>{m.login}</strong>
-                  {m.name ? <span style={{ color: "var(--ink-muted)" }}> · {m.name}</span> : null}
-                </span>
-                <span style={roleBadge(m.role, accent)}>{m.role}</span>
-              </li>
-            ))}
-          </ul>
-        </Panel>
-
-        <Panel
-          title="Templates"
-          count={data.templates.length}
-          footer={
-            <p style={footer}>
-              push one with <code>spine template save --location workspace --name …</code>
+            </pre>
+            <p className="ws-welcome__foot">
+              Next: invite a teammate below, or read the{" "}
+              <a href="https://github.com/PetriLahdelma/project-spine#quickstart">CLI quickstart</a>.
             </p>
-          }
-        >
-          {data.templates.length === 0 ? (
-            <Empty>no templates yet</Empty>
-          ) : (
-            <ul style={ulReset}>
-              {data.templates.map((t) => (
-                <li key={t.name} style={liRow}>
-                  <span>
-                    <strong>{t.name}</strong>{" "}
-                    <span style={{ color: "var(--ink-muted)" }}>· {t.title}</span>
+          </section>
+        ) : null}
+
+        <div className="ws-grid">
+          <Panel title="Members" count={data.members.length}>
+            <ul className="ws-rows">
+              {data.members.map((m) => (
+                <li key={m.login} className="ws-row">
+                  <span className="ws-row__main">
+                    <strong>{m.login}</strong>
+                    {m.name ? <span className="ws-row__dim"> · {m.name}</span> : null}
                   </span>
-                  <span style={{ fontFamily: "ui-monospace, monospace", fontSize: 12, color: "var(--ink-muted)" }}>
-                    {t.projectType}
-                  </span>
+                  <span className={`ws-badge ws-badge--${m.role}`}>{m.role}</span>
                 </li>
               ))}
             </ul>
-          )}
-        </Panel>
-      </Grid>
+          </Panel>
 
-      <Grid>
-        <Panel title="Published rationales" count={data.rationales.length}>
-          {data.rationales.length === 0 ? (
-            <Empty>no rationales published yet</Empty>
-          ) : (
-            <ul style={ulReset}>
-              {data.rationales.map((r) => (
-                <li key={r.publicSlug} style={liRow}>
-                  <span>
-                    <a href={`/r/${r.publicSlug}`} style={{ color: accent }}>
-                      {r.projectName}
-                    </a>
-                    <span style={{ color: "var(--ink-muted)" }}> · {r.title}</span>
-                  </span>
-                  <span style={{ fontSize: 12, color: "var(--ink-muted)" }}>
-                    {new Date(r.updatedAt).toLocaleDateString()}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </Panel>
+          <Panel
+            title="Templates"
+            count={data.templates.length}
+            footer={
+              <p className="ws-panel__foot">
+                push one with <code>spine template save --location workspace --name …</code>
+              </p>
+            }
+          >
+            {data.templates.length === 0 ? (
+              <Empty>no templates yet</Empty>
+            ) : (
+              <ul className="ws-rows">
+                {data.templates.map((t) => (
+                  <li key={t.name} className="ws-row">
+                    <span className="ws-row__main">
+                      <strong>{t.name}</strong>
+                      <span className="ws-row__dim"> · {t.title}</span>
+                    </span>
+                    <span className="ws-row__meta">{t.projectType}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </Panel>
 
-        <Panel title="Projects (drift)" count={data.projects.length}>
-          {data.projects.length === 0 ? (
-            <Empty>no drift data yet. run <code>spine drift check --push</code> in CI</Empty>
-          ) : (
-            <ul style={ulReset}>
-              {data.projects.map((p) => (
-                <li key={p.slug} style={liRow}>
-                  <span>
-                    <strong>{p.name}</strong>
-                  </span>
-                  <span
-                    style={{
-                      fontSize: 12,
-                      fontFamily: "ui-monospace, monospace",
-                      color: p.lastClean === "clean" ? "#16a34a" : "#b45309",
-                    }}
-                  >
-                    {p.lastClean ?? "unknown"}
-                    {p.lastDriftAt ? ` · ${new Date(p.lastDriftAt).toLocaleString()}` : ""}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </Panel>
-      </Grid>
+          <Panel title="Published rationales" count={data.rationales.length}>
+            {data.rationales.length === 0 ? (
+              <Empty>no rationales published yet</Empty>
+            ) : (
+              <ul className="ws-rows">
+                {data.rationales.map((r) => (
+                  <li key={r.publicSlug} className="ws-row">
+                    <span className="ws-row__main">
+                      <a href={`/r/${r.publicSlug}`} className="ws-row__link">{r.projectName}</a>
+                      <span className="ws-row__dim"> · {r.title}</span>
+                    </span>
+                    <span className="ws-row__meta ws-row__meta--date">
+                      {new Date(r.updatedAt).toLocaleDateString()}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </Panel>
 
-      {canManage ? (
-        <InvitePanel
-          workspaceSlug={data.ws.slug}
-          accent={accent}
-          initialInvites={
-            Array.isArray(initialInvites)
-              ? initialInvites.map((i) => ({
-                  ...i,
-                  expiresAt: new Date(i.expiresAt),
-                  acceptedAt: i.acceptedAt ? new Date(i.acceptedAt) : null,
-                  revokedAt: i.revokedAt ? new Date(i.revokedAt) : null,
-                  createdAt: new Date(i.createdAt),
-                }))
-              : []
-          }
-        />
-      ) : null}
-    </main>
-  );
-}
+          <Panel title="Projects (drift)" count={data.projects.length}>
+            {data.projects.length === 0 ? (
+              <Empty>
+                no drift data yet · run <code>spine drift check --push</code> in CI
+              </Empty>
+            ) : (
+              <ul className="ws-rows">
+                {data.projects.map((p) => (
+                  <li key={p.slug} className="ws-row">
+                    <span className="ws-row__main">
+                      <strong>{p.name}</strong>
+                    </span>
+                    <span className="ws-row__meta">
+                      <span className={`ws-chip ws-chip--${p.lastClean ?? "unknown"}`}>
+                        {p.lastClean ?? "unknown"}
+                      </span>
+                      {p.lastDriftAt ? (
+                        <span className="ws-row__meta-time">
+                          {new Date(p.lastDriftAt).toLocaleString()}
+                        </span>
+                      ) : null}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </Panel>
+        </div>
 
-function Grid({ children }: { children: React.ReactNode }) {
-  return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-        gap: 24,
-        marginBottom: 24,
-      }}
-    >
-      {children}
+        {canManage ? (
+          <InvitePanel
+            workspaceSlug={data.ws.slug}
+            accent={accent}
+            initialInvites={
+              Array.isArray(initialInvites)
+                ? initialInvites.map((i) => ({
+                    ...i,
+                    expiresAt: new Date(i.expiresAt),
+                    acceptedAt: i.acceptedAt ? new Date(i.acceptedAt) : null,
+                    revokedAt: i.revokedAt ? new Date(i.revokedAt) : null,
+                    createdAt: new Date(i.createdAt),
+                  }))
+                : []
+            }
+          />
+        ) : null}
+      </main>
     </div>
   );
 }
@@ -339,80 +294,19 @@ function Panel({
   children: React.ReactNode;
 }) {
   return (
-    <section
-      style={{
-        border: "1px solid var(--line)",
-        borderRadius: 10,
-        padding: 20,
-        background: "#fff",
-      }}
-    >
-      <h2
-        style={{
-          fontSize: 13,
-          letterSpacing: "0.08em",
-          textTransform: "uppercase",
-          color: "var(--ink-muted)",
-          margin: "0 0 16px",
-          fontWeight: 600,
-        }}
-      >
-        {title}
+    <section className="ws-panel">
+      <header className="ws-panel__header">
+        <h2 className="ws-panel__title">{title}</h2>
         {typeof count === "number" ? (
-          <span
-            style={{ fontWeight: 400, color: "var(--ink-muted)", marginLeft: 8, letterSpacing: 0 }}
-          >
-            ({count})
-          </span>
+          <span className="ws-panel__count">{count}</span>
         ) : null}
-      </h2>
-      {children}
+      </header>
+      <div className="ws-panel__body">{children}</div>
       {footer}
     </section>
   );
 }
 
 function Empty({ children }: { children: React.ReactNode }) {
-  return (
-    <p style={{ color: "var(--ink-muted)", fontSize: 14, margin: 0 }}>{children}</p>
-  );
-}
-
-const ulReset = { listStyle: "none", padding: 0, margin: 0 };
-const liRow: React.CSSProperties = {
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-  padding: "8px 0",
-  borderBottom: "1px solid var(--line)",
-};
-const footer: React.CSSProperties = {
-  fontSize: 12,
-  color: "var(--ink-muted)",
-  marginTop: 12,
-  marginBottom: 0,
-};
-const code: React.CSSProperties = {
-  background: "var(--code-bg, #0f1318)",
-  color: "var(--code-ink, #e8edf2)",
-  padding: "12px 16px",
-  borderRadius: 8,
-  fontSize: 13,
-  fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
-  overflowX: "auto",
-  margin: "12px 0 0",
-};
-
-function roleBadge(role: string, accent: string): React.CSSProperties {
-  return {
-    fontSize: 11,
-    fontFamily: "ui-monospace, monospace",
-    letterSpacing: "0.08em",
-    textTransform: "uppercase",
-    padding: "2px 8px",
-    borderRadius: 999,
-    color: role === "owner" ? "#fff" : accent,
-    background: role === "owner" ? accent : "transparent",
-    border: role === "owner" ? "none" : `1px solid ${accent}`,
-  };
+  return <p className="ws-empty">{children}</p>;
 }

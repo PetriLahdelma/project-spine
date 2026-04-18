@@ -81,24 +81,22 @@ export default defineCommand({
 async function resolveWorkspace(arg: string | undefined): Promise<string> {
   const cfg = await readConfig();
   if (!cfg.auth?.token) {
-    console.error("not signed in. run `spine login` first.");
-    process.exit(1);
+    throw new Error("not signed in. run `spine login` first.");
   }
   const workspace = arg ?? cfg.activeWorkspace;
   if (!workspace) {
-    console.error("no workspace selected. run `spine workspace switch <slug>` or pass --workspace.");
-    process.exit(1);
+    throw new Error(
+      "no workspace selected. run `spine workspace switch <slug>` or pass --workspace.",
+    );
   }
   return workspace;
 }
 
 function handleError(err: unknown): never {
   if (err instanceof ApiError) {
-    if (err.status === 401) console.error("token rejected. run `spine login` again.");
-    else if (err.status === 404) console.error("not found (workspace or rationale).");
-    else console.error(`api error ${err.status}: ${err.message}`);
-  } else {
-    console.error(`error: ${(err as Error).message}`);
+    if (err.status === 401) throw new Error("token rejected. run `spine login` again.");
+    if (err.status === 404) throw new Error("not found (workspace or rationale).");
+    throw new Error(`api error ${err.status}: ${err.message}`);
   }
-  process.exit(1);
+  throw err instanceof Error ? err : new Error(String(err));
 }

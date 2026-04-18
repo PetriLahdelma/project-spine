@@ -13,3 +13,6 @@ node_modules/
 
 # typescript incremental
 *.tsbuildinfo
+
+# spine inspect / compile output when run against the site package itself
+/.project-spine/

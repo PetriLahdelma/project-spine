@@ -5,6 +5,16 @@ export const metadata: Metadata = {
   title: "Product · Project Spine",
   description:
     "Compile briefs, repos, and design tokens into verifiable agent instructions. Drift-aware, portable across Claude, Cursor, and Copilot.",
+  alternates: { canonical: "https://projectspine.dev/product" },
+  openGraph: {
+    type: "article",
+    url: "https://projectspine.dev/product",
+    siteName: "Project Spine",
+    title: "Product · Project Spine",
+    description:
+      "Compile briefs, repos, and design tokens into verifiable agent instructions. Drift-aware, portable across Claude, Cursor, and Copilot.",
+    images: [{ url: "/banner.png", width: 2400, height: 1500, alt: "Project Spine" }],
+  },
 };
 
 export default function ProductPage() {

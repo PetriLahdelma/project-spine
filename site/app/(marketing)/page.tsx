@@ -1,7 +1,40 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { TerminalMock } from "../components/terminal-mock";
 import { InstallCommand } from "../components/install-command";
 import { HeroWordmark } from "../components/hero-wordmark";
+
+const SITE = "https://projectspine.dev";
+
+export const metadata: Metadata = {
+  alternates: { canonical: SITE },
+  keywords: [
+    "AGENTS.md",
+    "CLAUDE.md",
+    "copilot-instructions",
+    "AI coding agent context",
+    "context compiler",
+    "spine.json",
+    "drift detection",
+    "Project Spine",
+    "agent instructions generator",
+  ],
+};
+
+const LANDING_JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "Project Spine",
+  applicationCategory: "DeveloperApplication",
+  operatingSystem: "macOS, Linux, Windows",
+  description:
+    "Project Spine compiles a client brief, a repo, and optional design inputs into a repo-native operating layer: AGENTS.md, CLAUDE.md, copilot-instructions, scaffold plan, QA guardrails, and a sprint-1 backlog — with drift detection.",
+  url: SITE,
+  author: { "@type": "Organization", name: "Project Spine", url: SITE },
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  softwareVersion: "0.9.0-alpha.0",
+  license: "https://opensource.org/licenses/MIT",
+};
 
 async function fetchStars(): Promise<number | null> {
   try {
@@ -148,6 +181,10 @@ export default async function Home() {
   const stars = await fetchStars();
   return (
     <main className="landing">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(LANDING_JSON_LD) }}
+      />
       {/* Poster hero */}
       <section className="poster-hero">
         <div className="poster-hero__inner">
@@ -167,13 +204,16 @@ export default async function Home() {
             CLAUDE.md, and copilot-instructions from one deterministic source.
             With drift detection that fails CI before it fails trust.
           </p>
+          <div className="hero-band__install">
+            <InstallCommand />
+            <p className="hero-band__install-caption">
+              MIT-licensed, fully offline. Node 20+. Hosted workspace is opt-in.
+            </p>
+          </div>
           <div className="hero-band__ctas">
-            <Link href="/login?next=/workspaces/new" className="btn-primary">
-              Create a workspace
-            </Link>
             <a
               href="https://github.com/PetriLahdelma/project-spine"
-              className="btn-secondary"
+              className="btn-primary"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -186,13 +226,9 @@ export default async function Home() {
                 </span>
               ) : null}
             </a>
-          </div>
-          <div className="hero-band__install">
-            <InstallCommand />
-            <p className="hero-band__install-caption">
-              CLI is MIT-licensed and runs fully offline. Node 20+. Workspace
-              features are opt-in.
-            </p>
+            <Link href="/login?next=/workspaces/new" className="btn-secondary">
+              Create a workspace
+            </Link>
           </div>
         </div>
       </section>

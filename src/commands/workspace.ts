@@ -121,12 +121,12 @@ const invite = defineCommand({
     const cfg = await readConfig();
     const workspace = args.workspace ?? resolveActiveWorkspace(cfg);
     if (!workspace) {
-      console.error("no active workspace. run `spine workspace switch <slug>` or pass --workspace.");
-      process.exit(1);
+      throw new Error(
+        "no active workspace. run `spine workspace switch <slug>` or pass --workspace.",
+      );
     }
     if (args.role !== "member" && args.role !== "admin") {
-      console.error(`invalid --role "${args.role}" — expected member or admin.`);
-      process.exit(1);
+      throw new Error(`invalid --role "${args.role}" — expected member or admin.`);
     }
     try {
       const { body } = await apiFetch<{
@@ -161,8 +161,7 @@ const members = defineCommand({
     const cfg = await readConfig();
     const workspace = args.workspace ?? resolveActiveWorkspace(cfg);
     if (!workspace) {
-      console.error("no active workspace.");
-      process.exit(1);
+      throw new Error("no active workspace. run `spine workspace switch <slug>` or pass --workspace.");
     }
     try {
       const { body } = await apiFetch<{
@@ -194,26 +193,17 @@ export default defineCommand({
 async function requireAuth(): Promise<void> {
   const cfg = await readConfig();
   if (!resolveToken(cfg)) {
-    console.error("not signed in. run `spine login` first, or set SPINE_API_TOKEN.");
-    process.exit(1);
+    throw new Error("not signed in. run `spine login` first, or set SPINE_API_TOKEN.");
   }
 }
 
 function handleError(err: unknown): never {
   if (err instanceof ApiError) {
-    if (err.status === 401) {
-      console.error("token rejected. run `spine login` again.");
-    } else if (err.status === 404) {
-      console.error("not found (or you are not a member).");
-    } else if (err.status === 409) {
-      console.error(err.message);
-    } else if (err.status === 400) {
-      console.error(`invalid: ${err.message}`);
-    } else {
-      console.error(`api error ${err.status}: ${err.message}`);
-    }
-  } else {
-    console.error(`error: ${(err as Error).message}`);
+    if (err.status === 401) throw new Error("token rejected. run `spine login` again.");
+    if (err.status === 404) throw new Error("not found (or you are not a member).");
+    if (err.status === 409) throw new Error(err.message);
+    if (err.status === 400) throw new Error(`invalid: ${err.message}`);
+    throw new Error(`api error ${err.status}: ${err.message}`);
   }
-  process.exit(err instanceof ApiError ? Math.min(Math.floor(err.status / 100), 2) : 2);
+  throw err instanceof Error ? err : new Error(String(err));
 }

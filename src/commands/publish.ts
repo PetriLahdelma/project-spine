@@ -26,13 +26,13 @@ const rationale = defineCommand({
   async run({ args }) {
     const cfg = await readConfig();
     if (!cfg.auth?.token) {
-      console.error("not signed in. run `spine login` first.");
-      process.exit(1);
+      throw new Error("not signed in. run `spine login` first.");
     }
     const workspace = args.workspace ?? cfg.activeWorkspace;
     if (!workspace) {
-      console.error("no workspace selected. run `spine workspace switch <slug>` or pass --workspace.");
-      process.exit(1);
+      throw new Error(
+        "no workspace selected. run `spine workspace switch <slug>` or pass --workspace.",
+      );
     }
 
     const root = resolve(process.cwd(), args.repo);
@@ -43,16 +43,17 @@ const rationale = defineCommand({
     let contentMd: string;
     try {
       spine = SpineModel.parse(JSON.parse(await readFile(spinePath, "utf8")));
-    } catch (err) {
-      console.error(`cannot read ${spinePath}: ${(err as Error).message}`);
-      console.error(`run \`spine compile\` first to produce a spine.json.`);
-      process.exit(1);
+    } catch {
+      throw new Error(
+        `no spine.json at ${spinePath}. run \`spine compile\` first to produce one.`,
+      );
     }
     try {
       contentMd = await readFile(rationalePath, "utf8");
     } catch {
-      console.error(`no rationale.md at ${rationalePath}. run \`spine compile\` (or \`spine export --targets rationale\`).`);
-      process.exit(1);
+      throw new Error(
+        `no rationale.md at ${rationalePath}. run \`spine compile\` (or \`spine export --targets rationale\`) to emit one.`,
+      );
     }
 
     const projectName = spine.metadata.name ?? basename(root);
@@ -95,12 +96,10 @@ export default defineCommand({
 
 function handleError(err: unknown): never {
   if (err instanceof ApiError) {
-    if (err.status === 401) console.error("token rejected. run `spine login` again.");
-    else if (err.status === 404) console.error("workspace not found (or you are not a member).");
-    else if (err.status === 400) console.error(`invalid: ${err.message}`);
-    else console.error(`api error ${err.status}: ${err.message}`);
-  } else {
-    console.error(`error: ${(err as Error).message}`);
+    if (err.status === 401) throw new Error("token rejected. run `spine login` again.");
+    if (err.status === 404) throw new Error("workspace not found (or you are not a member).");
+    if (err.status === 400) throw new Error(`invalid: ${err.message}`);
+    throw new Error(`api error ${err.status}: ${err.message}`);
   }
-  process.exit(1);
+  throw err instanceof Error ? err : new Error(String(err));
 }

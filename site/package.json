@@ -11,7 +11,9 @@
   },
   "dependencies": {
     "@types/sanitize-html": "^2.16.1",
+    "@vercel/analytics": "^2.0.1",
     "@vercel/postgres": "^0.10.0",
+    "@vercel/speed-insights": "^2.0.0",
     "drizzle-orm": "^0.36.4",
     "marked": "^18.0.1",
     "next": "^16.2.4",

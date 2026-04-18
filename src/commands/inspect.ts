@@ -48,5 +48,9 @@ export default defineCommand({
     console.log("");
     console.log(`wrote ${profilePath}`);
     console.log(`wrote ${summaryPath}`);
+    console.log("");
+    console.log(
+      "next: sketch goals in `brief.md`, then run `spine compile --brief ./brief.md --repo .` to emit AGENTS.md, CLAUDE.md, and the full export set.",
+    );
   },
 });
