@@ -162,6 +162,25 @@ Each template contributes routes, components, QA, UX, a11y, and agent rules — 
 
 ---
 
+## Agent skills (for Claude Code, Codex CLI, Cursor)
+
+The [`skills/`](./skills/) directory ships six agent skills that teach your coding agent how to operate Project Spine end-to-end — kickoff, drift, templates, rationales, workspaces, plus an orientation skill that triggers on phrases like "new client project" or "AGENTS.md is stale".
+
+```bash
+# install into ~/.claude/skills (Claude Code)
+./skills/install.sh
+
+# also install into ~/.codex/skills (Codex CLI)
+./skills/install.sh --codex
+
+# preview without touching disk
+./skills/install.sh --dry-run
+```
+
+Each skill is a single `SKILL.md` with YAML frontmatter describing its trigger phrases. The installer symlinks them so edits land immediately. See [skills/README.md](./skills/README.md) for what each skill does and how they chain.
+
+---
+
 ## Roadmap
 
 - **v0.1** (here) — brief parser, repo inspector, deterministic exporters, 4 templates, CLI
