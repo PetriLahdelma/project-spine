@@ -14,6 +14,9 @@ import {
 import { getWebSessionUser } from "@/lib/web-auth";
 import { listInvitesAction } from "./actions";
 import { InvitePanel } from "./invite-panel";
+import { CopyButton, RevokeRationaleButton } from "./row-actions";
+
+const SITE_ORIGIN = "https://projectspine.dev";
 
 export const dynamic = "force-dynamic";
 
@@ -204,7 +207,14 @@ spine workspace switch ${data.ws.slug}`}
                       <strong>{t.name}</strong>
                       <span className="ws-row__dim"> · {t.title}</span>
                     </span>
-                    <span className="ws-row__meta">{t.projectType}</span>
+                    <span className="ws-row__meta">
+                      <span className="ws-row__meta-label">{t.projectType}</span>
+                      <CopyButton
+                        text={`spine template pull ${t.name}`}
+                        label="Copy pull cmd"
+                        title={`Copy: spine template pull ${t.name}`}
+                      />
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -219,11 +229,26 @@ spine workspace switch ${data.ws.slug}`}
                 {data.rationales.map((r) => (
                   <li key={r.publicSlug} className="ws-row">
                     <span className="ws-row__main">
-                      <a href={`/r/${r.publicSlug}`} className="ws-row__link">{r.projectName}</a>
+                      <a href={`/r/${r.publicSlug}`} className="ws-row__link" target="_blank" rel="noopener">
+                        {r.projectName}
+                      </a>
                       <span className="ws-row__dim"> · {r.title}</span>
                     </span>
-                    <span className="ws-row__meta ws-row__meta--date">
-                      {new Date(r.updatedAt).toLocaleDateString()}
+                    <span className="ws-row__meta">
+                      <span className="ws-row__meta-time">
+                        {new Date(r.updatedAt).toLocaleDateString()}
+                      </span>
+                      <CopyButton
+                        text={`${SITE_ORIGIN}/r/${r.publicSlug}`}
+                        label="Copy URL"
+                      />
+                      {canManage ? (
+                        <RevokeRationaleButton
+                          workspaceSlug={data.ws.slug}
+                          publicSlug={r.publicSlug}
+                          projectName={r.projectName}
+                        />
+                      ) : null}
                     </span>
                   </li>
                 ))}

@@ -67,14 +67,29 @@ export async function SiteHeader() {
               <Link href={dashboardHref} className="site-header__cta">
                 {wsSlug ? "Dashboard" : "Create workspace"}
               </Link>
-              <Link href="/logout" className="site-header__signout" aria-label="Log out">
+              <Link
+                href="/app"
+                className="site-header__user"
+                aria-label={`Account — signed in as ${user.githubLogin}`}
+              >
+                <span className="site-header__user-avatar" aria-hidden>
+                  {user.githubLogin.slice(0, 1).toUpperCase()}
+                </span>
                 {user.githubLogin}
+              </Link>
+              <Link href="/logout" className="site-header__signout">
+                Log out
               </Link>
             </>
           ) : (
-            <Link href="/login" className="site-header__cta">
-              Log in
-            </Link>
+            <>
+              <Link href="/login?next=/app" className="site-header__login">
+                Log in
+              </Link>
+              <Link href="/login?next=/workspaces/new" className="site-header__cta">
+                Sign up
+              </Link>
+            </>
           )}
         </div>
       </div>
