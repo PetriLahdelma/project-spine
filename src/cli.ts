@@ -10,7 +10,7 @@ import { printBanner, TAGLINE } from "./ui/banner.js";
 const main = defineCommand({
   meta: {
     name: "spine",
-    version: "0.9.0-alpha.0",
+    version: "0.9.1-alpha.0",
     description: `Project Spine — ${TAGLINE}.`,
   },
   subCommands: {
@@ -75,7 +75,7 @@ async function dispatch(): Promise<void> {
 
   // `spine --version` / `spine -v`
   if (rawArgs.length === 1 && (rawArgs[0] === "--version" || rawArgs[0] === "-v")) {
-    process.stdout.write("0.9.0-alpha.0\n");
+    process.stdout.write("0.9.1-alpha.0\n");
     return;
   }
 
