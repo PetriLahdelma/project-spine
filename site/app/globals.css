@@ -158,7 +158,7 @@ a:hover {
 
 .cta-row {
   display: flex;
-  gap: 16px;
+  gap: 12px;
   flex-wrap: wrap;
   margin: 24px 0 0;
 }
@@ -167,13 +167,16 @@ a:hover {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 14px;
-  border: 1px solid var(--line);
+  padding: 11px 18px;
+  border: 2px solid var(--ink);
   border-radius: 8px;
   text-decoration: none;
   background: #fff;
-  font-size: 15px;
+  font-size: 14.5px;
+  font-weight: 600;
   color: var(--ink);
+  line-height: 1;
+  transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease, color 120ms ease;
 }
 
 .cta-row a svg {
@@ -183,12 +186,14 @@ a:hover {
 }
 
 .cta-row a:hover {
-  border-color: var(--accent);
-  color: var(--accent);
+  color: var(--ink);
+  background: #fff;
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 var(--ink);
 }
 
 .cta-row a:hover svg {
-  color: var(--accent);
+  color: var(--ink);
 }
 
 footer {
@@ -316,7 +321,7 @@ footer a {
 .site-header__actions a:hover {
   color: var(--accent);
 }
-.site-header__cta {
+.site-header__actions a.site-header__cta {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -329,7 +334,7 @@ footer a {
   color: var(--ink);
   transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease, color 120ms ease;
 }
-.site-header__cta:hover {
+.site-header__actions a.site-header__cta:hover {
   color: var(--ink);
   background: var(--accent);
   transform: translate(-1px, -1px);
