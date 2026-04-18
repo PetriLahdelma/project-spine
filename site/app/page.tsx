@@ -40,12 +40,21 @@ export default function Home() {
         <img src="/banner.png" alt="Project Spine" />
       </header>
 
-      <p className="tag">pre-alpha · mit · node ≥ 20</p>
+      <p className="tag">
+        pre-alpha · mit · node ≥ 20 · 72 tests · 9 releases shipped
+      </p>
       <h1>A context compiler for software projects.</h1>
       <p className="lede">
-        Turn a brief, a repo, and optional design-system inputs into a repo-native
-        operating layer your team and your coding agents can both work from.
-        Without drift, without boilerplate, without the black box.
+        You already have Claude, Cursor, or Copilot. Project Spine is the
+        context layer they&apos;re missing — compile your brief, repo, and
+        design tokens into <code>AGENTS.md</code>, <code>CLAUDE.md</code>, and{" "}
+        <code>copilot-instructions</code> from one deterministic source, with
+        CI-grade drift detection so the files stay honest as the project evolves.
+      </p>
+      <p className="lede" style={{ color: "var(--ink-muted, #52525b)", fontSize: "0.95rem" }}>
+        CLI is free and open source. The hosted workspace is free during alpha.
+        No telemetry, no implicit network calls, no account required for the
+        compile pipeline itself.
       </p>
 
       <h2>Install</h2>
@@ -57,6 +66,56 @@ export default function Home() {
         <span className="prompt">$ </span>spine compile --brief ./brief.md --repo .
         <span className="comment"> # writes 18 files</span>
       </pre>
+
+      <h2>What it produces</h2>
+      <p style={{ color: "var(--ink-muted, #52525b)" }}>
+        A compiled <code>AGENTS.md</code> from a real saas-marketing brief
+        (
+        <a href="https://github.com/PetriLahdelma/project-spine/tree/main/docs/sample-output">
+          full sample
+        </a>
+        ):
+      </p>
+      <pre>
+{`# AGENTS.md
+
+**Project Spine** — Launch a marketing site for Acme Payroll's new
+SMB product line within 6 weeks.
+
+**Stack:** node-library · typescript · tests: vitest · pm: npm
+**Project type:** saas-marketing
+
+> Source of truth: .project-spine/spine.json (hash 3333f867f40d3e43).
+> Every rule below has a traceable source. Fix the upstream input
+> and rerun \`spine compile\` — don't hand-edit this file.
+
+## Repo conventions
+- TypeScript strict. Never use \`any\`; prefer \`unknown\` + narrow.
+- Use \`npm\` for all dependency ops. No mixed lockfiles.
+
+## Never do this (unsafe)
+- Never commit the uncompiled brief as \`AGENTS.md\` — it has no
+  source pointers, no drift tracking, no audit trail.
+`}
+      </pre>
+
+      <h2>Why this exists</h2>
+      <p>
+        Developers saved ~10 hours a week with AI tools and lost the same
+        ~10 hours to fragmented context (
+        <a href="https://www.atlassian.com/blog/developer/state-of-developer-experience-report-2025">
+          Atlassian State of DevEx 2025
+        </a>
+        ). Only ~5% of repositories contain AI configuration files (
+        <a href="https://arxiv.org/html/2510.21413v1">arXiv, Oct 2025</a>
+        ), and auto-generated <code>AGENTS.md</code> boilerplate is the
+        single most-cited failure mode (
+        <a href="https://medium.com/@addyosmani/stop-using-init-for-agents-md-3086a333f380">
+          Addy Osmani, March 2026
+        </a>
+        ). The gap isn&apos;t more AI. It&apos;s a repo-native, drift-aware
+        compiler for project intent. That&apos;s what Spine is.
+      </p>
 
       <h2>What you get</h2>
       <ul className="features">
@@ -115,6 +174,9 @@ export default function Home() {
         </a>
         <a href="https://github.com/PetriLahdelma/project-spine/blob/main/PRD.md">
           Read the PRD →
+        </a>
+        <a href="https://github.com/PetriLahdelma/project-spine/blob/main/docs/positioning.md">
+          Why not just Claude? →
         </a>
         <a href="https://github.com/PetriLahdelma/project-spine/tree/main/docs/sample-output">
           Sample output →

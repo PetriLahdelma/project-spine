@@ -26,7 +26,7 @@ design.md ─┘                    scaffold-plan.md, qa-guardrails.md, sprint-1
 
 > **Status — v0.1 (pre-alpha).** The CLI works end-to-end: brief + repo + optional design + optional template → canonical `spine.json` + generated exports. Published here so the thinking and implementation are public from day one.
 
-See the full product thinking in [PRD.md](./PRD.md) and the research evidence in [docs/research-citations.md](./docs/research-citations.md).
+See the full product thinking in [PRD.md](./PRD.md), the research evidence in [docs/research-citations.md](./docs/research-citations.md), and the "why not just Claude?" moat analysis in [docs/positioning.md](./docs/positioning.md).
 
 ---
 
