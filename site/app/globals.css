@@ -237,7 +237,7 @@ footer a {
 .site-header__logo {
   display: block;
   width: auto;
-  height: 22px;
+  height: 18px;
 }
 .site-header__nav {
   display: flex;
@@ -263,6 +263,8 @@ footer a {
   gap: 14px;
 }
 .site-header__actions a {
+  display: inline-flex;
+  align-items: center;
   color: var(--ink-muted);
   font-size: 14px;
   text-decoration: none;
