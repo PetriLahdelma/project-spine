@@ -1,6 +1,7 @@
 import { sql } from "drizzle-orm";
 import {
   bigint,
+  boolean,
   jsonb,
   pgEnum,
   pgTable,
@@ -159,6 +160,53 @@ export const rationales = pgTable(
   (t) => [uniqueIndex("rationales_workspace_project_idx").on(t.workspaceId, t.projectName)],
 );
 
+/**
+ * A project tracked inside a workspace. Populated the first time a member
+ * pushes a drift report for a given projectSlug; identity key is
+ * (workspaceId, slug). `lastSpineHash` is the most recent hash observed.
+ */
+export const projects = pgTable(
+  "projects",
+  {
+    id: text("id").primaryKey(),
+    workspaceId: text("workspace_id")
+      .notNull()
+      .references(() => workspaces.id, { onDelete: "cascade" }),
+    slug: text("slug").notNull(),
+    name: text("name").notNull(),
+    lastSpineHash: text("last_spine_hash"),
+    lastDriftAt: timestamp("last_drift_at", { withTimezone: true }),
+    lastClean: text("last_clean"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex("projects_workspace_slug_idx").on(t.workspaceId, t.slug)],
+);
+
+/**
+ * Time-series drift readings for a project. Each one is a compact snapshot
+ * of the CLI's `spine drift check` output. Enough to rebuild the timeline
+ * page without storing the full report text every time.
+ */
+export const driftSnapshots = pgTable("drift_snapshots", {
+  id: text("id").primaryKey(),
+  projectId: text("project_id")
+    .notNull()
+    .references(() => projects.id, { onDelete: "cascade" }),
+  storedSpineHash: text("stored_spine_hash"),
+  currentSpineHash: text("current_spine_hash"),
+  clean: boolean("clean").notNull(),
+  totalItems: bigint("total_items", { mode: "number" }).notNull().default(0),
+  inputDriftCount: bigint("input_drift_count", { mode: "number" }).notNull().default(0),
+  exportHandEditCount: bigint("export_hand_edit_count", { mode: "number" }).notNull().default(0),
+  missingExportCount: bigint("missing_export_count", { mode: "number" }).notNull().default(0),
+  items: jsonb("items").notNull().default(sql`'[]'::jsonb`),
+  pushedBy: text("pushed_by")
+    .notNull()
+    .references(() => users.id, { onDelete: "restrict" }),
+  capturedAt: timestamp("captured_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 export type Workspace = typeof workspaces.$inferSelect;
@@ -170,3 +218,7 @@ export type DeviceCode = typeof deviceCodes.$inferSelect;
 export type AuthToken = typeof authTokens.$inferSelect;
 export type Rationale = typeof rationales.$inferSelect;
 export type NewRationale = typeof rationales.$inferInsert;
+export type Project = typeof projects.$inferSelect;
+export type NewProject = typeof projects.$inferInsert;
+export type DriftSnapshot = typeof driftSnapshots.$inferSelect;
+export type NewDriftSnapshot = typeof driftSnapshots.$inferInsert;
