@@ -59,8 +59,9 @@ export function HeroWordmark({ line1, line2 }: Props) {
             lines.map((line, li) => (
               <text
                 key={`${li}-${i}`}
-                x={60 + i * STEP}
+                x={700 + i * STEP}
                 y={linePositions[li]!.y + i * STEP}
+                textAnchor="middle"
                 fontFamily="var(--font-display), Georgia, serif"
                 fontWeight={900}
                 fontSize={290}
@@ -79,8 +80,9 @@ export function HeroWordmark({ line1, line2 }: Props) {
         lines.map((line, li) => (
           <text
             key={`sh-${li}-${i}`}
-            x={60 + i * STEP}
+            x={700 + i * STEP}
             y={linePositions[li]!.y + i * STEP}
+            textAnchor="middle"
             fontFamily="var(--font-display), Georgia, serif"
             fontWeight={900}
             fontSize={290}
@@ -104,8 +106,9 @@ export function HeroWordmark({ line1, line2 }: Props) {
       {lines.map((line, li) => (
         <text
           key={`top-${li}`}
-          x={60}
+          x={700}
           y={linePositions[li]!.y}
+          textAnchor="middle"
           fontFamily="var(--font-display), Georgia, serif"
           fontWeight={900}
           fontSize={290}
