@@ -1,2 +1,15 @@
-.vercel
+# next build output
+.next/
+
+# deps
+node_modules/
+
+# env
+.env
 .env*.local
+
+# vercel link
+.vercel/
+
+# typescript incremental
+*.tsbuildinfo
