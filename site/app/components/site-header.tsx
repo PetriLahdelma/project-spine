@@ -4,8 +4,7 @@ import { db } from "@/db";
 import { memberships, workspaces } from "@/db/schema";
 import { getWebSessionUser } from "@/lib/web-auth";
 import { HeaderLogo } from "./header-logo";
-
-type Props = { activePath?: string };
+import { SiteNav } from "./site-nav";
 
 const NAV: Array<{ label: string; href: string }> = [
   { label: "Pricing", href: "/pricing" },
@@ -41,7 +40,7 @@ async function firstWorkspaceSlug(userId: string): Promise<string | null> {
   return row?.slug ?? null;
 }
 
-export async function SiteHeader({ activePath }: Props) {
+export async function SiteHeader() {
   const user = await getWebSessionUser();
   const wsSlug = user ? await firstWorkspaceSlug(user.id) : null;
   const dashboardHref = wsSlug ? `/w/${wsSlug}` : "/workspaces/new";
@@ -53,38 +52,7 @@ export async function SiteHeader({ activePath }: Props) {
           <HeaderLogo />
           Project Spine
         </Link>
-        <nav className="site-header__nav" aria-label="Primary">
-          <div className="nav-group">
-            <Link
-              href="/product"
-              className="nav-group__trigger"
-              aria-haspopup="menu"
-              aria-current={activePath && activePath.startsWith("/product") ? "page" : undefined}
-            >
-              Product
-              <svg className="nav-group__chevron" width={10} height={10} viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M2 3.5l3 3 3-3" />
-              </svg>
-            </Link>
-            <div className="nav-group__panel" role="menu">
-              {PRODUCT_MENU.map((item) => (
-                <Link key={item.href} href={item.href} role="menuitem" className="nav-group__item">
-                  <span className="nav-group__item-label">{item.label}</span>
-                  <span className="nav-group__item-desc">{item.desc}</span>
-                </Link>
-              ))}
-            </div>
-          </div>
-          {NAV.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              aria-current={activePath && activePath.startsWith(item.href) ? "page" : undefined}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
+        <SiteNav productMenu={PRODUCT_MENU} items={NAV} />
         <div className="site-header__actions">
           <a
             href="https://github.com/PetriLahdelma/project-spine"

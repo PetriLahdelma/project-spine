@@ -1,13 +1,10 @@
-import { headers } from "next/headers";
 import { SiteHeader } from "../components/site-header";
 import { SiteFooter } from "../components/site-footer";
 
-export default async function MarketingLayout({ children }: { children: React.ReactNode }) {
-  const hdrs = await headers();
-  const activePath = hdrs.get("x-pathname") ?? undefined;
+export default function MarketingLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <SiteHeader activePath={activePath} />
+      <SiteHeader />
       {children}
       <SiteFooter />
     </>
