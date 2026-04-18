@@ -303,9 +303,6 @@ footer a {
 .site-header__nav a[aria-current="page"] {
   color: var(--ink);
 }
-.site-header__nav a[aria-current="page"] {
-  font-weight: 600;
-}
 .site-header__actions {
   display: inline-flex;
   align-items: center;
@@ -785,7 +782,6 @@ main.landing {
 .nav-group:focus-within .nav-group__trigger {
   color: var(--ink);
 }
-.nav-group__trigger[aria-current="page"] { font-weight: 600; }
 .nav-group__chevron {
   transition: transform 160ms ease;
   color: currentColor;
