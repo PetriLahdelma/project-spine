@@ -311,11 +311,17 @@ footer a {
 .site-header__actions a {
   display: inline-flex;
   align-items: center;
-  color: var(--ink-muted);
+  color: var(--ink);
   font-size: 14px;
   text-decoration: none;
 }
 .site-header__actions a:hover {
+  color: var(--accent);
+}
+.site-header__actions a.site-header__signout {
+  color: var(--ink-muted);
+}
+.site-header__actions a.site-header__signout:hover {
   color: var(--accent);
 }
 .site-header__actions a.site-header__cta {
