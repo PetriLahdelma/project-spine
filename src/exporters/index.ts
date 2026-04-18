@@ -10,6 +10,8 @@ import { renderComponentPlan } from "./component-plan.js";
 import { renderQaGuardrails } from "./qa-guardrails.js";
 import { renderSprint1Backlog } from "./sprint-1-backlog.js";
 import { renderRationale } from "./rationale.js";
+import { fingerprintFile } from "../compiler/manifest.js";
+import type { FileFingerprint } from "../model/export-manifest.js";
 
 export type ExportTarget =
   | "agents"
@@ -60,11 +62,14 @@ export type WriteOptions = {
  * Writes exports to both locations:
  * - repo root: AGENTS.md, CLAUDE.md, .github/copilot-instructions.md (where tools look)
  * - .project-spine/exports/: canonical copies + the scaffold/docs family
+ *
+ * Returns the list of absolute paths written AND their sha256 fingerprints
+ * for the export-manifest used by drift detection.
  */
 export async function writeAllExports(
   spine: SpineModel,
   opts: WriteOptions
-): Promise<string[]> {
+): Promise<{ written: string[]; fingerprints: FileFingerprint[] }> {
   const targets = opts.targets ?? ALL_TARGETS;
   const rendered = renderAllExports(spine);
   const exportsDir = join(opts.outDir, "exports");
@@ -91,7 +96,10 @@ export async function writeAllExports(
       tasks.push(push(join(opts.repoRoot, ".github", "copilot-instructions.md"), content));
   }
   await Promise.all(tasks);
-  return written.sort();
+  written.sort();
+
+  const fingerprints = await Promise.all(written.map((p) => fingerprintFile(p, opts.repoRoot)));
+  return { written, fingerprints };
 }
 
 export function exportFilename(target: ExportTarget): string {

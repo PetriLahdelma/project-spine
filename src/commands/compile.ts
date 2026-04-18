@@ -10,6 +10,7 @@ import { renderBriefSummary } from "../reporters/brief-summary.js";
 import { renderWarningsJson } from "../reporters/warnings.js";
 import { writeAllExports } from "../exporters/index.js";
 import { getTemplate } from "../templates/registry.js";
+import { buildManifest } from "../compiler/manifest.js";
 
 type FailOn = "never" | "info" | "warn" | "error";
 
@@ -64,7 +65,23 @@ export default defineCommand({
       writeFile(join(exportsDir, "architecture-summary.md"), renderArchitectureSummary(repo), "utf8"),
     ]);
 
-    const exportedFiles = await writeAllExports(spine, { repoRoot: root, outDir });
+    const { written: exportedFiles, fingerprints } = await writeAllExports(spine, {
+      repoRoot: root,
+      outDir,
+    });
+
+    const manifest = buildManifest({
+      spine,
+      brief,
+      briefPath,
+      repo,
+      design,
+      designPath,
+      template,
+      exports: fingerprints,
+      repoRoot: root,
+    });
+    await writeFile(join(outDir, "export-manifest.json"), JSON.stringify(manifest, null, 2) + "\n", "utf8");
 
     const warnSummary = summarizeWarnings(spine.warnings);
     console.log(`compiled spine for "${spine.metadata.name}" v${spine.metadata.version}`);
@@ -77,7 +94,7 @@ export default defineCommand({
     console.log(`  qa rules:     ${spine.qaGuardrails.length}`);
     console.log(`  warnings:     ${warnSummary}`);
     console.log("");
-    console.log(`wrote ${exportedFiles.length + 6} files under ${outDir} and repo root.`);
+    console.log(`wrote ${exportedFiles.length + 7} files under ${outDir} and repo root.`);
 
     const triggered = triggeringWarnings(spine.warnings, failOn);
     if (triggered.length > 0) {

@@ -1,0 +1,46 @@
+name: Spine drift
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  drift:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install deps + build
+        run: |
+          npm ci
+          npm run build
+
+      - name: Compile spine
+        run: |
+          node dist/cli.js compile \
+            --brief ./examples/brief.md \
+            --repo . \
+            --template saas-marketing \
+            --name "project-spine (self)"
+
+      - name: Drift check
+        run: node dist/cli.js drift check --repo . --fail-on any
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: spine-drift-report
+          path: |
+            .project-spine/drift-report.md
+            .project-spine/drift-report.json
+            .project-spine/warnings.json
+          if-no-files-found: ignore

@@ -71,7 +71,10 @@ spine export --targets claude,copilot
 # 4. analyze any existing repo without a brief
 spine inspect --repo .
 
-# 5. browse templates
+# 5. check drift between last compile and current state (CI-friendly)
+spine drift check --fail-on any
+
+# 6. browse templates
 spine template list
 spine template show design-system
 ```
@@ -114,7 +117,7 @@ See [docs/sample-output/](./docs/sample-output/) for a real compiled example.
 2. **Useful without AI.** A human reviewer should want to keep the files.
 3. **Opinionated, not magical.** Good defaults, transparent reasoning, no black box.
 4. **Fast path to value.** First run under 30 seconds on a typical repo.
-5. **Drift-aware** (v0.3). Generation is cheap; staying aligned is the moat.
+5. **Drift-aware.** `spine drift check` flags input drift, hand-edited exports, and missing files. Generation is cheap; staying aligned is the moat.
 6. **Deterministic before enriched.** LLM calls (when they arrive) never load-bear.
 7. **Security by default.** No implicit network calls, no uninvited uploads.
 

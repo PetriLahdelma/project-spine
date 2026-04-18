@@ -29,7 +29,7 @@ export default defineCommand({
     const spine = SpineModel.parse(JSON.parse(raw));
     const targets = parseTargets(args.targets);
 
-    const written = await writeAllExports(spine, { repoRoot: root, outDir, targets });
+    const { written } = await writeAllExports(spine, { repoRoot: root, outDir, targets });
     console.log(`regenerated ${written.length} export${written.length === 1 ? "" : "s"} from spine hash ${spine.metadata.hash}:`);
     for (const f of written) console.log(`  ${f}`);
   },

@@ -5,7 +5,7 @@ import { printBanner, TAGLINE } from "./ui/banner.js";
 const main = defineCommand({
   meta: {
     name: "spine",
-    version: "0.1.0-alpha.0",
+    version: "0.3.0-alpha.0",
     description: `Project Spine — ${TAGLINE}.`,
   },
   subCommands: {
@@ -15,6 +15,7 @@ const main = defineCommand({
     export: () => import("./commands/export.js").then((m) => m.default),
     template: () => import("./commands/template.js").then((m) => m.default),
     explain: () => import("./commands/explain.js").then((m) => m.default),
+    drift: () => import("./commands/drift.js").then((m) => m.default),
   },
   run({ args }) {
     if ((args._?.length ?? 0) === 0) printBanner();
