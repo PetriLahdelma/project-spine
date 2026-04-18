@@ -91,7 +91,7 @@ export default function TermsPage() {
 
       <Section title="Contact">
         <p>
-          Email <a href="mailto:petri.lahdelma@gmail.com">petri.lahdelma@gmail.com</a>. Open
+          Email <a href="mailto:support@projectspine.dev">support@projectspine.dev</a>. Open
           issues for feature and bug reports:{" "}
           <a href="https://github.com/PetriLahdelma/project-spine/issues">
             github.com/PetriLahdelma/project-spine/issues
