@@ -92,6 +92,12 @@ export default function Home() {
           </a>
           .
         </p>
+        <p style={{ fontSize: 12, marginTop: 12 }}>
+          <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> ·{" "}
+          <a href="https://github.com/PetriLahdelma/project-spine/blob/main/SECURITY.md">
+            Security
+          </a>
+        </p>
       </footer>
     </main>
   );
