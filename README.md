@@ -1,18 +1,8 @@
-```
-██████╗ ██████╗  ██████╗      ██╗███████╗ ██████╗████████╗
-██╔══██╗██╔══██╗██╔═══██╗     ██║██╔════╝██╔════╝╚══██╔══╝
-██████╔╝██████╔╝██║   ██║     ██║█████╗  ██║        ██║
-██╔═══╝ ██╔══██╗██║   ██║██   ██║██╔══╝  ██║        ██║
-██║     ██║  ██║╚██████╔╝╚█████╔╝███████╗╚██████╗   ██║
-╚═╝     ╚═╝  ╚═╝ ╚═════╝  ╚════╝ ╚══════╝ ╚═════╝   ╚═╝
-     ███████╗██████╗ ██╗███╗   ██╗███████╗
-     ██╔════╝██╔══██╗██║████╗  ██║██╔════╝
-     ███████╗██████╔╝██║██╔██╗ ██║█████╗
-     ╚════██║██╔═══╝ ██║██║╚██╗██║██╔══╝
-     ███████║██║     ██║██║ ╚████║███████╗
-     ╚══════╝╚═╝     ╚═╝╚═╝  ╚═══╝╚══════╝
-     the missing context layer for software delivery
-```
+<p align="center">
+  <img src="docs/branding/banner.png" alt="Project Spine" width="880" />
+</p>
+
+<p align="center"><em>the missing context layer for software delivery</em></p>
 
 # Project Spine
 
@@ -29,7 +19,7 @@ Project Spine turns a client brief, a repo, and optional design-system inputs in
 
 ```
 brief.md ──┐
-repo/   ──┼──▶  spine.json ──▶  AGENTS.md + CLAUDE.md + copilot-instructions.md
+repo/   ───┼──▶  spine.json ──▶  AGENTS.md + CLAUDE.md + copilot-instructions.md
 design.md ─┘                    scaffold-plan.md, qa-guardrails.md, sprint-1-backlog.md,
                                 component-plan.md, route-inventory.md, rationale.md
 ```
@@ -144,13 +134,13 @@ See [docs/sample-output/](./docs/sample-output/) for a real compiled example.
 └────────────┘                    └──────────────┘
                                          │
                                          ▼
-                                  ┌──────────────┐
-                                  │ spine.json   │
-                                  │ warnings.json│
-                                  └──────────────┘
+                                  ┌───────────────┐
+                                  │ spine.json    │
+                                  │ warnings.json │
+                                  └───────────────┘
 ```
 
-Every rule in `spine.json` carries a `source` pointer — `brief.md#section0/item3`, `repo-profile#framework`, `template:saas-marketing/contributes#2`, or `inferred:...` — so reviewers can audit *why* a rule exists, not just trust that it does.
+Every rule in `spine.json` carries a `source` pointer — `brief.md#section0/item3`, `repo-profile#framework`, `template:saas-marketing/contributes#2`, or `inferred:...` — so reviewers can audit _why_ a rule exists, not just trust that it does.
 
 ---
 
@@ -158,12 +148,12 @@ Every rule in `spine.json` carries a `source` pointer — `brief.md#section0/ite
 
 Four starter presets ship in the box:
 
-| Template | Project type | Contributes |
-|---|---|---|
-| `saas-marketing` | Marketing site | 7 routes, 7 components, LCP/CLS budgets, privacy guardrails |
-| `app-dashboard` | Authenticated dashboard | role-gated routes, `PermissionGate`/`DataTable`/`AppShell`, PII scrubbing |
-| `design-system` | Library | zero routes, tokens/primitives/Storybook QA, ships its own `design-rules.md` |
-| `docs-portal` | Documentation site | docs-specific routes, `TOC`/`CodeBlock`/`SearchBar`, broken-link QA |
+| Template         | Project type            | Contributes                                                                  |
+| ---------------- | ----------------------- | ---------------------------------------------------------------------------- |
+| `saas-marketing` | Marketing site          | 7 routes, 7 components, LCP/CLS budgets, privacy guardrails                  |
+| `app-dashboard`  | Authenticated dashboard | role-gated routes, `PermissionGate`/`DataTable`/`AppShell`, PII scrubbing    |
+| `design-system`  | Library                 | zero routes, tokens/primitives/Storybook QA, ships its own `design-rules.md` |
+| `docs-portal`    | Documentation site      | docs-specific routes, `TOC`/`CodeBlock`/`SearchBar`, broken-link QA          |
 
 Each template contributes routes, components, QA, UX, a11y, and agent rules — not just a brief scaffold. Every contributed rule is tagged `kind: "template"` in `spine.json` for traceability.
 
