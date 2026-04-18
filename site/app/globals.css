@@ -164,17 +164,30 @@ a:hover {
 }
 
 .cta-row a {
-  display: inline-block;
-  padding: 10px 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
   border: 1px solid var(--line);
   border-radius: 8px;
   text-decoration: none;
   background: #fff;
   font-size: 15px;
+  color: var(--ink);
+}
+
+.cta-row a svg {
+  display: block;
+  flex-shrink: 0;
+  color: var(--ink);
 }
 
 .cta-row a:hover {
   border-color: var(--accent);
+  color: var(--accent);
+}
+
+.cta-row a:hover svg {
   color: var(--accent);
 }
 
