@@ -44,6 +44,7 @@ The hosted service at `projectspine.dev` exists to sync templates, publish ratio
 - **Input validation:** every JSON API body goes through a zod schema before touching the database.
 - **Transport:** HTTPS only. `.dev` is HSTS-preloaded by the root TLD; we additionally send our own `Strict-Transport-Security: max-age=63072000; includeSubDomains; preload` header.
 - **Security headers:** `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin` on every response.
+- **CSP with per-request nonce:** `Content-Security-Policy` is emitted from middleware with a fresh 16-byte nonce per request. `script-src` is `'self' 'nonce-<value>' 'strict-dynamic'` — `'unsafe-inline'` is **not** present on script, so an injected `<script>…</script>` cannot execute. Every page is rendered on demand so Next's RSC payload scripts receive the per-request nonce. Style-src still allows `'unsafe-inline'` (Next and inline component style objects depend on it; there's no user-controlled style injection surface).
 - **GitHub OAuth client secret:** stored only in Vercel's encrypted env vars, marked sensitive so it's write-only in the dashboard.
 - **Database:** one single-tenant Neon Postgres instance in `iad1`. Row-level isolation is enforced at query time by joining on `memberships.user_id`.
 - **Secrets in flight:** a device_code is never returned to anyone except the CLI that created it; the user_code is the user-facing half of the pair and is only useful together with an active session cookie.
