@@ -57,6 +57,9 @@ export function parseBrief(content: string, source = "brief.md"): NormalizedBrie
       id: "missing-sections",
       severity: "warn",
       message: `Brief is missing items under: ${missing.join(", ")}. Add at least one bullet per section for high-quality output.`,
+      suggestion: `Open \`brief.md\` and add at least one bullet under each of: ${missing
+        .map((s) => s === "nonGoals" ? "Non-goals" : humanSection(s))
+        .join(", ")}. Recompile.`,
     });
   }
   if (classification.confidence < 0.5) {
@@ -64,6 +67,8 @@ export function parseBrief(content: string, source = "brief.md"): NormalizedBrie
       id: "project-type-uncertain",
       severity: "warn",
       message: `Project type inferred as "${classification.value}" with confidence ${classification.confidence}. Set \`projectType\` in frontmatter to remove ambiguity.`,
+      suggestion:
+        'Add `projectType: "saas-marketing" | "app-dashboard" | "design-system" | "docs-portal" | "extension" | "other"` to the YAML frontmatter of brief.md.',
     });
   }
   if (unknownSections.length > 0) {
@@ -71,6 +76,8 @@ export function parseBrief(content: string, source = "brief.md"): NormalizedBrie
       id: "unknown-sections",
       severity: "info",
       message: `Unrecognized top-level sections (skipped): ${unknownSections.map((s) => s.heading).join(", ")}`,
+      suggestion:
+        "Rename each to one of: Goals, Non-goals, Audience, Constraints, Assumptions, Risks, Success criteria — or move the content into an existing section.",
     });
   }
 
@@ -208,4 +215,15 @@ function walk(node: { children?: RootContent[] | PhrasingContent[]; value?: stri
 
 function isPlainObject(v: unknown): v is Record<string, unknown> {
   return typeof v === "object" && v !== null && !Array.isArray(v);
+}
+
+function humanSection(key: string): string {
+  switch (key) {
+    case "successCriteria":
+      return "Success criteria";
+    case "nonGoals":
+      return "Non-goals";
+    default:
+      return key.charAt(0).toUpperCase() + key.slice(1);
+  }
 }

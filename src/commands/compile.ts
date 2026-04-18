@@ -11,6 +11,8 @@ import { renderWarningsJson } from "../reporters/warnings.js";
 import { writeAllExports } from "../exporters/index.js";
 import { getTemplate } from "../templates/registry.js";
 
+type FailOn = "never" | "info" | "warn" | "error";
+
 export default defineCommand({
   meta: {
     name: "compile",
@@ -20,19 +22,21 @@ export default defineCommand({
     brief: { type: "string", description: "Path to brief.md", required: true },
     repo: { type: "string", description: "Path to repo root", default: "." },
     design: { type: "string", description: "Optional path to design-rules.md", required: false },
-    template: {
-      type: "string",
-      description: "Preset: saas-marketing | app-dashboard | design-system | docs-portal",
-      required: false,
-    },
+    template: { type: "string", description: "Preset name", required: false },
     out: { type: "string", description: "Output directory (relative to repo)", default: ".project-spine" },
     name: { type: "string", description: "Project name override", required: false },
     version: { type: "string", description: "Project version", default: "0.1.0" },
+    "fail-on": {
+      type: "string",
+      description: "Exit non-zero if any warning meets this severity: never | info | warn | error",
+      default: "never",
+    },
   },
   async run({ args }) {
     const root = resolve(process.cwd(), args.repo);
     const briefPath = resolve(process.cwd(), args.brief);
     const designPath = args.design ? resolve(process.cwd(), args.design) : null;
+    const failOn = parseFailOn(args["fail-on"]);
 
     const [brief, repo] = await Promise.all([parseBriefFromFile(briefPath), analyzeRepo(root)]);
     const design = designPath ? await parseDesignFromFile(designPath) : null;
@@ -74,9 +78,49 @@ export default defineCommand({
     console.log(`  warnings:     ${warnSummary}`);
     console.log("");
     console.log(`wrote ${exportedFiles.length + 6} files under ${outDir} and repo root.`);
+
+    const triggered = triggeringWarnings(spine.warnings, failOn);
+    if (triggered.length > 0) {
+      console.error("");
+      console.error(`--fail-on=${args["fail-on"]} triggered by ${triggered.length} warning(s):`);
+      for (const w of triggered) console.error(`  [${w.severity}] ${w.id} — ${w.message}`);
+      console.error("");
+      console.error(`run \`spine explain <id>\` for suggested fixes, or pass --fail-on=never to ignore.`);
+      process.exitCode = 2;
+      return;
+    }
+
     console.log("review the outputs, commit what you want to keep, and edit `brief.md` to refine.");
   },
 });
+
+function parseFailOn(raw: string): FailOn {
+  const v = raw.trim().toLowerCase();
+  if (v === "never" || v === "info" || v === "warn" || v === "error") return v;
+  throw new Error(`invalid --fail-on value "${raw}" — expected one of: never, info, warn, error`);
+}
+
+function severityRank(s: string): number {
+  switch (s) {
+    case "info":
+      return 1;
+    case "warn":
+      return 2;
+    case "error":
+      return 3;
+    default:
+      return 0;
+  }
+}
+
+function triggeringWarnings(
+  warnings: Array<{ severity: string; id: string; message: string }>,
+  failOn: FailOn
+): Array<{ severity: string; id: string; message: string }> {
+  if (failOn === "never") return [];
+  const threshold = severityRank(failOn);
+  return warnings.filter((w) => severityRank(w.severity) >= threshold);
+}
 
 function summarizeWarnings(warnings: { severity: string }[]): string {
   if (warnings.length === 0) return "0";

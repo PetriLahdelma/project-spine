@@ -29,6 +29,7 @@ export async function analyzeRepo(root: string): Promise<RepoProfile> {
       id: "no-package-json",
       severity: "warn",
       message: "No readable package.json — framework and styling detection are unreliable.",
+      suggestion: "Run `npm init` (or equivalent) at the repo root, or point `--repo` at a directory that has one.",
     });
   }
   if (framework.confidence < 0.5) {
@@ -36,6 +37,8 @@ export async function analyzeRepo(root: string): Promise<RepoProfile> {
       id: "framework-uncertain",
       severity: "warn",
       message: `Framework detection confidence ${framework.confidence}. Evidence: ${framework.evidence.join("; ")}`,
+      suggestion:
+        "Install the framework dependency explicitly (e.g., `npm i next`), or bootstrap from a framework starter before compiling.",
     });
   }
   if (styling.value === "mixed") {
@@ -43,6 +46,8 @@ export async function analyzeRepo(root: string): Promise<RepoProfile> {
       id: "styling-mixed",
       severity: "warn",
       message: `Multiple styling approaches detected: ${styling.evidence.join("; ")}`,
+      suggestion:
+        "Pick one approach for new work and document the migration plan under `Constraints` in brief.md. The compiler will generate a rule telling agents to match the pattern already in the file.",
     });
   }
   if (routing.value === "next-hybrid") {
@@ -50,20 +55,25 @@ export async function analyzeRepo(root: string): Promise<RepoProfile> {
       id: "next-hybrid-routing",
       severity: "warn",
       message: "Both Next app/ and pages/ routers are present. Component and routing rules will be ambiguous until reconciled.",
+      suggestion:
+        "Decide which router is canonical. Migrate the other or note the split explicitly in brief.md so agents know where new surfaces belong.",
     });
   }
   if (language.typescript && language.strict === false) {
     warnings.push({
       id: "ts-strict-off",
       severity: "info",
-      message: "TypeScript is used but strict mode is disabled. Consider enabling it for agent rule clarity.",
+      message: "TypeScript is used but strict mode is disabled.",
+      suggestion:
+        'Set `"strict": true` in tsconfig.json compilerOptions. Spine will then generate a "never use any" convention automatically.',
     });
   }
   if (!agentFiles.agentsMd && !agentFiles.claudeMd && !agentFiles.copilotInstructions) {
     warnings.push({
       id: "no-agent-files",
       severity: "info",
-      message: "No agent instruction files found. Spine will generate them on `spine compile`.",
+      message: "No agent instruction files found.",
+      suggestion: "Run `spine compile --brief ./brief.md --repo .` to generate AGENTS.md, CLAUDE.md, and copilot-instructions.md.",
     });
   }
 

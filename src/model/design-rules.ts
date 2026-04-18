@@ -27,6 +27,7 @@ export const DesignRules = z.object({
       id: z.string(),
       severity: z.enum(["info", "warn", "error"]),
       message: z.string(),
+      suggestion: z.string().optional(),
     })
   ),
 });

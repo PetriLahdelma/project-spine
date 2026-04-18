@@ -51,6 +51,7 @@ export function compileSpine(input: CompileInput): SpineModel {
       severity: w.severity,
       message: w.message,
       sources: [{ kind: "brief", pointer: "brief.md" }],
+      ...(w.suggestion !== undefined && { suggestion: w.suggestion }),
     });
   }
   for (const w of repo.warnings) {
@@ -59,6 +60,7 @@ export function compileSpine(input: CompileInput): SpineModel {
       severity: w.severity,
       message: w.message,
       sources: [{ kind: "repo", pointer: "repo-profile" }],
+      ...(w.suggestion !== undefined && { suggestion: w.suggestion }),
     });
   }
   if (design) {
@@ -68,6 +70,7 @@ export function compileSpine(input: CompileInput): SpineModel {
         severity: w.severity,
         message: w.message,
         sources: [{ kind: "design", pointer: "design-rules.md" }],
+        ...(w.suggestion !== undefined && { suggestion: w.suggestion }),
       });
     }
   }
@@ -84,6 +87,7 @@ export function compileSpine(input: CompileInput): SpineModel {
         { kind: "template", pointer: `template:${template.name}` },
         { kind: "brief", pointer: "brief.md#frontmatter.projectType" },
       ],
+      suggestion: `Either change the brief's frontmatter to \`projectType: "${template.projectType}"\`, or switch to a template that matches ("${brief.projectType}").`,
     });
   }
 
@@ -388,6 +392,38 @@ function buildScaffoldPlan(
   components.push(inferredRule("cmp-bucket", ["primitives"], "UI primitives: `Button`, `Input`, `Field`, `Dialog`, `Toast`."));
   components.push(inferredRule("cmp-bucket", ["features"], "Feature components live co-located with the route or feature folder that owns them."));
 
+  // Setup items — derived from repo state, not the brief. These are the
+  // "clear the runway" tasks an agent or engineer does before shipping features.
+  if (!repo.agentFiles.agentsMd && !repo.agentFiles.claudeMd && !repo.agentFiles.copilotInstructions) {
+    sprint1.push(
+      setupRule(
+        "agent-files",
+        "Commit the Project Spine–generated `AGENTS.md`, `CLAUDE.md`, and `.github/copilot-instructions.md` after review."
+      )
+    );
+  }
+  if (repo.language.typescript && repo.language.strict === false) {
+    sprint1.push(setupRule("ts-strict", "Enable `strict: true` in tsconfig.json and resolve the fallout."));
+  }
+  if (!repo.linting.eslint && !repo.linting.biome && !repo.linting.oxlint) {
+    sprint1.push(setupRule("lint", "Pick and configure a linter (Biome or ESLint) with a minimal rule set."));
+  }
+  if (repo.testing.runners.length === 0) {
+    sprint1.push(setupRule("tests", "Set up a test runner (Vitest recommended) and land a smoke test."));
+  }
+  if (!repo.ci.githubActions && repo.ci.other.length === 0) {
+    sprint1.push(setupRule("ci", "Add a minimal CI workflow that runs typecheck + lint + tests on every PR."));
+  }
+  if (repo.styling.value === "mixed") {
+    sprint1.push(
+      setupRule(
+        "styling",
+        "Reconcile mixed styling approaches: pick canonical, document the migration plan under Constraints in brief.md."
+      )
+    );
+  }
+
+  // Delivery items — derived from brief goals.
   let i = 0;
   for (const goal of brief.sections.goals.slice(0, 5)) {
     sprint1.push({
@@ -396,15 +432,24 @@ function buildScaffoldPlan(
       source: goal.source,
     });
   }
-  if (sprint1.length === 0) {
-    sprint1.push(inferredRule("s1", ["seed"], "Seed: scaffold the initial route and header; land an empty-state page for the primary surface."));
-  }
-  if (!repo.agentFiles.agentsMd && !repo.agentFiles.claudeMd && !repo.agentFiles.copilotInstructions) {
+  if (i === 0 && sprint1.length === 0) {
     sprint1.push(
-      inferredRule("s1", ["agent-files"], "Commit the Project Spine–generated `AGENTS.md`, `CLAUDE.md`, and `.github/copilot-instructions.md` after review.")
+      inferredRule(
+        "s1",
+        ["seed"],
+        "Seed: scaffold the initial route and header; land an empty-state page for the primary surface."
+      )
     );
   }
   return { routes, components, sprint1 };
+}
+
+function setupRule(key: string, text: string): Rule {
+  return {
+    id: shortId("setup", [key, text]),
+    text,
+    source: { kind: "inference", pointer: `inferred:setup/${key}` },
+  };
 }
 
 function detectConflicts(brief: NormalizedBrief, repo: RepoProfile): SpineWarning[] {
@@ -422,6 +467,8 @@ function detectConflicts(brief: NormalizedBrief, repo: RepoProfile): SpineWarnin
           { kind: "brief", pointer: "brief#constraints-or-goals" },
           { kind: "repo", pointer: "package.json" },
         ],
+        suggestion:
+          "Pick an auth strategy and either add the dependency (better-auth, clerk, auth0, next-auth, supabase) or document the approach explicitly under Constraints in brief.md.",
       });
     }
   }
@@ -431,6 +478,8 @@ function detectConflicts(brief: NormalizedBrief, repo: RepoProfile): SpineWarnin
       severity: "info",
       message: "Brief implies a marketing site, but no framework was detected. Expect scaffold plan to suggest a setup choice.",
       sources: [{ kind: "brief", pointer: "brief" }, { kind: "repo", pointer: "repo-profile" }],
+      suggestion:
+        "Point `--repo` at a starter (Next, Astro, Remix) or scaffold one before compiling. Alternatively, declare the chosen framework under Constraints in brief.md.",
     });
   }
   return out;

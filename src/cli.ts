@@ -14,10 +14,9 @@ const main = defineCommand({
     inspect: () => import("./commands/inspect.js").then((m) => m.default),
     export: () => import("./commands/export.js").then((m) => m.default),
     template: () => import("./commands/template.js").then((m) => m.default),
+    explain: () => import("./commands/explain.js").then((m) => m.default),
   },
   run({ args }) {
-    // citty passes a truthy help flag or the normal arg map; show the banner
-    // only when the user typed `spine` with no subcommand.
     if ((args._?.length ?? 0) === 0) printBanner();
   },
 });

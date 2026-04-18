@@ -112,11 +112,12 @@ describe("compileSpine — examples + self repo", () => {
     expect(spine.componentGuidance.some((r) => r.text.includes("Button primitive"))).toBe(true);
   });
 
-  it("populates scaffoldPlan.sprint1 from brief goals", async () => {
+  it("populates scaffoldPlan.sprint1 with setup + delivery items", async () => {
     const brief = await parseBriefFromFile(briefPath);
     const repo = await analyzeRepo(repoRoot);
     const spine = compileSpine({ brief, repo, design: null, now: FIXED_NOW });
     expect(spine.scaffoldPlan.sprint1.length).toBeGreaterThan(0);
-    expect(spine.scaffoldPlan.sprint1[0]!.text).toContain("Deliver:");
+    const delivery = spine.scaffoldPlan.sprint1.filter((i) => i.text.startsWith("Deliver:"));
+    expect(delivery.length).toBeGreaterThan(0);
   });
 });
