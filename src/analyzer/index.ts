@@ -6,12 +6,13 @@ import { detectTesting } from "./testing.js";
 import { detectLinting } from "./linting.js";
 import { detectCi } from "./ci.js";
 import { detectAgentFiles } from "./agent-files.js";
+import { detectMonorepo } from "./monorepo.js";
 import { readJson, rootPath } from "./fs.js";
 import { RepoProfile } from "../model/repo-profile.js";
 
 export async function analyzeRepo(root: string): Promise<RepoProfile> {
   const pkg = await readJson<Record<string, unknown>>(rootPath(root, "package.json"));
-  const [packageManager, framework, styling, language, testing, linting, ci, agentFiles] = await Promise.all([
+  const [packageManager, framework, styling, language, testing, linting, ci, agentFiles, monorepo] = await Promise.all([
     detectPackageManager(root),
     detectFramework(root, pkg),
     detectStyling(root, pkg),
@@ -20,6 +21,7 @@ export async function analyzeRepo(root: string): Promise<RepoProfile> {
     detectLinting(root, pkg),
     detectCi(root),
     detectAgentFiles(root),
+    detectMonorepo(root, pkg),
   ]);
   const routing = await detectRouting(root, framework.value);
 
@@ -32,13 +34,25 @@ export async function analyzeRepo(root: string): Promise<RepoProfile> {
       suggestion: "Run `npm init` (or equivalent) at the repo root, or point `--repo` at a directory that has one.",
     });
   }
-  if (framework.confidence < 0.5) {
+  if (framework.confidence < 0.5 && !monorepo.isMonorepo) {
     warnings.push({
       id: "framework-uncertain",
       severity: "warn",
       message: `Framework detection confidence ${framework.confidence}. Evidence: ${framework.evidence.join("; ")}`,
       suggestion:
         "Install the framework dependency explicitly (e.g., `npm i next`), or bootstrap from a framework starter before compiling.",
+    });
+  }
+  if (monorepo.isMonorepo) {
+    const count = monorepo.workspaces.length;
+    warnings.push({
+      id: "monorepo-detected",
+      severity: "warn",
+      message: `Detected a ${monorepo.tool} monorepo with ${count} workspace${count === 1 ? "" : "s"}. Framework detection at the root is unreliable; compile against a specific workspace instead.`,
+      suggestion:
+        count > 0
+          ? `Re-run with \`--repo ${monorepo.workspaces[0]}\` (or another workspace). Workspaces detected: ${monorepo.workspaces.slice(0, 6).join(", ")}${count > 6 ? ", …" : ""}.`
+          : "Point `--repo` at the specific package you want to compile (e.g., `apps/web`).",
     });
   }
   if (styling.value === "mixed") {
@@ -90,6 +104,7 @@ export async function analyzeRepo(root: string): Promise<RepoProfile> {
     linting,
     ci,
     agentFiles,
+    monorepo,
     rawPackageJson: pkg,
     warnings,
   };

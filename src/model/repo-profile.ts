@@ -66,6 +66,14 @@ const AgentFilePresence = z.object({
   projectSpineDir: z.boolean(),
 });
 
+const Monorepo = z.object({
+  isMonorepo: z.boolean(),
+  tool: z.enum(["npm", "yarn", "pnpm", "bun", "nx", "turbo", "unknown"]).nullable(),
+  workspaces: z.array(z.string()),
+  evidence: z.array(z.string()),
+});
+export type Monorepo = z.infer<typeof Monorepo>;
+
 export const RepoProfile = z.object({
   schemaVersion: z.literal(1),
   root: z.string(),
@@ -99,6 +107,7 @@ export const RepoProfile = z.object({
     evidence: z.array(z.string()),
   }),
   agentFiles: AgentFilePresence,
+  monorepo: Monorepo,
   rawPackageJson: z.record(z.unknown()).nullable(),
   warnings: z.array(
     z.object({
