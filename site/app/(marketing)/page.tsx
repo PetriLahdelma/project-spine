@@ -243,7 +243,10 @@ export default async function Home() {
       {/* Output */}
       <section className="section">
         <div className="section-header">
-          <p className="eyebrow">Output</p>
+          <div className="section-header__kicker">
+            <span className="section-header__num">01</span>
+            <span className="section-header__label">Output</span>
+          </div>
           <h2>Eighteen files, every agent, all drift-tracked.</h2>
           <p className="sub">
             Run <code>spine compile</code> once. Everything below is generated
@@ -321,7 +324,10 @@ export default async function Home() {
       {/* Claude vs Spine */}
       <section className="section">
         <div className="section-header">
-          <p className="eyebrow">The moat</p>
+          <div className="section-header__kicker">
+            <span className="section-header__num">02</span>
+            <span className="section-header__label">The moat</span>
+          </div>
           <h2>Why not just use Claude?</h2>
           <p className="sub">
             Claude Code writes an <code>AGENTS.md</code> when you ask it to.
@@ -365,7 +371,10 @@ export default async function Home() {
       {/* Features — editorial list */}
       <section className="section">
         <div className="section-header">
-          <p className="eyebrow">Capabilities</p>
+          <div className="section-header__kicker">
+            <span className="section-header__num">03</span>
+            <span className="section-header__label">Capabilities</span>
+          </div>
           <h2>Everything the hosted tier needs. Nothing you don&apos;t.</h2>
           <p className="sub">
             Pre-alpha today, but already carrying the primitives agencies tell
@@ -402,17 +411,25 @@ export default async function Home() {
         </blockquote>
       </section>
 
-      {/* Final CTA */}
-      <section className="section section--tight">
-        <div className="final-cta">
-          <h2>Ship your AGENTS.md like it&apos;s code.</h2>
-          <p>
-            Free while in alpha. MIT forever. Three commands and 30 seconds to
-            compile your first brief into an audit-ready operating layer.
+      {/* Poster closer */}
+      <section className="poster-closer">
+        <div className="poster-closer__inner">
+          <p className="poster-closer__eyebrow">§ START</p>
+          <h2 className="poster-closer__headline">
+            Ship your <em>AGENTS.md</em><br />like it&apos;s code.
+          </h2>
+          <p className="poster-closer__sub">
+            Free while in alpha. MIT forever. Three commands and thirty seconds
+            to compile your first brief into an audit-ready operating layer.
           </p>
-          <Link href="/docs" className="btn-primary">
-            Install the CLI
-          </Link>
+          <div className="poster-closer__ctas">
+            <Link href="/login?next=/workspaces/new" className="btn-on-cyan btn-on-cyan--primary">
+              Create a workspace
+            </Link>
+            <Link href="/docs" className="btn-on-cyan btn-on-cyan--secondary">
+              Install the CLI
+            </Link>
+          </div>
         </div>
       </section>
     </main>

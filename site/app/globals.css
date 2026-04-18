@@ -300,7 +300,6 @@ footer a {
 .site-footer {
   border-top: 1px solid var(--line);
   background: #fff;
-  margin-top: 96px;
 }
 .site-footer__inner {
   display: grid;
@@ -482,6 +481,31 @@ main.landing {
   text-align: left;
   margin: 0 0 56px;
   max-width: 640px;
+}
+.section-header__kicker {
+  display: flex;
+  align-items: baseline;
+  gap: 20px;
+  margin: 0 0 20px;
+}
+.section-header__num {
+  font-family: var(--font-display), Georgia, serif;
+  font-style: italic;
+  font-weight: 900;
+  font-size: 72px;
+  line-height: 0.85;
+  color: var(--accent);
+  letter-spacing: -0.04em;
+  font-variation-settings: "SOFT" 100;
+}
+.section-header__label {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  position: relative;
+  top: -4px;
 }
 .section-header .eyebrow {
   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
@@ -1015,28 +1039,113 @@ main.landing {
   margin: 0;
 }
 
-/* ---- Final CTA (plain, no gradient) ---------------------------- */
-.final-cta {
-  max-width: 640px;
-  margin: 0;
-  padding-top: 40px;
-  border-top: 1px solid var(--line);
+/* ---- Poster closer (cyan band echoing the hero) ---------------- */
+.poster-closer {
+  position: relative;
+  background: var(--poster-blue);
+  border-top: 4px solid var(--poster-ink);
+  padding: 96px 24px 120px;
+  overflow: hidden;
 }
-.final-cta h2 {
-  font-size: clamp(22px, 2.6vw, 28px);
-  letter-spacing: -0.02em;
-  text-transform: none;
-  line-height: 1.2;
-  color: var(--ink);
-  margin: 0 0 10px;
+.poster-closer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 18% 22%, rgba(255, 255, 255, 0.6), transparent 60%),
+    radial-gradient(1.3px 1.3px at 78% 30%, rgba(255, 255, 255, 0.6), transparent 60%),
+    radial-gradient(1px 1px at 40% 78%, rgba(255, 255, 255, 0.55), transparent 60%),
+    radial-gradient(1.2px 1.2px at 88% 72%, rgba(255, 255, 255, 0.5), transparent 60%),
+    radial-gradient(1px 1px at 12% 60%, rgba(255, 255, 255, 0.5), transparent 60%),
+    radial-gradient(1.4px 1.4px at 58% 48%, rgba(255, 255, 255, 0.55), transparent 60%);
+  pointer-events: none;
+}
+.poster-closer__inner {
+  position: relative;
+  max-width: 960px;
+  margin: 0 auto;
+}
+.poster-closer__eyebrow {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--poster-ink);
+  opacity: 0.8;
+  margin: 0 0 20px;
+}
+.poster-closer__headline {
+  font-family: var(--font-display), Georgia, serif;
+  font-style: italic;
+  font-weight: 900;
+  font-variation-settings: "SOFT" 100;
+  font-size: clamp(48px, 7vw, 92px);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  color: var(--poster-pink);
+  margin: 0 0 28px;
+  text-transform: uppercase;
+  text-shadow:
+    1px 1px 0 var(--poster-ink),
+    2px 2px 0 var(--poster-ink),
+    3px 3px 0 var(--poster-ink),
+    4px 4px 0 var(--poster-ink),
+    5px 5px 0 var(--poster-ink),
+    6px 6px 0 var(--poster-ink),
+    7px 7px 0 var(--poster-ink),
+    8px 8px 0 var(--poster-ink);
+  -webkit-text-stroke: 2px var(--poster-ink);
+  paint-order: stroke fill;
+}
+.poster-closer__headline em {
+  font-style: italic;
+}
+.poster-closer__sub {
+  max-width: 560px;
+  margin: 0 0 36px;
+  font-size: clamp(16px, 1.7vw, 18px);
+  line-height: 1.5;
+  color: var(--poster-ink);
+  font-weight: 500;
+}
+.poster-closer__ctas {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.btn-on-cyan {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  border-radius: 8px;
+  font-size: 15px;
   font-weight: 600;
+  text-decoration: none;
+  line-height: 1;
+  border: 2px solid var(--poster-ink);
+  transition: transform 120ms ease, background 120ms ease, color 120ms ease;
 }
-.final-cta p {
-  color: var(--ink-soft);
-  font-size: 15.5px;
-  line-height: 1.55;
-  margin: 0 0 22px;
-  max-width: 540px;
+.btn-on-cyan--primary {
+  background: var(--poster-ink);
+  color: #fff;
+}
+.btn-on-cyan--primary:hover {
+  color: #fff;
+  background: var(--poster-pink);
+  border-color: var(--poster-pink);
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 var(--poster-ink);
+}
+.btn-on-cyan--secondary {
+  background: transparent;
+  color: var(--poster-ink);
+}
+.btn-on-cyan--secondary:hover {
+  color: var(--poster-ink);
+  background: #fff;
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 var(--poster-ink);
 }
 
 /* ---- Create-workspace form ------------------------------------- */
