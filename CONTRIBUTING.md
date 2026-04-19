@@ -55,7 +55,7 @@ New exporters live under `src/exporters/`. The contract: take a `SpineModel` and
 
 Manual, from the maintainer's workstation:
 
-1. Bump `package.json` `version` and the matching constants in [`src/cli.ts`](./src/cli.ts) (the `defineCommand` meta and the `--version` fallback).
+1. Bump `package.json` `version` (e.g. `npm version prerelease --preid=alpha --no-git-tag-version`). `src/cli.ts` reads it at runtime — no second bump.
 2. `npm run build` and verify `node dist/cli.js --version` prints the new value.
 3. Commit as `vX.Y.Z-alpha.N: <short summary>` on a release branch, open a PR, squash-merge to `main`.
 4. Tag `vX.Y.Z-alpha.N` against the merge commit and push the tag.

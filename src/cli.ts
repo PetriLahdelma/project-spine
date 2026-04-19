@@ -5,12 +5,21 @@ import {
   showUsage,
   type CommandDef,
 } from "citty";
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
 import { printBanner, TAGLINE } from "./ui/banner.js";
+
+// Read the version from package.json at runtime so the release flow has a
+// single source of truth (`npm version` updates package.json and we pick it
+// up here automatically — no duplicate bump in source).
+const PKG_PATH = join(dirname(fileURLToPath(import.meta.url)), "..", "package.json");
+const { version: VERSION } = JSON.parse(readFileSync(PKG_PATH, "utf8")) as { version: string };
 
 const main = defineCommand({
   meta: {
     name: "spine",
-    version: "0.9.1-alpha.0",
+    version: VERSION,
     description: `Project Spine — ${TAGLINE}.`,
   },
   subCommands: {
@@ -72,7 +81,7 @@ async function dispatch(): Promise<void> {
 
   // `spine --version` / `spine -v`
   if (rawArgs.length === 1 && (rawArgs[0] === "--version" || rawArgs[0] === "-v")) {
-    process.stdout.write("0.9.1-alpha.0\n");
+    process.stdout.write(VERSION + "\n");
     return;
   }
 
