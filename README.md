@@ -214,10 +214,11 @@ Project layout:
 src/
   analyzer/      stack + convention detection (§7.2 of the PRD)
   brief/         Markdown + frontmatter brief parser (§7.1)
-  cli-client/    auth + API client used by the hosted-tier commands
-  commands/      citty subcommands: init, compile, inspect, export,
-                 template, explain, drift, login, logout, whoami,
-                 workspace, publish, rationale
+  cli-client/    auth + API client used by the hosted-tier commands (dormant)
+  commands/      citty subcommands. Routed today:
+                 init, compile, inspect, export, template, explain, drift.
+                 Unrouted while the hosted tier is dormant:
+                 login, logout, whoami, workspace, publish, rationale.
   compiler/      the rules compiler, hash, deterministic ID (§7.3)
   design/        design-rules parser + DTCG / Tokens Studio ingestion
   drift/         drift detection against the stored manifest
