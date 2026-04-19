@@ -3,7 +3,8 @@ import { HeaderLogo } from "./header-logo";
 
 export function SiteFooter() {
   return (
-    <footer className="site-footer">
+    <footer className="site-footer" aria-labelledby="site-footer-heading">
+      <h2 id="site-footer-heading" className="visually-hidden">Site navigation</h2>
       <div className="site-footer__inner">
         <div className="site-footer__brand">
           <Link href="/" className="site-footer__brand-lockup" aria-label="Project Spine home">
@@ -17,7 +18,7 @@ export function SiteFooter() {
         </div>
 
         <div className="site-footer__col">
-          <h4>Product</h4>
+          <h3>Product</h3>
           <ul>
             <li><Link href="/product">Overview</Link></li>
             <li><Link href="/pricing">Pricing</Link></li>
@@ -28,7 +29,7 @@ export function SiteFooter() {
         </div>
 
         <div className="site-footer__col">
-          <h4>Resources</h4>
+          <h3>Resources</h3>
           <ul>
             <li><a href="https://github.com/PetriLahdelma/project-spine/blob/main/PRD.md">PRD</a></li>
             <li><a href="https://github.com/PetriLahdelma/project-spine/blob/main/docs/positioning.md">Positioning</a></li>
@@ -39,7 +40,7 @@ export function SiteFooter() {
         </div>
 
         <div className="site-footer__col">
-          <h4>Company</h4>
+          <h3>Company</h3>
           <ul>
             <li><Link href="/about">About</Link></li>
             <li><a href="mailto:support@projectspine.dev">Contact</a></li>
@@ -49,7 +50,7 @@ export function SiteFooter() {
         </div>
 
         <div className="site-footer__col">
-          <h4>Legal</h4>
+          <h3>Legal</h3>
           <ul>
             <li><Link href="/privacy">Privacy</Link></li>
             <li><Link href="/terms">Terms</Link></li>

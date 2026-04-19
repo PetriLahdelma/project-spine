@@ -92,9 +92,9 @@ export default async function ChangelogPage() {
           {rendered.map((r) => (
             <li key={r.tag_name} className="changelog__item">
               <div className="changelog__meta">
-                <h3 className="changelog__title">
+                <h2 className="changelog__title">
                   <a href={r.html_url}>{r.name || r.tag_name}</a>
-                </h3>
+                </h2>
                 <span className="changelog__date">
                   {r.published_at
                     ? new Date(r.published_at).toLocaleDateString(undefined, {

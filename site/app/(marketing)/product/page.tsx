@@ -33,7 +33,7 @@ export default function ProductPage() {
       </header>
 
       <h2>Pipeline</h2>
-      <pre>
+      <pre tabIndex={0}>
 {`brief.md   ──┐
 repo/      ──┼──▶  spine.json  ──▶  AGENTS.md + CLAUDE.md + copilot-instructions.md
 tokens.json ─┤                     scaffold-plan.md · qa-guardrails.md ·

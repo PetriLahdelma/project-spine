@@ -40,7 +40,7 @@ export function InstallCommand() {
         <span className="install-block__caption">install the CLI</span>
       </div>
       <div className="install-block__row">
-        <code className="install-block__command">
+        <code className="install-block__command" tabIndex={0}>
           <span className="install-block__prompt">$ </span>
           {COMMAND}
         </code>

@@ -181,9 +181,9 @@ export default async function Home() {
         <div className="poster-hero__inner">
           <p className="poster-hero__eyebrow">alpha · now with Figma tokens import</p>
           <HeroWordmark line1="PROJECT" line2="SPINE" />
-          <p className="poster-hero__tagline">
+          <h1 className="poster-hero__tagline">
             The context layer your coding agents are missing.
-          </p>
+          </h1>
         </div>
       </section>
 
