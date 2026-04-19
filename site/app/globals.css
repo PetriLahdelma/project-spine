@@ -631,6 +631,45 @@ footer a {
   color: var(--ink-muted);
 }
 
+/* --- Docs landing (pointer list, not a mirrored tree) --------------- */
+.docs__list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 32px;
+}
+.docs__list--flat {
+  margin-bottom: 24px;
+}
+.docs__item {
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+}
+.docs__list--flat .docs__item {
+  padding: 8px 0;
+  border-top: 0;
+}
+.docs__link {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: none;
+  letter-spacing: -0.01em;
+}
+.docs__link:hover {
+  color: var(--accent);
+}
+.docs__blurb {
+  margin: 4px 0 0;
+  color: var(--ink-soft);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.docs__cli {
+  margin: 24px 0 0;
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
 /* --- Marketing sub-page shared helpers --- */
 .page-header {
   margin-bottom: 48px;
