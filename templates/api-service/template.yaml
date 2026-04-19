@@ -1,0 +1,42 @@
+schemaVersion: 1
+name: api-service
+title: API service (Node / TypeScript backend)
+description: HTTP API service. Route handlers, typed request/response contracts, a single error envelope, health + readiness probes, structured logs, and a rate-limit story. Framework-agnostic — works with Fastify, Express, Hono, or plain node:http.
+projectType: api-service
+
+contributes:
+  routes:
+    - "/health — liveness probe. 200 {status:\"ok\",commit:...}. No external deps."
+    - "/ready — readiness probe. Fails if downstream deps (db, cache, upstream API) are unhealthy."
+    - "/metrics — Prometheus text exposition. Restricted by network or bearer token."
+    - "/v1/* — versioned public surface. Breaking changes move to /v2/, never rename in place."
+  components:
+    - "ErrorEnvelope — one JSON shape for every 4xx/5xx: { error: { code, message, requestId, details? } }."
+    - "RequestContext — per-request { requestId, traceId, user?, origin } carried through the handler stack."
+    - "RouteHandler — typed (req, ctx) => Promise<Response>. Zod-parses input, narrows at the edge, never leaks internal fields."
+    - "RateLimiter — middleware keyed on (user || ip, route). Returns 429 with Retry-After when tripped."
+    - "Logger — structured JSON only. One line per request (method, path, status, duration_ms, requestId, userId)."
+  qa:
+    - "Every 4xx / 5xx response conforms to the ErrorEnvelope shape; no raw framework errors leak."
+    - "Every handler has a typed input schema (zod or equivalent); invalid payloads get 400 with field-level details."
+    - "/health and /ready are always reachable, never gated by auth, and respond in under 50ms."
+    - "No secrets in logs, even at debug level. Redaction applied before the log line is emitted."
+    - "p95 latency budget declared per route and monitored; SLOs published."
+    - "Integration tests hit a real database / cache (or ephemeral container), not mocks."
+  uxRules:
+    - "Error codes are stable strings (\"auth.invalid_token\", \"ratelimit.exceeded\"), not HTTP numbers. Clients switch on them."
+    - "Pagination uses cursor tokens, not offset+limit — drop offset from the public surface entirely."
+    - "Timestamps are ISO-8601 UTC strings. No unix epochs, no timezone guessing."
+  a11yRules:
+    - "Responses include explicit Content-Language when returning localised error messages."
+  agentDos:
+    - "Add new routes under /v{N}/ — versioning is the only breaking-change escape hatch."
+    - "Validate inputs with zod schemas at the handler boundary; keep the parsed type flowing through the rest of the request."
+    - "Propagate requestId into every log line and downstream call (X-Request-Id header)."
+  agentDonts:
+    - "Do not add endpoints without a typed input schema and an ErrorEnvelope-shaped error path."
+    - "Do not introduce an ORM without approval — start with a typed query layer, add ORM only if read/write volume demands it."
+    - "Do not return 200 with `{ error: ... }` payloads. HTTP status is the source of truth for success vs failure."
+  unsafeActions:
+    - "Never log full request or response bodies at info level. Redacted summaries only."
+    - "Never expose stack traces or ORM error messages to clients. Map to the ErrorEnvelope."

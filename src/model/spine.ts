@@ -5,6 +5,8 @@ export const ProjectType = z.enum([
   "app-dashboard",
   "design-system",
   "docs-portal",
+  "api-service",
+  "monorepo",
   "extension",
   "other",
 ]);
