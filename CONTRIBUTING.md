@@ -53,7 +53,15 @@ New exporters live under `src/exporters/`. The contract: take a `SpineModel` and
 
 ## Releasing
 
-Manual, from the maintainer's workstation:
+### Why we're still on the alpha train
+
+The core pipeline (brief → `spine.json` → exports) is stable, tested end-to-end, and dogfooded against this repo's own brief. Despite that, versions stay `0.9.x-alpha.N` on purpose: the CLI surface, template shape, and drift semantics can still move in response to real usage before 1.0.
+
+The bar for cutting `1.0.0-beta` is external: agencies or dev-tool teams actively asking for stability guarantees. Until then, each alpha release is honest about what it is, and `@next` on npm keeps things explicit — no silent stability promises we haven't earned.
+
+### Manual release flow
+
+From the maintainer's workstation:
 
 1. Bump `package.json` `version` (e.g. `npm version prerelease --preid=alpha --no-git-tag-version`). `src/cli.ts` reads it at runtime — no second bump.
 2. `npm run build` and verify `node dist/cli.js --version` prints the new value.
