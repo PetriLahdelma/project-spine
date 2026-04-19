@@ -21,12 +21,9 @@ const main = defineCommand({
     template: () => import("./commands/template.js").then((m) => m.default),
     explain: () => import("./commands/explain.js").then((m) => m.default),
     drift: () => import("./commands/drift.js").then((m) => m.default),
-    login: () => import("./commands/login.js").then((m) => m.default),
-    logout: () => import("./commands/logout.js").then((m) => m.default),
-    whoami: () => import("./commands/whoami.js").then((m) => m.default),
-    workspace: () => import("./commands/workspace.js").then((m) => m.default),
-    publish: () => import("./commands/publish.js").then((m) => m.default),
-    rationale: () => import("./commands/rationale.js").then((m) => m.default),
+    // Hosted-tier subcommands (login / logout / whoami / workspace / publish /
+    // rationale) live in src/commands/ but are intentionally unrouted while
+    // the hosted tier is dormant. The OSS CLI should not advertise them.
   },
 });
 
