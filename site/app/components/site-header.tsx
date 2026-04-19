@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { HeaderLogo } from "./header-logo";
 import { SiteNav } from "./site-nav";
+import { MobileNav } from "./mobile-nav";
 
 const NAV: Array<{ label: string; href: string }> = [
   { label: "Pricing", href: "/pricing" },
@@ -35,6 +36,7 @@ export function SiteHeader() {
         <SiteNav productMenu={PRODUCT_MENU} items={NAV} />
         <div className="site-header__actions">
           <a
+            className="site-header__github"
             href="https://github.com/PetriLahdelma/project-spine"
             aria-label="GitHub"
             target="_blank"
@@ -42,6 +44,7 @@ export function SiteHeader() {
           >
             <GitHubIcon />
           </a>
+          <MobileNav productMenu={PRODUCT_MENU} items={NAV} />
         </div>
       </div>
     </header>
