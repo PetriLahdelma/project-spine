@@ -1,0 +1,176 @@
+{
+  "schemaVersion": 1,
+  "root": "/Users/petrilahdelma/SAPDevelop/ProjectSpine",
+  "detectedAt": "2026-04-19T10:57:22.728Z",
+  "packageManager": {
+    "value": "npm",
+    "confidence": 1,
+    "evidence": [
+      "found package-lock.json"
+    ]
+  },
+  "framework": {
+    "value": "node-library",
+    "confidence": 0.4,
+    "evidence": [
+      "no framework dep; looks like a node library"
+    ]
+  },
+  "routing": {
+    "value": "none",
+    "confidence": 0.8,
+    "evidence": [
+      "non-routed framework"
+    ]
+  },
+  "styling": {
+    "value": "unknown",
+    "confidence": 0,
+    "evidence": [
+      "no styling library detected"
+    ]
+  },
+  "language": {
+    "typescript": true,
+    "strict": true,
+    "evidence": [
+      "tsconfig.json present",
+      "compilerOptions.strict = true"
+    ]
+  },
+  "testing": {
+    "runners": [
+      "vitest"
+    ],
+    "storybook": false,
+    "storybookVersion": null,
+    "evidence": [
+      "vitest@^4.1.4"
+    ]
+  },
+  "linting": {
+    "eslint": false,
+    "biome": false,
+    "prettier": false,
+    "oxlint": false,
+    "evidence": []
+  },
+  "ci": {
+    "githubActions": true,
+    "workflows": [
+      ".github/workflows/ci.yml",
+      ".github/workflows/drift.yml"
+    ],
+    "other": [],
+    "evidence": [
+      ".github/workflows/ (2 files)"
+    ]
+  },
+  "agentFiles": {
+    "agentsMd": false,
+    "claudeMd": false,
+    "copilotInstructions": false,
+    "cursorRules": false,
+    "projectSpineDir": false
+  },
+  "monorepo": {
+    "isMonorepo": false,
+    "tool": null,
+    "workspaces": [],
+    "evidence": []
+  },
+  "rawPackageJson": {
+    "name": "project-spine",
+    "version": "0.9.1-alpha.0",
+    "description": "Context compiler for software projects. Turns brief + repo + design inputs into a repo-native operating layer.",
+    "type": "module",
+    "bin": {
+      "spine": "./dist/cli.js"
+    },
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js"
+      }
+    },
+    "files": [
+      "dist",
+      "templates",
+      "skills",
+      "README.md",
+      "PRD.md"
+    ],
+    "scripts": {
+      "build": "tsc -p tsconfig.json",
+      "dev": "tsc -p tsconfig.json --watch",
+      "start": "node dist/cli.js",
+      "test": "vitest run",
+      "test:watch": "vitest",
+      "typecheck": "tsc --noEmit",
+      "lint": "eslint src",
+      "prepublishOnly": "npm run typecheck && npm test && npm run build"
+    },
+    "keywords": [
+      "ai",
+      "coding-agents",
+      "agents.md",
+      "claude",
+      "copilot",
+      "cursor",
+      "context-engineering",
+      "project-kickoff",
+      "design-system",
+      "cli"
+    ],
+    "author": "Petri Lahdelma",
+    "license": "MIT",
+    "homepage": "https://projectspine.dev",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/PetriLahdelma/project-spine.git"
+    },
+    "bugs": {
+      "url": "https://github.com/PetriLahdelma/project-spine/issues"
+    },
+    "engines": {
+      "node": ">=20.0.0"
+    },
+    "dependencies": {
+      "@types/diff": "^8.0.0",
+      "citty": "^0.2.2",
+      "diff": "^9.0.0",
+      "fast-glob": "^3.3.2",
+      "remark": "^15.0.1",
+      "remark-frontmatter": "^5.0.0",
+      "remark-parse": "^11.0.0",
+      "unified": "^11.0.5",
+      "yaml": "^2.6.1",
+      "zod": "^4.3.6"
+    },
+    "devDependencies": {
+      "@types/mdast": "^4.0.4",
+      "@types/node": "^25.6.0",
+      "execa": "^9.6.1",
+      "typescript": "^6.0.3",
+      "vitest": "^4.1.4"
+    },
+    "publishConfig": {
+      "access": "public",
+      "tag": "next"
+    }
+  },
+  "warnings": [
+    {
+      "id": "framework-uncertain",
+      "severity": "warn",
+      "message": "Framework detection confidence 0.4. Evidence: no framework dep; looks like a node library",
+      "suggestion": "Install the framework dependency explicitly (e.g., `npm i next`), or bootstrap from a framework starter before compiling."
+    },
+    {
+      "id": "no-agent-files",
+      "severity": "info",
+      "message": "No agent instruction files found.",
+      "suggestion": "Run `spine compile --brief ./brief.md --repo .` to generate AGENTS.md, CLAUDE.md, and copilot-instructions.md."
+    }
+  ]
+}

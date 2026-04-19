@@ -1,0 +1,499 @@
+{
+  "metadata": {
+    "name": "Project Spine",
+    "version": "0.1.0",
+    "schemaVersion": 1,
+    "createdAt": "2026-04-19T10:57:22.731Z",
+    "hash": "b5db78b43a41f5e7"
+  },
+  "projectType": "other",
+  "goals": [
+    {
+      "id": "goal-aad0c14e",
+      "text": "Ship a deterministic context compiler that turns a client brief + a repo + optional design inputs into a repo-native operating layer for coding agents (AGENTS.md / CLAUDE.md / copilot-instructions.md plus a full scaffold plan).",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section0/item0"
+      }
+    },
+    {
+      "id": "goal-14fcfa5b",
+      "text": "Stay useful without AI in the loop. Every artefact must be worth keeping even if a human reviews it by hand.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section0/item1"
+      }
+    },
+    {
+      "id": "goal-32bed87e",
+      "text": "Keep the OSS CLI the whole pitch: MIT, no telemetry, no account required, no upsell in the code path.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section0/item2"
+      }
+    },
+    {
+      "id": "goal-588735c6",
+      "text": "Drift-aware by default. spine drift check + spine drift diff must be CI-reliable so teams can enforce that exports stay aligned with inputs.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section0/item3"
+      }
+    }
+  ],
+  "nonGoals": [],
+  "audience": [
+    {
+      "id": "aud-0b5bd0a8",
+      "text": "Agency leads kicking off 8–12 client projects a year who are rebuilding the same conventions every time.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section1/item0"
+      }
+    },
+    {
+      "id": "aud-b3e8594d",
+      "text": "Dev-tool teams evaluating Spine for internal use — they want to read the source and the PRD before they install anything.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section1/item1"
+      }
+    },
+    {
+      "id": "aud-b538c1f2",
+      "text": "Individual devs who hit \"AGENTS.md stale\" and want a compiler, not another chatbot.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section1/item2"
+      }
+    }
+  ],
+  "constraints": [
+    {
+      "id": "con-f5446daf",
+      "text": "Node ≥ 20, TypeScript strict, ESM only. Zero runtime hot reload tricks — the CLI must behave identically on developer machines and in CI.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section2/item0"
+      }
+    },
+    {
+      "id": "con-b51f7753",
+      "text": "No implicit network calls on any compile path. External calls (spine tokens pull, optional LLM enrichment) are behind explicit flags + explicit env vars.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section2/item1"
+      }
+    },
+    {
+      "id": "con-9b7913f5",
+      "text": "Generated outputs are deterministic: identical inputs → identical bytes → identical hash. The spine hash is load-bearing for drift detection.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section2/item2"
+      }
+    },
+    {
+      "id": "con-0a3e305e",
+      "text": "Bundled templates ship inside the npm tarball; the CLI does not download them at runtime.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section2/item3"
+      }
+    }
+  ],
+  "assumptions": [
+    {
+      "id": "asm-f45df454",
+      "text": "Teams that adopt a drift check will trust its exit code in CI. The signal has to be right > 99% of the time or it'll be ignored.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section3/item0"
+      }
+    },
+    {
+      "id": "asm-c1b93305",
+      "text": "Markdown + YAML frontmatter is the lowest-friction authoring format for briefs and design rules. A custom DSL would lose adoption.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section3/item1"
+      }
+    },
+    {
+      "id": "asm-7f5bb635",
+      "text": "Agents operating on a repo that already has AGENTS.md / CLAUDE.md will prefer Spine-generated ones over hand-written ones if those files cite their sources.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section3/item2"
+      }
+    }
+  ],
+  "risks": [
+    {
+      "id": "risk-3e565a46",
+      "text": "Scope creep into \"another AI coding tool\" dilutes the pitch. The compiler framing has to stay front and centre.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section4/item0"
+      }
+    },
+    {
+      "id": "risk-3dc85ebd",
+      "text": "Figma API changes (variables endpoint shape) could break spine tokens pull silently. Need integration checks.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section4/item1"
+      }
+    },
+    {
+      "id": "risk-b01c3e94",
+      "text": "Hosted-tier code still lives in-tree (dormant) — if it leaks back into the CLI surface, the OSS positioning breaks again.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section4/item2"
+      }
+    }
+  ],
+  "stack": {
+    "framework": "node-library",
+    "language": "typescript",
+    "packageManager": "npm",
+    "runtime": "node",
+    "styling": "unknown",
+    "testing": [
+      "vitest"
+    ],
+    "detected": {
+      "routing": "none",
+      "tsStrict": true,
+      "storybook": false,
+      "ci": {
+        "githubActions": true,
+        "workflows": 2
+      }
+    }
+  },
+  "repoConventions": [
+    {
+      "id": "conv-9eee0397",
+      "text": "TypeScript strict mode is on. Never use `any`; prefer `unknown` + narrow at the boundary.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:typescript/strict"
+      }
+    },
+    {
+      "id": "conv-14199504",
+      "text": "Use `npm` for all dependency operations. Do not commit lockfiles from other package managers.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:pm/npm"
+      }
+    }
+  ],
+  "designRules": [],
+  "uxRules": [],
+  "a11yRules": [
+    {
+      "id": "a11y-e68796a1",
+      "text": "All interactive elements must be reachable and operable with the keyboard alone.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:keyboard"
+      }
+    },
+    {
+      "id": "a11y-6a7fd559",
+      "text": "Focus must be visible at all times; never remove outlines without replacing them.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:focus"
+      }
+    },
+    {
+      "id": "a11y-7a33cd2b",
+      "text": "Text contrast must meet WCAG AA (4.5:1 for body, 3:1 for large text).",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:contrast"
+      }
+    },
+    {
+      "id": "a11y-e9db2d49",
+      "text": "Every form control has a programmatic label.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:labels"
+      }
+    },
+    {
+      "id": "a11y-5b4177a5",
+      "text": "Pages use proper landmark regions (header, main, nav, footer) and a sensible heading order.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:landmarks"
+      }
+    },
+    {
+      "id": "a11y-7e08ce1a",
+      "text": "Respect `prefers-reduced-motion` for any non-essential animation.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:motion"
+      }
+    }
+  ],
+  "componentGuidance": [],
+  "qaGuardrails": [
+    {
+      "id": "qa-2971d23b",
+      "text": "Unit tests live next to source as `*.test.ts`. Run `vitest run` in CI and before every commit touching business logic.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:vitest"
+      }
+    },
+    {
+      "id": "qa-7c4f14e6",
+      "text": "`tsc --noEmit` must pass on every PR.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:typecheck"
+      }
+    },
+    {
+      "id": "qa-brief-cb7f8ea1",
+      "text": "Success criterion to verify before launch: spine --help lists exactly the routed OSS commands — no hosted-tier leakage.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section5/item0"
+      }
+    },
+    {
+      "id": "qa-brief-708b6564",
+      "text": "Success criterion to verify before launch: Determinism test: recompiling with identical inputs yields a byte-identical spine.json and identical export hashes.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section5/item1"
+      }
+    },
+    {
+      "id": "qa-brief-f735014f",
+      "text": "Success criterion to verify before launch: Drift check exits non-zero when any input file's sha256 changes; spine drift diff prints the unified patch for every hand-edited export.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section5/item2"
+      }
+    },
+    {
+      "id": "qa-brief-7522d7ee",
+      "text": "Success criterion to verify before launch: First run (fresh clone) under 30 seconds from npm install → spine init → spine compile with a usable brief and the saas-marketing template.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section5/item3"
+      }
+    },
+    {
+      "id": "qa-brief-7724ad05",
+      "text": "Success criterion to verify before launch: Every rule in spine.json carries a non-empty source.pointer back to brief / repo / design / template / inference.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section5/item4"
+      }
+    }
+  ],
+  "agentInstructions": {
+    "dosAndDonts": [
+      {
+        "id": "do-9ad0f600",
+        "text": "Prefer small, focused diffs. One concern per PR or patch.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:diff"
+        }
+      },
+      {
+        "id": "do-9f52191a",
+        "text": "Always show the exact test or typecheck command you ran and its result.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:test-cmd"
+        }
+      },
+      {
+        "id": "do-cba0e959",
+        "text": "When following a rule from this file, cite it by section heading so reviewers can audit.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:trace"
+        }
+      },
+      {
+        "id": "dont-d429caec",
+        "text": "Do not refactor code unrelated to the task, even if it looks better.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:scope"
+        }
+      },
+      {
+        "id": "dont-d6da3150",
+        "text": "Do not add new dependencies without flagging the choice and reason.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:deps"
+        }
+      }
+    ],
+    "unsafeActions": [
+      {
+        "id": "unsafe-dfc94927",
+        "text": "Never modify generated files (anything under `dist/`, `build/`, `.next/`, or marked `@generated`).",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:generated"
+        }
+      },
+      {
+        "id": "unsafe-9cc52688",
+        "text": "Never edit lockfiles manually.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:lockfile"
+        }
+      },
+      {
+        "id": "unsafe-74a0844b",
+        "text": "Never commit secrets. Redact any `.env*` content that appears in logs or diffs.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:secrets"
+        }
+      }
+    ],
+    "filePlacement": [],
+    "responseExpectations": [
+      {
+        "id": "resp-2fa1aaa3",
+        "text": "Before claiming work is complete, run the repo's typecheck and test commands and show the output.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:verify"
+        }
+      },
+      {
+        "id": "resp-837d9493",
+        "text": "If the brief is ambiguous on a specific section, ask rather than guess. Cite the section heading.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:ask"
+        }
+      }
+    ]
+  },
+  "scaffoldPlan": {
+    "routes": [],
+    "components": [
+      {
+        "id": "cmp-bucket-e051805e",
+        "text": "Layout primitives: `AppShell`, `PageHeader`, `Section`, `Stack`.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:layout"
+        }
+      },
+      {
+        "id": "cmp-bucket-4d650fce",
+        "text": "UI primitives: `Button`, `Input`, `Field`, `Dialog`, `Toast`.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:primitives"
+        }
+      },
+      {
+        "id": "cmp-bucket-b1f7e9ba",
+        "text": "Feature components live co-located with the route or feature folder that owns them.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:features"
+        }
+      }
+    ],
+    "sprint1": [
+      {
+        "id": "setup-2255a7f6",
+        "text": "Commit the Project Spine–generated `AGENTS.md`, `CLAUDE.md`, and `.github/copilot-instructions.md` after review.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:setup/agent-files"
+        }
+      },
+      {
+        "id": "setup-e2afd63d",
+        "text": "Pick and configure a linter (Biome or ESLint) with a minimal rule set.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:setup/lint"
+        }
+      },
+      {
+        "id": "s1-5e400d66",
+        "text": "Deliver: Ship a deterministic context compiler that turns a client brief + a repo + optional design inputs into a repo-native operating layer for coding agents (AGENTS.md / CLAUDE.md / copilot-instructions.md plus a full scaffold plan).",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section0/item0"
+        }
+      },
+      {
+        "id": "s1-727f4872",
+        "text": "Deliver: Stay useful without AI in the loop. Every artefact must be worth keeping even if a human reviews it by hand.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section0/item1"
+        }
+      },
+      {
+        "id": "s1-2d3730a6",
+        "text": "Deliver: Keep the OSS CLI the whole pitch: MIT, no telemetry, no account required, no upsell in the code path.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section0/item2"
+        }
+      },
+      {
+        "id": "s1-1cf3e6b4",
+        "text": "Deliver: Drift-aware by default. spine drift check + spine drift diff must be CI-reliable so teams can enforce that exports stay aligned with inputs.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section0/item3"
+        }
+      }
+    ]
+  },
+  "warnings": [
+    {
+      "id": "repo:framework-uncertain",
+      "severity": "warn",
+      "message": "Framework detection confidence 0.4. Evidence: no framework dep; looks like a node library",
+      "sources": [
+        {
+          "kind": "repo",
+          "pointer": "repo-profile"
+        }
+      ],
+      "suggestion": "Install the framework dependency explicitly (e.g., `npm i next`), or bootstrap from a framework starter before compiling."
+    },
+    {
+      "id": "repo:no-agent-files",
+      "severity": "info",
+      "message": "No agent instruction files found.",
+      "sources": [
+        {
+          "kind": "repo",
+          "pointer": "repo-profile"
+        }
+      ],
+      "suggestion": "Run `spine compile --brief ./brief.md --repo .` to generate AGENTS.md, CLAUDE.md, and copilot-instructions.md."
+    }
+  ]
+}
