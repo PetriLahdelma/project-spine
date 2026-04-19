@@ -3,6 +3,7 @@ import { writeFile, mkdir, readFile } from "node:fs/promises";
 import { resolve, join, basename } from "node:path";
 import { checkDrift } from "../drift/check.js";
 import { renderDriftReportMd } from "../drift/report.js";
+import { buildDriftDiff, renderDriftDiffText } from "../drift/diff.js";
 import { apiFetch, ApiError } from "../cli-client/api.js";
 import { readConfig } from "../cli-client/config.js";
 import { SpineModel } from "../model/spine.js";
@@ -85,9 +86,34 @@ const check = defineCommand({
   },
 });
 
+const diff = defineCommand({
+  meta: {
+    name: "diff",
+    description: "Show what drifted — unified diffs for hand-edited exports, hash changes for inputs.",
+  },
+  args: {
+    repo: { type: "string", description: "Path to repo root", default: "." },
+    out: { type: "string", description: ".project-spine directory", default: ".project-spine" },
+    json: { type: "boolean", description: "Print JSON to stdout (for CI)", default: false },
+  },
+  async run({ args }) {
+    const root = resolve(process.cwd(), args.repo);
+    const report = await checkDrift({ repo: root, out: args.out });
+    const driftDiff = await buildDriftDiff({ repo: root, out: args.out, report });
+
+    if (args.json) {
+      process.stdout.write(JSON.stringify(driftDiff, null, 2) + "\n");
+    } else {
+      process.stdout.write(renderDriftDiffText(driftDiff));
+    }
+
+    if (!driftDiff.clean) process.exitCode = 1;
+  },
+});
+
 export default defineCommand({
   meta: { name: "drift", description: "Drift detection — compare current state to the last compile." },
-  subCommands: { check },
+  subCommands: { check, diff },
 });
 
 async function pushToWorkspace(params: {
