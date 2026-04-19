@@ -35,3 +35,7 @@ pnpm-debug.log*
 Thumbs.db
 .vercel
 .env*.local
+
+# maintainer-local tooling state — never commit
+/.planning/
+/.claude/
