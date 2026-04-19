@@ -32,12 +32,19 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  /* Sticky-footer layout: body is a column, main grows to push the footer
+     to the bottom of short pages without position:sticky. */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 main {
   max-width: 760px;
   margin: 0 auto;
   padding: 48px 24px 96px;
+  flex: 1;
+  width: 100%;
 }
 
 header.hero {
