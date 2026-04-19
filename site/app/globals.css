@@ -403,6 +403,49 @@ footer a {
   max-width: 1040px;
 }
 
+/* --- Changelog list ------------------------------------------------ */
+.changelog__empty {
+  color: var(--ink-muted);
+}
+.changelog__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.changelog__item {
+  border-top: 1px solid var(--line);
+  padding: 24px 0;
+}
+.changelog__meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.changelog__title {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+}
+.changelog__title a {
+  color: var(--ink);
+}
+.changelog__date {
+  font-size: 13px;
+  color: var(--ink-muted);
+}
+.changelog__body {
+  white-space: pre-wrap;
+  margin-top: 12px;
+  font-size: 13px;
+}
+.changelog__footnote {
+  margin-top: 48px;
+  font-size: 13px;
+  color: var(--ink-muted);
+}
+
 /* --- Marketing sub-page shared helpers --- */
 .page-header {
   margin-bottom: 48px;

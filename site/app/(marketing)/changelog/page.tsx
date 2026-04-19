@@ -66,7 +66,7 @@ export default async function ChangelogPage() {
       </header>
 
       {releases.length === 0 ? (
-        <p style={{ color: "var(--ink-muted)" }}>
+        <p className="changelog__empty">
           Could not load releases right now. See the{" "}
           <a href="https://github.com/PetriLahdelma/project-spine/releases">
             releases page on GitHub
@@ -74,30 +74,14 @@ export default async function ChangelogPage() {
           directly.
         </p>
       ) : (
-        <ol style={{ listStyle: "none", padding: 0, margin: 0 }}>
+        <ol className="changelog__list">
           {releases.map((r) => (
-            <li
-              key={r.tag_name}
-              style={{
-                borderTop: "1px solid var(--line)",
-                padding: "24px 0",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "baseline",
-                  flexWrap: "wrap",
-                  gap: 8,
-                }}
-              >
-                <h3 style={{ margin: 0, fontSize: 17, fontWeight: 600 }}>
-                  <a href={r.html_url} style={{ color: "var(--ink)" }}>
-                    {r.name || r.tag_name}
-                  </a>
+            <li key={r.tag_name} className="changelog__item">
+              <div className="changelog__meta">
+                <h3 className="changelog__title">
+                  <a href={r.html_url}>{r.name || r.tag_name}</a>
                 </h3>
-                <span style={{ fontSize: 13, color: "var(--ink-muted)" }}>
+                <span className="changelog__date">
                   {r.published_at
                     ? new Date(r.published_at).toLocaleDateString(undefined, {
                         year: "numeric",
@@ -109,27 +93,14 @@ export default async function ChangelogPage() {
                 </span>
               </div>
               {r.body ? (
-                <pre
-                  style={{
-                    background: "transparent",
-                    color: "var(--ink-soft)",
-                    padding: 0,
-                    border: 0,
-                    fontFamily: "inherit",
-                    fontSize: 14,
-                    whiteSpace: "pre-wrap",
-                    marginTop: 12,
-                  }}
-                >
-                  {trimBody(r.body)}
-                </pre>
+                <pre className="changelog__body">{trimBody(r.body)}</pre>
               ) : null}
             </li>
           ))}
         </ol>
       )}
 
-      <p style={{ marginTop: 48, fontSize: 13, color: "var(--ink-muted)" }}>
+      <p className="changelog__footnote">
         Cached for 10 minutes. Source of truth:{" "}
         <a href="https://github.com/PetriLahdelma/project-spine/releases">
           github.com/PetriLahdelma/project-spine/releases
