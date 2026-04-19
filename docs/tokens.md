@@ -81,10 +81,18 @@ and every token appears in `spine.json` as a `kind: "design"` rule with a
 If your design team edits tokens in Figma, skip the manual export step and
 pull them into `.project-spine/tokens.json` directly.
 
-Prerequisites:
+> **Plan requirement.** Figma's Variables REST API requires the
+> `file_variables:read` scope, which [per Figma's docs](https://www.figma.com/developers/api#variables)
+> is available only on the **Enterprise** plan. On Team / Pro / Starter
+> plans the scope isn't exposed on personal access tokens — the request
+> returns 403 with `"This endpoint requires the file_variables:read scope"`
+> no matter how many checkboxes you toggle. Use the Tokens Studio plugin
+> path (below) instead.
 
-1. Create a Figma personal access token: Settings → Account → *Personal access
-   tokens*. Grant **File read** and **Variables read** scopes.
+Prerequisites (Enterprise plan):
+
+1. Create a Figma personal access token: Settings → Security → *Personal
+   access tokens*. Grant **File read** and **Variables read** scopes.
 2. Export it:
 
 ```bash
@@ -134,3 +142,22 @@ resolve.
 The command makes exactly one network request per invocation, gated by an
 explicit flag and an explicit env var — consistent with the "no implicit
 network calls" line in SECURITY.md.
+
+## Tokens Studio plugin path (Team / Pro / Starter plans)
+
+Non-Enterprise Figma plans can't use the REST pull above. The workflow is:
+
+1. Install the free [Tokens Studio](https://tokens.studio/) plugin in Figma.
+2. Import or author your variables in the plugin.
+3. In the plugin: *Settings → Tools → Export* → choose **DTCG** or **Tokens
+   Studio** JSON format → download `tokens.json`.
+4. Drop the file into your repo and compile against it:
+
+```bash
+spine compile --brief ./brief.md --repo . --tokens ./tokens.json
+```
+
+`spine compile --tokens` accepts both DTCG and Tokens Studio shapes — the
+parser in [`src/design/tokens.ts`](../src/design/tokens.ts) auto-detects the
+format. The downstream compile pipeline is identical to what
+`spine tokens pull` produces; only the upstream source differs.

@@ -133,11 +133,31 @@ describe("fetchFigmaVariables", () => {
     ).rejects.toThrow(/403/);
   });
 
-  it("attaches a recovery hint keyed on status: 401/403 points at FIGMA_TOKEN scopes", async () => {
+  it("401 hint points at an invalid / expired token", async () => {
     const mockFetch: typeof fetch = async () => new Response("nope", { status: 401 });
     await expect(
       fetchFigmaVariables({ fileKey: "abc", token: "stale", fetchImpl: mockFetch }),
-    ).rejects.toThrow(/FIGMA_TOKEN/);
+    ).rejects.toThrow(/FIGMA_TOKEN rejected/);
+  });
+
+  it("403 body mentioning file_variables:read surfaces the Enterprise-plan note", async () => {
+    const body = JSON.stringify({
+      status: 403,
+      error: true,
+      message:
+        "Invalid scope(s): file_content:read, file_metadata:read. This endpoint requires the file_variables:read scope",
+    });
+    const mockFetch: typeof fetch = async () => new Response(body, { status: 403 });
+    await expect(
+      fetchFigmaVariables({ fileKey: "abc", token: "ok", fetchImpl: mockFetch }),
+    ).rejects.toThrow(/Enterprise-plan-only|Tokens Studio/);
+  });
+
+  it("403 without the scope marker falls back to a generic access-denied hint", async () => {
+    const mockFetch: typeof fetch = async () => new Response("nope", { status: 403 });
+    await expect(
+      fetchFigmaVariables({ fileKey: "abc", token: "ok", fetchImpl: mockFetch }),
+    ).rejects.toThrow(/Access denied|file-read scope/);
   });
 
   it("404 hint explains the file-key + access requirement", async () => {

@@ -66,7 +66,7 @@ export async function fetchFigmaVariables(
   if (!res.ok) {
     const body = await safeText(res);
     throw new Error(
-      `Figma API ${res.status} for file ${opts.fileKey}${body ? `: ${body}` : ""}. ${hintFor(res.status)}`,
+      `Figma API ${res.status} for file ${opts.fileKey}${body ? `: ${body}` : ""}. ${hintFor(res.status, body)}`,
     );
   }
   const data = (await res.json()) as FigmaVariablesResponse;
@@ -186,9 +186,15 @@ function rgbaToHex({ r, g, b, a }: FigmaRGBA): string {
   return a >= 1 ? base : `${base}${hex(to255(a))}`;
 }
 
-function hintFor(status: number): string {
-  if (status === 401 || status === 403) {
-    return "Check FIGMA_TOKEN: it may be expired or missing the `files:read` + `file_variables:read` scopes (Figma → Settings → Personal access tokens).";
+function hintFor(status: number, body: string | null): string {
+  if (status === 401) {
+    return "FIGMA_TOKEN rejected — check it's still valid (Figma → Settings → Security → Personal access tokens).";
+  }
+  if (status === 403) {
+    if (body && /file_variables:read/i.test(body)) {
+      return "Figma's Variables REST API requires the `file_variables:read` scope, which is Enterprise-plan-only. On Team / Pro / Starter plans export variables manually via the Tokens Studio Figma plugin, then feed the JSON to `spine compile --tokens <file>`. See docs/tokens.md.";
+    }
+    return "Access denied. Check that your token has file-read scope AND that you have access to this file.";
   }
   if (status === 404) {
     return "Check the file key — it must come from a figma.com/design/<KEY>/... URL on a file you have access to.";
@@ -205,7 +211,10 @@ function hintFor(status: number): string {
 async function safeText(res: Response): Promise<string | null> {
   try {
     const text = await res.text();
-    return text.length > 200 ? text.slice(0, 200) + "…" : text;
+    // Figma error bodies include the required-scope name in prose, e.g. "This
+    // endpoint requires the file_variables:read scope". Keep enough of the
+    // body to preserve that signal; anything beyond ~600 chars is debug dump.
+    return text.length > 600 ? text.slice(0, 600) + "…" : text;
   } catch {
     return null;
   }
