@@ -121,15 +121,6 @@ const FEATURES: Array<{ title: string; body: React.ReactNode }> = [
     ),
   },
   {
-    title: "Hosted workspace",
-    body: (
-      <>
-        Shared templates across clients. Branded rationale URLs. CI drift push
-        into a fleet view. GitHub OAuth, hashed tokens, rate limits.
-      </>
-    ),
-  },
-  {
     title: "Agent skills shipped",
     body: (
       <>
@@ -207,7 +198,7 @@ export default async function Home() {
           <div className="hero-band__install">
             <InstallCommand />
             <p className="hero-band__install-caption">
-              MIT-licensed, fully offline. Node 20+. Hosted workspace is opt-in.
+              MIT-licensed, fully offline. Node 20+.
             </p>
           </div>
           <div className="hero-band__ctas">
@@ -226,8 +217,8 @@ export default async function Home() {
                 </span>
               ) : null}
             </a>
-            <Link href="/login?next=/workspaces/new" className="btn-secondary">
-              Create a workspace
+            <Link href="/docs" className="btn-secondary">
+              Read the docs
             </Link>
           </div>
         </div>
@@ -411,7 +402,7 @@ export default async function Home() {
             <span className="section-header__num">03</span>
             <span className="section-header__label">Capabilities</span>
           </div>
-          <h2>Everything the hosted tier needs. Nothing you don&apos;t.</h2>
+          <h2>Everything a real kickoff needs. Nothing you don&apos;t.</h2>
           <p className="sub">
             Pre-alpha today, but already carrying the primitives agencies tell
             us they need on day one of a new client project.
@@ -459,9 +450,14 @@ export default async function Home() {
             to compile your first brief into an audit-ready operating layer.
           </p>
           <div className="poster-closer__ctas">
-            <Link href="/login?next=/workspaces/new" className="btn-on-cyan btn-on-cyan--primary">
-              Create a workspace
-            </Link>
+            <a
+              href="https://github.com/PetriLahdelma/project-spine"
+              className="btn-on-cyan btn-on-cyan--primary"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              View on GitHub
+            </a>
             <Link href="/docs" className="btn-on-cyan btn-on-cyan--secondary">
               Install the CLI
             </Link>

@@ -1,8 +1,4 @@
 import Link from "next/link";
-import { desc, eq } from "drizzle-orm";
-import { db } from "@/db";
-import { memberships, workspaces } from "@/db/schema";
-import { getWebSessionUser } from "@/lib/web-auth";
 import { HeaderLogo } from "./header-logo";
 import { SiteNav } from "./site-nav";
 
@@ -17,7 +13,6 @@ const PRODUCT_MENU: Array<{ label: string; href: string; desc: string }> = [
   { label: "Drift detection", href: "https://github.com/PetriLahdelma/project-spine/blob/main/docs/drift.md", desc: "sha256-backed manifest, CI-friendly exit codes." },
   { label: "Design tokens", href: "https://github.com/PetriLahdelma/project-spine/blob/main/docs/tokens.md", desc: "DTCG and Tokens Studio JSON, alias resolution." },
   { label: "Agent skills", href: "https://github.com/PetriLahdelma/project-spine/tree/main/skills", desc: "Six SKILL.md files for Claude Code, Codex, Cursor." },
-  { label: "Rationales", href: "/product#rationale", desc: "Branded, shareable, revocable client URLs." },
   { label: "Security", href: "/security", desc: "CSP nonces, rate limits, hashed tokens, no tracking." },
 ];
 
@@ -29,22 +24,7 @@ function GitHubIcon() {
   );
 }
 
-async function firstWorkspaceSlug(userId: string): Promise<string | null> {
-  const [row] = await db
-    .select({ slug: workspaces.slug })
-    .from(workspaces)
-    .innerJoin(memberships, eq(memberships.workspaceId, workspaces.id))
-    .where(eq(memberships.userId, userId))
-    .orderBy(desc(workspaces.createdAt))
-    .limit(1);
-  return row?.slug ?? null;
-}
-
-export async function SiteHeader() {
-  const user = await getWebSessionUser();
-  const wsSlug = user ? await firstWorkspaceSlug(user.id) : null;
-  const dashboardHref = wsSlug ? `/w/${wsSlug}` : "/workspaces/new";
-
+export function SiteHeader() {
   return (
     <header className="site-header">
       <div className="site-header__inner">
@@ -62,35 +42,6 @@ export async function SiteHeader() {
           >
             <GitHubIcon />
           </a>
-          {user ? (
-            <>
-              <Link href={dashboardHref} className="site-header__cta">
-                {wsSlug ? "Dashboard" : "Create workspace"}
-              </Link>
-              <Link
-                href="/app"
-                className="site-header__user"
-                aria-label={`Account — signed in as ${user.githubLogin}`}
-              >
-                <span className="site-header__user-avatar" aria-hidden>
-                  {user.githubLogin.slice(0, 1).toUpperCase()}
-                </span>
-                {user.githubLogin}
-              </Link>
-              <Link href="/logout" className="site-header__signout">
-                Log out
-              </Link>
-            </>
-          ) : (
-            <>
-              <Link href="/login?next=/app" className="site-header__login">
-                Log in
-              </Link>
-              <Link href="/login?next=/workspaces/new" className="site-header__cta">
-                Sign up
-              </Link>
-            </>
-          )}
         </div>
       </div>
     </header>
