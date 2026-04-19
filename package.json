@@ -55,8 +55,8 @@
     "node": ">=20.0.0"
   },
   "dependencies": {
-    "@types/diff": "^7.0.2",
-    "citty": "^0.1.6",
+    "@types/diff": "^8.0.0",
+    "citty": "^0.2.2",
     "diff": "^9.0.0",
     "fast-glob": "^3.3.2",
     "remark": "^15.0.1",
@@ -64,7 +64,7 @@
     "remark-parse": "^11.0.0",
     "unified": "^11.0.5",
     "yaml": "^2.6.1",
-    "zod": "^3.24.1"
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@types/mdast": "^4.0.4",
