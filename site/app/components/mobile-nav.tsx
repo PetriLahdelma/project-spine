@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { HeaderLogo } from "./header-logo";
 
 type Item = { label: string; href: string };
@@ -44,11 +45,16 @@ export function MobileNav({
   items: Item[];
 }) {
   const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
   const panelRef = useRef<HTMLDivElement | null>(null);
   const toggleRef = useRef<HTMLButtonElement | null>(null);
   const hasOpenedRef = useRef(false);
   const panelId = useId();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const isActive = (href: string) =>
     pathname ? pathname === href || pathname.startsWith(href + "/") : false;
@@ -87,21 +93,8 @@ export function MobileNav({
     }
   }, [open]);
 
-  return (
-    <>
-      <button
-        ref={toggleRef}
-        type="button"
-        className="mobile-nav__toggle"
-        aria-label={open ? "Close menu" : "Open menu"}
-        aria-expanded={open}
-        aria-controls={panelId}
-        onClick={() => setOpen((v) => !v)}
-      >
-        {open ? <CloseIcon /> : <HamburgerIcon />}
-      </button>
-
-      <div className={`mobile-nav${open ? " mobile-nav--open" : ""}`} aria-hidden={!open}>
+  const panel = (
+    <div className={`mobile-nav${open ? " mobile-nav--open" : ""}`} aria-hidden={!open}>
         <button
           type="button"
           className="mobile-nav__scrim"
@@ -133,7 +126,29 @@ export function MobileNav({
           </div>
 
           <nav className="mobile-nav__nav" aria-label="Mobile primary">
-            <p className="mobile-nav__heading">Product</p>
+            <ul className="mobile-nav__list mobile-nav__list--primary">
+              <li>
+                <Link
+                  href="/product"
+                  className="mobile-nav__link mobile-nav__link--primary"
+                  aria-current={isActive("/product") ? "page" : undefined}
+                >
+                  <span className="mobile-nav__label">Product</span>
+                </Link>
+              </li>
+              {items.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="mobile-nav__link mobile-nav__link--primary"
+                    aria-current={isActive(item.href) ? "page" : undefined}
+                  >
+                    <span className="mobile-nav__label">{item.label}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+
             <ul className="mobile-nav__list">
               {productMenu.map((item) => (
                 <li key={item.href}>
@@ -144,21 +159,6 @@ export function MobileNav({
                   >
                     <span className="mobile-nav__label">{item.label}</span>
                     <span className="mobile-nav__desc">{item.desc}</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-
-            <p className="mobile-nav__heading">Pages</p>
-            <ul className="mobile-nav__list">
-              {items.map((item) => (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className="mobile-nav__link"
-                    aria-current={isActive(item.href) ? "page" : undefined}
-                  >
-                    <span className="mobile-nav__label">{item.label}</span>
                   </Link>
                 </li>
               ))}
@@ -178,6 +178,22 @@ export function MobileNav({
           </div>
         </aside>
       </div>
+  );
+
+  return (
+    <>
+      <button
+        ref={toggleRef}
+        type="button"
+        className="mobile-nav__toggle"
+        aria-label={open ? "Close menu" : "Open menu"}
+        aria-expanded={open}
+        aria-controls={panelId}
+        onClick={() => setOpen((v) => !v)}
+      >
+        {open ? <CloseIcon /> : <HamburgerIcon />}
+      </button>
+      {mounted ? createPortal(panel, document.body) : null}
     </>
   );
 }
