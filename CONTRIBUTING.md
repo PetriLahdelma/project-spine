@@ -82,6 +82,24 @@ gh release create vX.Y.Z-alpha.N --prerelease --notes "…"
 
 The `NPM_TOKEN` secret is the only credential the Action needs. Rotate when a maintainer leaves.
 
+## Site — accessibility and performance
+
+Before shipping a change that touches `site/app/`:
+
+- **axe**: 0 violations. Run against a local dev server via
+  `axe-core` injected through the browser, or drop the published URL
+  into [axe DevTools](https://www.deque.com/axe/devtools/). Homepage,
+  `/product`, `/pricing`, `/docs`, `/changelog`, `/security`, `/about`
+  must all come back clean.
+- **Lighthouse / PageSpeed**: real numbers only from a production build
+  or the deployed URL — localhost dev (Turbopack, HMR, uncompiled JS)
+  is pessimistic and noisy. Easiest path: paste
+  `https://projectspine.dev` (or a preview deploy) into
+  [PageSpeed Insights](https://pagespeed.web.dev/). Targets: LCP < 2.5s
+  mobile, CLS < 0.1, a11y 100.
+- Don't block a PR on a 2-point Lighthouse movement. Do block on a new
+  axe violation.
+
 ## Non-goals for contributions
 
 - Making this "another AI coding tool." It isn't.
