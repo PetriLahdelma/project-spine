@@ -204,7 +204,7 @@ What's shipped (alpha train):
 - **v0.1–v0.2** — brief parser, repo inspector, deterministic exporters, 4 starter templates, `init` / `compile` / `inspect` / `export`.
 - **v0.3** — `spine drift check` with CI-friendly `--fail-on`, idempotent compile, hash manifest.
 - **v0.8** — agent skills for Claude Code, Codex CLI, and Cursor (`skills/install.sh`).
-- **v0.9** — `--tokens` import for DTCG and Tokens Studio design tokens.
+- **v0.9** — `--tokens` import for DTCG and Tokens Studio design tokens. `spine tokens pull` pulls directly from Figma Variables on Enterprise plans; [Tokens Studio plugin export](./docs/tokens.md#tokens-studio-plugin-path-team--pro--starter-plans) is the path on Team / Pro / Starter.
 
 What's next is TBD. Project Spine is positioned as pure OSS for now — the direction will be shaped by what agencies and dev-tool teams actually use it for. Open an issue, a discussion, or email with field notes and we'll fold it into the plan.
 

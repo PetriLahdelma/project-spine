@@ -7,7 +7,7 @@ const pull = defineCommand({
   meta: {
     name: "pull",
     description:
-      "Pull design tokens from Figma Variables into .project-spine/tokens.json (DTCG format).",
+      "Pull design tokens from Figma Variables into .project-spine/tokens.json (DTCG format). Requires Figma Enterprise — Team / Pro / Starter plans don't expose `file_variables:read`; use the Tokens Studio plugin path instead (see docs/tokens.md).",
   },
   args: {
     file: {
