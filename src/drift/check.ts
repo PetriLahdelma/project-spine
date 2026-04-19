@@ -87,15 +87,21 @@ export async function checkDrift(opts: CheckOptions): Promise<DriftReport> {
 
   const briefPath = resolve(root, stored.inputs.briefPath);
   if (!(await exists(briefPath))) {
-    throw new Error(`brief referenced by manifest is missing: ${briefPath}`);
+    throw new Error(
+      `brief referenced by manifest is missing: ${briefPath}. Restore it, or run \`spine compile --brief <current-path>\` to rebuild the manifest against the new location.`,
+    );
   }
   const designPath = stored.inputs.designPath ? resolve(root, stored.inputs.designPath) : null;
   if (designPath && !(await exists(designPath))) {
-    throw new Error(`design-rules referenced by manifest is missing: ${designPath}`);
+    throw new Error(
+      `design-rules referenced by manifest is missing: ${designPath}. Restore the file, or run \`spine compile --brief <path>\` (drop \`--design\` if it's gone for good) to rebuild the manifest.`,
+    );
   }
   const tokensPath = stored.inputs.tokensPath ? resolve(root, stored.inputs.tokensPath) : null;
   if (tokensPath && !(await exists(tokensPath))) {
-    throw new Error(`tokens file referenced by manifest is missing: ${tokensPath}`);
+    throw new Error(
+      `tokens file referenced by manifest is missing: ${tokensPath}. Restore it, re-run \`spine tokens pull\` against your Figma file, or rerun \`spine compile\` without \`--tokens\` if you're no longer using token import.`,
+    );
   }
 
   const [brief, repo] = await Promise.all([parseBriefFromFile(briefPath), analyzeRepo(root)]);

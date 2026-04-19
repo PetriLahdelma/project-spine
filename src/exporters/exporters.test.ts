@@ -105,6 +105,19 @@ describe("exporters — render all", () => {
     expect(() => parseTargets("nope")).toThrow();
   });
 
+  it("parseTargets error names the bad value and lists valid options", () => {
+    try {
+      parseTargets("typo,agents");
+      expect.fail("should have thrown");
+    } catch (e) {
+      const msg = (e as Error).message;
+      expect(msg).toContain('"typo"');
+      expect(msg).toContain("agents");
+      expect(msg).toContain("claude");
+      expect(msg).toContain("--targets=all");
+    }
+  });
+
   it("filenames match conventional tool locations", () => {
     expect(exportFilename("agents")).toBe("AGENTS.md");
     expect(exportFilename("claude")).toBe("CLAUDE.md");

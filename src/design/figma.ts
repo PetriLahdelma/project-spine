@@ -66,7 +66,7 @@ export async function fetchFigmaVariables(
   if (!res.ok) {
     const body = await safeText(res);
     throw new Error(
-      `Figma API ${res.status} for file ${opts.fileKey}${body ? `: ${body}` : ""}`,
+      `Figma API ${res.status} for file ${opts.fileKey}${body ? `: ${body}` : ""}. ${hintFor(res.status)}`,
     );
   }
   const data = (await res.json()) as FigmaVariablesResponse;
@@ -184,6 +184,22 @@ function rgbaToHex({ r, g, b, a }: FigmaRGBA): string {
   const hex = (n: number) => n.toString(16).padStart(2, "0");
   const base = `#${hex(to255(r))}${hex(to255(g))}${hex(to255(b))}`;
   return a >= 1 ? base : `${base}${hex(to255(a))}`;
+}
+
+function hintFor(status: number): string {
+  if (status === 401 || status === 403) {
+    return "Check FIGMA_TOKEN: it may be expired or missing the `files:read` + `file_variables:read` scopes (Figma → Settings → Personal access tokens).";
+  }
+  if (status === 404) {
+    return "Check the file key — it must come from a figma.com/design/<KEY>/... URL on a file you have access to.";
+  }
+  if (status === 429) {
+    return "Rate-limited. Wait a minute, then retry.";
+  }
+  if (status >= 500) {
+    return "Figma side issue. Retry in a moment; if it persists, check status.figma.com.";
+  }
+  return "See https://www.figma.com/developers/api for the error response format.";
 }
 
 async function safeText(res: Response): Promise<string | null> {
