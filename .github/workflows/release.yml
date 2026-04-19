@@ -16,6 +16,17 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
+      - name: Verify NPM_TOKEN secret is set
+        # Fails fast with a clear message rather than letting `npm publish`
+        # return a cryptic 401 ten minutes into the workflow.
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          if [ -z "$NPM_TOKEN" ]; then
+            echo "::error::NPM_TOKEN repository secret is not set. See CONTRIBUTING.md § One-time setup."
+            exit 1
+          fi
+
       - uses: actions/checkout@v6
         with:
           # Need full history so the release notes can diff against the previous tag.

@@ -59,9 +59,20 @@ The core pipeline (brief → `spine.json` → exports) is stable, tested end-to-
 
 The bar for cutting `1.0.0-beta` is external: agencies or dev-tool teams actively asking for stability guarantees. Until then, each alpha release is honest about what it is, and `@next` on npm keeps things explicit — no silent stability promises we haven't earned.
 
+### One-time setup
+
+Before the first automated release, add the `NPM_TOKEN` secret to the repository:
+
+1. [npmjs.com → Profile → Access Tokens](https://www.npmjs.com/settings/~/tokens) → Generate New Token → **Automation** type.
+2. Copy the token.
+3. In GitHub: `Settings → Secrets and variables → Actions → New repository secret`. Name: `NPM_TOKEN`. Value: the token from step 2.
+4. Verify: `gh api repos/PetriLahdelma/project-spine/actions/secrets` should list `NPM_TOKEN` (value is not returned, just the name).
+
+An **Automation** token is required because it bypasses 2FA for CI publishes. Publish tokens work for local manual publishes but will fail in the Action if 2FA is on the account.
+
 ### Release flow
 
-Tag push is the contract. [.github/workflows/release.yml](./.github/workflows/release.yml) installs, typechecks, tests, builds, verifies the tag matches `package.json`, publishes to npm with `--tag next`, and creates a GitHub Release with notes diffed from the previous tag.
+Tag push is the contract. [.github/workflows/release.yml](./.github/workflows/release.yml) installs, typechecks, tests, builds, verifies the tag matches `package.json`, publishes to npm with `--tag next`, regenerates `CHANGELOG.md` from git tags, and creates a GitHub Release with notes diffed from the previous tag.
 
 From the maintainer's workstation:
 
@@ -81,6 +92,24 @@ gh release create vX.Y.Z-alpha.N --prerelease --notes "…"
 ```
 
 The `NPM_TOKEN` secret is the only credential the Action needs. Rotate when a maintainer leaves.
+
+## Site — accessibility and performance
+
+Before shipping a change that touches `site/app/`:
+
+- **axe**: 0 violations. Run against a local dev server via
+  `axe-core` injected through the browser, or drop the published URL
+  into [axe DevTools](https://www.deque.com/axe/devtools/). Homepage,
+  `/product`, `/pricing`, `/docs`, `/changelog`, `/security`, `/about`
+  must all come back clean.
+- **Lighthouse / PageSpeed**: real numbers only from a production build
+  or the deployed URL — localhost dev (Turbopack, HMR, uncompiled JS)
+  is pessimistic and noisy. Easiest path: paste
+  `https://projectspine.dev` (or a preview deploy) into
+  [PageSpeed Insights](https://pagespeed.web.dev/). Targets: LCP < 2.5s
+  mobile, CLS < 0.1, a11y 100.
+- Don't block a PR on a 2-point Lighthouse movement. Do block on a new
+  axe violation.
 
 ## Non-goals for contributions
 

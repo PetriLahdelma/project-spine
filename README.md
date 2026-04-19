@@ -57,6 +57,8 @@ node dist/cli.js --help
 
 Requires Node ≥ 20.
 
+> **60-second demo.** [`docs/demo/`](./docs/demo/) ships a [VHS](https://github.com/charmbracelet/vhs) tape that records the canonical `init` → `compile` → `drift check` → `drift diff` flow. Run `vhs docs/demo/demo.tape` to regenerate `docs/demo/demo.gif`.
+
 ---
 
 ## Quickstart
