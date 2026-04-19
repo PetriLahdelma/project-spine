@@ -1,10 +1,10 @@
 # Sample output
 
-Committed snapshots of what `spine compile` produces against two very different repos. Read these to see the *shape* of the outputs before you install anything.
+Committed snapshots of what `spine compile` produces against three different repos. Read these to see the *shape* of the outputs before you install anything — the AGENTS.md / CLAUDE.md files are the ones your coding agents will actually load.
 
-## [saas-marketing/](./saas-marketing)
+## [saas-marketing/](./saas-marketing) — marketing-site kickoff
 
-`spine compile` run against the `saas-marketing` template and `examples/brief.md` — a marketing-site kickoff, which is the hot path for most agency work.
+`spine compile` run against the `saas-marketing` template and `examples/brief.md`. The hot path for most agency work.
 
 ```bash
 spine compile \
@@ -14,9 +14,21 @@ spine compile \
   --name "Project Spine"
 ```
 
+## [api-service/](./api-service) — HTTP API backend
+
+`spine compile` run against the `api-service` template with a Fastify / PostgreSQL stack. Shows how the compiler lifts template-contributed conventions (error envelope, versioned `/v{N}/` routes, cursor pagination, zod-parsed inputs) into the export set.
+
+```bash
+spine compile \
+  --brief ./docs/sample-output/api-service/brief.md \
+  --repo . \
+  --template api-service \
+  --name "Ledger API"
+```
+
 ## [project-spine/](./project-spine) — dogfood
 
-`spine compile` run against **this repo's own brief**, with no template. The CLI compiles itself. Read [project-spine/AGENTS.md](./project-spine/AGENTS.md) next to [the checked-in AGENTS.md at the repo root](../../.github/copilot-instructions.md)'s cousin — the files you see are what Spine would produce on any devtool codebase of this shape.
+`spine compile` run against **this repo's own brief**, with no template. The CLI compiles itself. The files here are what Spine produces on a devtool codebase of this shape.
 
 ```bash
 spine compile \
@@ -25,17 +37,17 @@ spine compile \
   --name "Project Spine"
 ```
 
-The brief lives alongside the snapshot at [project-spine/brief.md](./project-spine/brief.md). Recompiling against the current repo state will produce different hashes whenever `brief.md` or the repo itself changes — that's drift detection doing its job.
+The briefs live alongside their snapshots (`project-spine/brief.md`, `api-service/brief.md`). `saas-marketing/` uses the shared `examples/brief.md` at the repo root. Recompiling against current repo state will produce different hashes whenever the brief or the repo itself changes — that's drift detection doing its job.
 
 ---
 
 ## What's in each folder
 
-Every snapshot contains the full 19-file output of a compile run:
+Every snapshot is the full 19-file output of a compile run:
 
 | File | Purpose |
 |---|---|
-| `brief.md` *(input, only in `project-spine/`)* | The source brief fed to `spine compile`. |
+| `brief.md` *(input, in `project-spine/` and `api-service/`)* | The source brief fed to `spine compile`. |
 | `AGENTS.md` | Agent instructions per [agents.md](https://agents.md/) convention. |
 | `CLAUDE.md` | Claude Code instruction file with `@import` links to deeper docs. |
 | `copilot-instructions.md` | Self-contained Copilot instructions. |

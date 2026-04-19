@@ -7,6 +7,9 @@
 # Project Spine
 
 [![CI](https://github.com/PetriLahdelma/project-spine/actions/workflows/ci.yml/badge.svg)](https://github.com/PetriLahdelma/project-spine/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/project-spine?color=cb3837&label=npm)](https://www.npmjs.com/package/project-spine)
+[![downloads](https://img.shields.io/npm/dw/project-spine?color=cb3837&label=downloads)](https://www.npmjs.com/package/project-spine)
+[![install size](https://packagephobia.com/badge?p=project-spine)](https://packagephobia.com/result?p=project-spine)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 [![Node.js](https://img.shields.io/badge/node-%E2%89%A520-43853d)](./package.json)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6)](./tsconfig.json)
@@ -252,3 +255,7 @@ See [SECURITY.md](./SECURITY.md) for how to report vulnerabilities.
 ## License
 
 MIT. See [LICENSE](./LICENSE).
+
+## Stars over time
+
+[![Star history chart](https://api.star-history.com/svg?repos=PetriLahdelma/project-spine&type=Date)](https://star-history.com/#PetriLahdelma/project-spine&Date)

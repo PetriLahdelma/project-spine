@@ -2,7 +2,7 @@
 
 > How components are organized and how agents should extend them.
 
-_Generated from `spine.json` — hash `3333f867f40d3e43`, project type `saas-marketing`._
+_Generated from `spine.json` — hash `8976dc15b57e7f67`, project type `saas-marketing`._
 
 <!-- spine:deterministic -->
 

@@ -14,7 +14,7 @@ export function TerminalMock({ title = "~/acme-payroll — zsh", children }: Pro
         <span className="terminal__dot terminal__dot--g" aria-hidden="true" />
         <span className="terminal__title">{title}</span>
       </div>
-      <pre className="terminal__body">{children}</pre>
+      <pre className="terminal__body" tabIndex={0}>{children}</pre>
     </div>
   );
 }

@@ -1,0 +1,718 @@
+{
+  "metadata": {
+    "name": "Ledger API",
+    "version": "0.1.0",
+    "schemaVersion": 1,
+    "createdAt": "2026-04-19T11:21:32.793Z",
+    "hash": "bcaf67e27f36d134"
+  },
+  "projectType": "api-service",
+  "goals": [
+    {
+      "id": "goal-d9ce952c",
+      "text": "Ship v1 of the Ledger billing API for internal consumers in 8 weeks.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section0/item0"
+      }
+    },
+    {
+      "id": "goal-a2e533ac",
+      "text": "p95 read-path latency under 120ms; p95 write-path under 250ms.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section0/item1"
+      }
+    },
+    {
+      "id": "goal-14cc9560",
+      "text": "One stable error envelope across every endpoint — no raw stack traces ever reach a client.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section0/item2"
+      }
+    },
+    {
+      "id": "goal-8183b7e9",
+      "text": "OpenAPI spec generated from the same type definitions the runtime uses.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section0/item3"
+      }
+    }
+  ],
+  "nonGoals": [],
+  "audience": [
+    {
+      "id": "aud-b834ab6f",
+      "text": "Internal services within the Acme platform (3 consumers today, 6 planned by v1).",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section1/item0"
+      }
+    },
+    {
+      "id": "aud-f0f4cfd1",
+      "text": "Consumer SDK authors who will codegen typed clients from the OpenAPI spec.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section1/item1"
+      }
+    },
+    {
+      "id": "aud-eb370cfe",
+      "text": "Oncall engineers who need structured logs that answer \"what went wrong for request X.\"",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section1/item2"
+      }
+    }
+  ],
+  "constraints": [
+    {
+      "id": "con-3d6343b3",
+      "text": "Node 20 + Fastify 4 + PostgreSQL 16 (managed). No ORM for v1 — typed query layer over pg.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section2/item0"
+      }
+    },
+    {
+      "id": "con-28e0008a",
+      "text": "Auth is API-key only for v1 (internal service mesh). OAuth 2.1 client-credentials is a v2 follow-up.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section2/item1"
+      }
+    },
+    {
+      "id": "con-6e21b495",
+      "text": "Deployment target: containers on the shared Acme platform (not serverless).",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section2/item2"
+      }
+    },
+    {
+      "id": "con-6d4d6d0c",
+      "text": "Observability stack is fixed: structured JSON logs → Loki; traces → Tempo; metrics → Prometheus.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section2/item3"
+      }
+    }
+  ],
+  "assumptions": [
+    {
+      "id": "asm-ea22e62e",
+      "text": "Traffic stays under 500 rps during the alpha window; headroom is fine.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section3/item0"
+      }
+    },
+    {
+      "id": "asm-0644694d",
+      "text": "Internal consumers accept alpha-level SLAs (99.5% availability, 48h incident-response).",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section3/item1"
+      }
+    },
+    {
+      "id": "asm-9ee21fa1",
+      "text": "No public-internet exposure in v1 — mTLS at the mesh layer handles transport security.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section3/item2"
+      }
+    }
+  ],
+  "risks": [
+    {
+      "id": "risk-e3f74f84",
+      "text": "Downstream dependency on the legacy Pricing service (SLA not formally documented).",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section4/item0"
+      }
+    },
+    {
+      "id": "risk-23ce0b09",
+      "text": "Schema drift between services during migration from the existing monolith — need a contract-check step.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section4/item1"
+      }
+    },
+    {
+      "id": "risk-91142baa",
+      "text": "Pager fatigue from over-alerting on structured log volume; need explicit log-level discipline.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section4/item2"
+      }
+    }
+  ],
+  "stack": {
+    "framework": "node-app",
+    "language": "typescript",
+    "packageManager": "unknown",
+    "runtime": "node",
+    "styling": "unknown",
+    "testing": [
+      "vitest"
+    ],
+    "detected": {
+      "routing": "none",
+      "tsStrict": true,
+      "storybook": false,
+      "ci": {
+        "githubActions": false,
+        "workflows": 0
+      }
+    }
+  },
+  "repoConventions": [
+    {
+      "id": "conv-9eee0397",
+      "text": "TypeScript strict mode is on. Never use `any`; prefer `unknown` + narrow at the boundary.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:typescript/strict"
+      }
+    }
+  ],
+  "designRules": [],
+  "uxRules": [
+    {
+      "id": "ux-tpl-43de83e4",
+      "text": "Error codes are stable strings (\"auth.invalid_token\", \"ratelimit.exceeded\"), not HTTP numbers. Clients switch on them.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:api-service/contributes#0"
+      }
+    },
+    {
+      "id": "ux-tpl-a70052d5",
+      "text": "Pagination uses cursor tokens, not offset+limit — drop offset from the public surface entirely.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:api-service/contributes#1"
+      }
+    },
+    {
+      "id": "ux-tpl-e8d28504",
+      "text": "Timestamps are ISO-8601 UTC strings. No unix epochs, no timezone guessing.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:api-service/contributes#2"
+      }
+    }
+  ],
+  "a11yRules": [
+    {
+      "id": "a11y-e68796a1",
+      "text": "All interactive elements must be reachable and operable with the keyboard alone.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:keyboard"
+      }
+    },
+    {
+      "id": "a11y-6a7fd559",
+      "text": "Focus must be visible at all times; never remove outlines without replacing them.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:focus"
+      }
+    },
+    {
+      "id": "a11y-7a33cd2b",
+      "text": "Text contrast must meet WCAG AA (4.5:1 for body, 3:1 for large text).",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:contrast"
+      }
+    },
+    {
+      "id": "a11y-e9db2d49",
+      "text": "Every form control has a programmatic label.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:labels"
+      }
+    },
+    {
+      "id": "a11y-5b4177a5",
+      "text": "Pages use proper landmark regions (header, main, nav, footer) and a sensible heading order.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:landmarks"
+      }
+    },
+    {
+      "id": "a11y-7e08ce1a",
+      "text": "Respect `prefers-reduced-motion` for any non-essential animation.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:motion"
+      }
+    },
+    {
+      "id": "a11y-tpl-2d04aacc",
+      "text": "Responses include explicit Content-Language when returning localised error messages.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:api-service/contributes#0"
+      }
+    }
+  ],
+  "componentGuidance": [
+    {
+      "id": "cmp-tpl-25a133d8",
+      "text": "ErrorEnvelope — one JSON shape for every 4xx/5xx: { error: { code, message, requestId, details? } }.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:api-service/contributes#0"
+      }
+    },
+    {
+      "id": "cmp-tpl-49e1534f",
+      "text": "RequestContext — per-request { requestId, traceId, user?, origin } carried through the handler stack.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:api-service/contributes#1"
+      }
+    },
+    {
+      "id": "cmp-tpl-8846e117",
+      "text": "RouteHandler — typed (req, ctx) => Promise<Response>. Zod-parses input, narrows at the edge, never leaks internal fields.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:api-service/contributes#2"
+      }
+    },
+    {
+      "id": "cmp-tpl-f5c075b5",
+      "text": "RateLimiter — middleware keyed on (user || ip, route). Returns 429 with Retry-After when tripped.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:api-service/contributes#3"
+      }
+    },
+    {
+      "id": "cmp-tpl-7ff1b4d1",
+      "text": "Logger — structured JSON only. One line per request (method, path, status, duration_ms, requestId, userId).",
+      "source": {
+        "kind": "template",
+        "pointer": "template:api-service/contributes#4"
+      }
+    }
+  ],
+  "qaGuardrails": [
+    {
+      "id": "qa-2971d23b",
+      "text": "Unit tests live next to source as `*.test.ts`. Run `vitest run` in CI and before every commit touching business logic.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:vitest"
+      }
+    },
+    {
+      "id": "qa-7c4f14e6",
+      "text": "`tsc --noEmit` must pass on every PR.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:typecheck"
+      }
+    },
+    {
+      "id": "qa-brief-dffef1e9",
+      "text": "Success criterion to verify before launch: Every endpoint documented in the generated OpenAPI spec with examples + error-envelope shape.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section5/item0"
+      }
+    },
+    {
+      "id": "qa-brief-301492c7",
+      "text": "Success criterion to verify before launch: Integration tests cover happy path, 4xx auth, 4xx validation, 5xx upstream-down — per endpoint.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section5/item1"
+      }
+    },
+    {
+      "id": "qa-brief-b360140e",
+      "text": "Success criterion to verify before launch: p95 latency budgets met under synthetic load for both read and write paths.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section5/item2"
+      }
+    },
+    {
+      "id": "qa-brief-a9e83dfc",
+      "text": "Success criterion to verify before launch: Zero raw stack traces in client responses across 7 days of alpha traffic.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section5/item3"
+      }
+    },
+    {
+      "id": "qa-brief-b8c704de",
+      "text": "Success criterion to verify before launch: One-line log per request including requestId, userId, route, status, duration_ms.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section5/item4"
+      }
+    },
+    {
+      "id": "qa-tpl-3a2ea1e9",
+      "text": "Every 4xx / 5xx response conforms to the ErrorEnvelope shape; no raw framework errors leak.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:api-service/contributes#0"
+      }
+    },
+    {
+      "id": "qa-tpl-42a83325",
+      "text": "Every handler has a typed input schema (zod or equivalent); invalid payloads get 400 with field-level details.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:api-service/contributes#1"
+      }
+    },
+    {
+      "id": "qa-tpl-4447b5e2",
+      "text": "/health and /ready are always reachable, never gated by auth, and respond in under 50ms.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:api-service/contributes#2"
+      }
+    },
+    {
+      "id": "qa-tpl-6c81a879",
+      "text": "No secrets in logs, even at debug level. Redaction applied before the log line is emitted.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:api-service/contributes#3"
+      }
+    },
+    {
+      "id": "qa-tpl-232cb716",
+      "text": "p95 latency budget declared per route and monitored; SLOs published.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:api-service/contributes#4"
+      }
+    },
+    {
+      "id": "qa-tpl-c9dc8cfc",
+      "text": "Integration tests hit a real database / cache (or ephemeral container), not mocks.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:api-service/contributes#5"
+      }
+    }
+  ],
+  "agentInstructions": {
+    "dosAndDonts": [
+      {
+        "id": "do-9ad0f600",
+        "text": "Prefer small, focused diffs. One concern per PR or patch.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:diff"
+        }
+      },
+      {
+        "id": "do-9f52191a",
+        "text": "Always show the exact test or typecheck command you ran and its result.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:test-cmd"
+        }
+      },
+      {
+        "id": "do-cba0e959",
+        "text": "When following a rule from this file, cite it by section heading so reviewers can audit.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:trace"
+        }
+      },
+      {
+        "id": "dont-d429caec",
+        "text": "Do not refactor code unrelated to the task, even if it looks better.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:scope"
+        }
+      },
+      {
+        "id": "dont-d6da3150",
+        "text": "Do not add new dependencies without flagging the choice and reason.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:deps"
+        }
+      },
+      {
+        "id": "do-tpl-1a29c3b9",
+        "text": "Add new routes under /v{N}/ — versioning is the only breaking-change escape hatch.",
+        "source": {
+          "kind": "template",
+          "pointer": "template:api-service/contributes#0"
+        }
+      },
+      {
+        "id": "do-tpl-ed6d7190",
+        "text": "Validate inputs with zod schemas at the handler boundary; keep the parsed type flowing through the rest of the request.",
+        "source": {
+          "kind": "template",
+          "pointer": "template:api-service/contributes#1"
+        }
+      },
+      {
+        "id": "do-tpl-1a607c51",
+        "text": "Propagate requestId into every log line and downstream call (X-Request-Id header).",
+        "source": {
+          "kind": "template",
+          "pointer": "template:api-service/contributes#2"
+        }
+      },
+      {
+        "id": "dont-tpl-6b22e616",
+        "text": "Do not add endpoints without a typed input schema and an ErrorEnvelope-shaped error path.",
+        "source": {
+          "kind": "template",
+          "pointer": "template:api-service/contributes#0"
+        }
+      },
+      {
+        "id": "dont-tpl-2e4ca927",
+        "text": "Do not introduce an ORM without approval — start with a typed query layer, add ORM only if read/write volume demands it.",
+        "source": {
+          "kind": "template",
+          "pointer": "template:api-service/contributes#1"
+        }
+      },
+      {
+        "id": "dont-tpl-bf5dd446",
+        "text": "Do not return 200 with `{ error: ... }` payloads. HTTP status is the source of truth for success vs failure.",
+        "source": {
+          "kind": "template",
+          "pointer": "template:api-service/contributes#2"
+        }
+      }
+    ],
+    "unsafeActions": [
+      {
+        "id": "unsafe-dfc94927",
+        "text": "Never modify generated files (anything under `dist/`, `build/`, `.next/`, or marked `@generated`).",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:generated"
+        }
+      },
+      {
+        "id": "unsafe-9cc52688",
+        "text": "Never edit lockfiles manually.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:lockfile"
+        }
+      },
+      {
+        "id": "unsafe-74a0844b",
+        "text": "Never commit secrets. Redact any `.env*` content that appears in logs or diffs.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:secrets"
+        }
+      },
+      {
+        "id": "unsafe-tpl-aa749d93",
+        "text": "Never log full request or response bodies at info level. Redacted summaries only.",
+        "source": {
+          "kind": "template",
+          "pointer": "template:api-service/contributes#0"
+        }
+      },
+      {
+        "id": "unsafe-tpl-2eaccce1",
+        "text": "Never expose stack traces or ORM error messages to clients. Map to the ErrorEnvelope.",
+        "source": {
+          "kind": "template",
+          "pointer": "template:api-service/contributes#1"
+        }
+      }
+    ],
+    "filePlacement": [],
+    "responseExpectations": [
+      {
+        "id": "resp-2fa1aaa3",
+        "text": "Before claiming work is complete, run the repo's typecheck and test commands and show the output.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:verify"
+        }
+      },
+      {
+        "id": "resp-837d9493",
+        "text": "If the brief is ambiguous on a specific section, ask rather than guess. Cite the section heading.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:ask"
+        }
+      }
+    ]
+  },
+  "scaffoldPlan": {
+    "routes": [
+      {
+        "id": "route-tpl-3a6ce1f5",
+        "text": "/health — liveness probe. 200 {status:\"ok\",commit:...}. No external deps.",
+        "source": {
+          "kind": "template",
+          "pointer": "template:api-service/contributes#0"
+        }
+      },
+      {
+        "id": "route-tpl-1abcd3a8",
+        "text": "/ready — readiness probe. Fails if downstream deps (db, cache, upstream API) are unhealthy.",
+        "source": {
+          "kind": "template",
+          "pointer": "template:api-service/contributes#1"
+        }
+      },
+      {
+        "id": "route-tpl-de92e691",
+        "text": "/metrics — Prometheus text exposition. Restricted by network or bearer token.",
+        "source": {
+          "kind": "template",
+          "pointer": "template:api-service/contributes#2"
+        }
+      },
+      {
+        "id": "route-tpl-66162b7c",
+        "text": "/v1/* — versioned public surface. Breaking changes move to /v2/, never rename in place.",
+        "source": {
+          "kind": "template",
+          "pointer": "template:api-service/contributes#3"
+        }
+      }
+    ],
+    "components": [
+      {
+        "id": "cmp-bucket-e051805e",
+        "text": "Layout primitives: `AppShell`, `PageHeader`, `Section`, `Stack`.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:layout"
+        }
+      },
+      {
+        "id": "cmp-bucket-4d650fce",
+        "text": "UI primitives: `Button`, `Input`, `Field`, `Dialog`, `Toast`.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:primitives"
+        }
+      },
+      {
+        "id": "cmp-bucket-b1f7e9ba",
+        "text": "Feature components live co-located with the route or feature folder that owns them.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:features"
+        }
+      }
+    ],
+    "sprint1": [
+      {
+        "id": "setup-2255a7f6",
+        "text": "Commit the Project Spine–generated `AGENTS.md`, `CLAUDE.md`, and `.github/copilot-instructions.md` after review.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:setup/agent-files"
+        }
+      },
+      {
+        "id": "setup-e2afd63d",
+        "text": "Pick and configure a linter (Biome or ESLint) with a minimal rule set.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:setup/lint"
+        }
+      },
+      {
+        "id": "setup-553c659c",
+        "text": "Add a minimal CI workflow that runs typecheck + lint + tests on every PR.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:setup/ci"
+        }
+      },
+      {
+        "id": "s1-db68fd98",
+        "text": "Deliver: Ship v1 of the Ledger billing API for internal consumers in 8 weeks.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section0/item0"
+        }
+      },
+      {
+        "id": "s1-71831471",
+        "text": "Deliver: p95 read-path latency under 120ms; p95 write-path under 250ms.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section0/item1"
+        }
+      },
+      {
+        "id": "s1-8597fe62",
+        "text": "Deliver: One stable error envelope across every endpoint — no raw stack traces ever reach a client.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section0/item2"
+        }
+      },
+      {
+        "id": "s1-d4b2b83a",
+        "text": "Deliver: OpenAPI spec generated from the same type definitions the runtime uses.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section0/item3"
+        }
+      }
+    ]
+  },
+  "warnings": [
+    {
+      "id": "repo:framework-uncertain",
+      "severity": "warn",
+      "message": "Framework detection confidence 0.4. Evidence: no framework dep detected",
+      "sources": [
+        {
+          "kind": "repo",
+          "pointer": "repo-profile"
+        }
+      ],
+      "suggestion": "Install the framework dependency explicitly (e.g., `npm i next`), or bootstrap from a framework starter before compiling."
+    },
+    {
+      "id": "repo:no-agent-files",
+      "severity": "info",
+      "message": "No agent instruction files found.",
+      "sources": [
+        {
+          "kind": "repo",
+          "pointer": "repo-profile"
+        }
+      ],
+      "suggestion": "Run `spine compile --brief ./brief.md --repo .` to generate AGENTS.md, CLAUDE.md, and copilot-instructions.md."
+    }
+  ]
+}

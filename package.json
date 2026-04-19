@@ -16,6 +16,7 @@
     "dist",
     "templates",
     "skills",
+    "scripts/postinstall-hint.mjs",
     "README.md",
     "PRD.md"
   ],
@@ -27,7 +28,8 @@
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src",
-    "prepublishOnly": "npm run typecheck && npm test && npm run build"
+    "prepublishOnly": "npm run typecheck && npm test && npm run build",
+    "postinstall": "node scripts/postinstall-hint.mjs"
   },
   "keywords": [
     "ai",

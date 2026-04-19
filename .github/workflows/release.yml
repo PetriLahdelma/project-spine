@@ -1,0 +1,107 @@
+name: Release
+
+# Fires when a version tag is pushed (e.g. `git tag v0.9.2-alpha.0 && git push --tags`).
+# Flow: install -> typecheck -> test -> build -> `npm publish --tag next` -> GitHub Release.
+# Manual release steps still documented in CONTRIBUTING.md as the fallback path.
+
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+*"
+
+permissions:
+  contents: write # needed to create the GitHub Release
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          # Need full history so the release notes can diff against the previous tag.
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+          registry-url: https://registry.npmjs.org
+          always-auth: true
+
+      - name: Install
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+      - name: Verify tag matches package.json
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          PKG="$(node -p "require('./package.json').version")"
+          if [ "$TAG" != "$PKG" ]; then
+            echo "::error::tag $GITHUB_REF_NAME does not match package.json version $PKG"
+            exit 1
+          fi
+
+      - name: Regenerate CHANGELOG.md
+        run: scripts/generate-changelog.sh > CHANGELOG.md
+
+      - name: Publish to npm
+        run: npm publish --tag next --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Commit CHANGELOG.md back to main
+        # CHANGELOG.md is a generated mirror of git tags. Regenerate and push
+        # it back to main after a successful npm publish so npm consumers and
+        # GitHub readers both see the same history.
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet CHANGELOG.md; then
+            echo "CHANGELOG.md already up to date."
+          else
+            git checkout main
+            scripts/generate-changelog.sh > CHANGELOG.md
+            git add CHANGELOG.md
+            git commit -m "chore: update CHANGELOG.md for ${GITHUB_REF_NAME}"
+            git push origin main
+          fi
+
+      - name: Build release notes
+        id: notes
+        run: |
+          PREV="$(git tag --sort=-v:refname | grep -v "^${GITHUB_REF_NAME}$" | head -n 1)"
+          {
+            echo "## What changed"
+            echo ""
+            if [ -n "$PREV" ]; then
+              git log --pretty=format:'- %s (%h)' "$PREV..${GITHUB_REF_NAME}"
+            else
+              git log --pretty=format:'- %s (%h)' "${GITHUB_REF_NAME}" | head -n 50
+            fi
+            echo ""
+            echo ""
+            echo "## Install"
+            echo ""
+            echo '```bash'
+            echo "npm install -g project-spine@${GITHUB_REF_NAME#v}"
+            echo '```'
+            echo ""
+            echo "Or grab the latest alpha via \`npm install -g project-spine@next\`."
+          } > /tmp/notes.md
+          echo "path=/tmp/notes.md" >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          body_path: ${{ steps.notes.outputs.path }}
+          prerelease: ${{ contains(github.ref_name, 'alpha') || contains(github.ref_name, 'beta') || contains(github.ref_name, 'rc') }}
+          generate_release_notes: false

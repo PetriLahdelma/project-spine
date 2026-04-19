@@ -5,6 +5,11 @@
   --ink-muted: #6b7480;
   --line: #e2e8ee;
   --accent: #ff4fb4;
+  /* Darker accent for small text on --bg where WCAG AA (4.5:1) bites.
+     Use --accent for large text, hover states, and decorative fills; use
+     --accent-ink for eyebrows, inline accent copy, and anywhere the text
+     is ≤14px non-bold. Contrast against --bg: 4.54:1. */
+  --accent-ink: #c30a7a;
   --code-bg: #0f1318;
   --code-ink: #e8edf2;
   --code-line: #1b232c;
@@ -403,6 +408,21 @@ footer a {
   max-width: 1040px;
 }
 
+/* Visually hidden — accessible to screen readers / heading-order audits,
+   invisible to sighted users. Used for landmark-level H2s on pages whose
+   main content doesn't already have one (e.g. the site footer). */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* --- Error actions + digest (shared by marketing + global error) ---- */
 .error-actions {
   display: flex;
@@ -518,6 +538,25 @@ footer a {
 .changelog__empty {
   color: var(--ink-muted);
 }
+.changelog__alpha-note {
+  margin: 0 0 32px;
+  padding: 14px 18px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--bg);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+.changelog__alpha-note p {
+  margin: 0;
+}
+.changelog__alpha-note code {
+  background: rgba(15, 19, 24, 0.06);
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-size: 0.9em;
+}
 .changelog__list {
   list-style: none;
   padding: 0;
@@ -538,6 +577,9 @@ footer a {
   margin: 0;
   font-size: 17px;
   font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink);
 }
 .changelog__title a {
   color: var(--ink);
@@ -558,7 +600,8 @@ footer a {
 .changelog__body > *:last-child {
   margin-bottom: 0;
 }
-.changelog__body h2 {
+.changelog__body h2,
+.changelog__body h3 {
   font-size: 15px;
   font-weight: 600;
   letter-spacing: 0;
@@ -566,7 +609,7 @@ footer a {
   color: var(--ink);
   margin: 24px 0 8px;
 }
-.changelog__body h3 {
+.changelog__body h4 {
   font-size: 14px;
   font-weight: 600;
   letter-spacing: 0;
@@ -679,7 +722,7 @@ footer a {
   font-size: 12px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--accent-ink);
   margin: 0 0 10px;
 }
 .page-header h1 {
@@ -797,7 +840,7 @@ main.landing {
   font-weight: 900;
   font-size: 72px;
   line-height: 0.85;
-  color: var(--accent);
+  color: var(--accent-ink);
   letter-spacing: -0.04em;
   font-variation-settings: "SOFT" 100;
 }
@@ -1294,7 +1337,7 @@ main.landing {
   color: var(--ink-muted);
   margin: 0 0 16px;
 }
-.vs-col--spine .vs-col__label { color: var(--accent); }
+.vs-col--spine .vs-col__label { color: var(--accent-ink); }
 .vs-col h3 {
   font-size: 17px;
   font-weight: 600;
