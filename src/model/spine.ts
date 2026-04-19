@@ -55,7 +55,7 @@ export const SpineModel = z.object({
     runtime: z.string().optional(),
     styling: z.string().optional(),
     testing: z.array(z.string()).default([]),
-    detected: z.record(z.unknown()).default({}),
+    detected: z.record(z.string(), z.unknown()).default({}),
   }),
   repoConventions: z.array(Rule),
   designRules: z.array(Rule),

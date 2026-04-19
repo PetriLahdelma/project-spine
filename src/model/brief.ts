@@ -15,7 +15,7 @@ export type BriefItem = z.infer<typeof BriefItem>;
 export const NormalizedBrief = z.object({
   schemaVersion: z.literal(1),
   parsedAt: z.string(),
-  frontmatter: z.record(z.unknown()),
+  frontmatter: z.record(z.string(), z.unknown()),
   name: z.string().nullable(),
   projectType: ProjectType,
   projectTypeConfidence: z.number().min(0).max(1),
