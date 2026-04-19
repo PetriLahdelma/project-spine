@@ -68,7 +68,7 @@ export function parseBrief(content: string, source = "brief.md"): NormalizedBrie
       severity: "warn",
       message: `Project type inferred as "${classification.value}" with confidence ${classification.confidence}. Set \`projectType\` in frontmatter to remove ambiguity.`,
       suggestion:
-        'Add `projectType: "saas-marketing" | "app-dashboard" | "design-system" | "docs-portal" | "extension" | "other"` to the YAML frontmatter of brief.md.',
+        'Add `projectType: "saas-marketing" | "app-dashboard" | "design-system" | "docs-portal" | "api-service" | "monorepo" | "extension" | "other"` to the YAML frontmatter of brief.md.',
     });
   }
   if (unknownSections.length > 0) {

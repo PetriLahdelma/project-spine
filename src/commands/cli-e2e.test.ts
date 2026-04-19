@@ -205,10 +205,17 @@ describe("spine export", () => {
 });
 
 describe("spine template", () => {
-  it("template list shows the four starter presets", async () => {
+  it("template list shows all six starter presets", async () => {
     const { stdout, exitCode } = await spawn(["template", "list"]);
     expect(exitCode).toBe(0);
-    for (const name of ["saas-marketing", "app-dashboard", "design-system", "docs-portal"]) {
+    for (const name of [
+      "saas-marketing",
+      "app-dashboard",
+      "design-system",
+      "docs-portal",
+      "api-service",
+      "monorepo",
+    ]) {
       expect(stdout).toContain(name);
     }
   });

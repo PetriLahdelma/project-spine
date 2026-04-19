@@ -23,6 +23,31 @@ const signals: Signal[] = [
     keywords: ["docs portal", "documentation site", "api reference", "developer docs", "handbook"],
   },
   {
+    type: "api-service",
+    keywords: [
+      "api service",
+      "rest api",
+      "graphql api",
+      "backend service",
+      "microservice",
+      "node backend",
+      "route handlers",
+      "health check",
+    ],
+  },
+  {
+    type: "monorepo",
+    keywords: [
+      "monorepo",
+      "turborepo",
+      "nx workspace",
+      "pnpm workspace",
+      "workspaces",
+      "shared packages",
+      "multi-package",
+    ],
+  },
+  {
     type: "extension",
     keywords: ["browser extension", "chrome extension", "vs code extension", "figma plugin"],
   },
@@ -36,7 +61,18 @@ export function classifyProjectType(
   const fromFm = frontmatter["projectType"] ?? frontmatter["projectTtype"] ?? frontmatter["project_type"];
   if (typeof fromFm === "string") {
     const normalized = fromFm.trim().toLowerCase() as ProjectType;
-    if (["saas-marketing", "app-dashboard", "design-system", "docs-portal", "extension", "other"].includes(normalized)) {
+    if (
+      [
+        "saas-marketing",
+        "app-dashboard",
+        "design-system",
+        "docs-portal",
+        "api-service",
+        "monorepo",
+        "extension",
+        "other",
+      ].includes(normalized)
+    ) {
       return {
         value: normalized,
         confidence: 1,

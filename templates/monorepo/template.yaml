@@ -1,0 +1,37 @@
+schemaVersion: 1
+name: monorepo
+title: Monorepo (pnpm / Turborepo / Nx)
+description: Multi-package workspace. Shared internal packages, a build graph with caching, per-package versioning and release, and tests that run only on affected packages. Tool-agnostic — works with pnpm workspaces, Turborepo, or Nx.
+projectType: monorepo
+
+contributes:
+  routes: []
+  components:
+    - "packages/* — internal libraries. Private by default; each exports a typed public surface via index.ts."
+    - "apps/* — deployable targets. Depend on packages/, never the other way around."
+    - "tools/* — repo-local scripts, codegens, CI helpers. Not published."
+    - "BuildGraph — one root config (turbo.json, nx.json, or a root package.json scripts map) that declares task deps. Every script is reproducible from a clean clone."
+    - "ChangeGate — affected-package detection for CI: only run the build / test / lint for packages that actually changed (or depend on a change)."
+  qa:
+    - "Every package compiles in isolation: `cd packages/<name> && npm run build` succeeds without repo-root tooling on PATH."
+    - "Cross-package imports go through the package name, not a relative ../../../../ path."
+    - "CI uses affected-only runs and caches build artefacts. A no-op PR finishes in under 60s."
+    - "Every publishable package has a CHANGELOG.md updated via changesets or equivalent — never hand-edited in the release commit."
+    - "Version bumps flow through a single tool (changesets / lerna / nx release) — no manual `npm version` in a package."
+    - "Lockfile is a single source of truth (pnpm-lock.yaml or package-lock.json). No per-package lockfiles."
+  uxRules:
+    - "`tsconfig.json` at the repo root defines shared compiler options; package tsconfigs extend it and only add overrides."
+    - "Naming: `@scope/utils`, `@scope/ui`, `@scope/config`. The scope prefix makes internal-vs-external explicit in every import."
+    - "Each package has its own README explaining what it exports and the boundary with the rest of the repo."
+  a11yRules: []
+  agentDos:
+    - "When adding a new package, use the repo's generator / template if one exists. If not, copy the smallest existing package wholesale and edit from there."
+    - "Declare dependencies explicitly in each package's package.json — hoisting works, but the declared graph is what CI trusts."
+    - "Keep the build graph DAG: packages/* never import from apps/*."
+  agentDonts:
+    - "Do not add a global helper in the repo root. It belongs in a package."
+    - "Do not cross-reference packages with relative paths (`../../../other-package`). Use the package name so the build graph is honest."
+    - "Do not mix ESM and CommonJS within a single package. Pick one per package and stick to it."
+  unsafeActions:
+    - "Never hand-edit generated files in `dist/` or `.turbo/` or `.nx/` — they get blown away on the next build."
+    - "Never bypass the changeset / release tool to publish a package manually; that's how versions diverge from the changelog."

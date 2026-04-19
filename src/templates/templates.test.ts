@@ -9,13 +9,38 @@ const FIXED_NOW = () => "2026-04-18T00:00:00.000Z";
 const repoRoot = resolve(__dirname, "..", "..");
 
 describe("template registry", () => {
-  it("lists all 4 bundled templates", async () => {
+  it("lists all 6 bundled templates", async () => {
     const all = await listTemplates();
     const bundledNames = all
       .filter((t) => t.source === "bundled")
       .map((t) => t.manifest.name)
       .sort();
-    expect(bundledNames).toEqual(["app-dashboard", "design-system", "docs-portal", "saas-marketing"]);
+    expect(bundledNames).toEqual([
+      "api-service",
+      "app-dashboard",
+      "design-system",
+      "docs-portal",
+      "monorepo",
+      "saas-marketing",
+    ]);
+  });
+
+  it("api-service contributes /health and /ready probes plus an ErrorEnvelope", async () => {
+    const t = await getTemplate("api-service");
+    const routes = t.manifest.contributes.routes.join("\n");
+    expect(routes).toMatch(/\/health/);
+    expect(routes).toMatch(/\/ready/);
+    const components = t.manifest.contributes.components.join("\n");
+    expect(components).toMatch(/ErrorEnvelope/);
+  });
+
+  it("monorepo contributes zero routes but real packages/apps components", async () => {
+    const t = await getTemplate("monorepo");
+    expect(t.manifest.contributes.routes).toEqual([]);
+    const components = t.manifest.contributes.components.join("\n");
+    expect(components).toMatch(/packages\//);
+    expect(components).toMatch(/apps\//);
+    expect(components).toMatch(/BuildGraph/);
   });
 
   it("each template manifest validates and has a brief", async () => {

@@ -152,14 +152,16 @@ Every rule in `spine.json` carries a `source` pointer — `brief.md#section0/ite
 
 ## Templates
 
-Four starter presets ship in the box:
+Six starter presets ship in the box:
 
-| Template         | Project type            | Contributes                                                                  |
-| ---------------- | ----------------------- | ---------------------------------------------------------------------------- |
-| `saas-marketing` | Marketing site          | 7 routes, 7 components, LCP/CLS budgets, privacy guardrails                  |
-| `app-dashboard`  | Authenticated dashboard | role-gated routes, `PermissionGate`/`DataTable`/`AppShell`, PII scrubbing    |
-| `design-system`  | Library                 | zero routes, tokens/primitives/Storybook QA, ships its own `design-rules.md` |
-| `docs-portal`    | Documentation site      | docs-specific routes, `TOC`/`CodeBlock`/`SearchBar`, broken-link QA          |
+| Template         | Project type            | Contributes                                                                           |
+| ---------------- | ----------------------- | ------------------------------------------------------------------------------------- |
+| `saas-marketing` | Marketing site          | 7 routes, 7 components, LCP/CLS budgets, privacy guardrails                           |
+| `app-dashboard`  | Authenticated dashboard | role-gated routes, `PermissionGate`/`DataTable`/`AppShell`, PII scrubbing             |
+| `design-system`  | Library                 | zero routes, tokens/primitives/Storybook QA, ships its own `design-rules.md`          |
+| `docs-portal`    | Documentation site      | docs-specific routes, `TOC`/`CodeBlock`/`SearchBar`, broken-link QA                   |
+| `api-service`    | HTTP API (Node/TS)      | `/health` + `/ready` probes, `ErrorEnvelope`/`RequestContext`/`RateLimiter`, log + SLO QA |
+| `monorepo`       | pnpm / Turborepo / Nx   | `packages/*` + `apps/*` layout, `BuildGraph` + `ChangeGate`, affected-only CI rules   |
 
 Each template contributes routes, components, QA, UX, a11y, and agent rules — not just a brief scaffold. Every contributed rule is tagged `kind: "template"` in `spine.json` for traceability.
 
