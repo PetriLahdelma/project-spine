@@ -30,6 +30,7 @@ const main = defineCommand({
     template: () => import("./commands/template.js").then((m) => m.default),
     explain: () => import("./commands/explain.js").then((m) => m.default),
     drift: () => import("./commands/drift.js").then((m) => m.default),
+    tokens: () => import("./commands/tokens.js").then((m) => m.default),
     // Hosted-tier subcommands (login / logout / whoami / workspace / publish /
     // rationale) live in src/commands/ but are intentionally unrouted while
     // the hosted tier is dormant. The OSS CLI should not advertise them.
