@@ -1,0 +1,185 @@
+{
+  "schemaVersion": 1,
+  "parsedAt": "2026-04-19T11:21:32.772Z",
+  "frontmatter": {
+    "name": "Ledger API",
+    "projectType": "api-service"
+  },
+  "name": "Ledger API",
+  "projectType": "api-service",
+  "projectTypeConfidence": 1,
+  "projectTypeEvidence": [
+    "frontmatter.projectType = api-service"
+  ],
+  "sections": {
+    "goals": [
+      {
+        "text": "Ship v1 of the Ledger billing API for internal consumers in 8 weeks.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section0/item0"
+        }
+      },
+      {
+        "text": "p95 read-path latency under 120ms; p95 write-path under 250ms.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section0/item1"
+        }
+      },
+      {
+        "text": "One stable error envelope across every endpoint — no raw stack traces ever reach a client.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section0/item2"
+        }
+      },
+      {
+        "text": "OpenAPI spec generated from the same type definitions the runtime uses.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section0/item3"
+        }
+      }
+    ],
+    "nonGoals": [],
+    "audience": [
+      {
+        "text": "Internal services within the Acme platform (3 consumers today, 6 planned by v1).",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section1/item0"
+        }
+      },
+      {
+        "text": "Consumer SDK authors who will codegen typed clients from the OpenAPI spec.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section1/item1"
+        }
+      },
+      {
+        "text": "Oncall engineers who need structured logs that answer \"what went wrong for request X.\"",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section1/item2"
+        }
+      }
+    ],
+    "constraints": [
+      {
+        "text": "Node 20 + Fastify 4 + PostgreSQL 16 (managed). No ORM for v1 — typed query layer over pg.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section2/item0"
+        }
+      },
+      {
+        "text": "Auth is API-key only for v1 (internal service mesh). OAuth 2.1 client-credentials is a v2 follow-up.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section2/item1"
+        }
+      },
+      {
+        "text": "Deployment target: containers on the shared Acme platform (not serverless).",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section2/item2"
+        }
+      },
+      {
+        "text": "Observability stack is fixed: structured JSON logs → Loki; traces → Tempo; metrics → Prometheus.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section2/item3"
+        }
+      }
+    ],
+    "assumptions": [
+      {
+        "text": "Traffic stays under 500 rps during the alpha window; headroom is fine.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section3/item0"
+        }
+      },
+      {
+        "text": "Internal consumers accept alpha-level SLAs (99.5% availability, 48h incident-response).",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section3/item1"
+        }
+      },
+      {
+        "text": "No public-internet exposure in v1 — mTLS at the mesh layer handles transport security.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section3/item2"
+        }
+      }
+    ],
+    "risks": [
+      {
+        "text": "Downstream dependency on the legacy Pricing service (SLA not formally documented).",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section4/item0"
+        }
+      },
+      {
+        "text": "Schema drift between services during migration from the existing monolith — need a contract-check step.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section4/item1"
+        }
+      },
+      {
+        "text": "Pager fatigue from over-alerting on structured log volume; need explicit log-level discipline.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section4/item2"
+        }
+      }
+    ],
+    "successCriteria": [
+      {
+        "text": "Every endpoint documented in the generated OpenAPI spec with examples + error-envelope shape.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section5/item0"
+        }
+      },
+      {
+        "text": "Integration tests cover happy path, 4xx auth, 4xx validation, 5xx upstream-down — per endpoint.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section5/item1"
+        }
+      },
+      {
+        "text": "p95 latency budgets met under synthetic load for both read and write paths.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section5/item2"
+        }
+      },
+      {
+        "text": "Zero raw stack traces in client responses across 7 days of alpha traffic.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section5/item3"
+        }
+      },
+      {
+        "text": "One-line log per request including requestId, userId, route, status, duration_ms.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section5/item4"
+        }
+      }
+    ]
+  },
+  "unknownSections": [],
+  "warnings": []
+}

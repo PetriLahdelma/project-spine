@@ -2,7 +2,7 @@
 
 > Starter items with acceptance criteria. Setup items clear the runway; delivery items trace to brief goals.
 
-_Generated from `spine.json` — hash `8976dc15b57e7f67`, project type `saas-marketing`._
+_Generated from `spine.json` — hash `bcaf67e27f36d134`, project type `api-service`._
 
 <!-- spine:deterministic -->
 
@@ -28,17 +28,7 @@ _Generated from `spine.json` — hash `8976dc15b57e7f67`, project type `saas-mar
 
 **Source:** `inference:inferred:setup/lint`
 
-### S3. Set up a test runner (Vitest recommended) and land a smoke test.
-
-**Detail:** Set up a test runner (Vitest recommended) and land a smoke test.
-
-**Acceptance:**
-- [ ] Change landed on main (or a release branch) and merged.
-- [ ] Verified locally and in CI where applicable.
-
-**Source:** `inference:inferred:setup/tests`
-
-### S4. Add a minimal CI workflow that runs typecheck + lint + tests on every…
+### S3. Add a minimal CI workflow that runs typecheck + lint + tests on every…
 
 **Detail:** Add a minimal CI workflow that runs typecheck + lint + tests on every PR.
 
@@ -50,9 +40,9 @@ _Generated from `spine.json` — hash `8976dc15b57e7f67`, project type `saas-mar
 
 ## Deliver — sprint goals
 
-### 1. Launch a marketing site for Acme Payroll's new SMB product line withi…
+### 1. Ship v1 of the Ledger billing API for internal consumers in 8 weeks.
 
-**Detail:** Deliver: Launch a marketing site for Acme Payroll's new SMB product line within 6 weeks.
+**Detail:** Deliver: Ship v1 of the Ledger billing API for internal consumers in 8 weeks.
 
 **Acceptance:**
 - [ ] Implemented behind the stack and conventions declared in `AGENTS.md`.
@@ -63,9 +53,9 @@ _Generated from `spine.json` — hash `8976dc15b57e7f67`, project type `saas-mar
 
 **Source:** `brief:brief.md#section0/item0`
 
-### 2. Generate qualified trial signups from SMB founders in the US and UK.
+### 2. p95 read-path latency under 120ms; p95 write-path under 250ms.
 
-**Detail:** Deliver: Generate qualified trial signups from SMB founders in the US and UK.
+**Detail:** Deliver: p95 read-path latency under 120ms; p95 write-path under 250ms.
 
 **Acceptance:**
 - [ ] Implemented behind the stack and conventions declared in `AGENTS.md`.
@@ -76,9 +66,9 @@ _Generated from `spine.json` — hash `8976dc15b57e7f67`, project type `saas-mar
 
 **Source:** `brief:brief.md#section0/item1`
 
-### 3. Replace the legacy WordPress site with a repo-native, versionable build.
+### 3. One stable error envelope across every endpoint — no raw stack traces…
 
-**Detail:** Deliver: Replace the legacy WordPress site with a repo-native, versionable build.
+**Detail:** Deliver: One stable error envelope across every endpoint — no raw stack traces ever reach a client.
 
 **Acceptance:**
 - [ ] Implemented behind the stack and conventions declared in `AGENTS.md`.
@@ -89,9 +79,9 @@ _Generated from `spine.json` — hash `8976dc15b57e7f67`, project type `saas-mar
 
 **Source:** `brief:brief.md#section0/item2`
 
-### 4. Pass Lighthouse a11y ≥95 on all key pages.
+### 4. OpenAPI spec generated from the same type definitions the runtime uses.
 
-**Detail:** Deliver: Pass Lighthouse a11y ≥95 on all key pages.
+**Detail:** Deliver: OpenAPI spec generated from the same type definitions the runtime uses.
 
 **Acceptance:**
 - [ ] Implemented behind the stack and conventions declared in `AGENTS.md`.

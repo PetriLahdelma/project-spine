@@ -4,16 +4,17 @@
 
 **Project Spine** — Launch a marketing site for Acme Payroll's new SMB product line within 6 weeks.
 
-**Stack:** node-library • typescript • tests: vitest • pm: npm
+**Stack:** next • typescript • tailwind
 
 **Project type:** `saas-marketing`
 
-> Source of truth: `.project-spine/spine.json` (hash `3333f867f40d3e43`). Every rule below has a traceable source. If a rule is wrong, fix the upstream input (`brief.md`, repo state, or `design-rules.md`) and rerun `spine compile`.
+> Source of truth: `.project-spine/spine.json` (hash `8976dc15b57e7f67`). Every rule below has a traceable source. If a rule is wrong, fix the upstream input (`brief.md`, repo state, or `design-rules.md`) and rerun `spine compile`.
 
 ## Repo conventions
 
+- Use the Next.js App Router (`app/`). Prefer server components by default; only opt into client components via `"use client"` when needed.
+- Style exclusively with Tailwind utility classes. Do not add inline `style` props or ad-hoc CSS unless the component is outside the design system.
 - TypeScript strict mode is on. Never use `any`; prefer `unknown` + narrow at the boundary.
-- Use `npm` for all dependency operations. Do not commit lockfiles from other package managers.
 
 ## Do / Don't
 
@@ -35,7 +36,7 @@
 
 ## File placement
 
-_(none)_
+- Pages go in `app/`. Route segments use `page.tsx`. Shared UI goes in `components/` or `src/components/`.
 
 ## Response expectations
 
@@ -72,7 +73,6 @@ _(none)_
 
 ## QA guardrails
 
-- Unit tests live next to source as `*.test.ts`. Run `vitest run` in CI and before every commit touching business logic.
 - `tsc --noEmit` must pass on every PR.
 - Success criterion to verify before launch: Homepage, 3 product pages, pricing, /compliance, /security, 2 case studies live.
 - Success criterion to verify before launch: 99th-percentile page weight <250KB on mobile.
@@ -105,7 +105,7 @@ _(none)_
 
 ## Open warnings
 
-There are 2 unresolved warnings in `warnings.json`. Agents should review them before starting a new capability.
+There is 1 unresolved warning in `warnings.json`. Agents should review them before starting a new capability.
 
 ---
 

@@ -1,0 +1,171 @@
+{
+  "schemaVersion": 1,
+  "parsedAt": "2026-04-19T11:20:53.595Z",
+  "frontmatter": {
+    "name": "Acme Payroll Marketing Site",
+    "projectType": "saas-marketing"
+  },
+  "name": "Acme Payroll Marketing Site",
+  "projectType": "saas-marketing",
+  "projectTypeConfidence": 1,
+  "projectTypeEvidence": [
+    "frontmatter.projectType = saas-marketing"
+  ],
+  "sections": {
+    "goals": [
+      {
+        "text": "Launch a marketing site for Acme Payroll's new SMB product line within 6 weeks.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section0/item0"
+        }
+      },
+      {
+        "text": "Generate qualified trial signups from SMB founders in the US and UK.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section0/item1"
+        }
+      },
+      {
+        "text": "Replace the legacy WordPress site with a repo-native, versionable build.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section0/item2"
+        }
+      },
+      {
+        "text": "Pass Lighthouse a11y ≥95 on all key pages.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section0/item3"
+        }
+      }
+    ],
+    "nonGoals": [],
+    "audience": [
+      {
+        "text": "Founders of 5–50 person companies running payroll for the first time.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section1/item0"
+        }
+      },
+      {
+        "text": "Operations leads evaluating a switch from incumbents (Gusto, Rippling, Deel).",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section1/item1"
+        }
+      }
+    ],
+    "constraints": [
+      {
+        "text": "Stack must be Next.js 15 (app router) + Tailwind. Infra is already on Vercel.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section2/item0"
+        }
+      },
+      {
+        "text": "Content managed in MDX. No CMS for the MVP.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section2/item1"
+        }
+      },
+      {
+        "text": "Design system tokens ship as a JSON file from the product team — reference only, do not fork.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section2/item2"
+        }
+      },
+      {
+        "text": "Legal review required on every claim about pricing or compliance.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section2/item3"
+        }
+      }
+    ],
+    "assumptions": [
+      {
+        "text": "Engineering is 1 lead + 1 contractor.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section3/item0"
+        }
+      },
+      {
+        "text": "Design handoff is via Figma + exported tokens; no live design-system package yet.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section3/item1"
+        }
+      },
+      {
+        "text": "Analytics stack is PostHog.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section3/item2"
+        }
+      }
+    ],
+    "risks": [
+      {
+        "text": "Tokens JSON may change mid-build; we need to absorb updates without rewriting components.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section4/item0"
+        }
+      },
+      {
+        "text": "Ops lead audience reads long-form; the marketing team is pushing for short copy — tension to manage.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section4/item1"
+        }
+      },
+      {
+        "text": "Legal turnaround is 48h; compliance-adjacent copy blocks can bottleneck launch.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section4/item2"
+        }
+      }
+    ],
+    "successCriteria": [
+      {
+        "text": "Homepage, 3 product pages, pricing, /compliance, /security, 2 case studies live.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section5/item0"
+        }
+      },
+      {
+        "text": "99th-percentile page weight <250KB on mobile.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section5/item1"
+        }
+      },
+      {
+        "text": "All interactive elements keyboard-operable and screen-reader labeled.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section5/item2"
+        }
+      },
+      {
+        "text": "40+ qualified trial signups in the first month.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section5/item3"
+        }
+      }
+    ]
+  },
+  "unknownSections": [],
+  "warnings": []
+}

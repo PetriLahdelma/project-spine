@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "root": "/private/var/folders/6w/jqw75m7545gdh8j23y93f7fc0000gn/T/tmp.utxfuagGBF",
+  "detectedAt": "2026-04-19T11:21:32.776Z",
+  "packageManager": {
+    "value": "unknown",
+    "confidence": 0,
+    "evidence": [
+      "no lockfile found"
+    ]
+  },
+  "framework": {
+    "value": "node-app",
+    "confidence": 0.4,
+    "evidence": [
+      "no framework dep detected"
+    ]
+  },
+  "routing": {
+    "value": "none",
+    "confidence": 0.8,
+    "evidence": [
+      "non-routed framework"
+    ]
+  },
+  "styling": {
+    "value": "unknown",
+    "confidence": 0,
+    "evidence": [
+      "no styling library detected"
+    ]
+  },
+  "language": {
+    "typescript": true,
+    "strict": true,
+    "evidence": [
+      "tsconfig.json present",
+      "compilerOptions.strict = true"
+    ]
+  },
+  "testing": {
+    "runners": [
+      "vitest"
+    ],
+    "storybook": false,
+    "storybookVersion": null,
+    "evidence": [
+      "vitest@1.6.0"
+    ]
+  },
+  "linting": {
+    "eslint": false,
+    "biome": false,
+    "prettier": false,
+    "oxlint": false,
+    "evidence": []
+  },
+  "ci": {
+    "githubActions": false,
+    "workflows": [],
+    "other": [],
+    "evidence": []
+  },
+  "agentFiles": {
+    "agentsMd": false,
+    "claudeMd": false,
+    "copilotInstructions": false,
+    "cursorRules": false,
+    "projectSpineDir": false
+  },
+  "monorepo": {
+    "isMonorepo": false,
+    "tool": null,
+    "workspaces": [],
+    "evidence": []
+  },
+  "rawPackageJson": {
+    "name": "ledger-api",
+    "dependencies": {
+      "fastify": "4.26.0",
+      "pg": "8.11.0",
+      "zod": "3.24.0"
+    },
+    "devDependencies": {
+      "typescript": "5.5.0",
+      "vitest": "1.6.0"
+    }
+  },
+  "warnings": [
+    {
+      "id": "framework-uncertain",
+      "severity": "warn",
+      "message": "Framework detection confidence 0.4. Evidence: no framework dep detected",
+      "suggestion": "Install the framework dependency explicitly (e.g., `npm i next`), or bootstrap from a framework starter before compiling."
+    },
+    {
+      "id": "no-agent-files",
+      "severity": "info",
+      "message": "No agent instruction files found.",
+      "suggestion": "Run `spine compile --brief ./brief.md --repo .` to generate AGENTS.md, CLAUDE.md, and copilot-instructions.md."
+    }
+  ]
+}

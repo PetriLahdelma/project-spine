@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "compiledAt": "2026-04-19T11:21:32.797Z",
+  "spineHash": "bcaf67e27f36d134",
+  "inputs": {
+    "briefPath": "brief.md",
+    "briefSha256": "sha256:103330c982d348fc298036d32f90a323cb20321b44198e6b3b0e8604f021130e",
+    "designPath": null,
+    "designSha256": null,
+    "tokensPath": null,
+    "tokensSha256": null,
+    "templateName": "api-service",
+    "templateSha256": "sha256:76b3aef890c00b8068666833b8e5bc3c0e90aeadfd1bfd891ad2445abfe32687",
+    "repoProfileSha256": "sha256:7401b77cb36808423642ee5fc99927fef19df7fcda039cf4b8418388bde628c3"
+  },
+  "exports": [
+    {
+      "path": ".github/copilot-instructions.md",
+      "sha256": "sha256:0a52243d90bcba2648871ceef332fb22921c9306fe8e21a1589b39bcdbb84142",
+      "bytes": 3220
+    },
+    {
+      "path": ".project-spine/exports/AGENTS.md",
+      "sha256": "sha256:34452fd4a40af7c409b1c76b245b85a9d95790ef56b59fe0ef3eaa2aea1ff716",
+      "bytes": 6485
+    },
+    {
+      "path": ".project-spine/exports/CLAUDE.md",
+      "sha256": "sha256:4b82a6a105a50c55ff12aafe3957ac4d942512c1556fd15dbf4dd71a2708e0d8",
+      "bytes": 2659
+    },
+    {
+      "path": ".project-spine/exports/component-plan.md",
+      "sha256": "sha256:e27645e5077a0f9344af2a1e1ee06acd520a0c0e848006c61768541e6ce39224",
+      "bytes": 1771
+    },
+    {
+      "path": ".project-spine/exports/copilot-instructions.md",
+      "sha256": "sha256:0a52243d90bcba2648871ceef332fb22921c9306fe8e21a1589b39bcdbb84142",
+      "bytes": 3220
+    },
+    {
+      "path": ".project-spine/exports/qa-guardrails.md",
+      "sha256": "sha256:a3f9498c3445d06cf11919e86d3f64ae3878d8a92852ddf38e10667895e3d310",
+      "bytes": 3791
+    },
+    {
+      "path": ".project-spine/exports/rationale.md",
+      "sha256": "sha256:3e8a8b6fe182d237729c594a613522b6f029d2e79cb05351e0b41b7c750d4fc9",
+      "bytes": 2762
+    },
+    {
+      "path": ".project-spine/exports/route-inventory.md",
+      "sha256": "sha256:240afbb34176b11fac253e1d687f09d2fd2aee592ec78caadd99bf3bc7869d48",
+      "bytes": 1144
+    },
+    {
+      "path": ".project-spine/exports/scaffold-plan.md",
+      "sha256": "sha256:6f5caeae1865c543a57afd5841024887679eedb2d8c8b285ba94a201fe1caca6",
+      "bytes": 2149
+    },
+    {
+      "path": ".project-spine/exports/sprint-1-backlog.md",
+      "sha256": "sha256:473a5cca21311b6a55dcbcd80e1697192cb9c150b092acca8febe5d62625eaab",
+      "bytes": 3547
+    },
+    {
+      "path": "AGENTS.md",
+      "sha256": "sha256:34452fd4a40af7c409b1c76b245b85a9d95790ef56b59fe0ef3eaa2aea1ff716",
+      "bytes": 6485
+    },
+    {
+      "path": "CLAUDE.md",
+      "sha256": "sha256:4b82a6a105a50c55ff12aafe3957ac4d942512c1556fd15dbf4dd71a2708e0d8",
+      "bytes": 2659
+    }
+  ]
+}
