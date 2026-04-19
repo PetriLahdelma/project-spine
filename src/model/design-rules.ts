@@ -14,7 +14,7 @@ export type DesignItem = z.infer<typeof DesignItem>;
 export const DesignRules = z.object({
   schemaVersion: z.literal(1),
   parsedAt: z.string(),
-  frontmatter: z.record(z.unknown()),
+  frontmatter: z.record(z.string(), z.unknown()),
   sections: z.object({
     tokens: z.array(DesignItem),
     components: z.array(DesignItem),

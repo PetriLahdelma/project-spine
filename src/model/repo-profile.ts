@@ -108,7 +108,7 @@ export const RepoProfile = z.object({
   }),
   agentFiles: AgentFilePresence,
   monorepo: Monorepo,
-  rawPackageJson: z.record(z.unknown()).nullable(),
+  rawPackageJson: z.record(z.string(), z.unknown()).nullable(),
   warnings: z.array(
     z.object({
       id: z.string(),

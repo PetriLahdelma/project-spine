@@ -65,7 +65,7 @@ export default defineCommand({
       repo,
       design,
       template,
-      projectName: args.name,
+      ...(args.name !== undefined && { projectName: args.name }),
       projectVersion: args.version,
     });
 
