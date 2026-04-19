@@ -1,3 +1,6 @@
+import { fileURLToPath } from "node:url";
+import { dirname } from "node:path";
+
 /** @type {import('next').NextConfig} */
 
 // The Content-Security-Policy header is set per-request in middleware.ts so
@@ -8,6 +11,12 @@ const nextConfig = {
   // Hide the dev-only N badge / issues overlay in the bottom-left. It only
   // renders in `next dev`, never in production, so this is a dev-UX choice.
   devIndicators: false,
+  // The CLI and the site each have their own package.json + lockfile. Without
+  // this, Next's workspace-root inference walks up to the repo root lockfile
+  // and warns on every dev startup. Pin the site's workspace explicitly.
+  turbopack: {
+    root: dirname(fileURLToPath(import.meta.url)),
+  },
   async headers() {
     return [
       {
