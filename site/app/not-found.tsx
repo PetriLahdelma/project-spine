@@ -21,13 +21,7 @@ export default function NotFound() {
         <p className="nf__eyebrow">spine × compile error</p>
 
         <h1 className="nf__code" aria-label="404">
-          <span>4</span>
-          <span className="nf__code-zero" aria-hidden>
-            <svg viewBox="0 0 120 160" width="1em" height="1em" role="img" aria-hidden>
-              <ellipse cx="60" cy="80" rx="44" ry="64" fill="none" stroke="currentColor" strokeWidth="18" />
-            </svg>
-          </span>
-          <span>4</span>
+          4<span className="nf__code-null" aria-hidden>Ø</span>4
         </h1>
 
         <p className="nf__headline">This page never compiled.</p>

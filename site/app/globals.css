@@ -1972,28 +1972,15 @@ main.nf {
     4px 4px 0 var(--poster-blue),
     6px 6px 0 var(--poster-blue),
     8px 8px 0 var(--poster-blue);
-  display: inline-flex;
-  align-items: center;
-  gap: 0.02em;
 }
-.nf__code-zero {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 0.72em;
-  height: 1em;
-  color: var(--poster-ink);
-  filter:
-    drop-shadow(2px 2px 0 var(--poster-blue))
-    drop-shadow(2px 2px 0 var(--poster-blue));
-  animation: nf-zero-spin 14s linear infinite;
-}
-@media (prefers-reduced-motion: reduce) {
-  .nf__code-zero { animation: none; }
-}
-@keyframes nf-zero-spin {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
+/*
+ * Ø — slashed zero, CLI-font convention for "this is a zero, and it's null."
+ * Tighten around the slashed glyph so it optically matches the 4s, and make
+ * sure the diagonal ligature inherits the same cyan offset-shadow.
+ */
+.nf__code-null {
+  display: inline-block;
+  margin: 0 -0.04em;
 }
 .nf__headline {
   font-family: var(--font-display), Georgia, serif;
