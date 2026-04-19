@@ -37,8 +37,11 @@ jobs:
         with:
           node-version: 22
           cache: npm
+          # registry-url + the NODE_AUTH_TOKEN env var on the publish step is
+          # all that's needed to authenticate npm publish. `always-auth` was
+          # recognised on older setup-node versions but setup-node@v6 drops
+          # it — leaving it in surfaced as an "Unexpected input" warning.
           registry-url: https://registry.npmjs.org
-          always-auth: true
 
       - name: Install
         run: npm ci
@@ -111,7 +114,9 @@ jobs:
           echo "path=/tmp/notes.md" >> "$GITHUB_OUTPUT"
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
+        # v3 runs on Node 24 — v2 was pinned to Node 20, which GitHub deprecated
+        # as an Actions runtime with removal in Sep 2026.
+        uses: softprops/action-gh-release@v3
         with:
           body_path: ${{ steps.notes.outputs.path }}
           prerelease: ${{ contains(github.ref_name, 'alpha') || contains(github.ref_name, 'beta') || contains(github.ref_name, 'rc') }}

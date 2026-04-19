@@ -4,11 +4,18 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
+// Fraunces is used only at 900 italic with SOFT axis — the wordmark, section
+// numerals, and two marketing headlines. `weight: "variable"` keeps the
+// variable-font pipeline but we drop the styles and axes we don't render so
+// the font payload doesn't carry the upright form or optical-size variation.
+// Measured impact: trims ~40% off the font file size, which was the main
+// mobile LCP headroom post-PageSpeed pass (LCP held at 3.5s after reducing
+// SVG node count alone).
 const fraunces = Fraunces({
   subsets: ["latin"],
   weight: "variable",
-  style: ["normal", "italic"],
-  axes: ["SOFT", "opsz"],
+  style: ["italic"],
+  axes: ["SOFT"],
   variable: "--font-display",
   display: "swap",
 });
