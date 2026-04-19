@@ -2,45 +2,11 @@ import { defineCommand } from "citty";
 import { readFile } from "node:fs/promises";
 import { getTemplate, listTemplates, userTemplatesDir } from "../templates/registry.js";
 import { saveTemplate } from "../templates/save.js";
-import {
-  listWorkspaceTemplates,
-  pullWorkspaceTemplate,
-  pushWorkspaceTemplate,
-} from "../templates/workspace-sync.js";
-import { readConfig } from "../cli-client/config.js";
-import { ApiError } from "../cli-client/api.js";
 import type { ProjectType } from "../model/spine.js";
 
 const list = defineCommand({
-  meta: { name: "list", description: "List available templates (bundled + user + project + workspace)." },
-  args: {
-    workspace: {
-      type: "boolean",
-      description: "List templates in the active workspace instead of local sources",
-      default: false,
-    },
-  },
-  async run({ args }) {
-    if (args.workspace) {
-      try {
-        const res = await listWorkspaceTemplates();
-        if (res.items.length === 0) {
-          console.log(`workspace "${res.workspace}" has no templates yet.`);
-          return;
-        }
-        const nameWidth = Math.max(...res.items.map((t) => t.name.length));
-        console.log(`workspace: ${res.workspace}`);
-        for (const t of res.items) {
-          console.log(`  ${t.name.padEnd(nameWidth)}  ${t.title}`);
-          console.log(`  ${"".padEnd(nameWidth)}  ${t.description}`);
-          console.log("");
-        }
-      } catch (err) {
-        handleError(err);
-      }
-      return;
-    }
-
+  meta: { name: "list", description: "List available templates (bundled + user + project)." },
+  async run() {
     const all = await listTemplates();
     if (all.length === 0) {
       console.log("no templates available");
@@ -55,10 +21,9 @@ const list = defineCommand({
     }
     console.log(`user templates dir: ${await userTemplatesDir()}`);
     console.log(`project templates dir: ./.project-spine-templates (if present)`);
-    const cfg = await readConfig();
-    if (cfg.activeWorkspace) {
-      console.log(`workspace templates: run \`spine template list --workspace\` (active: ${cfg.activeWorkspace})`);
-    }
+    // Hosted-tier workspace templates (list --workspace, push, pull) live in
+    // src/templates/workspace-sync.ts but are unrouted while the hosted tier
+    // is dormant. Revive those paths here if the tier wakes back up.
   },
 });
 
@@ -83,13 +48,15 @@ const show = defineCommand({
     console.log("");
     console.log(brief);
     if (t.designPath) console.log(`(ships with design-rules.md at ${t.designPath})`);
+    console.log("");
+    console.log(`next: 'spine init --template ${t.manifest.name}' scaffolds this brief into a new project.`);
   },
 });
 
 const save = defineCommand({
   meta: {
     name: "save",
-    description: "Save the current project as a reusable template.",
+    description: "Save the current project as a reusable template (user or project scope).",
   },
   args: {
     name: { type: "string", required: true, description: "Template name (lowercase-kebab)" },
@@ -101,29 +68,11 @@ const save = defineCommand({
       type: "string",
       required: false,
       default: "user",
-      description: "Where to save: user | project | workspace",
+      description: "Where to save: user | project",
     },
     force: { type: "boolean", required: false, description: "Overwrite existing template", default: false },
   },
   async run({ args }) {
-    if (args.location === "workspace") {
-      try {
-        const res = await pushWorkspaceTemplate({
-          name: args.name,
-          ...(args.title !== undefined && { title: args.title }),
-          ...(args.description !== undefined && { description: args.description }),
-          ...(args.from !== undefined && { from: args.from }),
-          force: args.force,
-        });
-        console.log(`${res.status} template "${res.name}" in workspace "${res.workspace}"`);
-        console.log(`  content hash: ${res.contentHash}`);
-        console.log(`  members can now: spine template pull ${res.name}`);
-      } catch (err) {
-        handleError(err);
-      }
-      return;
-    }
-
     const location = args.location === "project" ? "project" : "user";
     const result = await saveTemplate({
       name: args.name,
@@ -144,37 +93,7 @@ const save = defineCommand({
   },
 });
 
-const pull = defineCommand({
-  meta: { name: "pull", description: "Download a workspace template into your user template library." },
-  args: {
-    name: { type: "positional", required: true, description: "Template name" },
-    force: { type: "boolean", required: false, description: "Overwrite existing local template", default: false },
-  },
-  async run({ args }) {
-    try {
-      const res = await pullWorkspaceTemplate({ name: args.name, force: args.force });
-      console.log(`pulled "${args.name}" to ${res.templateDir}`);
-      console.log(`  content hash: ${res.contentHash}`);
-      console.log(`  apply with: spine init --template ${args.name}`);
-    } catch (err) {
-      handleError(err);
-    }
-  },
-});
-
 export default defineCommand({
-  meta: { name: "template", description: "List, show, save, pull, and inspect templates." },
-  subCommands: { list, show, save, pull },
+  meta: { name: "template", description: "List, show, and save templates." },
+  subCommands: { list, show, save },
 });
-
-function handleError(err: unknown): never {
-  if (err instanceof ApiError) {
-    if (err.status === 401) console.error("token rejected. run `spine login` again.");
-    else if (err.status === 404) console.error("not found (template or workspace).");
-    else if (err.status === 409) console.error(err.message);
-    else console.error(`api error ${err.status}: ${err.message}`);
-  } else {
-    console.error(`${(err as Error).message}`);
-  }
-  process.exit(1);
-}

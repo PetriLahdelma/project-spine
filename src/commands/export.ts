@@ -32,5 +32,7 @@ export default defineCommand({
     const { written } = await writeAllExports(spine, { repoRoot: root, outDir, targets });
     console.log(`regenerated ${written.length} export${written.length === 1 ? "" : "s"} from spine hash ${spine.metadata.hash}:`);
     for (const f of written) console.log(`  ${f}`);
+    console.log("");
+    console.log(`next: \`spine drift check\` — confirm hand-edited exports don't shadow the regenerated set.`);
   },
 });
