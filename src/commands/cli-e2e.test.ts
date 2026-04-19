@@ -51,10 +51,19 @@ const EXPECTED_EXPORT_FILES = [
 ].sort();
 
 describe("spine --help", () => {
-  it("lists exactly the seven routed commands", async () => {
+  it("lists exactly the eight routed commands", async () => {
     const { stdout, exitCode } = await spawn(["--help"]);
     expect(exitCode).toBe(0);
-    for (const cmd of ["init", "compile", "inspect", "export", "template", "explain", "drift"]) {
+    for (const cmd of [
+      "init",
+      "compile",
+      "inspect",
+      "export",
+      "template",
+      "explain",
+      "drift",
+      "tokens",
+    ]) {
       expect(stdout).toContain(cmd);
     }
     for (const cmd of ["login", "logout", "whoami", "workspace", "publish", "rationale"]) {
@@ -257,6 +266,42 @@ describe("spine explain", () => {
     expect(exitCode).not.toBe(0);
     const combined = (stderr + "\n" + stdout).toLowerCase();
     expect(combined).toMatch(/w9999|unknown|not found|no such/);
+  });
+});
+
+describe("spine tokens", () => {
+  it("tokens pull --help lists the file/url/out flags", async () => {
+    const { stdout, exitCode } = await spawn(["tokens", "pull", "--help"]);
+    expect(exitCode).toBe(0);
+    expect(stdout).toContain("--file");
+    expect(stdout).toContain("--url");
+    expect(stdout).toContain("--out");
+  });
+
+  it("tokens pull errors when FIGMA_TOKEN is missing", async () => {
+    const env = { ...process.env, NO_COLOR: "1", FORCE_COLOR: "0", CONSOLA_LEVEL: "5" };
+    delete env.FIGMA_TOKEN;
+    const { execa } = await import("execa");
+    const { exitCode, stderr, stdout } = await execa("node", [CLI, "tokens", "pull", "--file", "abc"], {
+      reject: false,
+      env,
+    });
+    expect(exitCode).not.toBe(0);
+    const combined = (stderr + "\n" + stdout).toLowerCase();
+    expect(combined).toMatch(/figma_token/);
+  });
+
+  it("tokens pull errors when both --file and --url are given", async () => {
+    const env = { ...process.env, NO_COLOR: "1", FORCE_COLOR: "0", CONSOLA_LEVEL: "5", FIGMA_TOKEN: "fake" };
+    const { execa } = await import("execa");
+    const { exitCode, stderr, stdout } = await execa(
+      "node",
+      [CLI, "tokens", "pull", "--file", "abc", "--url", "https://figma.com/design/abc/x"],
+      { reject: false, env },
+    );
+    expect(exitCode).not.toBe(0);
+    const combined = (stderr + "\n" + stdout).toLowerCase();
+    expect(combined).toMatch(/file.*url|url.*file/);
   });
 });
 

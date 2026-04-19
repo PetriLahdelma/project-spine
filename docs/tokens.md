@@ -73,3 +73,64 @@ Compiled output in `AGENTS.md` gets a `## Design tokens` block:
 
 and every token appears in `spine.json` as a `kind: "design"` rule with a
 `source.pointer` back to its path in the original JSON.
+
+---
+
+## Pulling from Figma Variables
+
+If your design team edits tokens in Figma, skip the manual export step and
+pull them into `.project-spine/tokens.json` directly.
+
+Prerequisites:
+
+1. Create a Figma personal access token: Settings → Account → *Personal access
+   tokens*. Grant **File read** and **Variables read** scopes.
+2. Export it:
+
+```bash
+export FIGMA_TOKEN=figd_yourTokenHere
+```
+
+Then point at a file:
+
+```bash
+# by key (take from the figma.com/design/<KEY>/... URL)
+spine tokens pull --file ABC123XYZ
+
+# or paste the full URL
+spine tokens pull --url "https://www.figma.com/design/ABC123XYZ/Brand"
+```
+
+`spine tokens pull` emits a DTCG-shaped `.project-spine/tokens.json`. Feed it
+back into compile:
+
+```bash
+spine compile --brief ./brief.md --repo . --tokens .project-spine/tokens.json
+```
+
+### What translates
+
+| Figma variable type | DTCG `$type` | Value form             |
+| ------------------- | ------------ | ---------------------- |
+| COLOR               | `color`      | `#rrggbb` or `#rrggbbaa` (alpha appended when < 1) |
+| FLOAT               | `number`     | JSON number            |
+| STRING              | `string`     | JSON string            |
+| BOOLEAN             | `boolean`    | `true` / `false`       |
+
+Variable aliases (`VARIABLE_ALIAS`) emit DTCG alias syntax:
+`{color.primary}` → compile resolves them the same way file-based aliases
+resolve.
+
+### Current limits
+
+- **Default mode only.** If a collection has multiple modes (light / dark,
+  brand variants), only the collection's `defaultModeId` value is written.
+  Multi-mode support is follow-up work; the compiler has no theme-set
+  representation yet.
+- **Read-only.** Push back to Figma is out of scope for this first cut.
+- **Flat by variable name.** Slashes in variable names (`color/primary`)
+  become nested groups. No aliasing by Figma collection name.
+
+The command makes exactly one network request per invocation, gated by an
+explicit flag and an explicit env var — consistent with the "no implicit
+network calls" line in SECURITY.md.
