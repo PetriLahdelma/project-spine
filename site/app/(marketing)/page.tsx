@@ -32,7 +32,7 @@ const LANDING_JSON_LD = {
   url: SITE,
   author: { "@type": "Organization", name: "Project Spine", url: SITE },
   offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-  softwareVersion: "0.9.0-alpha.0",
+  softwareVersion: "0.9.1-alpha.0",
   license: "https://opensource.org/licenses/MIT",
 };
 
@@ -179,7 +179,7 @@ export default async function Home() {
       {/* Poster hero */}
       <section className="poster-hero">
         <div className="poster-hero__inner">
-          <p className="poster-hero__eyebrow">v0.9.0 alpha · now with Figma tokens import</p>
+          <p className="poster-hero__eyebrow">alpha · now with Figma tokens import</p>
           <HeroWordmark line1="PROJECT" line2="SPINE" />
           <p className="poster-hero__tagline">
             The context layer your coding agents are missing.
@@ -257,7 +257,7 @@ export default async function Home() {
           <span className="tok-val">   2 </span>
           <span className="tok-dim">(0 error, 1 warn, 1 info)</span>
           {"\n\n"}
-          <span className="tok-dim">wrote 18 files under ./.project-spine and repo root.</span>
+          <span className="tok-dim">wrote 19 files under ./.project-spine and repo root.</span>
           {"\n\n"}
           <span className="tok-prompt">$ </span>
           <span className="tok-command">spine drift check --fail-on any</span>
@@ -274,7 +274,7 @@ export default async function Home() {
             <span className="section-header__num">01</span>
             <span className="section-header__label">Output</span>
           </div>
-          <h2>Eighteen files, every agent, all drift-tracked.</h2>
+          <h2>Nineteen files, every agent, all drift-tracked.</h2>
           <p className="sub">
             Run <code>spine compile</code> once. Everything below is generated
             with source pointers back to your brief, and hashed into a
@@ -404,8 +404,8 @@ export default async function Home() {
           </div>
           <h2>Everything a real kickoff needs. Nothing you don&apos;t.</h2>
           <p className="sub">
-            Pre-alpha today, but already carrying the primitives agencies tell
-            us they need on day one of a new client project.
+            Alpha today — carrying the primitives agencies tell us they need
+            on day one of a new client project.
           </p>
         </div>
         <div className="features-list">

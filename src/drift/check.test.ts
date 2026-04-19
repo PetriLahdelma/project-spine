@@ -124,4 +124,13 @@ describe("checkDrift", () => {
     expect(kinds).toContain("input:repo-profile");
     expect(kinds).toContain("spine:hash");
   });
+
+  it("missing-brief error message points at the recovery command", async () => {
+    await fullCompile(work);
+    const { rm } = await import("node:fs/promises");
+    await rm(join(work, "brief.md"));
+    await expect(checkDrift({ repo: work, now: FIXED_NOW })).rejects.toThrow(
+      /spine compile --brief/,
+    );
+  });
 });

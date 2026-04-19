@@ -133,6 +133,27 @@ describe("fetchFigmaVariables", () => {
     ).rejects.toThrow(/403/);
   });
 
+  it("attaches a recovery hint keyed on status: 401/403 points at FIGMA_TOKEN scopes", async () => {
+    const mockFetch: typeof fetch = async () => new Response("nope", { status: 401 });
+    await expect(
+      fetchFigmaVariables({ fileKey: "abc", token: "stale", fetchImpl: mockFetch }),
+    ).rejects.toThrow(/FIGMA_TOKEN/);
+  });
+
+  it("404 hint explains the file-key + access requirement", async () => {
+    const mockFetch: typeof fetch = async () => new Response("", { status: 404 });
+    await expect(
+      fetchFigmaVariables({ fileKey: "abc", token: "ok", fetchImpl: mockFetch }),
+    ).rejects.toThrow(/file key|access/);
+  });
+
+  it("429 hint says rate-limited", async () => {
+    const mockFetch: typeof fetch = async () => new Response("", { status: 429 });
+    await expect(
+      fetchFigmaVariables({ fileKey: "abc", token: "ok", fetchImpl: mockFetch }),
+    ).rejects.toThrow(/rate-limited|retry/i);
+  });
+
   it("throws when the response shape is not a variables payload", async () => {
     const mockFetch: typeof fetch = async () =>
       new Response(JSON.stringify({ error: "nope" }), { status: 200 });

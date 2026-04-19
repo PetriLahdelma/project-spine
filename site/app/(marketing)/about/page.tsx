@@ -22,7 +22,7 @@ export default function AboutPage() {
         <p className="eyebrow">About</p>
         <h1>Built in the open, by a single maintainer.</h1>
         <p className="lede">
-          Project Spine is a solo-maintainer pre-alpha project. I&apos;m
+          Project Spine is a solo-maintainer alpha project. I&apos;m
           building it because the <code>AGENTS.md</code> files I kept handing
           coding agents went stale the moment the brief moved, and no
           existing tool treated that as a real problem.

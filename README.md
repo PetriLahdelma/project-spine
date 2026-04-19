@@ -110,7 +110,7 @@ A single `spine compile` run writes **19 files**:
     rationale.md                             client-facing project rationale
 ```
 
-See [docs/sample-output/](./docs/sample-output/) for a real compiled example.
+See [docs/sample-output/](./docs/sample-output/) for real compiled examples — including [this repo compiled by itself](./docs/sample-output/project-spine/).
 
 ---
 

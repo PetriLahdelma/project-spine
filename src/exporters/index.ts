@@ -141,7 +141,9 @@ export function parseTargets(raw: string): ExportTarget[] {
     if (ALL_TARGETS.includes(p as ExportTarget)) {
       out.push(p as ExportTarget);
     } else {
-      throw new Error(`unknown export target: ${p}`);
+      throw new Error(
+        `unknown export target: "${p}". Pick from: ${ALL_TARGETS.join(", ")} (or --targets=all).`,
+      );
     }
   }
   return out;
