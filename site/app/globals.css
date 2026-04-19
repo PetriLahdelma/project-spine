@@ -255,45 +255,9 @@ footer a {
 }
 .site-header__logo-letter {
   transform-origin: 0 0;
-}
-@media (prefers-reduced-motion: no-preference) {
-  .site-header__brand:hover .site-header__logo-letter--p {
-    animation: logo-orbit-p 1200ms cubic-bezier(0.65, 0, 0.35, 1);
-  }
-  .site-header__brand:hover .site-header__logo-letter--s {
-    animation: logo-orbit-s 1200ms cubic-bezier(0.65, 0, 0.35, 1);
-  }
-}
-/*
- * P orbits clockwise around the logo centre (36, 51). Rest position is
- * (-14, -32) from centre; 9 keyframes at 45° steps approximate a circle
- * while each P keeps its upright orientation (pure translate).
- */
-@keyframes logo-orbit-p {
-  0%    { transform: translate(0, 0); }
-  12.5% { transform: translate(27px, 0); }
-  25%   { transform: translate(46px, 18px); }
-  37.5% { transform: translate(47px, 45px); }
-  50%   { transform: translate(28px, 64px); }
-  62.5% { transform: translate(1px, 65px); }
-  75%   { transform: translate(-18px, 46px); }
-  87.5% { transform: translate(-19px, 19px); }
-  100%  { transform: translate(0, 0); }
-}
-/*
- * S rests at (+14, +21) from centre, 180° opposite P. Same 45° cadence so
- * the two stay diametrically opposed through the orbit.
- */
-@keyframes logo-orbit-s {
-  0%    { transform: translate(0, 0); }
-  12.5% { transform: translate(-19px, 4px); }
-  25%   { transform: translate(-35px, -7px); }
-  37.5% { transform: translate(-39px, -26px); }
-  50%   { transform: translate(-28px, -42px); }
-  62.5% { transform: translate(-9px, -46px); }
-  75%   { transform: translate(7px, -35px); }
-  87.5% { transform: translate(11px, -16px); }
-  100%  { transform: translate(0, 0); }
+  /* Orbit animation is driven by the Web Animations API in header-logo.tsx
+     so that mouseleave can play the orbit in reverse from the current
+     position instead of snapping the letters back to rest. */
 }
 .site-header__nav {
   display: flex;
