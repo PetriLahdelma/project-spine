@@ -50,10 +50,30 @@ jobs:
             exit 1
           fi
 
+      - name: Regenerate CHANGELOG.md
+        run: scripts/generate-changelog.sh > CHANGELOG.md
+
       - name: Publish to npm
         run: npm publish --tag next --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Commit CHANGELOG.md back to main
+        # CHANGELOG.md is a generated mirror of git tags. Regenerate and push
+        # it back to main after a successful npm publish so npm consumers and
+        # GitHub readers both see the same history.
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet CHANGELOG.md; then
+            echo "CHANGELOG.md already up to date."
+          else
+            git checkout main
+            scripts/generate-changelog.sh > CHANGELOG.md
+            git add CHANGELOG.md
+            git commit -m "chore: update CHANGELOG.md for ${GITHUB_REF_NAME}"
+            git push origin main
+          fi
 
       - name: Build release notes
         id: notes
