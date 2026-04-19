@@ -53,7 +53,15 @@ New exporters live under `src/exporters/`. The contract: take a `SpineModel` and
 
 ## Releasing
 
-Not yet automated. Until the first npm publish, version bumps happen manually in `package.json` and the repo tag.
+Manual, from the maintainer's workstation:
+
+1. Bump `package.json` `version` and the matching constants in [`src/cli.ts`](./src/cli.ts) (the `defineCommand` meta and the `--version` fallback).
+2. `npm run build` and verify `node dist/cli.js --version` prints the new value.
+3. Commit as `vX.Y.Z-alpha.N: <short summary>` on a release branch, open a PR, squash-merge to `main`.
+4. Tag `vX.Y.Z-alpha.N` against the merge commit and push the tag.
+5. `npm publish --tag next` (alpha publishes stay off the `latest` tag).
+
+No automated release workflow yet. Until there is, prefer patch bumps for polish-only changes and keep breaking changes out of the alpha train or flag them in the PR description.
 
 ## Non-goals for contributions
 

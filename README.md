@@ -10,7 +10,7 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 [![Node.js](https://img.shields.io/badge/node-%E2%89%A520-43853d)](./package.json)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6)](./tsconfig.json)
-[![Status](https://img.shields.io/badge/status-pre--alpha-orange)](./PRD.md)
+[![Status](https://img.shields.io/badge/status-alpha-orange)](./PRD.md)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](./CONTRIBUTING.md)
 
 **A context compiler for software projects.**
@@ -24,7 +24,7 @@ design.md ─┘                    scaffold-plan.md, qa-guardrails.md, sprint-1
                                 component-plan.md, route-inventory.md, rationale.md
 ```
 
-> **Status — v0.1 (pre-alpha).** The CLI works end-to-end: brief + repo + optional design + optional template → canonical `spine.json` + generated exports. Published here so the thinking and implementation are public from day one.
+> **Status — v0.9.x (alpha).** The CLI works end-to-end: brief + repo + optional design + optional template → canonical `spine.json` + generated exports. Drift detection, design-token ingestion, and agent skills for Claude Code / Codex / Cursor are all live. Published here so the thinking and implementation are public from day one.
 
 See the full product thinking in [PRD.md](./PRD.md), the research evidence in [docs/research-citations.md](./docs/research-citations.md), and the "why not just Claude?" moat analysis in [docs/positioning.md](./docs/positioning.md).
 
@@ -41,10 +41,10 @@ The gap isn't more AI. It's a repo-native, drift-aware compiler that turns actua
 ## Install
 
 ```bash
-# from npm (alpha — @latest and @next both point here until we ship stable)
+# from npm — the @next tag tracks the current alpha train
 npm install -g project-spine@next
 
-# today: from source
+# or from source
 git clone https://github.com/PetriLahdelma/project-spine.git
 cd project-spine
 npm install
@@ -85,7 +85,7 @@ spine template show design-system
 
 ## What you get
 
-A single `spine compile` run writes **18 files**:
+A single `spine compile` run writes **19 files**:
 
 ```
 ./AGENTS.md                                  (agents.md convention — tool-discovery location)
@@ -97,6 +97,7 @@ A single `spine compile` run writes **18 files**:
   brief.normalized.json                      parsed brief
   repo-profile.json                          detected stack + conventions
   warnings.json                              ambiguities, conflicts, missing fields
+  export-manifest.json                       hashed inventory used by `spine drift check`
   exports/
     AGENTS.md, CLAUDE.md, copilot-instructions.md
     architecture-summary.md                  detected stack at a glance
@@ -185,12 +186,16 @@ Each skill is a single `SKILL.md` with YAML frontmatter describing its trigger p
 
 ## Roadmap
 
-- **v0.1** (here) — brief parser, repo inspector, deterministic exporters, 4 templates, CLI
-- **v0.2** — richer design-rules input, team templates (save/apply), better warnings
-- **v0.3** — `spine drift check` with CI-friendly exit codes, GitHub Action, first paid tier
-- **v0.4** — hosted workspace, Jira/Linear export, shareable project packs
+What's shipped (alpha train):
 
-See [PRD.md §16](./PRD.md#16-roadmap) for detail.
+- **v0.1–v0.2** — brief parser, repo inspector, deterministic exporters, 4 starter templates, `init` / `compile` / `inspect` / `export`.
+- **v0.3** — `spine drift check` with CI-friendly `--fail-on`, idempotent compile, hash manifest.
+- **v0.8** — agent skills for Claude Code, Codex CLI, and Cursor (`skills/install.sh`).
+- **v0.9** — `--tokens` import for DTCG and Tokens Studio design tokens.
+
+What's next is TBD. Project Spine is positioned as pure OSS for now — the direction will be shaped by what agencies and dev-tool teams actually use it for. Open an issue, a discussion, or email with field notes and we'll fold it into the plan.
+
+See [PRD.md §16](./PRD.md#16-roadmap) for the original phasing; ground truth is the changelog at [/changelog](https://projectspine.dev/changelog).
 
 ---
 
@@ -199,7 +204,7 @@ See [PRD.md §16](./PRD.md#16-roadmap) for detail.
 ```bash
 npm install
 npm run typecheck    # tsc --noEmit
-npm test             # vitest run (35 tests)
+npm test             # vitest
 npm run build        # tsc → dist/
 ```
 
@@ -209,14 +214,21 @@ Project layout:
 src/
   analyzer/      stack + convention detection (§7.2 of the PRD)
   brief/         Markdown + frontmatter brief parser (§7.1)
+  cli-client/    auth + API client used by the hosted-tier commands
+  commands/      citty subcommands: init, compile, inspect, export,
+                 template, explain, drift, login, logout, whoami,
+                 workspace, publish, rationale
   compiler/      the rules compiler, hash, deterministic ID (§7.3)
-  design/        optional design-rules parser
+  design/        design-rules parser + DTCG / Tokens Studio ingestion
+  drift/         drift detection against the stored manifest
   exporters/     one file per output target (§7.4 / §7.5)
+  llm/           opt-in LLM enrichment (never load-bearing)
   model/         zod schemas for every artifact
   reporters/     Markdown summaries
   templates/     registry + manifest loader (§11)
-  commands/      citty subcommands (init, compile, inspect, export, template)
+  ui/            CLI presentation helpers (banners, styling)
 templates/       bundled starter presets (§11)
+skills/          agent skills for Claude Code, Codex, Cursor
 examples/        sample briefs for tests and demos
 docs/
   research-citations.md
