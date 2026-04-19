@@ -62,10 +62,13 @@ describe("spine --help", () => {
     }
   });
 
-  it("--version prints a semver-ish string", async () => {
+  it("--version matches package.json exactly", async () => {
     const { stdout, exitCode } = await spawn(["--version"]);
     expect(exitCode).toBe(0);
-    expect(stdout.trim()).toMatch(/^\d+\.\d+\.\d+/);
+    const pkg = JSON.parse(await readFile(resolve(ROOT, "package.json"), "utf8")) as {
+      version: string;
+    };
+    expect(stdout.trim()).toBe(pkg.version);
   });
 
   it("bare invocation prints help without erroring", async () => {
