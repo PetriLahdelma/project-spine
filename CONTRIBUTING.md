@@ -59,17 +59,28 @@ The core pipeline (brief → `spine.json` → exports) is stable, tested end-to-
 
 The bar for cutting `1.0.0-beta` is external: agencies or dev-tool teams actively asking for stability guarantees. Until then, each alpha release is honest about what it is, and `@next` on npm keeps things explicit — no silent stability promises we haven't earned.
 
-### Manual release flow
+### Release flow
+
+Tag push is the contract. [.github/workflows/release.yml](./.github/workflows/release.yml) installs, typechecks, tests, builds, verifies the tag matches `package.json`, publishes to npm with `--tag next`, and creates a GitHub Release with notes diffed from the previous tag.
 
 From the maintainer's workstation:
 
 1. Bump `package.json` `version` (e.g. `npm version prerelease --preid=alpha --no-git-tag-version`). `src/cli.ts` reads it at runtime — no second bump.
-2. `npm run build` and verify `node dist/cli.js --version` prints the new value.
+2. `npm run build` and verify `node dist/cli.js --version` prints the new value locally.
 3. Commit as `vX.Y.Z-alpha.N: <short summary>` on a release branch, open a PR, squash-merge to `main`.
-4. Tag `vX.Y.Z-alpha.N` against the merge commit and push the tag.
-5. `npm publish --tag next` (alpha publishes stay off the `latest` tag).
+4. Tag the merge commit: `git tag vX.Y.Z-alpha.N && git push --tags`. The Action takes over from here.
 
-No automated release workflow yet. Until there is, prefer patch bumps for polish-only changes and keep breaking changes out of the alpha train or flag them in the PR description.
+Prefer patch bumps for polish-only changes. Keep breaking changes out of the alpha train or flag them in the PR description.
+
+**Fallback (manual publish)** — if the Action is red or npm access needs to happen offline:
+
+```bash
+npm run typecheck && npm test && npm run build
+npm publish --tag next
+gh release create vX.Y.Z-alpha.N --prerelease --notes "…"
+```
+
+The `NPM_TOKEN` secret is the only credential the Action needs. Rotate when a maintainer leaves.
 
 ## Non-goals for contributions
 
