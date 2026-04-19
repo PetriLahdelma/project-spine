@@ -47,36 +47,44 @@ Length: ~110 words. Sharper, might split the room.
 
 PH allows 5 images in the gallery (plus one optional video). Image spec: 1270×760, PNG/JPG. First image is the hero and shows in the feed preview — it carries the most weight.
 
-### Plan
+### Plan (4 of 5 captured — slot 5 still needs your editor)
 
-| # | Asset | Source | Notes |
-|---|-------|--------|-------|
-| 1 | Hero: site wordmark + tagline | Screenshot of `https://projectspine.dev` above-the-fold at 1270×760 | Already the cleanest brand shot we have. |
-| 2 | Demo in motion | Convert `docs/demo/demo.gif` to a 1270×760 still OR upload the GIF directly (PH accepts animated GIFs in gallery) | Show the compile + drift sequence. |
-| 3 | Drift diff terminal | New terminal screenshot: run `spine drift diff` after a hand-edit to `AGENTS.md` | This is the "oh, that's different" moment. |
-| 4 | Generated file tree | Terminal screenshot: `tree .project-spine` or `ls AGENTS.md CLAUDE.md .github/copilot-instructions.md .project-spine/` | Makes the "19 files in one compile" claim concrete. |
-| 5 | AGENTS.md rendered in Claude Code / Cursor | Real screenshot from an editor, showing the compiled AGENTS.md being used | Closes the loop: input (brief) → output (agent actually uses it). |
+| # | File | Source | Size | Status |
+|---|------|--------|------|--------|
+| 1 | [`hero.png`](gallery/hero.png) | Headless-Chromium capture of `https://projectspine.dev` at 1270×760 | 108 KB | ✅ |
+| 2 | [`demo.gif`](gallery/demo.gif) | Copy of `docs/demo/demo.gif` (animated; PH accepts GIF in gallery) | 1.1 MB, 1100×700 | ✅ |
+| 3 | [`drift-diff.png`](gallery/drift-diff.png) | VHS tape `gallery/drift-diff.tape`, Tomorrow Night palette (Ghostty default) | 42 KB, 1270×760 | ✅ |
+| 4 | [`tree.png`](gallery/tree.png) | VHS tape `gallery/tree.tape`, same palette | 51 KB, 1270×760 | ✅ |
+| 5 | `editor.png` | Real screenshot of `AGENTS.md` open in Claude Code or Cursor with the agent panel visible | — | ⏳ your machine |
 
-### Capture commands
+### Regenerating
 
-Run these at your own terminal (Tokyo Night theme matches the demo GIF, but any dark theme works). Capture at 2x retina, crop to 1270×760.
+The terminal slots are VHS-driven, so they re-render deterministically. `spine` must be on PATH (`npm i -g project-spine@next`):
 
 ```bash
-# Frame 3 — drift diff
-cd $(mktemp -d) && spine init --template saas-marketing
-printf '{"name":"acme","dependencies":{"next":"14.0.0"}}' > package.json
-spine compile --brief ./brief.md --repo . --template saas-marketing > /dev/null
-echo '# hand edit' >> AGENTS.md
-clear && spine drift diff
-
-# Frame 4 — generated tree
-cd $(mktemp -d) && spine init --template saas-marketing
-printf '{"name":"acme","dependencies":{"next":"14.0.0"}}' > package.json
-spine compile --brief ./brief.md --repo . --template saas-marketing > /dev/null
-clear && ls -la AGENTS.md CLAUDE.md .github/ .project-spine/
+vhs docs/launch/gallery/drift-diff.tape
+vhs docs/launch/gallery/tree.tape
+# then extract the last frame of each GIF as a PNG
+magick docs/launch/gallery/drift-diff.gif -coalesce /tmp/d-%03d.png && cp "$(ls /tmp/d-*.png | tail -1)" docs/launch/gallery/drift-diff.png && rm /tmp/d-*.png
+magick docs/launch/gallery/tree.gif -coalesce /tmp/t-%03d.png && cp "$(ls /tmp/t-*.png | tail -1)" docs/launch/gallery/tree.png && rm /tmp/t-*.png
 ```
 
-For frame 5: open the generated `AGENTS.md` in Claude Code or Cursor, take a screenshot of the editor with the file open and the agent panel visible — shows the downstream surface.
+Hero (production site) — requires the Playwright Chromium you already have cached at `~/Library/Caches/ms-playwright/chromium-1217/`:
+
+```bash
+CHROMIUM='/Users/petrilahdelma/Library/Caches/ms-playwright/chromium-1217/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing'
+"$CHROMIUM" --headless --disable-gpu --hide-scrollbars --window-size=1270,760 --virtual-time-budget=8000 --screenshot=docs/launch/gallery/hero.png https://projectspine.dev
+```
+
+### Slot 5 — what to capture
+
+Open the generated `AGENTS.md` in whichever editor you actually use. Claude Code or Cursor are both fine — whichever one a hunter would recognise fastest is best. Frame it so:
+
+- The file is clearly `AGENTS.md` (filename visible in the tab/breadcrumb).
+- A recognisable section heading shows (e.g. "Conventions", "Quality bars") — proves it's real content, not a stub.
+- The agent panel is open with a short conversation visible, or a recent command referencing the file. Don't stage a fake convo — if there's nothing real, just show the file open.
+
+Save at `docs/launch/gallery/editor.png`, 1270×760 (retina-crop down to that if needed).
 
 ## 4. Version signal — alpha vs beta vs drop-tag
 
@@ -97,7 +105,8 @@ Ship a CHANGELOG entry that names the surface area this covers (CLI end-to-end, 
 Day -3:
 - [ ] Tagline chosen (§1)
 - [ ] Maker comment chosen + committed to a local scratch file (not the repo)
-- [ ] Gallery 5 images captured + cropped to 1270×760
+- [x] Gallery slots 1–4 captured at 1270×760 (see `docs/launch/gallery/`)
+- [ ] Gallery slot 5 (editor screenshot) captured
 - [ ] Version decision made (§4); if cutting `0.10.0`, PR + merge + `npm publish` before launch day
 - [ ] Mobile LCP reconfirmed ≤ 2.5 s on production (if not, ship mobile WebP fallback)
 
