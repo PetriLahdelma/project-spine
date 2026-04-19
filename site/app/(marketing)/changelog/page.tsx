@@ -68,6 +68,17 @@ export default async function ChangelogPage() {
         </p>
       </header>
 
+      <aside className="changelog__alpha-note">
+        <p>
+          <strong>Why <code>0.9.x-alpha.N</code>?</strong> The core pipeline
+          (brief &rarr; <code>spine.json</code> &rarr; exports) is stable and
+          tested end-to-end, but the CLI surface, template shape, and drift
+          semantics can still move in response to real usage before 1.0. Using
+          Spine in production today is fine; pinning to a specific
+          <code>alpha.N</code> is smarter than tracking <code>@next</code>.
+        </p>
+      </aside>
+
       {rendered.length === 0 ? (
         <p className="changelog__empty">
           Could not load releases right now. See the{" "}

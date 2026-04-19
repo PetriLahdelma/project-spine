@@ -518,6 +518,25 @@ footer a {
 .changelog__empty {
   color: var(--ink-muted);
 }
+.changelog__alpha-note {
+  margin: 0 0 32px;
+  padding: 14px 18px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--bg);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+.changelog__alpha-note p {
+  margin: 0;
+}
+.changelog__alpha-note code {
+  background: rgba(15, 19, 24, 0.06);
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-size: 0.9em;
+}
 .changelog__list {
   list-style: none;
   padding: 0;
