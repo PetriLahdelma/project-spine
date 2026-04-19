@@ -5,6 +5,9 @@
 // doesn't need per-request variance.
 const nextConfig = {
   reactStrictMode: true,
+  // Hide the dev-only N badge / issues overlay in the bottom-left. It only
+  // renders in `next dev`, never in production, so this is a dev-UX choice.
+  devIndicators: false,
   async headers() {
     return [
       {
