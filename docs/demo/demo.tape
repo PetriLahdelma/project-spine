@@ -8,12 +8,13 @@
 # Produces docs/demo/demo.gif. Commit the GIF + link from README.
 #
 # Tape assumes:
-#   - `project-spine` is installed globally (or aliased; the FakeCommand
-#     below shows what to display if you prefer to mock without a real
-#     install).
+#   - `project-spine` is installed globally (or aliased).
 #   - A clean tmp working directory.
-#   - Internet access (for GitHub releases via /changelog page only; the
-#     compile step itself is offline).
+#   - Offline; no credentials needed.
+#
+# Quoting rule: VHS `Type "..."` does NOT process escaped double-quotes.
+# For any command that needs literal " inside the typed text, use backtick
+# strings (`...`) instead — VHS parses them as literal.
 
 Output docs/demo/demo.gif
 Set FontSize 16
@@ -21,55 +22,75 @@ Set Width 1100
 Set Height 700
 Set Shell bash
 Set TypingSpeed 35ms
-Set Theme "Tokyo Night"
+Set Theme "TokyoNight"
 Set Padding 20
 
 # Fresh working directory.
 Hide
-Type "cd $(mktemp -d) && clear"  Enter
+Type `cd $(mktemp -d) && clear`
+Enter
 Show
 
 Sleep 700ms
 
 # 1. Scaffold a brief from a template.
-Type "spine init --template saas-marketing"  Sleep 300ms  Enter
+Type "spine init --template saas-marketing"
+Sleep 300ms
+Enter
 Sleep 2.5s
 
-# 2. Edit the generated brief.md (simulate with a cat + a prepared one-liner).
+# 2. Seed a minimal repo skeleton so the compile has something to analyse.
 Hide
-Type "sed -i '' 's/name: \"\"/name: \"Acme Payroll marketing site\"/' brief.md 2>/dev/null || sed -i 's/name: \"\"/name: \"Acme Payroll marketing site\"/' brief.md"  Enter
-Type "clear"  Enter
+Type `printf '{"name":"acme-payroll","dependencies":{"next":"14.0.0"}}' > package.json`
+Enter
+Type "mkdir -p app"
+Enter
+Type `printf '{"compilerOptions":{"strict":true}}' > tsconfig.json`
+Enter
+Type "clear"
+Enter
 Show
 
-Type "# brief.md now carries a real project name"  Enter
-Sleep 700ms
+Type "# Brief scaffolded, minimal repo skeleton in place."
+Enter
+Sleep 1s
 
-# 3. Compile against a minimal repo skeleton.
-Hide
-Type 'echo {\"name\":\"acme-payroll\",\"dependencies\":{\"next\":\"14.0.0\"}} > package.json && mkdir -p app && echo {\"compilerOptions\":{\"strict\":true}} > tsconfig.json'  Enter
-Show
-
-Type "spine compile --brief ./brief.md --repo . --template saas-marketing"  Sleep 300ms  Enter
+# 3. Compile brief + repo + template into the full 19-file output.
+Type "spine compile --brief ./brief.md --repo . --template saas-marketing"
+Sleep 300ms
+Enter
 Sleep 4s
 
-# 4. Look at the tool-discovery files at repo root.
-Type "ls AGENTS.md CLAUDE.md .github/copilot-instructions.md"  Sleep 200ms  Enter
-Sleep 1.5s
+# 4. Show the tool-discovery files landed at repo root.
+Type "ls AGENTS.md CLAUDE.md .github/copilot-instructions.md"
+Sleep 200ms
+Enter
+Sleep 1.8s
 
-# 5. Show the hashed manifest.
-Type "cat .project-spine/export-manifest.json | head -12"  Sleep 200ms  Enter
-Sleep 2s
+# 5. Peek at the hashed manifest.
+Type "head -12 .project-spine/export-manifest.json"
+Sleep 200ms
+Enter
+Sleep 2.2s
 
-# 6. Hand-edit one export to demonstrate drift detection.
-Type "echo \"\\n<!-- hand-edited -->\" >> AGENTS.md"  Sleep 200ms  Enter
+# 6. Hand-edit one export.
+Type "echo >> AGENTS.md"
+Enter
+Type "echo '# hand edit' >> AGENTS.md"
+Enter
 Sleep 600ms
 
-Type "spine drift check --fail-on any; echo exit=$?"  Sleep 200ms  Enter
+# 7. Drift check fires non-zero on hand edits.
+Type "spine drift check --fail-on any; echo exit=$?"
+Sleep 200ms
+Enter
 Sleep 2.5s
 
-# 7. See exactly WHAT drifted.
-Type "spine drift diff"  Sleep 200ms  Enter
+# 8. Drift diff shows exactly WHAT changed.
+Type "spine drift diff"
+Sleep 200ms
+Enter
 Sleep 3s
 
-# Hold on the final frame so the GIF lands on the diff output.
+# Hold on the final frame.
 Sleep 2s

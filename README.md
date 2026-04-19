@@ -57,7 +57,13 @@ node dist/cli.js --help
 
 Requires Node ≥ 20.
 
-> **60-second demo.** [`docs/demo/`](./docs/demo/) ships a [VHS](https://github.com/charmbracelet/vhs) tape that records the canonical `init` → `compile` → `drift check` → `drift diff` flow. Run `vhs docs/demo/demo.tape` to regenerate `docs/demo/demo.gif`.
+60-second demo — `init` → `compile` → `drift check` → `drift diff`:
+
+<p align="center">
+  <img src="docs/demo/demo.gif" alt="Project Spine demo: spine init, compile, drift check, and drift diff" width="880" />
+</p>
+
+Regenerate via [VHS](https://github.com/charmbracelet/vhs): `vhs docs/demo/demo.tape`. See [`docs/demo/`](./docs/demo/).
 
 ---
 
