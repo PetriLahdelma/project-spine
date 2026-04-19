@@ -8,6 +8,19 @@ import { NextResponse, type NextRequest } from "next/server";
  * stamps it onto its own inline script tags), and emit a matching
  * Content-Security-Policy response header.
  *
+ * Scope of the nonce: `script-src` only. Scripts are the high-blast-radius
+ * surface, and `strict-dynamic` + nonce is how we keep `'unsafe-inline'` off
+ * scripts without breaking Next's RSC payload.
+ *
+ * Style-src is intentionally nonce-free: `'self' 'unsafe-inline'` is the
+ * documented posture in SECURITY.md. React's inline `style={{…}}` and Next's
+ * styled-jsx both rely on inline styles, and CSP Level 3 voids
+ * `'unsafe-inline'` as soon as a nonce is present on the same directive —
+ * the result is style attributes silently dropped on SSR HTML but re-applied
+ * via CSSOM after SPA nav, so identical source produced divergent renders.
+ * There is no user-controlled style injection surface, so inline styles are
+ * not a practical XSS vector here.
+ *
  * This replaces the static CSP from next.config.mjs on every HTML route.
  * API routes don't need inline scripts — the nonce is irrelevant for them,
  * but emitting it does no harm and keeps the CSP uniform.
@@ -24,7 +37,7 @@ export function middleware(request: NextRequest) {
   const cspDirectives = [
     "default-src 'self'",
     `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https://va.vercel-scripts.com`,
-    `style-src 'self' 'nonce-${nonce}' 'unsafe-inline'`,
+    "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: https:",
     "font-src 'self' data:",
     "connect-src 'self' https://api.github.com https://registry.npmjs.org https://vitals.vercel-insights.com https://va.vercel-scripts.com",
