@@ -197,6 +197,24 @@ Each skill is a single `SKILL.md` with YAML frontmatter describing its trigger p
 
 ---
 
+## MCP server (`spine-mcp`)
+
+The npm install also drops a second binary on `PATH`: `spine-mcp`, a stdio MCP server that exposes `compile`, `drift check`, `drift diff`, `init`, and `tokens pull` as tools any MCP-speaking client can call — Claude Code, Cursor, Continue.
+
+Claude Code / Cursor config:
+
+```json
+{
+  "mcpServers": {
+    "project-spine": { "command": "spine-mcp" }
+  }
+}
+```
+
+Full setup notes + tool reference: [docs/mcp.md](./docs/mcp.md).
+
+---
+
 ## Roadmap
 
 What's shipped (alpha train):

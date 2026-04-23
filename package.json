@@ -4,7 +4,8 @@
   "description": "Context compiler for software projects. Turns brief + repo + design inputs into a repo-native operating layer.",
   "type": "module",
   "bin": {
-    "spine": "./dist/cli.js"
+    "spine": "./dist/cli.js",
+    "spine-mcp": "./dist/mcp/server.js"
   },
   "exports": {
     ".": {
@@ -57,6 +58,7 @@
     "node": ">=20.0.0"
   },
   "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
     "citty": "^0.2.2",
     "diff": "^9.0.0",
     "fast-glob": "^3.3.2",
