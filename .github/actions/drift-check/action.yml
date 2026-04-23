@@ -1,0 +1,64 @@
+name: "Project Spine — drift check"
+description: "Fail CI when AGENTS.md / CLAUDE.md / copilot-instructions have drifted from the brief or tokens since the last compile."
+author: "Petri Lahdelma"
+branding:
+  icon: "shield"
+  color: "blue"
+
+inputs:
+  version:
+    description: "project-spine npm dist-tag or exact version. Examples: next, latest, 0.9.2-alpha.0."
+    required: false
+    default: "next"
+  node-version:
+    description: "Node.js version used to run the CLI."
+    required: false
+    default: "20"
+  repo-path:
+    description: "Repo root. Must contain a .project-spine/ directory produced by a prior `spine compile`."
+    required: false
+    default: "."
+  fail-on:
+    description: "Which drift kinds cause a non-zero exit: none | any | inputs | exports. Default 'any' fails on any drift."
+    required: false
+    default: "any"
+  json:
+    description: "If 'true', emit the structured drift report to the job log as JSON."
+    required: false
+    default: "false"
+
+outputs:
+  clean:
+    description: "'true' if no drift was detected, 'false' otherwise. Read via steps.<id>.outputs.clean."
+    value: ${{ steps.run.outputs.clean }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+
+    - name: Install project-spine
+      shell: bash
+      run: npm install -g "project-spine@${{ inputs.version }}"
+
+    - name: Run spine drift check
+      id: run
+      shell: bash
+      run: |
+        set +e
+        FLAGS="--repo '${{ inputs.repo-path }}' --fail-on '${{ inputs.fail-on }}'"
+        if [ "${{ inputs.json }}" = "true" ]; then
+          FLAGS="$FLAGS --json"
+        fi
+        # shellcheck disable=SC2086
+        eval spine drift check $FLAGS
+        EXIT_CODE=$?
+        if [ $EXIT_CODE -eq 0 ]; then
+          echo "clean=true" >> "$GITHUB_OUTPUT"
+        else
+          echo "clean=false" >> "$GITHUB_OUTPUT"
+        fi
+        exit $EXIT_CODE

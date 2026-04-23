@@ -215,6 +215,20 @@ Full setup notes + tool reference: [docs/mcp.md](./docs/mcp.md).
 
 ---
 
+## GitHub Action: `spine drift check` in your CI
+
+Fail your own CI when `AGENTS.md` / `CLAUDE.md` / `copilot-instructions.md` drift from the brief or tokens. No release to Marketplace yet — reference by full repo path:
+
+```yaml
+- uses: PetriLahdelma/project-spine/.github/actions/drift-check@v0.9.2-alpha.0
+  with:
+    fail-on: any
+```
+
+Inputs, outputs, and more examples: [.github/actions/drift-check/README.md](./.github/actions/drift-check/README.md).
+
+---
+
 ## Roadmap
 
 What's shipped (alpha train):
