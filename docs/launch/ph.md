@@ -17,6 +17,8 @@ PH caps the tagline at 60 characters. Shorter reads faster on the feed. Current 
 
 **Recommendation:** #4 or #1. #4 reads as a verb the audience recognises (the re-briefing pain is real). #1 is boring but accurate and uses the category word "compile" that makes the shape obvious.
 
+**Decision (2026-04-23):** **#5, "The missing context layer for software delivery."** Matches the site tagline; same voice across surfaces beats marginal optimisation on PH alone.
+
 ## 2. Maker first comment
 
 Posted within ~15 min of launch. Goals: honest framing, invite replies, surface the two things that aren't obvious from the preview (drift detection + repo-native).
@@ -42,6 +44,8 @@ Length: ~155 words. Feels right.
 Length: ~110 words. Sharper, might split the room.
 
 **Recommendation:** A. B is more distinctive but risks a "too cool for PH" read on a platform where warmth converts.
+
+**Decision (2026-04-23):** **Draft A.** Post within 15 min of launch. Don't edit it once it's up — threaded replies are where the work happens.
 
 ## 3. Gallery — 5 slots
 
@@ -121,15 +125,24 @@ PH audience splits on "alpha". Some reflex-downvote. Three options:
 
 **Recommendation:** B. Cut `0.10.0` as the launch-day release. Drops the "alpha" drag without inflating to 1.0 — matches CONTRIBUTING.md's posture of staying honest about pre-1.0 status. The reason to keep 0.x is that the hosted tier and several templates in the roadmap are 1.0 gates; shipping those and then cutting 1.0 is truer than shipping now and calling it 1.0-beta.
 
-Ship a CHANGELOG entry that names the surface area this covers (CLI end-to-end, drift, tokens, six templates, 121 tests). No hype.
+Ship a CHANGELOG entry that names the surface area this covers (CLI end-to-end, drift, tokens, six templates, spine-mcp stdio server, GitHub Action for drift check, 124 tests). No hype.
+
+**Decision (2026-04-23):** **Cut `0.10.0` on launch day, not before.** Sequence:
+
+1. Day -1: merge the readiness PRs from this branch to `main`. Site + CLI at `0.9.2-alpha.0`, no user-visible change.
+2. Launch day, ~2 h before go-time: `npm version minor` (→ `0.10.0`) + push the tag. The existing release workflow publishes to npm `latest` and the `next` tag moves too.
+3. Day 0, 00:01 PT: submit PH. Maker comment within 15 min. HN Show HN at +1 h. X/LinkedIn at 08:00 PT.
+4. If anyone reports a smell in the first hour, `npm publish project-spine@0.10.1` is faster than debating it.
 
 ## 5. Launch-day checklist
 
+**Target launch date: Wednesday 2026-04-29, 00:01 PT.** 6 days from lock-in. Gives a Tue/Wed slot (the highest-converting window on PH), enough buffer to merge the readiness PRs and cut `0.10.0`, and no calendar conflicts with large launches in the hunter community this week.
+
 Day -3:
 - [x] Tagline chosen — **#5: "The missing context layer for software delivery"** (48 chars). Same as the site tagline; keep the brand voice consistent across surfaces.
-- [ ] Maker comment chosen + committed to a local scratch file (not the repo)
+- [x] Maker comment chosen — **Draft A** (warm, ~155 words). Post within 15 min of PH going live.
 - [x] Gallery — 6 assets captured, all 1270×760, real Ghostty for terminal slots (see `docs/launch/gallery/`); pick 5 for upload
-- [ ] Version decision made (§4); if cutting `0.10.0`, PR + merge + `npm publish` before launch day
+- [x] Version decision — **cut `0.10.0` on launch day, not before** (see §4 sequence). Drops the alpha drag without inflating to 1.0.
 - [x] Mobile LCP reconfirmed — **2.6 s** on 2026-04-23 (was 3.5 s before PRs #39 / #41). Marginally over the 2.5 s "Good" cutoff but overall Performance score 97 (A11y 96, Best Practices 96, SEO 100). Shipping without the mobile WebP fallback; revisit if a hunter calls it out.
 
 Day -1:
@@ -163,9 +176,9 @@ Cold launch = sub-optimal placement. Warm it enough that the first hour has acti
 
 Do not: mass-DM, LinkedIn-spam, post in 10 Discords you don't belong to, use a "upvote exchange" service. PH will catch this and it tanks the launch.
 
-## 7. Open questions
+## 7. Open questions (resolved)
 
-- Do we cut `0.10.0` as the launch release? (see §4 — recommend yes)
-- Is mobile LCP ≤ 2.5 s on the latest production deploy? (pending PSI rerun; was ~3.5 s before the font trim in #41)
-- Do we self-hunt or approach a PH hunter with a devtools audience? (previous session concluded: self-hunt)
-- Target launch date — Tue or Wed in the next two weeks?
+- ~~Do we cut `0.10.0` as the launch release?~~ **Yes — cut on launch day morning, not before.** See §4.
+- ~~Is mobile LCP ≤ 2.5 s on the latest production deploy?~~ **2.6 s. Ship anyway; Performance score 97 carries it.**
+- ~~Do we self-hunt or approach a PH hunter with a devtools audience?~~ **Self-hunt.** Matches the OSS-only posture; the voice stays intact.
+- ~~Target launch date?~~ **Wed 2026-04-29, 00:01 PT.**
