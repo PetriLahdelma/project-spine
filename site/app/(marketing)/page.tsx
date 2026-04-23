@@ -32,7 +32,7 @@ const LANDING_JSON_LD = {
   url: SITE,
   author: { "@type": "Organization", name: "Project Spine", url: SITE },
   offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-  softwareVersion: "0.9.1-alpha.0",
+  softwareVersion: "0.9.2-alpha.0",
   license: "https://opensource.org/licenses/MIT",
 };
 
