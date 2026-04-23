@@ -126,11 +126,11 @@ Ship a CHANGELOG entry that names the surface area this covers (CLI end-to-end, 
 ## 5. Launch-day checklist
 
 Day -3:
-- [ ] Tagline chosen (§1)
+- [x] Tagline chosen — **#5: "The missing context layer for software delivery"** (48 chars). Same as the site tagline; keep the brand voice consistent across surfaces.
 - [ ] Maker comment chosen + committed to a local scratch file (not the repo)
 - [x] Gallery — 6 assets captured, all 1270×760, real Ghostty for terminal slots (see `docs/launch/gallery/`); pick 5 for upload
 - [ ] Version decision made (§4); if cutting `0.10.0`, PR + merge + `npm publish` before launch day
-- [ ] Mobile LCP reconfirmed ≤ 2.5 s on production (if not, ship mobile WebP fallback)
+- [x] Mobile LCP reconfirmed — **2.6 s** on 2026-04-23 (was 3.5 s before PRs #39 / #41). Marginally over the 2.5 s "Good" cutoff but overall Performance score 97 (A11y 96, Best Practices 96, SEO 100). Shipping without the mobile WebP fallback; revisit if a hunter calls it out.
 
 Day -1:
 - [ ] Draft PH submission saved (title, tagline, description, gallery, maker comment ready to paste)
