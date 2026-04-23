@@ -47,44 +47,67 @@ Length: ~110 words. Sharper, might split the room.
 
 PH allows 5 images in the gallery (plus one optional video). Image spec: 1270×760, PNG/JPG. First image is the hero and shows in the feed preview — it carries the most weight.
 
-### Plan (4 of 5 captured — slot 5 still needs your editor)
+### Shipped — 6 assets for 5 slots
 
-| # | File | Source | Size | Status |
-|---|------|--------|------|--------|
-| 1 | [`hero.png`](gallery/hero.png) | Headless-Chromium capture of `https://projectspine.dev` at 1270×760 | 108 KB | ✅ |
-| 2 | [`demo.gif`](gallery/demo.gif) | Copy of `docs/demo/demo.gif` (animated; PH accepts GIF in gallery) | 1.1 MB, 1100×700 | ✅ |
-| 3 | [`drift-diff.png`](gallery/drift-diff.png) | VHS tape `gallery/drift-diff.tape`, Tomorrow Night palette (Ghostty default) | 42 KB, 1270×760 | ✅ |
-| 4 | [`tree.png`](gallery/tree.png) | VHS tape `gallery/tree.tape`, same palette | 51 KB, 1270×760 | ✅ |
-| 5 | `editor.png` | Real screenshot of `AGENTS.md` open in Claude Code or Cursor with the agent panel visible | — | ⏳ your machine |
+All 1270×760. Terminal slots captured in real Ghostty (not simulated) via `screencapture -l <windowId>`; hero and changelog via headless Chromium on the live production site. Pick the 5 strongest for the PH upload.
+
+| File | What it shows | Size | Source |
+|---|---|---|---|
+| [`hero.png`](gallery/hero.png) | Site hero: wordmark + "The context layer your coding agents are missing." | 108 KB | Headless Chromium on `projectspine.dev` |
+| [`demo.gif`](gallery/demo.gif) | 60-s CLI demo: init → compile → drift check → drift diff | 1.1 MB, 1100×700 | `docs/demo/demo.tape` (VHS) |
+| [`drift-diff.png`](gallery/drift-diff.png) | `spine drift diff` showing the `+# hand edit` that slipped in | 60 KB | Ghostty, `capture-drift-diff.sh` |
+| [`tree.png`](gallery/tree.png) | The 3 tool-discovery files + 11 compiled exports (the "19 files per compile" proof) | 128 KB | Ghostty, `capture-tree.sh` |
+| [`templates.png`](gallery/templates.png) | `spine template list` — all 6 bundled templates with descriptions | 136 KB | Ghostty, `capture-templates.sh` |
+| [`changelog.png`](gallery/changelog.png) | `/changelog` page: "What shipped, when, and what changed" with the 0.9.x-alpha aside | 112 KB | Headless Chromium |
+| [`claude.png`](gallery/claude.png) | **The money shot.** `claude -p "Read AGENTS.md and summarise…"` answering with a 3-bullet summary pulled from the Spine-generated AGENTS.md. Closes the loop: brief → compile → AGENTS.md → real Claude consumes it. | 128 KB | Ghostty + claude CLI, `capture-claude.sh` |
+
+**Recommended 5-slot order for the PH upload:**
+
+1. `hero.png` — brand, sets the feed preview
+2. `claude.png` — the downstream proof, answers "what do I actually get"
+3. `drift-diff.png` — shows the distinctive capability (determinism + drift detection)
+4. `tree.png` — concrete output, 19 files
+5. `demo.gif` — the motion asset
+
+`templates.png` and `changelog.png` are held back as swap options if you want to replace any of the above.
 
 ### Regenerating
 
-The terminal slots are VHS-driven, so they re-render deterministically. `spine` must be on PATH (`npm i -g project-spine@next`):
+Every capture script lives alongside its output in `gallery/`. `spine` must be on PATH (`npm i -g project-spine@next`). Scripts assume Ghostty is your terminal — they print into whichever window is frontmost when run from your shell. For terminal slots:
 
 ```bash
-vhs docs/launch/gallery/drift-diff.tape
-vhs docs/launch/gallery/tree.tape
-# then extract the last frame of each GIF as a PNG
-magick docs/launch/gallery/drift-diff.gif -coalesce /tmp/d-%03d.png && cp "$(ls /tmp/d-*.png | tail -1)" docs/launch/gallery/drift-diff.png && rm /tmp/d-*.png
-magick docs/launch/gallery/tree.gif -coalesce /tmp/t-%03d.png && cp "$(ls /tmp/t-*.png | tail -1)" docs/launch/gallery/tree.png && rm /tmp/t-*.png
+bash docs/launch/gallery/capture-drift-diff.sh   # writes drift-diff content; screenshot the window
+bash docs/launch/gallery/capture-tree.sh
+bash docs/launch/gallery/capture-templates.sh
+bash docs/launch/gallery/capture-claude.sh       # takes ~30 s, calls claude -p
 ```
 
-Hero (production site) — requires the Playwright Chromium you already have cached at `~/Library/Caches/ms-playwright/chromium-1217/`:
+To capture the Ghostty window deterministically at 2540×1560 retina (then downscale to 1270×760):
+
+```bash
+WID=$(swift - <<'SW' 2>/dev/null
+import Cocoa
+import CoreGraphics
+if let arr = CGWindowListCopyWindowInfo([.optionOnScreenOnly, .excludeDesktopElements], kCGNullWindowID) as? [[String: AnyObject]] {
+  for w in arr {
+    if let o = w[kCGWindowOwnerName as String] as? String, o.lowercased().contains("ghostty") {
+      if let id = w[kCGWindowNumber as String] as? Int { print(id); break }
+    }
+  }
+}
+SW
+)
+screencapture -l "$WID" -o /tmp/raw.png
+magick /tmp/raw.png -resize 1270x760^ -gravity north -extent 1270x760 docs/launch/gallery/<slot>.png
+```
+
+Hero + changelog (production site):
 
 ```bash
 CHROMIUM='/Users/petrilahdelma/Library/Caches/ms-playwright/chromium-1217/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing'
 "$CHROMIUM" --headless --disable-gpu --hide-scrollbars --window-size=1270,760 --virtual-time-budget=8000 --screenshot=docs/launch/gallery/hero.png https://projectspine.dev
+"$CHROMIUM" --headless --disable-gpu --hide-scrollbars --window-size=1270,760 --virtual-time-budget=10000 --screenshot=docs/launch/gallery/changelog.png https://projectspine.dev/changelog
 ```
-
-### Slot 5 — what to capture
-
-Open the generated `AGENTS.md` in whichever editor you actually use. Claude Code or Cursor are both fine — whichever one a hunter would recognise fastest is best. Frame it so:
-
-- The file is clearly `AGENTS.md` (filename visible in the tab/breadcrumb).
-- A recognisable section heading shows (e.g. "Conventions", "Quality bars") — proves it's real content, not a stub.
-- The agent panel is open with a short conversation visible, or a recent command referencing the file. Don't stage a fake convo — if there's nothing real, just show the file open.
-
-Save at `docs/launch/gallery/editor.png`, 1270×760 (retina-crop down to that if needed).
 
 ## 4. Version signal — alpha vs beta vs drop-tag
 
@@ -105,8 +128,7 @@ Ship a CHANGELOG entry that names the surface area this covers (CLI end-to-end, 
 Day -3:
 - [ ] Tagline chosen (§1)
 - [ ] Maker comment chosen + committed to a local scratch file (not the repo)
-- [x] Gallery slots 1–4 captured at 1270×760 (see `docs/launch/gallery/`)
-- [ ] Gallery slot 5 (editor screenshot) captured
+- [x] Gallery — 6 assets captured, all 1270×760, real Ghostty for terminal slots (see `docs/launch/gallery/`); pick 5 for upload
 - [ ] Version decision made (§4); if cutting `0.10.0`, PR + merge + `npm publish` before launch day
 - [ ] Mobile LCP reconfirmed ≤ 2.5 s on production (if not, ship mobile WebP fallback)
 
