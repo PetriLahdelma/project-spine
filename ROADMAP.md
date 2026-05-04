@@ -60,11 +60,11 @@ Second round: polish the codebase and public surface so it lands as a best-in-cl
 
 ### R0.3 · Homepage + marketing front-door review
 
-**Why.** Stale numbers and mixed pre-alpha/alpha framing were the only real regressions on the public site. No layout rewrite, just unblocking the signals.
+**Why.** Stale numbers and mixed preview/beta framing were the only real regressions on the public site. No layout rewrite, just unblocking the signals.
 
-**Scope.** Terminal mock + "Eighteen files" headline → 19. JSON-LD `softwareVersion` → 0.9.1-alpha.0. Hero eyebrow drops the point version. Sweep `pre-alpha` → `alpha` on /about, /pricing, /privacy; /terms deliberately kept as-is (references the dormant hosted service).
+**Scope.** Terminal mock + "Eighteen files" headline → 19. JSON-LD `softwareVersion` → 0.9.2-beta.0. Hero eyebrow drops the point version. Sweep preview framing → `beta` on /about, /pricing, /privacy, and /terms.
 
-**Done when.** No page claims "18 files" or "pre-alpha" in contexts that describe the CLI.
+**Done when.** No page claims "18 files" or preview status in contexts that describe the CLI.
 
 **Effort.** S.
 
@@ -80,13 +80,13 @@ Second round: polish the codebase and public surface so it lands as a best-in-cl
 
 **Effort.** M.
 
-### R1.2 · /changelog post-mortem: rendered state + alpha lede
+### R1.2 · /changelog post-mortem: rendered state + beta lede
 
-**Why.** Markdown now parses. Need to look at the rendered result with a critical eye and add a short paragraph explaining what `-alpha.N` means here so newcomers don't panic at the version scheme.
+**Why.** Markdown now parses. Need to look at the rendered result with a critical eye and add a short paragraph explaining what `-beta.N` means here so newcomers understand the version scheme.
 
-**Scope.** Pass through the first five rendered release bodies on the live site. Tune `.changelog__body` spacing for long bodies. Add a small `<aside>` above the list: one paragraph on the alpha tag.
+**Scope.** Pass through the first five rendered release bodies on the live site. Tune `.changelog__body` spacing for long bodies. Add a small `<aside>` above the list: one paragraph on the beta tag.
 
-**Done when.** All rendered releases read clean; alpha framing above the list.
+**Done when.** All rendered releases read clean; beta framing above the list.
 
 **Effort.** S.
 
@@ -134,13 +134,13 @@ Second round: polish the codebase and public surface so it lands as a best-in-cl
 
 ---
 
-### R3.1 · Document the alpha-stay decision in CONTRIBUTING
+### R3.1 · Document the beta release decision in CONTRIBUTING
 
-**Why.** No version cut on launch. Alpha train continues; `1.0.0-beta` postponed until a clearer signal that agencies are leaning on Spine in real projects.
+**Why.** Public launch should not understate readiness. Beta train continues; `1.0.0` waits until there is a clearer signal that agencies are leaning on Spine in real projects.
 
-**Scope.** One paragraph in CONTRIBUTING explaining the versioning posture: alpha while the API can still move, bump to beta only when external users ask for stability guarantees. No marketing copy in the repo about "the 1.0".
+**Scope.** One paragraph in CONTRIBUTING explaining the versioning posture: beta while the API can still move, bump to 1.0 only when external users ask for stability guarantees. No marketing copy in the repo about "the 1.0".
 
-**Done when.** CONTRIBUTING release section has a one-paragraph "why we're still alpha" note.
+**Done when.** CONTRIBUTING release section has a one-paragraph "why this is beta" note.
 
 **Effort.** XS.
 
@@ -148,9 +148,9 @@ Second round: polish the codebase and public surface so it lands as a best-in-cl
 
 **Why.** Manual `npm publish` is fine today but forgettable. Automate so tagging is the release contract.
 
-**Scope.** Workflow on `v*` tag push: install → typecheck → test → build → `npm publish --tag next` → create GitHub Release with notes from the commits since the previous tag. Manual path stays documented as fallback.
+**Scope.** Workflow on `v*` tag push: install → typecheck → test → build → `npm publish --tag beta` → create GitHub Release with notes from the commits since the previous tag. Manual path stays documented as fallback.
 
-**Done when.** Pushing `v0.9.2-alpha.0` publishes to npm and creates a draft GitHub Release.
+**Done when.** Pushing `v0.9.2-beta.0` publishes to npm and creates a draft GitHub Release.
 
 **Effort.** M.
 

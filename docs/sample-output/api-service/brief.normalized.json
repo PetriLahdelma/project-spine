@@ -98,14 +98,14 @@
     ],
     "assumptions": [
       {
-        "text": "Traffic stays under 500 rps during the alpha window; headroom is fine.",
+        "text": "Traffic stays under 500 rps during the beta window; headroom is fine.",
         "source": {
           "kind": "brief",
           "pointer": "brief.md#section3/item0"
         }
       },
       {
-        "text": "Internal consumers accept alpha-level SLAs (99.5% availability, 48h incident-response).",
+        "text": "Internal consumers accept beta-level SLAs (99.5% availability, 48h incident-response).",
         "source": {
           "kind": "brief",
           "pointer": "brief.md#section3/item1"
@@ -165,7 +165,7 @@
         }
       },
       {
-        "text": "Zero raw stack traces in client responses across 7 days of alpha traffic.",
+        "text": "Zero raw stack traces in client responses across 7 days of beta traffic.",
         "source": {
           "kind": "brief",
           "pointer": "brief.md#section5/item3"

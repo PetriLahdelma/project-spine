@@ -28,8 +28,8 @@ _Generated from `spine.json` — hash `7040c29c1d1f2ab2`, project type `api-serv
 
 ## Assumptions we are making
 
-- Traffic stays under 500 rps during the alpha window; headroom is fine.
-- Internal consumers accept alpha-level SLAs (99.5% availability, 48h incident-response).
+- Traffic stays under 500 rps during the beta window; headroom is fine.
+- Internal consumers accept beta-level SLAs (99.5% availability, 48h incident-response).
 - No public-internet exposure in v1 — mTLS at the mesh layer handles transport security.
 
 ## Risks we are watching

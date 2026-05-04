@@ -5,7 +5,7 @@ Project Spine ships with an MCP (Model Context Protocol) server so any MCP-speak
 The server is distributed in the same npm package as the CLI. Install once and you get both binaries on `PATH`:
 
 ```bash
-npm install -g project-spine@next
+npm install -g project-spine@beta
 which spine spine-mcp
 ```
 
@@ -114,7 +114,7 @@ The agent reads `spine://manifest` and summarizes. No tool call required; resour
 ## Troubleshooting
 
 **`Cannot find module .../dist/cli.js`**
-The CLI bundle is missing. Reinstall: `npm install -g project-spine@next`.
+The CLI bundle is missing. Reinstall: `npm install -g project-spine@beta`.
 
 **Tool calls hang or timeout**
 Each call has a 2-minute hard cap. If `spine_compile` is legitimately slow, try `spine_compile` directly from a terminal once so the first-run warm-up (template expansion, repo scan) is cached.

@@ -77,7 +77,7 @@ _(none)_
 - Success criterion to verify before launch: Every endpoint documented in the generated OpenAPI spec with examples + error-envelope shape.
 - Success criterion to verify before launch: Integration tests cover happy path, 4xx auth, 4xx validation, 5xx upstream-down — per endpoint.
 - Success criterion to verify before launch: p95 latency budgets met under synthetic load for both read and write paths.
-- Success criterion to verify before launch: Zero raw stack traces in client responses across 7 days of alpha traffic.
+- Success criterion to verify before launch: Zero raw stack traces in client responses across 7 days of beta traffic.
 - Success criterion to verify before launch: One-line log per request including requestId, userId, route, status, duration_ms.
 - Every 4xx / 5xx response conforms to the ErrorEnvelope shape; no raw framework errors leak.
 - Every handler has a typed input schema (zod or equivalent); invalid payloads get 400 with field-level details.

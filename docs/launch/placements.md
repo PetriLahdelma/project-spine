@@ -6,7 +6,7 @@ All submissions can be filed by Petri in under 30 minutes total.
 
 ## Order of operations
 
-1. Release `project-spine` on npm with `spine-mcp` bin included. Verify `npm install -g project-spine@next` drops both binaries on PATH.
+1. Release `project-spine` on npm with `spine-mcp` bin included. Verify `npm install -g project-spine@beta` drops both binaries on PATH.
 2. Open the six PRs below (or fewer, depending on which lists are alive).
 3. Reply to any reviewer comments within a day. Single-maintainer lists often want a line about what the server actually does.
 

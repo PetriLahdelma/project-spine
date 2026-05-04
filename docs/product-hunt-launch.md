@@ -67,7 +67,7 @@ Generated files:
 ## Launch-day checklist
 
 - Product URL points to `https://projectspine.dev`, not a tracking redirect.
-- GitHub README install path uses `npm install -g project-spine@next`.
+- GitHub README install path uses `npm install -g project-spine@beta`.
 - `npm view project-spine version dist-tags --json` matches the version shown on the site.
 - `npm run typecheck`, `npm test`, `npm run build`, and `npm run pack:check` pass.
 - `npm run launch:check` passes.

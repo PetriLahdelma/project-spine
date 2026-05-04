@@ -27,8 +27,8 @@ _Normalized by Project Spine on 2026-05-04T21:04:10.735Z._
 
 ## Assumptions
 
-- Traffic stays under 500 rps during the alpha window; headroom is fine.
-- Internal consumers accept alpha-level SLAs (99.5% availability, 48h incident-response).
+- Traffic stays under 500 rps during the beta window; headroom is fine.
+- Internal consumers accept beta-level SLAs (99.5% availability, 48h incident-response).
 - No public-internet exposure in v1 — mTLS at the mesh layer handles transport security.
 
 ## Risks
@@ -42,7 +42,7 @@ _Normalized by Project Spine on 2026-05-04T21:04:10.735Z._
 - Every endpoint documented in the generated OpenAPI spec with examples + error-envelope shape.
 - Integration tests cover happy path, 4xx auth, 4xx validation, 5xx upstream-down — per endpoint.
 - p95 latency budgets met under synthetic load for both read and write paths.
-- Zero raw stack traces in client responses across 7 days of alpha traffic.
+- Zero raw stack traces in client responses across 7 days of beta traffic.
 - One-line log per request including requestId, userId, route, status, duration_ms.
 
 <!-- spine:deterministic -->

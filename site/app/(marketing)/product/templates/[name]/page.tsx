@@ -273,7 +273,7 @@ export default async function TemplatePage({
       <h2>Get started</h2>
       <TerminalMock title={`~ — spine init --template ${t.name}`}>
         <span className="tok-prompt">$ </span>
-        <span className="tok-command">npm install -g project-spine@next</span>
+        <span className="tok-command">npm install -g project-spine@beta</span>
         {"\n"}
         <span className="tok-prompt">$ </span>
         <span className="tok-command">{"spine init --template "}{t.name}</span>

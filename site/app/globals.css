@@ -538,7 +538,7 @@ footer a {
 .changelog__empty {
   color: var(--ink-muted);
 }
-.changelog__alpha-note {
+.changelog__beta-note {
   margin: 0 0 32px;
   padding: 14px 18px;
   border: 1px solid var(--line);
@@ -548,10 +548,10 @@ footer a {
   line-height: 1.55;
   color: var(--ink-soft);
 }
-.changelog__alpha-note p {
+.changelog__beta-note p {
   margin: 0;
 }
-.changelog__alpha-note code {
+.changelog__beta-note code {
   background: rgba(15, 19, 24, 0.06);
   border-radius: 4px;
   padding: 1px 6px;

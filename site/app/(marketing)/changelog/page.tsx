@@ -68,14 +68,14 @@ export default async function ChangelogPage() {
         </p>
       </header>
 
-      <aside className="changelog__alpha-note">
+      <aside className="changelog__beta-note">
         <p>
-          <strong>Why <code>0.9.x-alpha.N</code>?</strong> The core pipeline
-          (brief &rarr; <code>spine.json</code> &rarr; exports) is stable and
-          tested end-to-end, but the CLI surface, template shape, and drift
-          semantics can still move in response to real usage before 1.0. Using
-          Spine in production today is fine; pinning to a specific
-          <code>alpha.N</code> is smarter than tracking <code>@next</code>.
+          <strong>Why <code>0.9.x-beta.N</code>?</strong> The core pipeline
+          (brief &rarr; <code>spine.json</code> &rarr; exports) is stable,
+          tested end-to-end, and ready for public evaluation, while the
+          template and integration surfaces can still move before 1.0. Using
+          Spine in production pilots today is fine; pinning to a specific
+          <code>beta.N</code> is smarter than tracking <code>@beta</code>.
         </p>
       </aside>
 

@@ -13,7 +13,7 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 [![Node.js](https://img.shields.io/badge/node-%E2%89%A520-43853d)](./package.json)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6)](./tsconfig.json)
-[![Status](https://img.shields.io/badge/status-alpha-orange)](./PRD.md)
+[![Status](https://img.shields.io/badge/status-beta-2ea44f)](./PRD.md)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](./CONTRIBUTING.md)
 
 **A context compiler for software projects.**
@@ -27,7 +27,7 @@ design.md ─┘                    scaffold-plan.md, qa-guardrails.md, sprint-1
                                 component-plan.md, route-inventory.md, rationale.md
 ```
 
-> **Status — v0.9.x (alpha).** The CLI works end-to-end: brief + repo + optional design + optional template → canonical `spine.json` + generated exports. Drift detection, design-token ingestion, and agent skills for Claude Code / Codex / Cursor are all live. Published here so the thinking and implementation are public from day one.
+> **Status — v0.9.x (beta).** The CLI works end-to-end: brief + repo + optional design + optional template → canonical `spine.json` + generated exports. Drift detection, design-token ingestion, Cursor-native exports, MCP, the GitHub drift action, generated launch assets, and agent skills for Claude Code / Codex / Cursor are all live. The compiler path is ready for public evaluation while templates and integrations continue to harden before 1.0.
 
 See the full product thinking in [PRD.md](./PRD.md), the research evidence in [docs/research-citations.md](./docs/research-citations.md), and the "why not just Claude?" moat analysis in [docs/positioning.md](./docs/positioning.md).
 
@@ -46,8 +46,8 @@ The gap isn't more AI. It's a repo-native, drift-aware compiler that turns actua
 ## Install
 
 ```bash
-# from npm — the @next tag tracks the current alpha train
-npm install -g project-spine@next
+# from npm — the @beta tag tracks the current public beta train
+npm install -g project-spine@beta
 
 # or from source
 git clone https://github.com/PetriLahdelma/project-spine.git
@@ -223,7 +223,7 @@ Full setup notes + tool reference: [docs/mcp.md](./docs/mcp.md).
 Fail your own CI when `AGENTS.md` / `CLAUDE.md` / `copilot-instructions.md` drift from the brief or tokens. No release to Marketplace yet — reference by full repo path:
 
 ```yaml
-- uses: PetriLahdelma/project-spine/.github/actions/drift-check@v0.9.2-alpha.0
+- uses: PetriLahdelma/project-spine/.github/actions/drift-check@v0.9.2-beta.0
   with:
     fail-on: any
 ```
@@ -234,7 +234,7 @@ Inputs, outputs, and more examples: [.github/actions/drift-check/README.md](./.g
 
 ## Roadmap
 
-What's shipped (alpha train):
+What's shipped (beta train):
 
 - **v0.1–v0.2** — brief parser, repo inspector, deterministic exporters, the first 4 starter templates, `init` / `compile` / `inspect` / `export`.
 - **v0.3** — `spine drift check` with CI-friendly `--fail-on`, idempotent compile, hash manifest.

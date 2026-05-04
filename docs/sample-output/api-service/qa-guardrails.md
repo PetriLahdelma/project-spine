@@ -13,7 +13,7 @@ _Generated from `spine.json` — hash `7040c29c1d1f2ab2`, project type `api-serv
 - Success criterion to verify before launch: Every endpoint documented in the generated OpenAPI spec with examples + error-envelope shape. <sup>`brief:brief.md#section5/item0`</sup>
 - Success criterion to verify before launch: Integration tests cover happy path, 4xx auth, 4xx validation, 5xx upstream-down — per endpoint. <sup>`brief:brief.md#section5/item1`</sup>
 - Success criterion to verify before launch: p95 latency budgets met under synthetic load for both read and write paths. <sup>`brief:brief.md#section5/item2`</sup>
-- Success criterion to verify before launch: Zero raw stack traces in client responses across 7 days of alpha traffic. <sup>`brief:brief.md#section5/item3`</sup>
+- Success criterion to verify before launch: Zero raw stack traces in client responses across 7 days of beta traffic. <sup>`brief:brief.md#section5/item3`</sup>
 - Success criterion to verify before launch: One-line log per request including requestId, userId, route, status, duration_ms. <sup>`brief:brief.md#section5/item4`</sup>
 - Every 4xx / 5xx response conforms to the ErrorEnvelope shape; no raw framework errors leak. <sup>`template:template:api-service/contributes#0`</sup>
 - Every handler has a typed input schema (zod or equivalent); invalid payloads get 400 with field-level details. <sup>`template:template:api-service/contributes#1`</sup>

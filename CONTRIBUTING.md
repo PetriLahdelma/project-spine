@@ -53,11 +53,11 @@ New exporters live under `src/exporters/`. The contract: take a `SpineModel` and
 
 ## Releasing
 
-### Why we're still on the alpha train
+### Why this is now beta
 
-The core pipeline (brief → `spine.json` → exports) is stable, tested end-to-end, and dogfooded against this repo's own brief. Despite that, versions stay `0.9.x-alpha.N` on purpose: the CLI surface, template shape, and drift semantics can still move in response to real usage before 1.0.
+The core pipeline (brief → `spine.json` → exports) is stable, tested end-to-end, and dogfooded against this repo's own brief. Versions now stay on `0.9.x-beta.N` while the public CLI gets wider evaluation: the compiler, drift checks, templates, Cursor export, MCP server, GitHub drift action, sample outputs, and package-surface checks are all ready to try, while the pre-1.0 line leaves room for interface polish.
 
-The bar for cutting `1.0.0-beta` is external: agencies or dev-tool teams actively asking for stability guarantees. Until then, each alpha release is honest about what it is, and `@next` on npm keeps things explicit — no silent stability promises we haven't earned.
+The bar for `1.0.0` is external: agencies or dev-tool teams actively relying on Spine in real projects and asking for stability guarantees. Until then, each beta release is honest about what it is, and `@beta` on npm keeps the channel explicit.
 
 ### One-time setup
 
@@ -72,23 +72,23 @@ An **Automation** token is required because it bypasses 2FA for CI publishes. Pu
 
 ### Release flow
 
-Tag push is the contract. [.github/workflows/release.yml](./.github/workflows/release.yml) installs, typechecks, tests, builds, verifies the tag matches `package.json`, publishes to npm with `--tag next`, regenerates `CHANGELOG.md` from git tags, and creates a GitHub Release with notes diffed from the previous tag.
+Tag push is the contract. [.github/workflows/release.yml](./.github/workflows/release.yml) installs, typechecks, tests, builds, verifies the tag matches `package.json`, publishes to npm with `--tag beta`, regenerates `CHANGELOG.md` from git tags, and creates a GitHub Release with notes diffed from the previous tag.
 
 From the maintainer's workstation:
 
-1. Bump `package.json` `version` (e.g. `npm version prerelease --preid=alpha --no-git-tag-version`). `src/cli.ts` reads it at runtime — no second bump.
+1. Bump `package.json` `version` (e.g. `npm version prerelease --preid=beta --no-git-tag-version`). `src/cli.ts` reads it at runtime — no second bump.
 2. `npm run build` and verify `node dist/cli.js --version` prints the new value locally.
-3. Commit as `vX.Y.Z-alpha.N: <short summary>` on a release branch, open a PR, squash-merge to `main`.
-4. Tag the merge commit: `git tag vX.Y.Z-alpha.N && git push --tags`. The Action takes over from here.
+3. Commit as `vX.Y.Z-beta.N: <short summary>` on a release branch, open a PR, squash-merge to `main`.
+4. Tag the merge commit: `git tag vX.Y.Z-beta.N && git push --tags`. The Action takes over from here.
 
-Prefer patch bumps for polish-only changes. Keep breaking changes out of the alpha train or flag them in the PR description.
+Prefer patch bumps for polish-only changes. Keep breaking changes out of the beta train or flag them in the PR description.
 
 **Fallback (manual publish)** — if the Action is red or npm access needs to happen offline:
 
 ```bash
 npm run typecheck && npm test && npm run build
-npm publish --tag next
-gh release create vX.Y.Z-alpha.N --prerelease --notes "…"
+npm publish --tag beta
+gh release create vX.Y.Z-beta.N --prerelease --notes "…"
 ```
 
 The `NPM_TOKEN` secret is the only credential the Action needs. Rotate when a maintainer leaves.

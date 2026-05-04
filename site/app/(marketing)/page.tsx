@@ -33,7 +33,7 @@ const LANDING_JSON_LD = {
   url: SITE,
   author: { "@type": "Organization", name: "Project Spine", url: SITE },
   offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-  softwareVersion: "0.9.2-alpha.0",
+  softwareVersion: "0.9.2-beta.0",
   license: "https://opensource.org/licenses/MIT",
 };
 
@@ -180,7 +180,7 @@ export default async function Home() {
       {/* Poster hero */}
       <section className="poster-hero">
         <div className="poster-hero__inner">
-          <p className="poster-hero__eyebrow">alpha · now with Figma tokens import</p>
+          <p className="poster-hero__eyebrow">beta · now with Figma tokens import</p>
           <HeroWordmark line1="PROJECT" line2="SPINE" />
           <h1 className="poster-hero__tagline">
             The context layer your coding agents are missing.
@@ -411,8 +411,8 @@ export default async function Home() {
           </div>
           <h2>Everything a real kickoff needs. Nothing you don&apos;t.</h2>
           <p className="sub">
-            Alpha today — carrying the primitives agencies tell us they need
-            on day one of a new client project.
+            Public beta today — carrying the primitives agencies tell us they
+            need on day one of a new client project.
           </p>
         </div>
         <div className="features-list">
@@ -453,7 +453,7 @@ export default async function Home() {
             Ship your <em>AGENTS.md</em><br />like it&apos;s code.
           </h2>
           <p className="poster-closer__sub">
-            Free while in alpha. MIT forever. Three commands and thirty seconds
+            Free while in beta. MIT forever. Three commands and thirty seconds
             to compile your first brief into an audit-ready operating layer.
           </p>
           <div className="poster-closer__ctas">
