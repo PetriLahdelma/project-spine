@@ -15,7 +15,7 @@ Detection (all correct):
 - language: TypeScript strict
 - package manager: pnpm
 
-Compile with a synthetic 5-section brief + `saas-marketing` template: **18 files generated, hash `16ee2266674b131f`, 2 warnings**.
+Compile with a synthetic 5-section brief + `saas-marketing` template on the historical v0.2 CLI: **18 files generated, hash `16ee2266674b131f`, 2 warnings**.
 
 The AGENTS.md is genuinely useful:
 - Names the actual detected conventions (Next app router, Tailwind-only, pnpm-only, TS strict).

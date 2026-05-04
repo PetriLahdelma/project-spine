@@ -1,6 +1,6 @@
 # Brief summary
 
-_Normalized by Project Spine on 2026-04-19T11:20:53.595Z._
+_Normalized by Project Spine on 2026-05-04T21:04:10.705Z._
 
 **Project:** Acme Payroll Marketing Site
 **Type:** saas-marketing _(confidence 1)_

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "compiledAt": "2026-04-19T10:57:22.738Z",
-  "spineHash": "b5db78b43a41f5e7",
+  "compiledAt": "2026-05-04T21:04:10.752Z",
+  "spineHash": "ce09cb93352dfefb",
   "inputs": {
     "briefPath": "docs/sample-output/project-spine/brief.md",
     "briefSha256": "sha256:a104c47882973e8fcbb4f216879e30854a16a911a5209c4d53c9668988ee422e",
@@ -11,68 +11,78 @@
     "tokensSha256": null,
     "templateName": null,
     "templateSha256": null,
-    "repoProfileSha256": "sha256:c0f64068ef273042548c3399c7a70c8f070a62a50790a27fefbb32003c7ede4d"
+    "repoProfileSha256": "sha256:e0f9267ba5691220d5a800a99de2994b4c20691af0b804f699b59e6d84db2e5b"
   },
   "exports": [
     {
+      "path": ".cursor/rules/project-spine.mdc",
+      "sha256": "sha256:6be2324ac10f34cf8bfcfd189e0644d95e3f1422b9add7e74f03aa83d5050e05",
+      "bytes": 1019
+    },
+    {
       "path": ".github/copilot-instructions.md",
-      "sha256": "sha256:0ca8d67a058d5c1e06f46fe3688381fbc7a700554e2161f409238bd8899d8435",
+      "sha256": "sha256:9a1b351c90707cf366c51e3628a4b3950543eeecaffd55f8c6112275e30a6306",
       "bytes": 2747
     },
     {
       "path": ".project-spine/exports/AGENTS.md",
-      "sha256": "sha256:ee36bb24e00763348f5622f27bf8697f5ccb31a40f5045c84744a90c67c9ba6d",
-      "bytes": 5165
+      "sha256": "sha256:fccdba2878cd0f8168b091539ea8e6af1bcbb60e2cbb5a038e0a3a4cb399d698",
+      "bytes": 5163
     },
     {
       "path": ".project-spine/exports/CLAUDE.md",
-      "sha256": "sha256:75021d244c435b7870087339d2ed743c6b781d2a9bd74e2a752f80c39c384d80",
-      "bytes": 2046
+      "sha256": "sha256:3e28ea4c0960865daedc330ad5d731ddfee5da9b1400481d14b4f038c43cab51",
+      "bytes": 2045
     },
     {
       "path": ".project-spine/exports/component-plan.md",
-      "sha256": "sha256:b0ed7f0cdd5c1502c0c97c632e31af43ff5c02bdbadb7ce7f358ce8e6d7ed0c0",
+      "sha256": "sha256:d269af3d8ef657564b74a2f38a00f930181a754f5b050649401ce6cd64c5e643",
       "bytes": 478
     },
     {
       "path": ".project-spine/exports/copilot-instructions.md",
-      "sha256": "sha256:0ca8d67a058d5c1e06f46fe3688381fbc7a700554e2161f409238bd8899d8435",
+      "sha256": "sha256:9a1b351c90707cf366c51e3628a4b3950543eeecaffd55f8c6112275e30a6306",
       "bytes": 2747
     },
     {
+      "path": ".project-spine/exports/cursor-project-rule.mdc",
+      "sha256": "sha256:6be2324ac10f34cf8bfcfd189e0644d95e3f1422b9add7e74f03aa83d5050e05",
+      "bytes": 1019
+    },
+    {
       "path": ".project-spine/exports/qa-guardrails.md",
-      "sha256": "sha256:ad31f8b5426517909c42b63d5d94b2eb14ac184163162a686ea82d44a5089468",
-      "bytes": 2936
+      "sha256": "sha256:fc8916c327a2bef231a6263c915b1893aab23f61f477cb15283c948d16bb35c6",
+      "bytes": 2886
     },
     {
       "path": ".project-spine/exports/rationale.md",
-      "sha256": "sha256:5bb55c870451b6001863e17b99a7066336a9d63ed94b1f2ebe77e770c5bd2dac",
-      "bytes": 3527
+      "sha256": "sha256:f297457e57fdee4452b16d3cf9058d0d3a3222be06fa9df7831716da68f2299f",
+      "bytes": 3562
     },
     {
       "path": ".project-spine/exports/route-inventory.md",
-      "sha256": "sha256:38e7410b6011b0cb990f72e1cfda8ca092eefdf6c8e1e5114279cf5725ae685d",
+      "sha256": "sha256:091e949a717737a125be4448383b2ae1d129cc8086ab367617c1a11855874eb1",
       "bytes": 941
     },
     {
       "path": ".project-spine/exports/scaffold-plan.md",
-      "sha256": "sha256:89e5d5b85ad3c222b29feb0d70139766d31aeed503338005beeb0eab66c06322",
-      "bytes": 1988
+      "sha256": "sha256:3510076d0e818d6fa3c885f44d3331f10c1787fe1bdf53b45b54c9dcd2108249",
+      "bytes": 1750
     },
     {
       "path": ".project-spine/exports/sprint-1-backlog.md",
-      "sha256": "sha256:ff0df24ef265e574be5610f09d45d76863519be9f726c703e406ad043d05794f",
-      "bytes": 3495
+      "sha256": "sha256:1eb6d75d7703b20b470ab3ab7137996dcc252c7fb2cda726a6eca78ba32067cb",
+      "bytes": 3101
     },
     {
       "path": "AGENTS.md",
-      "sha256": "sha256:ee36bb24e00763348f5622f27bf8697f5ccb31a40f5045c84744a90c67c9ba6d",
-      "bytes": 5165
+      "sha256": "sha256:fccdba2878cd0f8168b091539ea8e6af1bcbb60e2cbb5a038e0a3a4cb399d698",
+      "bytes": 5163
     },
     {
       "path": "CLAUDE.md",
-      "sha256": "sha256:75021d244c435b7870087339d2ed743c6b781d2a9bd74e2a752f80c39c384d80",
-      "bytes": 2046
+      "sha256": "sha256:3e28ea4c0960865daedc330ad5d731ddfee5da9b1400481d14b4f038c43cab51",
+      "bytes": 2045
     }
   ]
 }

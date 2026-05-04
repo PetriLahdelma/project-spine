@@ -1,5 +1,5 @@
 {
-  "count": 2,
+  "count": 1,
   "warnings": [
     {
       "id": "repo:framework-uncertain",
@@ -12,18 +12,6 @@
         }
       ],
       "suggestion": "Install the framework dependency explicitly (e.g., `npm i next`), or bootstrap from a framework starter before compiling."
-    },
-    {
-      "id": "repo:no-agent-files",
-      "severity": "info",
-      "message": "No agent instruction files found.",
-      "sources": [
-        {
-          "kind": "repo",
-          "pointer": "repo-profile"
-        }
-      ],
-      "suggestion": "Run `spine compile --brief ./brief.md --repo .` to generate AGENTS.md, CLAUDE.md, and copilot-instructions.md."
     }
   ]
 }

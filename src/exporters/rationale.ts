@@ -55,7 +55,7 @@ export function renderRationale(spine: SpineModel, extras: RationaleExtras = {})
   lines.push(...section("How we will ship quality", qualityNote));
 
   const howWeWork = [
-    "Project context is compiled into a machine-readable layer (`.project-spine/spine.json`). Agent instruction files (`AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`) are generated from that same source, so humans and coding agents stay aligned without hand-editing duplicated docs.",
+    "Project context is compiled into a machine-readable layer (`.project-spine/spine.json`). Agent instruction files (`AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, `.cursor/rules/project-spine.mdc`) are generated from that same source, so humans and coding agents stay aligned without hand-editing duplicated docs.",
     "When the brief or design evolves, we update the upstream input and recompile. That keeps the working context honest.",
   ];
   lines.push(...section("How we will work", howWeWork));

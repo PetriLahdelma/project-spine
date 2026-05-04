@@ -4,7 +4,7 @@
 
 **Project Spine** — Launch a marketing site for Acme Payroll's new SMB product line within 6 weeks.
 
-**Stack:** next • typescript • tailwind
+**Stack:** node-library • typescript • tests: vitest • pm: npm
 
 ## Working agreement
 
@@ -29,10 +29,6 @@
 - Before claiming work is complete, run the repo's typecheck and test commands and show the output.
 - If the brief is ambiguous on a specific section, ask rather than guess. Cite the section heading.
 
-## File placement
-
-- Pages go in `app/`. Route segments use `page.tsx`. Shared UI goes in `components/` or `src/components/`.
-
 ## Deeper context (imported)
 
 When you need more than the above, read:
@@ -48,7 +44,7 @@ When you need more than the above, read:
 ## Source of truth
 
 All rules above are compiled from `brief.md` + repo state.
-Canonical model: `.project-spine/spine.json` (hash `8976dc15b57e7f67`).
+Canonical model: `.project-spine/spine.json` (hash `9ea72686cdffd1cd`).
 To change a rule, edit the upstream input and run `spine compile` — do not hand-edit this file.
 
 ⚠ 1 warning in `.project-spine/warnings.json` — review before adding a new capability.

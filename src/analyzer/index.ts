@@ -82,12 +82,12 @@ export async function analyzeRepo(root: string): Promise<RepoProfile> {
         'Set `"strict": true` in tsconfig.json compilerOptions. Spine will then generate a "never use any" convention automatically.',
     });
   }
-  if (!agentFiles.agentsMd && !agentFiles.claudeMd && !agentFiles.copilotInstructions) {
+  if (!agentFiles.agentsMd && !agentFiles.claudeMd && !agentFiles.copilotInstructions && !agentFiles.cursorRules) {
     warnings.push({
       id: "no-agent-files",
       severity: "info",
       message: "No agent instruction files found.",
-      suggestion: "Run `spine compile --brief ./brief.md --repo .` to generate AGENTS.md, CLAUDE.md, and copilot-instructions.md.",
+      suggestion: "Run `spine compile --brief ./brief.md --repo .` to generate AGENTS.md, CLAUDE.md, copilot-instructions.md, and a Cursor project rule.",
     });
   }
 

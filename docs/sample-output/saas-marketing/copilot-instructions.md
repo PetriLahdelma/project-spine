@@ -4,13 +4,12 @@
 
 **Project Spine** — Launch a marketing site for Acme Payroll's new SMB product line within 6 weeks.
 
-**Stack:** next • typescript • tailwind
+**Stack:** node-library • typescript • tests: vitest • pm: npm
 
 ## Repo conventions
 
-- Use the Next.js App Router (`app/`). Prefer server components by default; only opt into client components via `"use client"` when needed.
-- Style exclusively with Tailwind utility classes. Do not add inline `style` props or ad-hoc CSS unless the component is outside the design system.
 - TypeScript strict mode is on. Never use `any`; prefer `unknown` + narrow at the boundary.
+- Use `npm` for all dependency operations. Do not commit lockfiles from other package managers.
 
 ## Do / Don't
 
@@ -30,18 +29,14 @@
 - Never commit secrets. Redact any `.env*` content that appears in logs or diffs.
 - Never hardcode pricing numbers in templates; reference a single source (MDX frontmatter or CMS).
 
-## File placement
-
-- Pages go in `app/`. Route segments use `page.tsx`. Shared UI goes in `components/` or `src/components/`.
-
 ## Quality bar
 
+- Unit tests live next to source as `*.test.ts`. Run `vitest run` in CI and before every commit touching business logic.
 - `tsc --noEmit` must pass on every PR.
 - Success criterion to verify before launch: Homepage, 3 product pages, pricing, /compliance, /security, 2 case studies live.
 - Success criterion to verify before launch: 99th-percentile page weight <250KB on mobile.
 - Success criterion to verify before launch: All interactive elements keyboard-operable and screen-reader labeled.
 - Success criterion to verify before launch: 40+ qualified trial signups in the first month.
-- LCP under 2.0s on mobile (p75), CLS under 0.1, INP under 200ms.
 
 _Full QA guardrails: `.project-spine/exports/qa-guardrails.md`._
 
@@ -56,6 +51,6 @@ _Full QA guardrails: `.project-spine/exports/qa-guardrails.md`._
 - Images decorative vs informative is explicit; informative images have real alt text.
 - Hero headline uses a single h1; no competing h1s on the page.
 
-_Source of truth: `.project-spine/spine.json` (hash `8976dc15b57e7f67`)._
+_Source of truth: `.project-spine/spine.json` (hash `9ea72686cdffd1cd`)._
 
 <!-- spine:deterministic -->

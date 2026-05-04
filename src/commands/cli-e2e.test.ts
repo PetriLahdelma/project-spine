@@ -42,6 +42,7 @@ const EXPECTED_EXPORT_FILES = [
   "AGENTS.md",
   "CLAUDE.md",
   "copilot-instructions.md",
+  "cursor-project-rule.mdc",
   "component-plan.md",
   "qa-guardrails.md",
   "rationale.md",
@@ -49,6 +50,24 @@ const EXPECTED_EXPORT_FILES = [
   "scaffold-plan.md",
   "sprint-1-backlog.md",
 ].sort();
+
+const BUNDLED_TEMPLATE_NAMES = [
+  "saas-marketing",
+  "app-dashboard",
+  "design-system",
+  "docs-portal",
+  "api-service",
+  "monorepo",
+];
+
+const DORMANT_HOSTED_COMMAND_MODULES = [
+  "login",
+  "logout",
+  "whoami",
+  "workspace",
+  "publish",
+  "rationale",
+];
 
 describe("spine --help", () => {
   it("lists exactly the eight routed commands", async () => {
@@ -115,6 +134,14 @@ describe("spine init", () => {
     const combined = (stderr + "\n" + stdout).toLowerCase();
     expect(combined).toMatch(/not-a-real-template|unknown|not found/);
   });
+
+  it("documents every bundled template accepted by template list", async () => {
+    const { stdout, exitCode } = await spawn(["init", "--help"]);
+    expect(exitCode).toBe(0);
+    for (const name of BUNDLED_TEMPLATE_NAMES) {
+      expect(stdout).toContain(name);
+    }
+  });
 });
 
 describe("spine compile", () => {
@@ -128,17 +155,21 @@ describe("spine compile", () => {
   });
 
   it("writes the expected export set on a primed project", async () => {
-    const { exitCode, stderr } = await spawn(
+    const { exitCode, stderr, stdout } = await spawn(
       ["compile", "--brief", "./brief.md", "--repo", "."],
       work,
     );
     expect(exitCode, stderr).toBe(0);
+    expect(stdout).toContain("agent files:");
+    expect(stdout).toContain("32 KB/file budget");
 
     const rootEntries = await readdir(work);
     expect(rootEntries).toContain("AGENTS.md");
     expect(rootEntries).toContain("CLAUDE.md");
     const gh = await readdir(join(work, ".github"));
     expect(gh).toContain("copilot-instructions.md");
+    const cursorRules = await readdir(join(work, ".cursor", "rules"));
+    expect(cursorRules).toContain("project-spine.mdc");
 
     const spineFiles = await readdir(join(work, ".project-spine"));
     for (const f of ["spine.json", "brief.normalized.json", "repo-profile.json", "warnings.json", "export-manifest.json"]) {
@@ -217,14 +248,7 @@ describe("spine template", () => {
   it("template list shows all six starter presets", async () => {
     const { stdout, exitCode } = await spawn(["template", "list"]);
     expect(exitCode).toBe(0);
-    for (const name of [
-      "saas-marketing",
-      "app-dashboard",
-      "design-system",
-      "docs-portal",
-      "api-service",
-      "monorepo",
-    ]) {
+    for (const name of BUNDLED_TEMPLATE_NAMES) {
       expect(stdout).toContain(name);
     }
   });
@@ -240,6 +264,16 @@ describe("spine template", () => {
     expect(exitCode).not.toBe(0);
     const combined = (stderr + "\n" + stdout).toLowerCase();
     expect(combined).toMatch(/ghost-template|not found|unknown/);
+  });
+});
+
+describe("public dist surface", () => {
+  it("does not emit dormant hosted command modules into the npm build output", async () => {
+    const files = await readdir(resolve(ROOT, "dist", "commands"));
+    for (const command of DORMANT_HOSTED_COMMAND_MODULES) {
+      expect(files).not.toContain(`${command}.js`);
+      expect(files).not.toContain(`${command}.d.ts`);
+    }
   });
 });
 

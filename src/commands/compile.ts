@@ -14,8 +14,17 @@ import { getTemplate } from "../templates/registry.js";
 import { buildManifest, sha256OfFile } from "../compiler/manifest.js";
 import { resolveLlmConfig } from "../llm/index.js";
 import { enrichRationaleIntro } from "../llm/enrich.js";
+import type { FileFingerprint } from "../model/export-manifest.js";
 
 type FailOn = "never" | "info" | "warn" | "error";
+
+const AGENT_FILE_BUDGET_BYTES = 32 * 1024;
+const TOOL_DISCOVERY_EXPORTS = [
+  { path: "AGENTS.md", label: "AGENTS.md" },
+  { path: "CLAUDE.md", label: "CLAUDE.md" },
+  { path: ".github/copilot-instructions.md", label: "copilot-instructions.md" },
+  { path: ".cursor/rules/project-spine.mdc", label: "project-spine.mdc" },
+] as const;
 
 export default defineCommand({
   meta: {
@@ -140,6 +149,7 @@ export default defineCommand({
     console.log(`  goals:        ${spine.goals.length}`);
     console.log(`  constraints:  ${spine.constraints.length}`);
     console.log(`  qa rules:     ${spine.qaGuardrails.length}`);
+    console.log(`  agent files:  ${summarizeAgentFileBudget(fingerprints)}`);
     console.log(`  warnings:     ${warnSummary}`);
     if (args.enrich) console.log(`  enrichment:   ${enrichmentStatus}`);
     console.log("");
@@ -193,4 +203,23 @@ function summarizeWarnings(warnings: { severity: string }[]): string {
   const counts = { info: 0, warn: 0, error: 0 } as Record<string, number>;
   for (const w of warnings) counts[w.severity] = (counts[w.severity] ?? 0) + 1;
   return `${warnings.length} (${counts.error ?? 0} error, ${counts.warn ?? 0} warn, ${counts.info ?? 0} info)`;
+}
+
+function summarizeAgentFileBudget(fingerprints: FileFingerprint[]): string {
+  const entries = TOOL_DISCOVERY_EXPORTS.flatMap((target) => {
+    const fp = fingerprints.find((f) => f.path === target.path);
+    return fp ? [{ label: target.label, bytes: fp.bytes }] : [];
+  });
+  if (entries.length === 0) return "none written";
+
+  const sizes = entries.map((e) => `${e.label} ${formatBytes(e.bytes)}`).join(", ");
+  const over = entries.filter((e) => e.bytes > AGENT_FILE_BUDGET_BYTES).map((e) => e.label);
+  const budget = `${formatBytes(AGENT_FILE_BUDGET_BYTES)}/file budget`;
+  return over.length > 0 ? `${sizes} (over ${budget}: ${over.join(", ")})` : `${sizes} (${budget})`;
+}
+
+function formatBytes(bytes: number): string {
+  if (bytes < 1024) return `${bytes} B`;
+  const kb = bytes / 1024;
+  return `${kb.toFixed(kb >= 10 ? 0 : 1)} KB`;
 }

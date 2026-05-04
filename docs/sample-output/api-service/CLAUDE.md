@@ -4,7 +4,7 @@
 
 **Ledger API** — Ship v1 of the Ledger billing API for internal consumers in 8 weeks.
 
-**Stack:** node-app • typescript • tests: vitest
+**Stack:** node-library • typescript • tests: vitest • pm: npm
 
 ## Working agreement
 
@@ -48,9 +48,9 @@ When you need more than the above, read:
 ## Source of truth
 
 All rules above are compiled from `brief.md` + repo state.
-Canonical model: `.project-spine/spine.json` (hash `bcaf67e27f36d134`).
+Canonical model: `.project-spine/spine.json` (hash `7040c29c1d1f2ab2`).
 To change a rule, edit the upstream input and run `spine compile` — do not hand-edit this file.
 
-⚠ 2 warnings in `.project-spine/warnings.json` — review before adding a new capability.
+⚠ 1 warning in `.project-spine/warnings.json` — review before adding a new capability.
 
 <!-- spine:deterministic -->

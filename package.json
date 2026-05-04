@@ -22,14 +22,17 @@
     "PRD.md"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "node scripts/clean-dist.mjs && tsc -p tsconfig.json",
     "dev": "tsc -p tsconfig.json --watch",
     "start": "node dist/cli.js",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint src",
-    "prepublishOnly": "npm run typecheck && npm test && npm run build",
+    "lint": "npm run typecheck",
+    "launch:assets": "node scripts/generate-launch-assets.mjs",
+    "launch:check": "node scripts/check-launch-assets.mjs",
+    "pack:check": "node scripts/check-public-package.mjs",
+    "prepublishOnly": "npm run typecheck && npm test && npm run build && npm run pack:check",
     "postinstall": "node scripts/postinstall-hint.mjs"
   },
   "keywords": [

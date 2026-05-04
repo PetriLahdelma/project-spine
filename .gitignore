@@ -30,6 +30,7 @@ pnpm-debug.log*
 /AGENTS.md
 /CLAUDE.md
 /.github/copilot-instructions.md
+/.cursor/rules/project-spine.mdc
 
 # OS
 Thumbs.db

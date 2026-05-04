@@ -3,8 +3,8 @@
     "name": "Ledger API",
     "version": "0.1.0",
     "schemaVersion": 1,
-    "createdAt": "2026-04-19T11:21:32.793Z",
-    "hash": "bcaf67e27f36d134"
+    "createdAt": "2026-05-04T21:04:10.744Z",
+    "hash": "7040c29c1d1f2ab2"
   },
   "projectType": "api-service",
   "goals": [
@@ -155,9 +155,9 @@
     }
   ],
   "stack": {
-    "framework": "node-app",
+    "framework": "node-library",
     "language": "typescript",
-    "packageManager": "unknown",
+    "packageManager": "npm",
     "runtime": "node",
     "styling": "unknown",
     "testing": [
@@ -168,8 +168,8 @@
       "tsStrict": true,
       "storybook": false,
       "ci": {
-        "githubActions": false,
-        "workflows": 0
+        "githubActions": true,
+        "workflows": 3
       }
     }
   },
@@ -180,6 +180,14 @@
       "source": {
         "kind": "inference",
         "pointer": "inferred:typescript/strict"
+      }
+    },
+    {
+      "id": "conv-14199504",
+      "text": "Use `npm` for all dependency operations. Do not commit lockfiles from other package managers.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:pm/npm"
       }
     }
   ],
@@ -632,27 +640,11 @@
     ],
     "sprint1": [
       {
-        "id": "setup-2255a7f6",
-        "text": "Commit the Project Spine–generated `AGENTS.md`, `CLAUDE.md`, and `.github/copilot-instructions.md` after review.",
-        "source": {
-          "kind": "inference",
-          "pointer": "inferred:setup/agent-files"
-        }
-      },
-      {
         "id": "setup-e2afd63d",
         "text": "Pick and configure a linter (Biome or ESLint) with a minimal rule set.",
         "source": {
           "kind": "inference",
           "pointer": "inferred:setup/lint"
-        }
-      },
-      {
-        "id": "setup-553c659c",
-        "text": "Add a minimal CI workflow that runs typecheck + lint + tests on every PR.",
-        "source": {
-          "kind": "inference",
-          "pointer": "inferred:setup/ci"
         }
       },
       {
@@ -693,7 +685,7 @@
     {
       "id": "repo:framework-uncertain",
       "severity": "warn",
-      "message": "Framework detection confidence 0.4. Evidence: no framework dep detected",
+      "message": "Framework detection confidence 0.4. Evidence: no framework dep; looks like a node library",
       "sources": [
         {
           "kind": "repo",
@@ -701,18 +693,6 @@
         }
       ],
       "suggestion": "Install the framework dependency explicitly (e.g., `npm i next`), or bootstrap from a framework starter before compiling."
-    },
-    {
-      "id": "repo:no-agent-files",
-      "severity": "info",
-      "message": "No agent instruction files found.",
-      "sources": [
-        {
-          "kind": "repo",
-          "pointer": "repo-profile"
-        }
-      ],
-      "suggestion": "Run `spine compile --brief ./brief.md --repo .` to generate AGENTS.md, CLAUDE.md, and copilot-instructions.md."
     }
   ]
 }

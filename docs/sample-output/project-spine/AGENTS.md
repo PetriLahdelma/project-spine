@@ -8,7 +8,7 @@
 
 **Project type:** `other`
 
-> Source of truth: `.project-spine/spine.json` (hash `b5db78b43a41f5e7`). Every rule below has a traceable source. If a rule is wrong, fix the upstream input (`brief.md`, repo state, or `design-rules.md`) and rerun `spine compile`.
+> Source of truth: `.project-spine/spine.json` (hash `ce09cb93352dfefb`). Every rule below has a traceable source. If a rule is wrong, fix the upstream input (`brief.md`, repo state, or `design-rules.md`) and rerun `spine compile`.
 
 ## Repo conventions
 
@@ -87,7 +87,7 @@ _(none)_
 
 ## Open warnings
 
-There are 2 unresolved warnings in `warnings.json`. Agents should review them before starting a new capability.
+There is 1 unresolved warning in `warnings.json`. Agents should review them before starting a new capability.
 
 ---
 

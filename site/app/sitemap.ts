@@ -14,7 +14,14 @@ const STATIC_ROUTES: Array<{ path: string; priority: number; changeFrequency: Me
   { path: "/terms", priority: 0.3, changeFrequency: "yearly" },
 ];
 
-const TEMPLATES = ["saas-marketing", "app-dashboard", "design-system", "docs-portal"];
+const TEMPLATES = [
+  "saas-marketing",
+  "app-dashboard",
+  "design-system",
+  "docs-portal",
+  "api-service",
+  "monorepo",
+];
 
 const STACKS = [
   "nextjs",

@@ -1,19 +1,19 @@
 {
   "schemaVersion": 1,
-  "root": "/private/var/folders/6w/jqw75m7545gdh8j23y93f7fc0000gn/T/tmp.utxfuagGBF",
-  "detectedAt": "2026-04-19T11:21:32.776Z",
+  "root": "/Users/petrilahdelma/SAPDevelop/ProjectSpine",
+  "detectedAt": "2026-05-04T21:04:10.694Z",
   "packageManager": {
-    "value": "unknown",
-    "confidence": 0,
+    "value": "npm",
+    "confidence": 1,
     "evidence": [
-      "no lockfile found"
+      "found package-lock.json"
     ]
   },
   "framework": {
-    "value": "node-app",
+    "value": "node-library",
     "confidence": 0.4,
     "evidence": [
-      "no framework dep detected"
+      "no framework dep; looks like a node library"
     ]
   },
   "routing": {
@@ -45,7 +45,7 @@
     "storybook": false,
     "storybookVersion": null,
     "evidence": [
-      "vitest@1.6.0"
+      "vitest@^4.1.4"
     ]
   },
   "linting": {
@@ -56,17 +56,23 @@
     "evidence": []
   },
   "ci": {
-    "githubActions": false,
-    "workflows": [],
+    "githubActions": true,
+    "workflows": [
+      ".github/workflows/ci.yml",
+      ".github/workflows/drift.yml",
+      ".github/workflows/release.yml"
+    ],
     "other": [],
-    "evidence": []
+    "evidence": [
+      ".github/workflows/ (3 files)"
+    ]
   },
   "agentFiles": {
-    "agentsMd": false,
-    "claudeMd": false,
-    "copilotInstructions": false,
-    "cursorRules": false,
-    "projectSpineDir": false
+    "agentsMd": true,
+    "claudeMd": true,
+    "copilotInstructions": true,
+    "cursorRules": true,
+    "projectSpineDir": true
   },
   "monorepo": {
     "isMonorepo": false,
@@ -75,29 +81,93 @@
     "evidence": []
   },
   "rawPackageJson": {
-    "name": "ledger-api",
+    "name": "project-spine",
+    "version": "0.9.2-alpha.0",
+    "description": "Context compiler for software projects. Turns brief + repo + design inputs into a repo-native operating layer.",
+    "type": "module",
+    "bin": {
+      "spine": "./dist/cli.js"
+    },
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js"
+      }
+    },
+    "files": [
+      "dist",
+      "templates",
+      "skills",
+      "scripts/postinstall-hint.mjs",
+      "README.md",
+      "PRD.md"
+    ],
+    "scripts": {
+      "build": "node scripts/clean-dist.mjs && tsc -p tsconfig.json",
+      "dev": "tsc -p tsconfig.json --watch",
+      "start": "node dist/cli.js",
+      "test": "vitest run",
+      "test:watch": "vitest",
+      "typecheck": "tsc --noEmit",
+      "lint": "npm run typecheck",
+      "pack:check": "node scripts/check-public-package.mjs",
+      "prepublishOnly": "npm run typecheck && npm test && npm run build && npm run pack:check",
+      "postinstall": "node scripts/postinstall-hint.mjs"
+    },
+    "keywords": [
+      "ai",
+      "coding-agents",
+      "agents.md",
+      "claude",
+      "copilot",
+      "cursor",
+      "context-engineering",
+      "project-kickoff",
+      "design-system",
+      "cli"
+    ],
+    "author": "Petri Lahdelma",
+    "license": "MIT",
+    "homepage": "https://projectspine.dev",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/PetriLahdelma/project-spine.git"
+    },
+    "bugs": {
+      "url": "https://github.com/PetriLahdelma/project-spine/issues"
+    },
+    "engines": {
+      "node": ">=20.0.0"
+    },
     "dependencies": {
-      "fastify": "4.26.0",
-      "pg": "8.11.0",
-      "zod": "3.24.0"
+      "citty": "^0.2.2",
+      "diff": "^9.0.0",
+      "fast-glob": "^3.3.2",
+      "remark": "^15.0.1",
+      "remark-frontmatter": "^5.0.0",
+      "remark-parse": "^11.0.0",
+      "unified": "^11.0.5",
+      "yaml": "^2.6.1",
+      "zod": "^4.3.6"
     },
     "devDependencies": {
-      "typescript": "5.5.0",
-      "vitest": "1.6.0"
+      "@types/mdast": "^4.0.4",
+      "@types/node": "^25.6.0",
+      "execa": "^9.6.1",
+      "typescript": "^6.0.3",
+      "vitest": "^4.1.4"
+    },
+    "publishConfig": {
+      "access": "public",
+      "tag": "next"
     }
   },
   "warnings": [
     {
       "id": "framework-uncertain",
       "severity": "warn",
-      "message": "Framework detection confidence 0.4. Evidence: no framework dep detected",
+      "message": "Framework detection confidence 0.4. Evidence: no framework dep; looks like a node library",
       "suggestion": "Install the framework dependency explicitly (e.g., `npm i next`), or bootstrap from a framework starter before compiling."
-    },
-    {
-      "id": "no-agent-files",
-      "severity": "info",
-      "message": "No agent instruction files found.",
-      "suggestion": "Run `spine compile --brief ./brief.md --repo .` to generate AGENTS.md, CLAUDE.md, and copilot-instructions.md."
     }
   ]
 }

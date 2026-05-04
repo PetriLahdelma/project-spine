@@ -51,6 +51,16 @@ describe("exporters — render all", () => {
     expect(copilot).toContain("Accessibility");
   });
 
+  it("Cursor project rule uses MDC frontmatter and imports generated context", async () => {
+    const [brief, repo] = await Promise.all([parseBriefFromFile(briefPath), analyzeRepo(repoRoot)]);
+    const spine = compileSpine({ brief, repo, design: null, now: FIXED_NOW });
+    const { cursor } = renderAllExports(spine);
+    expect(cursor).toContain("alwaysApply: true");
+    expect(cursor).toContain("@AGENTS.md");
+    expect(cursor).toContain("@.project-spine/exports/qa-guardrails.md");
+    expect(cursor).toContain(spine.metadata.hash);
+  });
+
   it("sprint-1-backlog.md has acceptance checkboxes and source traces", async () => {
     const [brief, repo] = await Promise.all([parseBriefFromFile(briefPath), analyzeRepo(repoRoot)]);
     const spine = compileSpine({ brief, repo, design: null, now: FIXED_NOW });
@@ -122,6 +132,7 @@ describe("exporters — render all", () => {
     expect(exportFilename("agents")).toBe("AGENTS.md");
     expect(exportFilename("claude")).toBe("CLAUDE.md");
     expect(exportFilename("copilot")).toBe("copilot-instructions.md");
+    expect(exportFilename("cursor")).toBe("cursor-project-rule.mdc");
   });
 
   it("warnings surface in AGENTS.md and scaffold-plan", () => {

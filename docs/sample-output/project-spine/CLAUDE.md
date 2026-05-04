@@ -40,9 +40,9 @@ When you need more than the above, read:
 ## Source of truth
 
 All rules above are compiled from `brief.md` + repo state.
-Canonical model: `.project-spine/spine.json` (hash `b5db78b43a41f5e7`).
+Canonical model: `.project-spine/spine.json` (hash `ce09cb93352dfefb`).
 To change a rule, edit the upstream input and run `spine compile` — do not hand-edit this file.
 
-⚠ 2 warnings in `.project-spine/warnings.json` — review before adding a new capability.
+⚠ 1 warning in `.project-spine/warnings.json` — review before adding a new capability.
 
 <!-- spine:deterministic -->

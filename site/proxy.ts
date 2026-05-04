@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 /**
- * Per-request CSP nonce middleware.
+ * Per-request CSP nonce proxy.
  *
  * We generate a fresh nonce per request, pass it to the downstream render via
  * the `x-nonce` request header (Next 16 SSR picks this up automatically and
@@ -26,9 +26,9 @@ import { NextResponse, type NextRequest } from "next/server";
  * but emitting it does no harm and keeps the CSP uniform.
  *
  * Static asset fetches (next/static chunks, images, fonts) are excluded via
- * the matcher below so middleware isn't invoked for every byte of bundle.
+ * the matcher below so the proxy isn't invoked for every byte of bundle.
  */
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   // Uint8Array → base64 via btoa. 16 bytes → 24-char nonce.
   const bytes = new Uint8Array(16);
   crypto.getRandomValues(bytes);
@@ -58,7 +58,24 @@ export function middleware(request: NextRequest) {
 
   const response = NextResponse.next({ request: { headers: requestHeaders } });
   response.headers.set("Content-Security-Policy", csp);
+  if (shouldNoIndex(request.nextUrl.pathname)) {
+    response.headers.set("X-Robots-Tag", "noindex, nofollow");
+  }
   return response;
+}
+
+function shouldNoIndex(pathname: string): boolean {
+  return (
+    pathname.startsWith("/api/") ||
+    pathname === "/login" ||
+    pathname === "/logout" ||
+    pathname === "/device" ||
+    pathname.startsWith("/device/") ||
+    pathname.startsWith("/invite/") ||
+    pathname.startsWith("/r/") ||
+    pathname.startsWith("/w/") ||
+    pathname.startsWith("/workspaces/")
+  );
 }
 
 export const config = {

@@ -2,7 +2,7 @@
 
 > What 'done' means for this project. Every item here is actionable.
 
-_Generated from `spine.json` — hash `bcaf67e27f36d134`, project type `api-service`._
+_Generated from `spine.json` — hash `7040c29c1d1f2ab2`, project type `api-service`._
 
 <!-- spine:deterministic -->
 
@@ -41,9 +41,8 @@ _Generated from `spine.json` — hash `bcaf67e27f36d134`, project type `api-serv
 - [ ] All interactive surfaces tested with keyboard only.
 - [ ] Screen reader pass on primary flows.
 - [ ] No new dependencies added without explicit rationale.
-- [ ] Generated files (`AGENTS.md`, `CLAUDE.md`, `copilot-instructions.md`) reflect the current spine hash.
+- [ ] Generated files (`AGENTS.md`, `CLAUDE.md`, `copilot-instructions.md`, `project-spine.mdc`) reflect the current spine hash.
 
 ## Open warnings
 
-- **[warn] repo:framework-uncertain** — Framework detection confidence 0.4. Evidence: no framework dep detected
-- **[info] repo:no-agent-files** — No agent instruction files found.
+- **[warn] repo:framework-uncertain** — Framework detection confidence 0.4. Evidence: no framework dep; looks like a node library

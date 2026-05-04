@@ -4,6 +4,7 @@ import type { SpineModel } from "../model/spine.js";
 import { renderAgentsMd } from "./agents.js";
 import { renderClaudeMd } from "./claude.js";
 import { renderCopilotInstructions } from "./copilot.js";
+import { renderCursorProjectRule } from "./cursor.js";
 import { renderScaffoldPlan } from "./scaffold-plan.js";
 import { renderRouteInventory } from "./route-inventory.js";
 import { renderComponentPlan } from "./component-plan.js";
@@ -17,6 +18,7 @@ export type ExportTarget =
   | "agents"
   | "claude"
   | "copilot"
+  | "cursor"
   | "scaffold"
   | "routes"
   | "components"
@@ -28,6 +30,7 @@ export const ALL_TARGETS: ExportTarget[] = [
   "agents",
   "claude",
   "copilot",
+  "cursor",
   "scaffold",
   "routes",
   "components",
@@ -48,6 +51,7 @@ export function renderAllExports(spine: SpineModel, extras: RenderExtras = {}): 
     agents: renderAgentsMd(spine),
     claude: renderClaudeMd(spine),
     copilot: renderCopilotInstructions(spine),
+    cursor: renderCursorProjectRule(spine),
     scaffold: renderScaffoldPlan(spine),
     routes: renderRouteInventory(spine),
     components: renderComponentPlan(spine),
@@ -68,7 +72,8 @@ export type WriteOptions = {
 
 /**
  * Writes exports to both locations:
- * - repo root: AGENTS.md, CLAUDE.md, .github/copilot-instructions.md (where tools look)
+ * - repo root: AGENTS.md, CLAUDE.md, .github/copilot-instructions.md,
+ *   .cursor/rules/project-spine.mdc (where tools look)
  * - .project-spine/exports/: canonical copies + the scaffold/docs family
  *
  * Returns the list of absolute paths written AND their sha256 fingerprints
@@ -102,6 +107,8 @@ export async function writeAllExports(
     if (target === "claude") tasks.push(push(join(opts.repoRoot, "CLAUDE.md"), content));
     if (target === "copilot")
       tasks.push(push(join(opts.repoRoot, ".github", "copilot-instructions.md"), content));
+    if (target === "cursor")
+      tasks.push(push(join(opts.repoRoot, ".cursor", "rules", "project-spine.mdc"), content));
   }
   await Promise.all(tasks);
   written.sort();
@@ -118,6 +125,8 @@ export function exportFilename(target: ExportTarget): string {
       return "CLAUDE.md";
     case "copilot":
       return "copilot-instructions.md";
+    case "cursor":
+      return "cursor-project-rule.mdc";
     case "scaffold":
       return "scaffold-plan.md";
     case "routes":

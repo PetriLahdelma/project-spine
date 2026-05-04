@@ -41,11 +41,11 @@ Each skill is a single self-contained `SKILL.md` with frontmatter. Paste the rel
 | Skill | Triggers on | What it teaches |
 |---|---|---|
 | [`project-spine`](./project-spine/SKILL.md) | "AGENTS.md", "CLAUDE.md", "context for coding agents", "project brief", "agency kickoff" | Orientation: what the product is, when to reach for it, conceptual model (brief + repo + design → spine.json → exports) |
-| [`project-spine-kickoff`](./project-spine-kickoff/SKILL.md) | "new client project", "start a project", "set up AGENTS.md from scratch" | init → edit brief → compile → review the 18 files |
-| [`project-spine-drift`](./project-spine-drift/SKILL.md) | "drift", "stale AGENTS.md", "agent instructions out of date", "CI drift check" | drift check semantics, `--push` for CI, how to resolve each drift type |
-| [`project-spine-template`](./project-spine-template/SKILL.md) | "use our agency template", "pull team starter", "apply workspace template" | login → workspace switch → template pull → init from template |
-| [`project-spine-rationale`](./project-spine-rationale/SKILL.md) | "share project rationale with client", "publish a branded project summary", "send client overview" | compile → publish rationale → revoke when engagement ends |
-| [`project-spine-workspace`](./project-spine-workspace/SKILL.md) | "join workspace", "share templates with teammates", "invite teammate" | workspace create + invite + members flow |
+| [`project-spine-kickoff`](./project-spine-kickoff/SKILL.md) | "new client project", "start a project", "set up AGENTS.md from scratch" | init → edit brief → compile → review the 19 generated files |
+| [`project-spine-drift`](./project-spine-drift/SKILL.md) | "drift", "stale AGENTS.md", "agent instructions out of date", "CI drift check" | drift check semantics and how to resolve each drift type |
+| [`project-spine-template`](./project-spine-template/SKILL.md) | "use our agency template", "save this as a template", "apply the shared saas-marketing starter" | bundled/user/project templates → init from template |
+| [`project-spine-rationale`](./project-spine-rationale/SKILL.md) | "share project rationale with client", "review rationale.md", "send client overview" | review the generated local rationale safely before sharing |
+| [`project-spine-workspace`](./project-spine-workspace/SKILL.md) | "workspace", "login", "publish rationale", "drift push" | guardrail: hosted workspace commands are dormant in the public OSS CLI |
 
 ## Design principles these skills follow
 
@@ -56,9 +56,9 @@ Each skill is a single self-contained `SKILL.md` with frontmatter. Paste the rel
 
 ## Compatibility
 
-- CLI version: **`project-spine@0.8.1-alpha.0`** or later (compile, drift, workspace, template, rationale, publish are all referenced).
+- CLI version: **`project-spine@0.9.2-alpha.0`** or later.
 - Runtime: Node ≥ 20.
-- Hosted features (workspace, rationale, drift push) require `spine login` first; the skills detect this and instruct the agent accordingly.
+- Hosted features are dormant in the public OSS CLI; the workspace skill exists to stop agents from inventing commands.
 
 ## Contributing
 

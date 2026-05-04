@@ -3,7 +3,7 @@ import { dirname } from "node:path";
 
 /** @type {import('next').NextConfig} */
 
-// The Content-Security-Policy header is set per-request in middleware.ts so
+// The Content-Security-Policy header is set per-request in proxy.ts so
 // it can include a fresh nonce. Static headers here cover everything that
 // doesn't need per-request variance.
 const nextConfig = {

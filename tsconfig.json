@@ -21,5 +21,19 @@
     "verbatimModuleSyntax": true
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "**/*.test.ts", "examples", "templates"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.test.ts",
+    "examples",
+    "templates",
+    "src/cli-client/**/*",
+    "src/commands/login.ts",
+    "src/commands/logout.ts",
+    "src/commands/publish.ts",
+    "src/commands/rationale.ts",
+    "src/commands/whoami.ts",
+    "src/commands/workspace.ts",
+    "src/templates/workspace-sync.ts"
+  ]
 }

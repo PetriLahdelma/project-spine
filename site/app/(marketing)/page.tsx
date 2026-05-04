@@ -12,6 +12,7 @@ export const metadata: Metadata = {
     "AGENTS.md",
     "CLAUDE.md",
     "copilot-instructions",
+    "Cursor rules",
     "AI coding agent context",
     "context compiler",
     "spine.json",
@@ -28,7 +29,7 @@ const LANDING_JSON_LD = {
   applicationCategory: "DeveloperApplication",
   operatingSystem: "macOS, Linux, Windows",
   description:
-    "Project Spine compiles a client brief, a repo, and optional design inputs into a repo-native operating layer: AGENTS.md, CLAUDE.md, copilot-instructions, scaffold plan, QA guardrails, and a sprint-1 backlog — with drift detection.",
+    "Project Spine compiles a client brief, a repo, and optional design inputs into a repo-native operating layer: AGENTS.md, CLAUDE.md, copilot-instructions, Cursor rules, scaffold plan, QA guardrails, and a sprint-1 backlog — with drift detection.",
   url: SITE,
   author: { "@type": "Organization", name: "Project Spine", url: SITE },
   offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
@@ -139,7 +140,7 @@ const CLAUDE_POINTS: React.ReactNode[] = [
   <>No memory of the brief you signed three months ago.</>,
   <>
     Writes <code>CLAUDE.md</code> well. Doesn&apos;t own the Cursor or Copilot
-    file.
+    project files.
   </>,
   <>No sha256 chain, no source pointers, no audit trail.</>,
   <>Can&apos;t fail CI when your instructions drift from the brief.</>,
@@ -155,8 +156,8 @@ const SPINE_POINTS: React.ReactNode[] = [
     lifecycle drift.
   </>,
   <>
-    One source fans out to <code>AGENTS.md</code>, <code>CLAUDE.md</code>, and
-    copilot-instructions.
+    One source fans out to <code>AGENTS.md</code>, <code>CLAUDE.md</code>,{" "}
+    copilot-instructions, and <code>.cursor/rules/project-spine.mdc</code>.
   </>,
   <>
     Every rule carries a source pointer back to{" "}
@@ -192,7 +193,8 @@ export default async function Home() {
         <div className="hero-band__inner">
           <p className="hero-band__lede">
             Compile your brief, repo, and design tokens into AGENTS.md,
-            CLAUDE.md, and copilot-instructions from one deterministic source.
+            CLAUDE.md, copilot-instructions, and Cursor rules from one
+            deterministic source.
             With drift detection that fails CI before it fails trust.
           </p>
           <div className="hero-band__install">
@@ -257,7 +259,7 @@ export default async function Home() {
           <span className="tok-val">   2 </span>
           <span className="tok-dim">(0 error, 1 warn, 1 info)</span>
           {"\n\n"}
-          <span className="tok-dim">wrote 19 files under ./.project-spine and repo root.</span>
+          <span className="tok-dim">wrote 21 files under ./.project-spine and repo root.</span>
           {"\n\n"}
           <span className="tok-prompt">$ </span>
           <span className="tok-command">spine drift check --fail-on any</span>
@@ -274,7 +276,7 @@ export default async function Home() {
             <span className="section-header__num">01</span>
             <span className="section-header__label">Output</span>
           </div>
-          <h2>Nineteen files, every agent, all drift-tracked.</h2>
+          <h2>Twenty-one files, every agent, all drift-tracked.</h2>
           <p className="sub">
             Run <code>spine compile</code> once. Everything below is generated
             with source pointers back to your brief, and hashed into a
@@ -302,6 +304,11 @@ export default async function Home() {
               <span className="filetree__icon filetree__icon--rule" aria-hidden="true" />
               <span className="filetree__name">.github/copilot-instructions.md</span>
               <span className="filetree__sha">92b4711f3e6c0d12</span>
+            </li>
+            <li className="filetree__item">
+              <span className="filetree__icon filetree__icon--rule" aria-hidden="true" />
+              <span className="filetree__name">.cursor/rules/project-spine.mdc</span>
+              <span className="filetree__sha">7bf46ac330f18d2e</span>
             </li>
             <li className="filetree__group-label">.project-spine/exports</li>
             <li className="filetree__item">

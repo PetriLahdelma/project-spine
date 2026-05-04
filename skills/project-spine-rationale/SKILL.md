@@ -1,99 +1,53 @@
 ---
 name: project-spine-rationale
-description: Use when the user wants to publish a branded, client-facing project summary at a shareable URL — phrases like "share the rationale with the client", "send a project overview link", "publish the brief for external viewing", "give the client a project summary page". For setting up a workspace use project-spine-workspace; for revoking an old rationale also use this skill.
+description: Use when the user wants to review, polish, or share the generated Project Spine rationale file locally. Phrases like "show the project rationale", "send the client a project summary", "review rationale.md", or "make the client-facing overview safer".
 ---
 
-# Publish a client-facing rationale URL
+# Local rationale review
 
-**Goal:** generate a public, unguessable, revocable URL at `projectspine.dev/r/<slug>` that renders the compiled `rationale.md` with the workspace's brand color. Use it as a leave-behind after a kickoff call, a sales artifact, or a client-facing project overview.
+**Goal:** help the user review `.project-spine/exports/rationale.md` before they share it through their normal channel. The public OSS CLI generates the file locally; it does not publish hosted rationale URLs.
 
 ## Prerequisites
 
 1. Project compiled — `.project-spine/exports/rationale.md` exists. If not, switch to project-spine-kickoff.
-2. User signed in — `spine whoami` returns a user. If not, run `spine login`.
-3. Active workspace — `spine workspace current` returns a slug. If not, create or join one (project-spine-workspace).
+2. Generated outputs are current — run `spine drift check` first if the user mentions stale instructions or changed inputs.
 
-## Publish
-
-```bash
-spine publish rationale
-```
-
-Defaults:
-
-- Project name: taken from `spine.metadata.name` in `spine.json`.
-- Title: `"<project-name> — Project rationale"`.
-- Workspace: the active one.
-
-Overrides:
+## Step 1 — inspect the rationale
 
 ```bash
-spine publish rationale \
-  --workspace my-agency \
-  --title "Acme Payroll — kickoff context"
+sed -n '1,220p' .project-spine/exports/rationale.md
 ```
 
-The CLI prints:
+Review the headings and content with the user. Do not paste the whole file into a public channel unless they explicitly ask.
 
-```
-created rationale for "Acme demo" in workspace "my-agency"
+## Step 2 — check client-safety
 
-  https://projectspine.dev/r/4gHsVAQ7dtQcoQ
+Before the user shares the rationale, call out these sections:
 
-  content hash: sha256:df6d...
-  revoke with: spine rationale revoke 4gHsVAQ7dtQcoQ
-```
+- **Risks** — may contain internal language that should be softened.
+- **Constraints** — may mention vendor costs, private process, or trade secrets.
+- **Warnings** — may reveal missing brief details or repo uncertainty.
+- **Assumptions** — should be phrased as assumptions, not promises.
 
-**Copy the URL** and share it with the client. The slug is unguessable (10 bytes base64url).
+If anything needs changing, edit the upstream `brief.md` or design inputs and rerun `spine compile`. Do not hand-edit `rationale.md` unless the user accepts that drift will be reported later.
 
-## Re-publish after changes
+## Step 3 — prepare a shareable note
 
-The rationale is upserted by `(workspace, project_name)`. Re-running `spine publish rationale` after a recompile **updates the same URL** — the slug stays stable so you don't have to resend the link.
+If the file is safe, summarize it into a short client note:
 
-## Page properties
-
-What the public URL looks like:
-
-- Workspace name + brand color at the top.
-- Markdown rendered with `sanitize-html` (no inline `<script>` can execute).
-- `robots: noindex, nofollow` — not crawled by search engines.
-- Anyone with the URL can read it; that's the accepted tradeoff.
-
-## List published rationales
-
-```bash
-spine rationale list
-spine rationale list --show-revoked    # include previously-revoked
+```text
+Here is the Project Spine rationale generated from the current brief and repo.
+It captures goals, audience, constraints, assumptions, risks, stack summary,
+and the first scaffold direction. The generated files are local and versionable;
+future drift is checked with `spine drift check`.
 ```
 
-## Revoke
+## Hosted publishing status
 
-When the engagement ends or you published something by mistake:
-
-```bash
-spine rationale revoke <public-slug>
-```
-
-The URL returns 404 immediately. The row is soft-deleted (retained for audit).
-
-## Before publishing — reality check with the user
-
-**Always** confirm with the user before the first publish:
-
-> The rationale at `.project-spine/exports/rationale.md` will be public at a URL only people you share it with can find. It will include these sections: goals, audience, constraints, assumptions, risks, stack summary. Want me to publish?
-
-Show them the rationale file content (or at least the headings) first. Give them a chance to say "let me edit `brief.md` first" — the published URL should not contain anything the client shouldn't see.
-
-Specifically call out:
-
-- **Risks** section — often candid language that's internal-team only.
-- **Constraints** — sometimes lists vendor-specific costs or trade secrets.
-- **Warnings** — if the brief was incomplete, warnings may surface.
-
-If in doubt, offer: *"I can revoke it any time with `spine rationale revoke <slug>`."*
+Do not tell users to run `spine publish rationale`, `spine rationale list`, or `spine rationale revoke` in the public OSS CLI. Those hosted commands exist in dormant source files but are intentionally not routed from `spine --help`.
 
 ## What NOT to do
 
-- Don't publish a rationale that includes credentials, internal URLs, or trade secrets. The scrubber doesn't run on rationales (it's an opt-in layer for LLM prompts). The user is responsible for the content of their brief.
-- Don't publish without a compile first — the rationale is generated from `spine.json`, not from the brief directly.
-- Don't share the URL in public tickets or mailing lists where search-engine-indexable backlinks might leak the slug.
+- Do not publish or share rationale content that includes credentials, internal URLs, PII, or trade secrets.
+- Do not manually edit generated rationale files as the canonical fix. Edit inputs and recompile.
+- Do not claim there is a hosted branded URL flow in the public CLI.

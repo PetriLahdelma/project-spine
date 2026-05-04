@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1270" height="760" viewBox="0 0 1270 760">
+  <rect width="1270" height="760" fill="#07070a"/>
+
+
+  <rect x="72" y="66" width="267.6" height="34" rx="17" fill="#d7ff59" opacity="0.14"/>
+  <text x="86" y="89" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#d7ff59">CI-ready drift detection</text>
+  <text x="72" y="148" font-family="Arial, sans-serif" font-size="54" font-weight="900" fill="#f7f4ee">
+    <tspan x="72" dy="0">Treat agent instructions</tspan>
+    <tspan x="72" dy="64">like code, not stale</tspan>
+    <tspan x="72" dy="64">notes.</tspan>
+  </text>
+  <rect x="72" y="300" width="520" height="300" rx="24" fill="#101116" stroke="#30323d" stroke-width="2"/>
+  <text x="112" y="362" font-family="Arial, sans-serif" font-size="32" font-weight="900" fill="#ff6b6b">brief.md changed</text>
+  <text x="112" y="428" font-family="Menlo, Consolas, monospace" font-size="25" font-weight="700" fill="#ff6b6b">- AGENTS.md hash old</text>
+  <text x="112" y="478" font-family="Menlo, Consolas, monospace" font-size="25" font-weight="700" fill="#d7ff59">+ AGENTS.md hash new</text>
+  <text x="112" y="528" font-family="Menlo, Consolas, monospace" font-size="25" font-weight="700" fill="#f7f4ee">drift check exits 1</text>
+  <rect x="676" y="300" width="520" height="300" rx="24" fill="#101116" stroke="#30323d" stroke-width="2"/>
+  <text x="716" y="362" font-family="Arial, sans-serif" font-size="32" font-weight="900" fill="#45f4ff">reviewer sees why</text>
+  <text x="716" y="428" font-family="Menlo, Consolas, monospace" font-size="25" font-weight="700" fill="#f7f4ee">source: brief.md#section0/item3</text>
+  <text x="716" y="478" font-family="Menlo, Consolas, monospace" font-size="25" font-weight="700" fill="#f7f4ee">source: repo-profile#framework</text>
+  <text x="716" y="528" font-family="Menlo, Consolas, monospace" font-size="25" font-weight="700" fill="#f7f4ee">source: template:api-service</text>
+</svg>

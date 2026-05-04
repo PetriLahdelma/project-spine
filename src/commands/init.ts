@@ -4,9 +4,12 @@ import { join } from "node:path";
 import { getTemplate } from "../templates/registry.js";
 import { printBanner } from "../ui/banner.js";
 
+const TEMPLATE_HELP =
+  "saas-marketing | app-dashboard | design-system | docs-portal | api-service | monorepo";
+
 const defaultBrief = `---
 name: ""
-projectType: "" # saas-marketing | app-dashboard | design-system | docs-portal | other
+projectType: "" # ${TEMPLATE_HELP} | other
 ---
 
 # Project brief
@@ -39,7 +42,7 @@ export default defineCommand({
     cwd: { type: "string", description: "Directory to initialize", default: "." },
     template: {
       type: "string",
-      description: "Preset: saas-marketing | app-dashboard | design-system | docs-portal",
+      description: `Preset: ${TEMPLATE_HELP}`,
       required: false,
     },
     force: { type: "boolean", description: "Overwrite existing brief.md", default: false },

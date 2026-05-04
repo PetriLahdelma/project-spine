@@ -1,15 +1,15 @@
 ---
 name: project-spine-kickoff
-description: Use when the user wants to set up Project Spine for a new project — phrases like "new client project", "kickoff", "create AGENTS.md from scratch", "generate agent instructions for this repo", "set up project context". Runs `spine init` → edits brief → `spine compile` → reviews outputs. For team workspaces use project-spine-workspace instead; for stale files use project-spine-drift.
+description: Use when the user wants to set up Project Spine for a new project — phrases like "new client project", "kickoff", "create AGENTS.md from scratch", "generate agent instructions for this repo", "set up project context". Runs `spine init` → edits brief → `spine compile` → reviews outputs. For stale files use project-spine-drift.
 ---
 
 # Kickoff flow for a new project
 
-**Goal:** produce the 18 canonical Project Spine files (`AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, plus scaffold/QA/rationale docs) from a real brief + the current repo.
+**Goal:** produce the 21 canonical Project Spine files (`AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, `.cursor/rules/project-spine.mdc`, plus scaffold/QA/rationale docs) from a real brief + the current repo.
 
 ## Prerequisites — check before proceeding
 
-1. CLI installed: `spine --version` returns `0.8.1-alpha.0` or later
+1. CLI installed: `spine --version` returns `0.9.2-alpha.0` or later
 2. Current directory is the project root (has `package.json` or equivalent)
 3. No `.project-spine/` directory yet (if there is, this is probably a **drift** scenario — switch to project-spine-drift)
 
@@ -27,6 +27,8 @@ Bundled templates cover these project types:
 - `app-dashboard` — authenticated product with data tables, settings, role gating
 - `design-system` — component library, tokens, Storybook
 - `docs-portal` — technical documentation site
+- `api-service` — Node / TypeScript API service with health and readiness probes
+- `monorepo` — pnpm / Turborepo / Nx workspace guidance
 
 If the user mentions one of these project types, pick the matching template. If they describe something unusual (extension, CLI tool, data pipeline), skip the template and compile without it — the brief carries the intent.
 
@@ -97,9 +99,9 @@ Ask: **"Does this match what you had in mind? Anything worth editing in `brief.m
 ## Common follow-ups
 
 - **"The stack is wrong"** → `spine inspect --repo .` to see what was detected; edit repo state (add framework dep) or pass explicit `--template`, then recompile.
-- **"I want to commit these files"** → The repo-root `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md` are the canonical tool-discovery locations. Commit them. Gitignore `.project-spine/` internals if desired.
-- **"How do I share this with my team?"** → Switch to project-spine-workspace skill.
-- **"How do I send a client-facing version?"** → Switch to project-spine-rationale skill.
+- **"I want to commit these files"** → The repo-root `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, and `.cursor/rules/project-spine.mdc` are the canonical tool-discovery locations. Commit them. Gitignore `.project-spine/` internals if desired.
+- **"How do I share this with my team?"** → Save a project-local template with `spine template save --location project`, or use your normal VCS flow.
+- **"How do I send a client-facing version?"** → Switch to project-spine-rationale skill to review the generated `.project-spine/exports/rationale.md` locally.
 
 ## What NOT to do
 

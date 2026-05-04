@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     siteName: "Project Spine",
     title: "About · Project Spine",
     description: "Who makes Project Spine, why it exists, and how to get in touch.",
-    images: [{ url: "/banner.png", width: 2400, height: 1500, alt: "Project Spine" }],
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Project Spine" }],
   },
 };
 
@@ -47,8 +47,9 @@ export default function AboutPage() {
         canonical, content-addressable <code>spine.json</code>. Every rule
         carries a source pointer so reviewers can audit <em>why</em> a rule
         exists. A drift check in CI fails the build when the generated files
-        no longer match the inputs. The CLI is deterministic and offline;
-        only the optional hosted workspace touches the network.
+        no longer match the inputs. The core CLI is deterministic and offline;
+        network access is limited to explicit opt-in commands such as Figma
+        token pull or LLM enrichment.
       </p>
 
       <h2>The maintainer</h2>

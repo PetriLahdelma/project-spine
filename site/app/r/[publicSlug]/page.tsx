@@ -133,8 +133,7 @@ export default async function RationalePage({ params }: { params: Promise<Params
           <a href="https://projectspine.dev" style={{ color: accent }}>
             Project Spine
           </a>
-          , compiled from brief, repo, and design inputs. Revoke anytime with{" "}
-          <code>spine rationale revoke</code>.
+          , compiled from brief, repo, and design inputs.
         </p>
       </footer>
 
