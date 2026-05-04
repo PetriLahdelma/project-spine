@@ -7,7 +7,7 @@ The moat piece. Generating instruction files is easy — keeping them aligned as
 At compile time, `spine compile` writes two things in addition to the exports:
 
 1. **`.project-spine/spine.json`** — the canonical model (already present).
-2. **`.project-spine/export-manifest.json`** — a per-file manifest recording the sha256 of every input (brief, design, template, repo-profile) and every export (`AGENTS.md`, `CLAUDE.md`, `copilot-instructions.md`, and each of the nine Markdown exports).
+2. **`.project-spine/export-manifest.json`** — a per-file manifest recording the sha256 of every input (brief, design, template, repo-profile) and every export (`AGENTS.md`, `CLAUDE.md`, `copilot-instructions.md`, `project-spine.mdc`, and each canonical export).
 
 At check time, `spine drift check` re-runs the deterministic pipeline, computes fresh hashes, and compares them against the manifest.
 
@@ -39,14 +39,9 @@ spine drift check --json
 # stricter — fail when any export is hand-edited (default is any drift)
 spine drift check --fail-on any
 
-# push the snapshot to the active workspace fleet view
-spine drift check --push
-
-# push to a specific workspace and project slug
-spine drift check --push --workspace my-agency --project acme-site
 ```
 
-`--push` is non-fatal for the drift check's own exit-code semantics — if the upload fails, the local check result still determines success/failure. That makes it safe to drop into CI today.
+The public OSS CLI does not route hosted drift push. Keep drift checks local in CI and upload `.project-spine/drift-report.md` as a normal build artifact if you want reviewer visibility.
 
 ## CI integration
 
@@ -64,6 +59,7 @@ on:
       - "AGENTS.md"
       - "CLAUDE.md"
       - ".github/copilot-instructions.md"
+      - ".cursor/rules/project-spine.mdc"
       - "package.json"
       - "tsconfig.json"
 
@@ -76,19 +72,10 @@ jobs:
         with:
           node-version: 20
       - run: npm install -g project-spine
-      - run: spine drift check --push --fail-on any --json | tee drift.json
-        env:
-          # Generated once via `spine login` + `cat ~/.project-spine/config.json`;
-          # store as a GitHub Actions secret.
-          SPINE_API_TOKEN: ${{ secrets.SPINE_API_TOKEN }}
-          SPINE_WORKSPACE: my-agency
-      - name: Fail on drift
+      - name: Check drift
         run: |
-          code=$?
-          if [ "$code" != "0" ]; then
-            echo "::warning::Project Spine detected drift. See drift-report.md in artifacts."
-            exit "$code"
-          fi
+          set -o pipefail
+          spine drift check --fail-on any --json | tee drift.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -98,7 +85,7 @@ jobs:
             drift.json
 ```
 
-> **Auth in CI.** The `spine` CLI reads its token from `~/.project-spine/config.json`. In CI, either mount the token via `SPINE_API_TOKEN` and bootstrap the config file in a pre-step, or skip `--push` entirely if the team prefers the drift check to stay local.
+> **No hosted auth required.** `spine drift check` is local and deterministic. CI does not need a Project Spine token.
 
 ## Design invariants
 

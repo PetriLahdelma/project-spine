@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
+  <rect width="600" height="600" fill="#07070a"/>
+
+  <rect x="32" y="32" width="536" height="536" rx="72" fill="#101116" stroke="#30323d" stroke-width="2"/>
+  <circle cx="470" cy="126" r="78" fill="#45f4ff" opacity="0.2"/>
+  <circle cx="140" cy="470" r="96" fill="#ff4fb4" opacity="0.22"/>
+
+  <text x="74" y="190" font-family="Arial Black, Arial, sans-serif" font-size="60.900000000000006" font-weight="900" letter-spacing="0" fill="#f7f4ee">PROJECT</text>
+  <text x="74" y="244.81" font-family="Arial Black, Arial, sans-serif" font-size="60.900000000000006" font-weight="900" letter-spacing="0" fill="#ff4fb4">SPINE</text>
+  <text x="74" y="362" font-family="Arial, sans-serif" font-size="32" font-weight="800" fill="#f7f4ee">
+    <tspan x="74" dy="0">Drift-proof context for</tspan>
+    <tspan x="74" dy="42">coding agents</tspan>
+  </text>
+
+  <rect x="74" y="486" width="90.8" height="34" rx="17" fill="#d7ff59" opacity="0.14"/>
+  <text x="88" y="509" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#d7ff59">MIT CLI</text>
+</svg>

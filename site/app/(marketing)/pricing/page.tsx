@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     siteName: "Project Spine",
     title: "Pricing · Project Spine",
     description: "Free. Open source under MIT.",
-    images: [{ url: "/banner.png", width: 2400, height: 1500, alt: "Project Spine" }],
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Project Spine" }],
   },
 };
 

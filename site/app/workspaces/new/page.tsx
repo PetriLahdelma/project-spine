@@ -51,9 +51,10 @@ export default async function NewWorkspacePage({
             {isWelcome ? "Welcome. Let\u2019s set up your workspace." : "Create a workspace"}
           </h1>
           <p style={{ color: "var(--ink-soft)", fontSize: 16, lineHeight: 1.55, margin: 0, maxWidth: 560 }}>
-            A workspace is where your team shares templates, publishes client-facing
-            rationales, and sees drift reports pushed from CI. One workspace per team
-            is the expected shape.
+            Hosted workspaces are an experimental surface and are not part of
+            the public OSS CLI launch path. For now, teams should share
+            project-local templates in git and keep drift reports as CI
+            artifacts.
           </p>
         </header>
 
@@ -67,15 +68,17 @@ export default async function NewWorkspacePage({
             <li>You land on your workspace dashboard as the owner.</li>
             <li>
               You install the CLI (<code>npm install -g project-spine@next</code>) and
-              run <code>spine login</code> to pair your machine.
+              use the local <code>init</code>, <code>compile</code>, template, and drift commands.
             </li>
             <li>
-              Run <code>spine template save --location workspace --name …</code> to
-              push a shared template, or invite teammates from the dashboard.
+              Run <code>spine template save --location project --name ...</code> to
+              commit a shared template with the repo, or invite teammates to review
+              the generated outputs in git.
             </li>
             <li>
-              Publish client-facing rationales with <code>spine publish rationale</code>
-              , push CI drift with <code>spine drift check --push</code>.
+              Share <code>.project-spine/exports/rationale.md</code> with clients
+              and upload <code>.project-spine/drift-report.md</code> from CI when
+              reviewer visibility is needed.
             </li>
           </ol>
           <p style={{ marginTop: 20, fontSize: 14, color: "var(--ink-muted)" }}>

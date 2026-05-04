@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1270" height="760" viewBox="0 0 1270 760">
+  <rect width="1270" height="760" fill="#07070a"/>
+
+
+  <rect x="72" y="66" width="132.4" height="34" rx="17" fill="#45f4ff" opacity="0.14"/>
+  <text x="86" y="89" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#45f4ff">One command</text>
+  <text x="72" y="148" font-family="Arial, sans-serif" font-size="54" font-weight="900" fill="#f7f4ee">
+    <tspan x="72" dy="0">Generate the operating</tspan>
+    <tspan x="72" dy="64">layer agents actually</tspan>
+    <tspan x="72" dy="64">load.</tspan>
+  </text>
+
+  <rect x="72" y="306" width="780" height="364" rx="22" fill="#101116" stroke="#30323d" stroke-width="2"/>
+  <circle cx="106" cy="340" r="8" fill="#ff6b6b"/>
+  <circle cx="132" cy="340" r="8" fill="#ffd166"/>
+  <circle cx="158" cy="340" r="8" fill="#78f59c"/>
+  <text x="106" y="392" font-family="Menlo, Consolas, monospace" font-size="24" font-weight="700" fill="#45f4ff">$ spine compile --brief ./brief.md --repo .</text>
+<text x="106" y="431" font-family="Menlo, Consolas, monospace" font-size="24" font-weight="700" fill="#f7f4ee">compiled spine for &quot;acme-payroll&quot; v0.1.0</text>
+<text x="106" y="470" font-family="Menlo, Consolas, monospace" font-size="24" font-weight="700" fill="#f7f4ee">agent files: AGENTS.md 5.5 KB, CLAUDE.md 2.3 KB</text>
+<text x="106" y="509" font-family="Menlo, Consolas, monospace" font-size="24" font-weight="700" fill="#f7f4ee">             Copilot 2.9 KB, Cursor 868 B</text>
+<text x="106" y="548" font-family="Menlo, Consolas, monospace" font-size="24" font-weight="700" fill="#d7ff59">wrote 21 files under ./.project-spine and repo root</text>
+  <rect x="910" y="110" width="286" height="520" rx="26" fill="#101116" stroke="#30323d" stroke-width="2"/>
+  <text x="946" y="178" font-family="Arial, sans-serif" font-size="96" font-weight="900" fill="#ff4fb4">21</text>
+  <text x="946" y="248" font-family="Arial, sans-serif" font-size="25" font-weight="800" fill="#f7f4ee">
+    <tspan x="946" dy="0">generated</tspan>
+    <tspan x="946" dy="32">files from one</tspan>
+    <tspan x="946" dy="32">deterministic</tspan>
+    <tspan x="946" dy="32">source</tspan>
+  </text>
+  <text x="946" y="410" font-family="Arial, sans-serif" font-size="88" font-weight="900" fill="#45f4ff">0</text>
+  <text x="946" y="470" font-family="Arial, sans-serif" font-size="25" font-weight="800" fill="#f7f4ee">
+    <tspan x="946" dy="0">network calls</tspan>
+    <tspan x="946" dy="32">in compile</tspan>
+    <tspan x="946" dy="32">path</tspan>
+  </text>
+</svg>

@@ -43,7 +43,7 @@ The briefs live alongside their snapshots (`project-spine/brief.md`, `api-servic
 
 ## What's in each folder
 
-Every snapshot is the full 19-file output of a compile run:
+Every snapshot is the full 21-file output of a compile run:
 
 | File | Purpose |
 |---|---|
@@ -51,6 +51,7 @@ Every snapshot is the full 19-file output of a compile run:
 | `AGENTS.md` | Agent instructions per [agents.md](https://agents.md/) convention. |
 | `CLAUDE.md` | Claude Code instruction file with `@import` links to deeper docs. |
 | `copilot-instructions.md` | Self-contained Copilot instructions. |
+| `cursor-project-rule.mdc` | Cursor project rule that imports the generated operating contract. |
 | `architecture-summary.md` | Detected stack, conventions, tool presence. |
 | `brief-summary.md` | Normalized brief for human review. |
 | `scaffold-plan.md` | Routes, component buckets, sprint-1 seed. |

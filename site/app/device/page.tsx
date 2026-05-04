@@ -3,16 +3,16 @@ import Link from "next/link";
 export const dynamic = "force-dynamic";
 
 const errors: Record<string, string> = {
-  "missing-code": "No code was submitted. Please enter the code shown in your terminal.",
-  "unknown-code": "That code wasn't found. Check for typos or try running `spine login` again.",
-  "already-used": "That code has already been used. Run `spine login` again to get a fresh one.",
-  expired: "That code expired. Codes last 15 minutes. Run `spine login` again.",
+  "missing-code": "No code was submitted. Please enter the legacy hosted-auth code shown in your terminal.",
+  "unknown-code": "That code wasn't found. Check for typos or request a fresh legacy hosted-auth code.",
+  "already-used": "That code has already been used. Request a fresh legacy hosted-auth code.",
+  expired: "That code expired. Codes last 15 minutes. Request a fresh legacy hosted-auth code.",
   "state-mismatch": "Something went wrong during the GitHub redirect. Please try again.",
   "bad-callback": "The GitHub callback was malformed. Please try again.",
   "oauth-exchange-failed":
     "Couldn't exchange the GitHub authorization code. This is usually a server config issue.",
   "device-code-unavailable":
-    "The device code expired or was already used between the approval and this redirect. Run `spine login` again.",
+    "The device code expired or was already used between the approval and this redirect. Request a fresh legacy hosted-auth code.",
 };
 
 export default async function DevicePage({
@@ -28,8 +28,10 @@ export default async function DevicePage({
     <main style={{ maxWidth: 520, margin: "0 auto", padding: "64px 24px" }}>
       <h1 style={{ fontSize: 28, letterSpacing: "-0.01em", marginBottom: 12 }}>Authorize your device</h1>
       <p style={{ color: "var(--ink-soft)", marginBottom: 32 }}>
-        Paste the code shown in your terminal after running <code>spine login</code>, then click{" "}
-        <strong>Authorize</strong>. You&apos;ll be redirected to GitHub to approve access.
+        This legacy hosted-auth flow is separate from the public OSS CLI launch path.
+        Paste a valid device code only if you are using an experimental hosted build,
+        then click <strong>Authorize</strong>. You&apos;ll be redirected to GitHub
+        to approve access.
       </p>
 
       {errorText && (

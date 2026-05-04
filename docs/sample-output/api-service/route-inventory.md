@@ -2,7 +2,7 @@
 
 > Proposed routes for the project, derived from project type and brief goals.
 
-_Generated from `spine.json` — hash `bcaf67e27f36d134`, project type `api-service`._
+_Generated from `spine.json` — hash `7040c29c1d1f2ab2`, project type `api-service`._
 
 <!-- spine:deterministic -->
 

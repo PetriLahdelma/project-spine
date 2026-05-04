@@ -3,8 +3,8 @@
     "name": "Project Spine",
     "version": "0.1.0",
     "schemaVersion": 1,
-    "createdAt": "2026-04-19T10:57:22.731Z",
-    "hash": "b5db78b43a41f5e7"
+    "createdAt": "2026-05-04T21:04:10.750Z",
+    "hash": "ce09cb93352dfefb"
   },
   "projectType": "other",
   "goals": [
@@ -169,7 +169,7 @@
       "storybook": false,
       "ci": {
         "githubActions": true,
-        "workflows": 2
+        "workflows": 3
       }
     }
   },
@@ -421,14 +421,6 @@
     ],
     "sprint1": [
       {
-        "id": "setup-2255a7f6",
-        "text": "Commit the Project Spine–generated `AGENTS.md`, `CLAUDE.md`, and `.github/copilot-instructions.md` after review.",
-        "source": {
-          "kind": "inference",
-          "pointer": "inferred:setup/agent-files"
-        }
-      },
-      {
         "id": "setup-e2afd63d",
         "text": "Pick and configure a linter (Biome or ESLint) with a minimal rule set.",
         "source": {
@@ -482,18 +474,6 @@
         }
       ],
       "suggestion": "Install the framework dependency explicitly (e.g., `npm i next`), or bootstrap from a framework starter before compiling."
-    },
-    {
-      "id": "repo:no-agent-files",
-      "severity": "info",
-      "message": "No agent instruction files found.",
-      "sources": [
-        {
-          "kind": "repo",
-          "pointer": "repo-profile"
-        }
-      ],
-      "suggestion": "Run `spine compile --brief ./brief.md --repo .` to generate AGENTS.md, CLAUDE.md, and copilot-instructions.md."
     }
   ]
 }

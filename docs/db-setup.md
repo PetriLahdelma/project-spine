@@ -1,6 +1,6 @@
-# Database setup — Project Spine hosted
+# Database setup — dormant hosted experiment
 
-This applies to the hosted workspace features (Phase 1 onward). The CLI itself is fully offline — it never touches a database.
+This applies only to the dormant hosted workspace experiment. The public OSS CLI does not route hosted workspace commands; its normal compile/drift/template path remains local-first and never touches a database.
 
 ## Provision Vercel Postgres
 

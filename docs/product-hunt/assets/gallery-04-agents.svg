@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1270" height="760" viewBox="0 0 1270 760">
+  <rect width="1270" height="760" fill="#07070a"/>
+
+
+  <rect x="72" y="66" width="184.4" height="34" rx="17" fill="#45f4ff" opacity="0.14"/>
+  <text x="86" y="89" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#45f4ff">Portable context</text>
+  <text x="72" y="148" font-family="Arial, sans-serif" font-size="54" font-weight="900" fill="#f7f4ee">
+    <tspan x="72" dy="0">One spine.json fans out to</tspan>
+    <tspan x="72" dy="64">every agent file.</tspan>
+  </text>
+
+  <rect x="72" y="346" width="260" height="236" rx="24" fill="#101116" stroke="#30323d" stroke-width="2"/>
+  <circle cx="126" cy="404" r="20" fill="#45f4ff" opacity="0.85"/>
+  <text x="106" y="470" font-family="Arial, sans-serif" font-size="32" font-weight="900" fill="#f7f4ee">Codex</text>
+  <text x="106" y="516" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#a4a7b5">
+    <tspan x="106" dy="0">AGENTS.md</tspan>
+  </text>
+
+  <rect x="364" y="346" width="260" height="236" rx="24" fill="#101116" stroke="#30323d" stroke-width="2"/>
+  <circle cx="418" cy="404" r="20" fill="#ff4fb4" opacity="0.85"/>
+  <text x="398" y="470" font-family="Arial, sans-serif" font-size="32" font-weight="900" fill="#f7f4ee">Claude</text>
+  <text x="398" y="516" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#a4a7b5">
+    <tspan x="398" dy="0">CLAUDE.md</tspan>
+  </text>
+
+  <rect x="656" y="346" width="260" height="236" rx="24" fill="#101116" stroke="#30323d" stroke-width="2"/>
+  <circle cx="710" cy="404" r="20" fill="#d7ff59" opacity="0.85"/>
+  <text x="690" y="470" font-family="Arial, sans-serif" font-size="32" font-weight="900" fill="#f7f4ee">Copilot</text>
+  <text x="690" y="516" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#a4a7b5">
+    <tspan x="690" dy="0">.github</tspan>
+    <tspan x="690" dy="30">instructions</tspan>
+  </text>
+
+  <rect x="948" y="346" width="260" height="236" rx="24" fill="#101116" stroke="#30323d" stroke-width="2"/>
+  <circle cx="1002" cy="404" r="20" fill="#9f7aea" opacity="0.85"/>
+  <text x="982" y="470" font-family="Arial, sans-serif" font-size="32" font-weight="900" fill="#f7f4ee">Cursor</text>
+  <text x="982" y="516" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#a4a7b5">
+    <tspan x="982" dy="0">.cursor/rules</tspan>
+    <tspan x="982" dy="30">project-spine.mdc</tspan>
+  </text>
+</svg>

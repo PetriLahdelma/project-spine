@@ -21,7 +21,7 @@ const STACKS: Record<string, StackCopy> = {
     runtime: "Next.js 14/15/16 (App Router)",
     tagline: "Agent instructions that know the App Router, Server Components, and Turbopack.",
     lede:
-      "Project Spine inspects your Next.js repo and compiles AGENTS.md, CLAUDE.md, and copilot-instructions.md that actually track the App Router conventions in your tree — not the Pages Router your agent half-remembers from 2023.",
+      "Project Spine inspects your Next.js repo and compiles AGENTS.md, CLAUDE.md, copilot-instructions.md, and a Cursor project rule that actually track the App Router conventions in your tree — not the Pages Router your agent half-remembers from 2023.",
     detects: [
       "App Router vs Pages Router",
       "Server / client component boundaries",
@@ -222,7 +222,7 @@ export async function generateMetadata({
   const { stack } = await params;
   const s = STACKS[stack];
   if (!s) return {};
-  const title = `Project Spine for ${s.label} · AGENTS.md, CLAUDE.md, copilot-instructions`;
+  const title = `Project Spine for ${s.label} · AGENTS.md, CLAUDE.md, Copilot, Cursor`;
   const description = `${s.tagline} Context compiler that inspects ${s.runtime} and emits deterministic agent instructions, scaffold plans, and drift checks.`;
   const url = `${SITE}/for/${s.slug}`;
   return {
@@ -235,9 +235,9 @@ export async function generateMetadata({
       title,
       description,
       siteName: "Project Spine",
-      images: [{ url: "/banner.png", width: 2400, height: 1500, alt: "Project Spine" }],
+      images: [{ url: "/og.png", width: 1200, height: 630, alt: "Project Spine" }],
     },
-    twitter: { card: "summary_large_image", title, description, images: ["/banner.png"] },
+    twitter: { card: "summary_large_image", title, description, images: ["/og.png"] },
     keywords: [
       `${s.label} AGENTS.md`,
       `${s.label} CLAUDE.md`,
@@ -305,7 +305,7 @@ export default async function StackPage({
         <span className="tok-prompt">$ </span>
         <span className="tok-command">spine compile --brief ./brief.md --repo .</span>
         {"\n"}
-        <span className="tok-success">✓</span> wrote <span className="tok-accent">AGENTS.md</span>, <span className="tok-accent">CLAUDE.md</span>, <span className="tok-accent">copilot-instructions.md</span>
+        <span className="tok-success">✓</span> wrote <span className="tok-accent">AGENTS.md</span>, <span className="tok-accent">CLAUDE.md</span>, <span className="tok-accent">copilot-instructions.md</span>, <span className="tok-accent">project-spine.mdc</span>
       </TerminalMock>
 
       <h2>Templates that fit {s.label}</h2>

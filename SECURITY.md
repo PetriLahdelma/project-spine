@@ -28,19 +28,20 @@ Please do **not** open a public issue for a suspected vulnerability.
 The CLI is designed to minimize exposure:
 
 - **No implicit network calls** for compile, drift, or export. The CLI reads your repo and writes files locally only.
-- **No repo content uploaded** unless you explicitly opt into a workspace (`spine template save --location workspace`, `spine publish rationale`, `spine drift check --push`).
-- **LLM enrichment, when it lands, is opt-in** and requires an explicit API key in your environment. Content sent to an LLM is run through a secrets scrubber (`.env` contents, common key patterns); don't rely on this as your only line of defense.
+- **No repo upload path** in the routed OSS CLI. Project Spine does not upload source, briefs, generated exports, or drift reports as part of `init`, `compile`, `inspect`, `export`, `template`, `explain`, or `drift`.
+- **Network calls are explicit.** `spine tokens pull` calls Figma only when you pass a file key/URL and set `FIGMA_TOKEN`; `spine compile --enrich` calls Anthropic only when you pass `--enrich` and set `ANTHROPIC_API_KEY`.
+- **LLM enrichment is opt-in** and requires an explicit API key in your environment. Content sent to an LLM is run through a secrets scrubber (`.env` contents, common key patterns); don't rely on this as your only line of defense.
 
 If you suspect the CLI is doing something it shouldn't, you can audit the compile pipeline in `src/compiler/compile.ts`. Phases 1–3 are deterministic and network-free by design.
 
 ## Security posture — hosted service (projectspine.dev)
 
-The hosted service at `projectspine.dev` exists to sync templates, publish rationales, and collect drift snapshots. It runs on Vercel (serverless Node.js + Edge CDN) with Postgres on Neon.
+The hosted service code is present in-tree but is dormant for the public OSS launch; hosted commands are intentionally not routed from `spine --help` and are excluded from the public npm build. The deployed site still contains legacy/authenticated endpoints for existing experiments. That surface runs on Vercel (serverless Node.js + Edge CDN) with Postgres on Neon.
 
 - **Authentication:** GitHub OAuth device flow for CLI. Bearer tokens are stored in `~/.project-spine/config.json` with `0600` permissions. Plaintext tokens are never written to the database — we store only sha256 hashes and compare at request time.
 - **OAuth state:** the `/api/auth/device/verify` → GitHub → `/api/auth/github/callback` hop uses a short-lived HttpOnly, Secure, SameSite=Lax cookie and a bound device_code to prevent cross-device session fixation.
 - **Authorization:** every workspace API route requires both a valid bearer and membership. Non-members get 404 (not 403), so workspace existence is not leaked.
-- **Public rationales:** URLs use an unguessable 10-byte base64url slug. They can be revoked anytime with `spine rationale revoke`. Revoked rows soft-delete; the public URL returns 404. Rationales set `noindex, nofollow`.
+- **Public rationales:** URLs use an unguessable 10-byte base64url slug. Revoked rows soft-delete; the public URL returns 404. Rationales set `noindex, nofollow`.
 - **Input validation:** every JSON API body goes through a zod schema before touching the database.
 - **Transport:** HTTPS only. `.dev` is HSTS-preloaded by the root TLD; we additionally send our own `Strict-Transport-Security: max-age=63072000; includeSubDomains; preload` header.
 - **Security headers:** `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin` on every response.
@@ -64,7 +65,7 @@ Operational details that matter to auditors:
 
 ## Data handling
 
-See the [privacy policy](https://projectspine.dev/privacy) for what we collect, where it's stored, and how to get it deleted. For CLI-only use the answer is simpler: nothing leaves your machine until you run a workspace command.
+See the [privacy policy](https://projectspine.dev/privacy) for what we collect, where it's stored, and how to get it deleted. For CLI-only use the answer is simpler: nothing leaves your machine until you explicitly run an opt-in network command such as `spine tokens pull` or `spine compile --enrich`.
 
 ## Supported versions
 

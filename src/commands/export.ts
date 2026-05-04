@@ -15,7 +15,7 @@ export default defineCommand({
     targets: {
       type: "string",
       description:
-        "Comma-separated targets: agents,claude,copilot,scaffold,routes,components,qa,backlog,rationale,all",
+        "Comma-separated targets: agents,claude,copilot,cursor,scaffold,routes,components,qa,backlog,rationale,all",
       default: "all",
     },
   },

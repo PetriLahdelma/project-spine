@@ -2,12 +2,13 @@
 
 > What 'done' means for this project. Every item here is actionable.
 
-_Generated from `spine.json` — hash `8976dc15b57e7f67`, project type `saas-marketing`._
+_Generated from `spine.json` — hash `9ea72686cdffd1cd`, project type `saas-marketing`._
 
 <!-- spine:deterministic -->
 
 ## Project-level checks
 
+- Unit tests live next to source as `*.test.ts`. Run `vitest run` in CI and before every commit touching business logic. <sup>`inference:inferred:vitest`</sup>
 - `tsc --noEmit` must pass on every PR. <sup>`inference:inferred:typecheck`</sup>
 - Success criterion to verify before launch: Homepage, 3 product pages, pricing, /compliance, /security, 2 case studies live. <sup>`brief:brief.md#section5/item0`</sup>
 - Success criterion to verify before launch: 99th-percentile page weight <250KB on mobile. <sup>`brief:brief.md#section5/item1`</sup>
@@ -38,8 +39,8 @@ _Generated from `spine.json` — hash `8976dc15b57e7f67`, project type `saas-mar
 - [ ] All interactive surfaces tested with keyboard only.
 - [ ] Screen reader pass on primary flows.
 - [ ] No new dependencies added without explicit rationale.
-- [ ] Generated files (`AGENTS.md`, `CLAUDE.md`, `copilot-instructions.md`) reflect the current spine hash.
+- [ ] Generated files (`AGENTS.md`, `CLAUDE.md`, `copilot-instructions.md`, `project-spine.mdc`) reflect the current spine hash.
 
 ## Open warnings
 
-- **[info] repo:no-agent-files** — No agent instruction files found.
+- **[warn] repo:framework-uncertain** — Framework detection confidence 0.4. Evidence: no framework dep; looks like a node library

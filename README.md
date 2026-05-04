@@ -22,7 +22,7 @@ Project Spine turns a client brief, a repo, and optional design-system inputs in
 
 ```
 brief.md ──┐
-repo/   ───┼──▶  spine.json ──▶  AGENTS.md + CLAUDE.md + copilot-instructions.md
+repo/   ───┼──▶  spine.json ──▶  AGENTS.md + CLAUDE.md + copilot-instructions.md + project-spine.mdc
 design.md ─┘                    scaffold-plan.md, qa-guardrails.md, sprint-1-backlog.md,
                                 component-plan.md, route-inventory.md, rationale.md
 ```
@@ -30,6 +30,8 @@ design.md ─┘                    scaffold-plan.md, qa-guardrails.md, sprint-1
 > **Status — v0.9.x (alpha).** The CLI works end-to-end: brief + repo + optional design + optional template → canonical `spine.json` + generated exports. Drift detection, design-token ingestion, and agent skills for Claude Code / Codex / Cursor are all live. Published here so the thinking and implementation are public from day one.
 
 See the full product thinking in [PRD.md](./PRD.md), the research evidence in [docs/research-citations.md](./docs/research-citations.md), and the "why not just Claude?" moat analysis in [docs/positioning.md](./docs/positioning.md).
+
+Product Hunt launch copy and generated gallery assets live in [docs/product-hunt-launch.md](./docs/product-hunt-launch.md).
 
 ---
 
@@ -79,7 +81,7 @@ spine compile --brief ./brief.md --repo . --template saas-marketing
 spine compile --brief ./brief.md --repo . --tokens ./tokens.json
 
 # 3. regenerate a subset without recompiling
-spine export --targets claude,copilot
+spine export --targets claude,copilot,cursor
 
 # 4. analyze any existing repo without a brief
 spine inspect --repo .
@@ -96,12 +98,13 @@ spine template show design-system
 
 ## What you get
 
-A single `spine compile` run writes **19 files**:
+A single `spine compile` run writes **21 files**:
 
 ```
 ./AGENTS.md                                  (agents.md convention — tool-discovery location)
 ./CLAUDE.md                                  (Claude Code — uses @import to keep lean)
 ./.github/copilot-instructions.md            (Copilot — self-contained)
+./.cursor/rules/project-spine.mdc            (Cursor — always-on project rule)
 
 ./.project-spine/
   spine.json                                 canonical machine-readable model (hashed)
@@ -110,7 +113,7 @@ A single `spine compile` run writes **19 files**:
   warnings.json                              ambiguities, conflicts, missing fields
   export-manifest.json                       hashed inventory used by `spine drift check`
   exports/
-    AGENTS.md, CLAUDE.md, copilot-instructions.md
+    AGENTS.md, CLAUDE.md, copilot-instructions.md, cursor-project-rule.mdc
     architecture-summary.md                  detected stack at a glance
     brief-summary.md                         normalized brief at a glance
     scaffold-plan.md                         routes, components, sprint-1 seed
@@ -180,7 +183,7 @@ Each template contributes routes, components, QA, UX, a11y, and agent rules — 
 
 ## Agent skills (for Claude Code, Codex CLI, Cursor)
 
-The [`skills/`](./skills/) directory ships six agent skills that teach your coding agent how to operate Project Spine end-to-end — kickoff, drift, templates, rationales, workspaces, plus an orientation skill that triggers on phrases like "new client project" or "AGENTS.md is stale".
+The [`skills/`](./skills/) directory ships six agent skills for Project Spine: active workflows for kickoff, drift, project-local templates, and local rationale review; a hosted-workspace guardrail for dormant commands; plus an orientation skill that triggers on phrases like "new client project" or "AGENTS.md is stale".
 
 ```bash
 # install into ~/.claude/skills (Claude Code)
@@ -233,7 +236,7 @@ Inputs, outputs, and more examples: [.github/actions/drift-check/README.md](./.g
 
 What's shipped (alpha train):
 
-- **v0.1–v0.2** — brief parser, repo inspector, deterministic exporters, 4 starter templates, `init` / `compile` / `inspect` / `export`.
+- **v0.1–v0.2** — brief parser, repo inspector, deterministic exporters, the first 4 starter templates, `init` / `compile` / `inspect` / `export`.
 - **v0.3** — `spine drift check` with CI-friendly `--fail-on`, idempotent compile, hash manifest.
 - **v0.8** — agent skills for Claude Code, Codex CLI, and Cursor (`skills/install.sh`).
 - **v0.9** — `--tokens` import for DTCG and Tokens Studio design tokens. `spine tokens pull` pulls directly from Figma Variables on Enterprise plans; [Tokens Studio plugin export](./docs/tokens.md#tokens-studio-plugin-path-team--pro--starter-plans) is the path on Team / Pro / Starter.
@@ -259,10 +262,11 @@ Project layout:
 src/
   analyzer/      stack + convention detection (§7.2 of the PRD)
   brief/         Markdown + frontmatter brief parser (§7.1)
-  cli-client/    auth + API client used by the hosted-tier commands (dormant)
+  cli-client/    auth + API client for dormant hosted experiments
   commands/      citty subcommands. Routed today:
                  init, compile, inspect, export, template, explain, drift.
-                 Unrouted while the hosted tier is dormant:
+                 Dormant hosted experiments are excluded from the public
+                 npm build while they remain unrouted:
                  login, logout, whoami, workspace, publish, rationale.
   compiler/      the rules compiler, hash, deterministic ID (§7.3)
   design/        design-rules parser + DTCG / Tokens Studio ingestion

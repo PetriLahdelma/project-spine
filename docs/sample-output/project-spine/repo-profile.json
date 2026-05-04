@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "root": "/Users/petrilahdelma/SAPDevelop/ProjectSpine",
-  "detectedAt": "2026-04-19T10:57:22.728Z",
+  "detectedAt": "2026-05-04T21:04:10.694Z",
   "packageManager": {
     "value": "npm",
     "confidence": 1,
@@ -59,19 +59,20 @@
     "githubActions": true,
     "workflows": [
       ".github/workflows/ci.yml",
-      ".github/workflows/drift.yml"
+      ".github/workflows/drift.yml",
+      ".github/workflows/release.yml"
     ],
     "other": [],
     "evidence": [
-      ".github/workflows/ (2 files)"
+      ".github/workflows/ (3 files)"
     ]
   },
   "agentFiles": {
-    "agentsMd": false,
-    "claudeMd": false,
-    "copilotInstructions": false,
-    "cursorRules": false,
-    "projectSpineDir": false
+    "agentsMd": true,
+    "claudeMd": true,
+    "copilotInstructions": true,
+    "cursorRules": true,
+    "projectSpineDir": true
   },
   "monorepo": {
     "isMonorepo": false,
@@ -81,7 +82,7 @@
   },
   "rawPackageJson": {
     "name": "project-spine",
-    "version": "0.9.1-alpha.0",
+    "version": "0.9.2-alpha.0",
     "description": "Context compiler for software projects. Turns brief + repo + design inputs into a repo-native operating layer.",
     "type": "module",
     "bin": {
@@ -97,18 +98,21 @@
       "dist",
       "templates",
       "skills",
+      "scripts/postinstall-hint.mjs",
       "README.md",
       "PRD.md"
     ],
     "scripts": {
-      "build": "tsc -p tsconfig.json",
+      "build": "node scripts/clean-dist.mjs && tsc -p tsconfig.json",
       "dev": "tsc -p tsconfig.json --watch",
       "start": "node dist/cli.js",
       "test": "vitest run",
       "test:watch": "vitest",
       "typecheck": "tsc --noEmit",
-      "lint": "eslint src",
-      "prepublishOnly": "npm run typecheck && npm test && npm run build"
+      "lint": "npm run typecheck",
+      "pack:check": "node scripts/check-public-package.mjs",
+      "prepublishOnly": "npm run typecheck && npm test && npm run build && npm run pack:check",
+      "postinstall": "node scripts/postinstall-hint.mjs"
     },
     "keywords": [
       "ai",
@@ -136,7 +140,6 @@
       "node": ">=20.0.0"
     },
     "dependencies": {
-      "@types/diff": "^8.0.0",
       "citty": "^0.2.2",
       "diff": "^9.0.0",
       "fast-glob": "^3.3.2",
@@ -165,12 +168,6 @@
       "severity": "warn",
       "message": "Framework detection confidence 0.4. Evidence: no framework dep; looks like a node library",
       "suggestion": "Install the framework dependency explicitly (e.g., `npm i next`), or bootstrap from a framework starter before compiling."
-    },
-    {
-      "id": "no-agent-files",
-      "severity": "info",
-      "message": "No agent instruction files found.",
-      "suggestion": "Run `spine compile --brief ./brief.md --repo .` to generate AGENTS.md, CLAUDE.md, and copilot-instructions.md."
     }
   ]
 }

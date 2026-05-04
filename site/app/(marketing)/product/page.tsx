@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     title: "Product · Project Spine",
     description:
       "Compile briefs, repos, and design tokens into verifiable agent instructions. Drift-aware, portable across Claude, Cursor, and Copilot.",
-    images: [{ url: "/banner.png", width: 2400, height: 1500, alt: "Project Spine" }],
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Project Spine" }],
   },
 };
 
@@ -26,16 +26,17 @@ export default function ProductPage() {
         <p className="lede">
           Project Spine reads a brief, a repo, and optional design tokens and
           writes <code>AGENTS.md</code>, <code>CLAUDE.md</code>,{" "}
-          <code>.github/copilot-instructions.md</code>, a scaffold plan, QA
-          guardrails, and a sprint-1 backlog. All with source pointers back
-          to the inputs, all covered by a drift check you can put in CI.
+          <code>.github/copilot-instructions.md</code>,{" "}
+          <code>.cursor/rules/project-spine.mdc</code>, a scaffold plan, QA
+          guardrails, and a sprint-1 backlog. All with source pointers back to
+          the inputs, all covered by a drift check you can put in CI.
         </p>
       </header>
 
       <h2>Pipeline</h2>
       <pre tabIndex={0}>
 {`brief.md   ──┐
-repo/      ──┼──▶  spine.json  ──▶  AGENTS.md + CLAUDE.md + copilot-instructions.md
+repo/      ──┼──▶  spine.json  ──▶  AGENTS.md + CLAUDE.md + copilot-instructions.md + project-spine.mdc
 tokens.json ─┤                     scaffold-plan.md · qa-guardrails.md ·
 design.md  ──┘                     sprint-1-backlog.md · rationale.md`}
       </pre>
@@ -54,10 +55,11 @@ design.md  ──┘                     sprint-1-backlog.md · rationale.md`}
         <li>
           <strong>Agent instructions that reflect reality.</strong>
           <span>
-            Generates <code>AGENTS.md</code>, <code>CLAUDE.md</code>, and{" "}
-            <code>.github/copilot-instructions.md</code> from your actual brief
-            and detected stack. Not generic boilerplate. Switch agents without
-            re-briefing.
+            Generates <code>AGENTS.md</code>, <code>CLAUDE.md</code>,{" "}
+            <code>.github/copilot-instructions.md</code>, and{" "}
+            <code>.cursor/rules/project-spine.mdc</code> from your actual
+            brief and detected stack. Not generic boilerplate. Switch agents
+            without re-briefing.
           </span>
         </li>
         <li>
@@ -87,29 +89,32 @@ design.md  ──┘                     sprint-1-backlog.md · rationale.md`}
           </span>
         </li>
         <li>
-          <strong>Four starter templates.</strong>
+          <strong>Six starter templates.</strong>
           <span>
             <code>saas-marketing</code>, <code>app-dashboard</code>,{" "}
-            <code>design-system</code>, <code>docs-portal</code>. Each
+            <code>design-system</code>, <code>docs-portal</code>,{" "}
+            <code>api-service</code>, and <code>monorepo</code>. Each
             contributes routes, components, QA, UX, a11y, and agent rules
-            additively, and you can save your own with{" "}
+            additively, and you can save your own locally with{" "}
             <code>spine template save</code>.
           </span>
         </li>
         <li>
-          <strong>Hosted workspace for teams.</strong>
+          <strong>No account in the critical path.</strong>
           <span>
-            Share templates across client projects, publish branded rationales
-            at <code>/r/&lt;slug&gt;</code>, push drift reports from CI into a
-            fleet view. GitHub OAuth, bearer tokens hashed, rate-limited.
+            The OSS CLI runs locally by default: compile, export, inspect,
+            templates, and drift checks do not upload your repo. The only
+            routed network command is <code>spine tokens pull</code>, and that
+            requires an explicit Figma token and file URL.
           </span>
         </li>
         <li>
           <strong>Agent skills for Claude Code, Codex, Cursor.</strong>
           <span>
             Ship <code>skills/</code> with six <code>SKILL.md</code> files that
-            teach your coding agent the kickoff / drift / template / rationale
-            / workspace flows.{" "}
+            teach your coding agent the active kickoff, drift, template, and
+            rationale-review flows, plus guardrails for dormant hosted-workspace
+            requests.{" "}
             <code>./skills/install.sh</code> symlinks them into{" "}
             <code>~/.claude/skills</code>.
           </span>

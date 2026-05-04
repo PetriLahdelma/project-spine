@@ -55,14 +55,14 @@ Type "# Brief scaffolded, minimal repo skeleton in place."
 Enter
 Sleep 1s
 
-# 3. Compile brief + repo + template into the full 19-file output.
+# 3. Compile brief + repo + template into the full 21-file output.
 Type "spine compile --brief ./brief.md --repo . --template saas-marketing"
 Sleep 300ms
 Enter
 Sleep 4s
 
 # 4. Show the tool-discovery files landed at repo root.
-Type "ls AGENTS.md CLAUDE.md .github/copilot-instructions.md"
+Type "ls AGENTS.md CLAUDE.md .github/copilot-instructions.md .cursor/rules/project-spine.mdc"
 Sleep 200ms
 Enter
 Sleep 1.8s

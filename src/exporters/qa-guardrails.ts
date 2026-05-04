@@ -16,7 +16,7 @@ export function renderQaGuardrails(spine: SpineModel): string {
     "- [ ] All interactive surfaces tested with keyboard only.",
     "- [ ] Screen reader pass on primary flows.",
     "- [ ] No new dependencies added without explicit rationale.",
-    "- [ ] Generated files (`AGENTS.md`, `CLAUDE.md`, `copilot-instructions.md`) reflect the current spine hash.",
+    "- [ ] Generated files (`AGENTS.md`, `CLAUDE.md`, `copilot-instructions.md`, `project-spine.mdc`) reflect the current spine hash.",
   ];
   lines.push(...section("Definition of done (starter)", dod));
 

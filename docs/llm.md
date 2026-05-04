@@ -37,7 +37,7 @@ Grep for `spine:ai-generated` to audit.
 
 ## What we explicitly *don't* enrich
 
-- `AGENTS.md`, `CLAUDE.md`, `copilot-instructions.md` — agent instruction files need to reflect repo reality exactly. No prose padding.
+- `AGENTS.md`, `CLAUDE.md`, `copilot-instructions.md`, `project-spine.mdc` — agent instruction files need to reflect repo reality exactly. No prose padding.
 - `spine.json` — canonical, reproducible, hashable. LLM contamination breaks drift detection by definition.
 - `warnings.json` — the surface where Spine tells you what it detected. Must be deterministic.
 - Source pointers — every rule traces back to `brief.md#…` or `inferred:…`. We won't let the LLM hallucinate a source.

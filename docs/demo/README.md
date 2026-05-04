@@ -15,8 +15,8 @@ The `Output` directive at the top of the tape writes to `docs/demo/demo.gif`. Co
 
 1. `spine init --template saas-marketing` — scaffolds brief.md from a preset.
 2. Edit the brief's project name.
-3. `spine compile --brief ./brief.md --repo . --template saas-marketing` — produces the full 19-file output.
-4. `ls` the tool-discovery files at repo root (`AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`).
+3. `spine compile --brief ./brief.md --repo . --template saas-marketing` — produces the full 21-file output.
+4. `ls` the tool-discovery files at repo root (`AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, `.cursor/rules/project-spine.mdc`).
 5. Peek at `.project-spine/export-manifest.json` to show the hashed inventory.
 6. Hand-edit `AGENTS.md` to demonstrate drift.
 7. `spine drift check --fail-on any` → non-zero exit.

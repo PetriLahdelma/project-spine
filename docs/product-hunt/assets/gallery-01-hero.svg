@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1270" height="760" viewBox="0 0 1270 760">
+  <rect width="1270" height="760" fill="#07070a"/>
+
+
+  <rect x="72" y="74" width="257.20000000000005" height="34" rx="17" fill="#ff4fb4" opacity="0.14"/>
+  <text x="86" y="97" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#ff4fb4">Product Hunt launch kit</text>
+
+  <text x="72" y="198" font-family="Arial Black, Arial, sans-serif" font-size="69.6" font-weight="900" letter-spacing="0" fill="#f7f4ee">PROJECT</text>
+  <text x="72" y="260.64" font-family="Arial Black, Arial, sans-serif" font-size="69.6" font-weight="900" letter-spacing="0" fill="#ff4fb4">SPINE</text>
+  <text x="72" y="394" font-family="Arial, sans-serif" font-size="58" font-weight="900" fill="#f7f4ee">
+    <tspan x="72" dy="0">Drift-proof context</tspan>
+    <tspan x="72" dy="66">for coding agents.</tspan>
+  </text>
+  <text x="72" y="552" font-family="Arial, sans-serif" font-size="27" font-weight="500" fill="#a4a7b5">
+    <tspan x="72" dy="0">Compile a brief, repo, and design tokens into</tspan>
+    <tspan x="72" dy="36">AGENTS.md, CLAUDE.md, Copilot, Cursor rules,</tspan>
+    <tspan x="72" dy="36">scaffold plans, QA guardrails, and a CI drift</tspan>
+    <tspan x="72" dy="36">gate.</tspan>
+  </text>
+  <rect x="870" y="116" width="302" height="430" rx="26" fill="#101116" stroke="#30323d" stroke-width="2"/>
+  <text x="910" y="184" font-family="Arial, sans-serif" font-size="27" font-weight="700" fill="#45f4ff">brief.md</text>
+  <text x="910" y="247" font-family="Arial, sans-serif" font-size="27" font-weight="700" fill="#ff4fb4">repo/</text>
+  <text x="910" y="310" font-family="Arial, sans-serif" font-size="27" font-weight="700" fill="#d7ff59">tokens.json</text>
+  <text x="910" y="392" font-family="Arial, sans-serif" font-size="32" font-weight="900" fill="#f7f4ee">spine.json</text>
+  <text x="910" y="457" font-family="Arial, sans-serif" font-size="27" font-weight="700" fill="#a4a7b5">agent files</text>
+  <path d="M1022 330 L1022 358" stroke="#45f4ff" stroke-width="4"/>
+  <path d="M993 349 L1022 378 L1051 349" fill="none" stroke="#45f4ff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -32,9 +32,9 @@ export default function PrivacyPage() {
       <Section title="What we collect">
         <ul>
           <li>
-            <strong>GitHub identity.</strong> When you run <code>spine login</code>, GitHub shares
-            your user id, login, name, avatar URL, and primary verified email (if granted via
-            <code>user:email</code>). We never receive or store your GitHub password or any
+            <strong>GitHub identity.</strong> If you use legacy hosted authentication, GitHub
+            shares your user id, login, name, avatar URL, and primary verified email (if granted
+            via <code>user:email</code>). We never receive or store your GitHub password or any
             OAuth-unrelated GitHub token beyond the one-time code exchange.
           </li>
           <li>

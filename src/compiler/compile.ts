@@ -394,11 +394,11 @@ function buildScaffoldPlan(
 
   // Setup items — derived from repo state, not the brief. These are the
   // "clear the runway" tasks an agent or engineer does before shipping features.
-  if (!repo.agentFiles.agentsMd && !repo.agentFiles.claudeMd && !repo.agentFiles.copilotInstructions) {
+  if (!repo.agentFiles.agentsMd && !repo.agentFiles.claudeMd && !repo.agentFiles.copilotInstructions && !repo.agentFiles.cursorRules) {
     sprint1.push(
       setupRule(
         "agent-files",
-        "Commit the Project Spine–generated `AGENTS.md`, `CLAUDE.md`, and `.github/copilot-instructions.md` after review."
+        "Commit the Project Spine–generated `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, and `.cursor/rules/project-spine.mdc` after review."
       )
     );
   }

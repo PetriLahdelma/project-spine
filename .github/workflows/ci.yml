@@ -37,6 +37,12 @@ jobs:
       - name: Test
         run: npm test
 
+      - name: Public package surface
+        run: npm run pack:check
+
+      - name: Launch assets
+        run: npm run launch:check
+
       - name: Smoke — compile against sample brief
         run: |
           node dist/cli.js compile \
@@ -49,3 +55,28 @@ jobs:
           test -f AGENTS.md
           test -f CLAUDE.md
           test -f .github/copilot-instructions.md
+          test -f .cursor/rules/project-spine.mdc
+
+  site:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+
+      - name: Install
+        working-directory: site
+        run: npm ci
+
+      - name: Typecheck
+        working-directory: site
+        run: npm run typecheck
+
+      - name: Build
+        working-directory: site
+        run: npm run build

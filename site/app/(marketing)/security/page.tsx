@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     siteName: "Project Spine",
     title: "Security · Project Spine",
     description: "How Project Spine handles your code, your tokens, and your data.",
-    images: [{ url: "/banner.png", width: 2400, height: 1500, alt: "Project Spine" }],
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Project Spine" }],
   },
 };
 
@@ -22,8 +22,9 @@ export default function SecurityPage() {
         <p className="eyebrow">Security</p>
         <h1>Deterministic by default. Hardened where it matters.</h1>
         <p className="lede">
-          The CLI is designed to minimise exposure. The hosted service is
-          designed to fail safe. Full posture in{" "}
+          The public launch surface is an OSS CLI. It is designed to minimise
+          exposure by running locally by default, with every network path
+          behind an explicit command and explicit credentials. Full posture in{" "}
           <a href="https://github.com/PetriLahdelma/project-spine/blob/main/SECURITY.md">
             SECURITY.md
           </a>
@@ -36,19 +37,21 @@ export default function SecurityPage() {
         <li>
           <strong>No implicit network calls.</strong>
           <span>
-            <code>spine compile</code>, <code>spine drift check</code>, and{" "}
-            <code>spine export</code> run entirely offline. Workspace
-            commands (<code>login</code>, <code>publish</code>,{" "}
-            <code>drift check --push</code>) are the only surfaces that touch
-            the network, and only after you explicitly opt in.
+            <code>spine init</code>, <code>spine compile</code>,{" "}
+            <code>spine inspect</code>, <code>spine export</code>,{" "}
+            <code>spine template</code>, <code>spine explain</code>, and{" "}
+            <code>spine drift check</code> run entirely offline. The only
+            routed network command today is <code>spine tokens pull</code>,
+            which requires an explicit Figma file key or URL and{" "}
+            <code>FIGMA_TOKEN</code>.
           </span>
         </li>
         <li>
-          <strong>Bearer tokens at rest.</strong>
+          <strong>No repo upload path.</strong>
           <span>
-            CLI bearer tokens live in <code>~/.project-spine/config.json</code>{" "}
-            with <code>0600</code> permissions. On the server side only a
-            sha256 hash is stored; plaintext tokens never hit the database.
+            The routed OSS CLI reads your repo and writes generated files
+            locally. It does not upload source, briefs, generated exports, or
+            drift reports to Project Spine.
           </span>
         </li>
         <li>
@@ -62,25 +65,8 @@ export default function SecurityPage() {
         </li>
       </ul>
 
-      <h2>Hosted service (projectspine.dev)</h2>
+      <h2>Website</h2>
       <ul className="features">
-        <li>
-          <strong>Auth.</strong>
-          <span>
-            GitHub OAuth device flow for CLI; web OAuth for the workspace UI.
-            The two share a single unified callback with cookie-bound state to
-            prevent cross-device session fixation.
-          </span>
-        </li>
-        <li>
-          <strong>Rate limits on every auth endpoint.</strong>
-          <span>
-            Per-IP and per-device-code fixed-window limits backed by Postgres.
-            Atomic UPSERT prevents thundering-herd bypass. Fails open if the
-            DB is unavailable so auth never becomes unreachable because of a
-            limiter bug.
-          </span>
-        </li>
         <li>
           <strong>CSP with per-request nonce.</strong>
           <span>
@@ -105,14 +91,6 @@ export default function SecurityPage() {
           </span>
         </li>
         <li>
-          <strong>Authorization.</strong>
-          <span>
-            Every workspace API route requires a valid bearer AND membership.
-            Non-members get 404, not 403, so workspace existence isn&apos;t
-            leaked.
-          </span>
-        </li>
-        <li>
           <strong>XSS on public rationale URLs.</strong>
           <span>
             Markdown is rendered via <code>marked</code> and then passed
@@ -128,9 +106,9 @@ export default function SecurityPage() {
         <li>
           <strong>Your repo source.</strong>
           <span>
-            The CLI runs offline for compile and drift. Workspace commands
-            upload only what you explicitly push: templates, rationales,
-            drift summaries. Never the full repo.
+            The routed CLI runs offline for compile and drift. The website
+            never receives repo source, generated exports, briefs, or drift
+            reports from the OSS workflow.
           </span>
         </li>
         <li>

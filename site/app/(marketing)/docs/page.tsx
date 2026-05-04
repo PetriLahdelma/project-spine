@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     title: "Docs · Project Spine",
     description:
       "Project Spine's documentation lives in the repo. This page is the short pointer list.",
-    images: [{ url: "/banner.png", width: 2400, height: 1500, alt: "Project Spine" }],
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Project Spine" }],
   },
 };
 
@@ -31,7 +31,7 @@ const CORE = [
   {
     title: "Sample output",
     href: "https://github.com/PetriLahdelma/project-spine/tree/main/docs/sample-output",
-    blurb: "A full compile of the saas-marketing template — 19 files you can read end-to-end.",
+    blurb: "Full compiled examples for Project Spine itself, saas-marketing, and API-service projects.",
   },
 ];
 
@@ -51,6 +51,10 @@ const TOPIC = [
   {
     title: "LLM enrichment (opt-in, never load-bearing)",
     href: "https://github.com/PetriLahdelma/project-spine/blob/main/docs/llm.md",
+  },
+  {
+    title: "Competitive landscape",
+    href: "https://github.com/PetriLahdelma/project-spine/blob/main/docs/competitive-landscape.md",
   },
 ];
 

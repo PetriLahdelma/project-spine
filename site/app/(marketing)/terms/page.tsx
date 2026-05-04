@@ -24,14 +24,14 @@ export default function TermsPage() {
       </div>
       <h1 style={{ fontSize: 32, letterSpacing: "-0.01em", marginBottom: 24 }}>Terms of use</h1>
       <p style={{ color: "var(--ink-soft)", marginBottom: 32 }}>
-        Project Spine is a pre-alpha developer tool operated by Petri Lahdelma. These terms cover
-        your use of the hosted service at <code>projectspine.dev</code>. The CLI itself is
-        separately licensed under MIT (see the repository).
+        Project Spine is an alpha developer tool operated by Petri Lahdelma. These terms cover
+        legacy hosted-service surfaces at <code>projectspine.dev</code>. The public OSS CLI is
+        separately licensed under MIT (see the repository) and does not require an account.
       </p>
 
-      <Section title="Status: pre-alpha">
+      <Section title="Status: alpha">
         <p>
-          The service is pre-alpha. Interfaces, data shapes, and pricing may change without
+          The service is alpha. Interfaces, data shapes, and pricing may change without
           notice. There is no SLA. You should not rely on the hosted service for anything
           production-critical.
         </p>
@@ -60,14 +60,14 @@ export default function TermsPage() {
         <p>
           When you publish a rationale, the URL is intentionally unguessable but publicly
           accessible. Anyone with the link can view the rationale content and your workspace
-          name/branding. Use <code>spine rationale revoke</code> to take it down.
+          name/branding. Contact support if you need a legacy rationale URL removed.
         </p>
       </Section>
 
       <Section title="Termination">
         <p>
-          You can stop using the service anytime; <code>spine logout</code> removes the local
-          token and we&apos;ll delete workspace data on request (see our{" "}
+          You can stop using the service anytime; we&apos;ll delete workspace data on request
+          (see our{" "}
           <Link href="/privacy">privacy policy</Link>). We can suspend accounts that violate
           these terms, with notice when possible.
         </p>

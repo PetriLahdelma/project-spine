@@ -20,7 +20,7 @@ Fair. That works for one developer on one project today. It breaks the moment an
 | --- | --- |
 | Non-deterministic by design — the same prompt can yield a different `AGENTS.md` | sha256 hash of every input and output; `spine.json` is byte-identical until a real input changes |
 | No memory of "the brief I saw three months ago" | `export-manifest.json` + `spine drift check` — CI fails when the brief and `AGENTS.md` have drifted apart |
-| Writes one agent-file format well (`CLAUDE.md`) | One source (`spine.json`) fans out to `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md` — portable across agents |
+| Writes one agent-file format well (`CLAUDE.md`) | One source (`spine.json`) fans out to `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, and `.cursor/rules/project-spine.mdc` — portable across agents |
 
 This isn't a capability gap — it's a philosophical one. Anthropic will not ship determinism as a first-class Claude feature because Claude's value proposition *is* the LLM. Project Spine's value proposition is the opposite: the non-LLM layer around the LLM.
 
@@ -44,11 +44,11 @@ CI-integrated `spine drift check --fail-on any` turns `AGENTS.md` into a contrac
 
 ### 4. Agency deliverable surface
 
-`/r/<slug>` rationale URLs and hosted workspace branding are sales infrastructure, not dev-tooling. Once a client has the link in their inbox, swapping tools means re-publishing and re-sending. This is a workflow moat that gets stickier over time.
+The generated `rationale.md` is sales infrastructure, not dev-tooling. Agencies can hand a client a concise, source-pointed explanation of the scaffold and tradeoffs without asking an LLM to improvise the story after the fact. It is a local, versionable artifact today; hosted publishing is deliberately outside the public OSS launch surface.
 
 ### 5. Template contribution model (network effect if it grows)
 
-Each saved workspace template contributes routes + components + QA + UX + a11y additively to every future project. Agencies lock in their own conventions and compound across client projects. Claude cannot be THE template registry because agency conventions are local, not global — there is no single opinionated starter that suits every studio.
+Each saved user-local or project-local template contributes routes + components + QA + UX + a11y additively to future projects. Agencies lock in their own conventions and compound across client projects. Claude cannot be THE template registry because agency conventions are local, not global — there is no single opinionated starter that suits every studio.
 
 ## The weakest link
 
@@ -78,7 +78,9 @@ The moat is a **commitment moat**, not a capability moat. Claude *could* theoret
 ## How to wield this in conversation
 
 - When a technical buyer says "I have Claude" → lead with **determinism + drift gate**. Developers intuit the non-determinism problem.
-- When an agency lead says "I have Claude" → lead with **rationale URL + multi-agent portability**. Agencies feel the mixed-tooling pain first.
+- When an agency lead says "I have Claude" → lead with **client-ready rationale artifact + multi-agent portability**. Agencies feel the mixed-tooling pain first.
 - When a platform team says "I have Claude" → lead with **CI gate + source pointers**. Platform teams want repeatability they can attest to.
 
 The one-liner goes on the landing page and in outbound. This doc goes into sales decks and docs.
+
+For the current competitor read, see [competitive-landscape.md](./competitive-landscape.md).

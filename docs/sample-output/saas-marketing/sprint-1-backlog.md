@@ -2,23 +2,13 @@
 
 > Starter items with acceptance criteria. Setup items clear the runway; delivery items trace to brief goals.
 
-_Generated from `spine.json` — hash `8976dc15b57e7f67`, project type `saas-marketing`._
+_Generated from `spine.json` — hash `9ea72686cdffd1cd`, project type `saas-marketing`._
 
 <!-- spine:deterministic -->
 
 ## Setup — clear the runway
 
-### S1. Commit the Project Spine–generated `AGENTS.md`, `CLAUDE.md`, and `.gi…
-
-**Detail:** Commit the Project Spine–generated `AGENTS.md`, `CLAUDE.md`, and `.github/copilot-instructions.md` after review.
-
-**Acceptance:**
-- [ ] Change landed on main (or a release branch) and merged.
-- [ ] Verified locally and in CI where applicable.
-
-**Source:** `inference:inferred:setup/agent-files`
-
-### S2. Pick and configure a linter (Biome or ESLint) with a minimal rule set.
+### S1. Pick and configure a linter (Biome or ESLint) with a minimal rule set.
 
 **Detail:** Pick and configure a linter (Biome or ESLint) with a minimal rule set.
 
@@ -27,26 +17,6 @@ _Generated from `spine.json` — hash `8976dc15b57e7f67`, project type `saas-mar
 - [ ] Verified locally and in CI where applicable.
 
 **Source:** `inference:inferred:setup/lint`
-
-### S3. Set up a test runner (Vitest recommended) and land a smoke test.
-
-**Detail:** Set up a test runner (Vitest recommended) and land a smoke test.
-
-**Acceptance:**
-- [ ] Change landed on main (or a release branch) and merged.
-- [ ] Verified locally and in CI where applicable.
-
-**Source:** `inference:inferred:setup/tests`
-
-### S4. Add a minimal CI workflow that runs typecheck + lint + tests on every…
-
-**Detail:** Add a minimal CI workflow that runs typecheck + lint + tests on every PR.
-
-**Acceptance:**
-- [ ] Change landed on main (or a release branch) and merged.
-- [ ] Verified locally and in CI where applicable.
-
-**Source:** `inference:inferred:setup/ci`
 
 ## Deliver — sprint goals
 

@@ -2,7 +2,7 @@
 
 > Why the project is set up this way. Shareable with clients and non-technical stakeholders.
 
-_Generated from `spine.json` — hash `8976dc15b57e7f67`, project type `saas-marketing`._
+_Generated from `spine.json` — hash `9ea72686cdffd1cd`, project type `saas-marketing`._
 
 <!-- spine:deterministic -->
 
@@ -39,7 +39,7 @@ _Generated from `spine.json` — hash `8976dc15b57e7f67`, project type `saas-mar
 
 ## The stack we are using
 
-Framework: **next**. Styling: **tailwind**. Language: **typescript** (strict).
+Framework: **node-library**. Language: **typescript** (strict). Testing: **vitest**.
 
 ## How we will ship quality
 
@@ -47,5 +47,9 @@ We enforce accessibility and testing guardrails from day one, not at the end. Ev
 
 ## How we will work
 
-Project context is compiled into a machine-readable layer (`.project-spine/spine.json`). Agent instruction files (`AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`) are generated from that same source, so humans and coding agents stay aligned without hand-editing duplicated docs.
+Project context is compiled into a machine-readable layer (`.project-spine/spine.json`). Agent instruction files (`AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, `.cursor/rules/project-spine.mdc`) are generated from that same source, so humans and coding agents stay aligned without hand-editing duplicated docs.
 When the brief or design evolves, we update the upstream input and recompile. That keeps the working context honest.
+
+## Open questions
+
+- Framework detection confidence 0.4. Evidence: no framework dep; looks like a node library

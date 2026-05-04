@@ -1,127 +1,57 @@
 ---
 name: project-spine-workspace
-description: Use when the user wants to set up a shared agency workspace, join one a teammate invited them to, invite a teammate, or manage workspace membership. Phrases like "create a workspace for my agency", "join my team's workspace", "invite a teammate to share templates", "list workspace members", "use the team's templates".
+description: Use when the user asks about Project Spine hosted workspaces, team sync, shared workspace templates, invites, or commands such as `spine login`, `spine workspace`, `spine publish`, or `spine drift check --push`.
 ---
 
-# Workspace lifecycle
+# Hosted workspace guardrail
 
-**Goal:** stand up or join a hosted workspace so a team can share templates, drift state, and rationale publishing across all their client projects.
+**Goal:** prevent agents from inventing or invoking hosted workspace flows that are not routed in the public OSS CLI.
 
-## Prerequisites
+## Current status
 
-- CLI ≥ 0.8.1.
-- The user has a GitHub account (required for login).
-
-## Flow A — the user is the workspace owner (first time)
+The public Project Spine CLI is OSS-first and local-first. Its routed commands are:
 
 ```bash
-spine login
-# opens browser; user approves on GitHub; CLI prints "signed in as <login>"
-
-spine workspace create my-agency \
-  --name "My agency" \
-  --description "Shared templates for client projects"
+spine init
+spine compile
+spine inspect
+spine export
+spine template list|show|save
+spine explain
+spine drift check|diff
+spine tokens pull
 ```
 
-`spine workspace create` makes the user the owner and sets the workspace active. Templates saved with `--location workspace` now push here.
+Hosted workspace commands are dormant in source but intentionally not exposed from `spine --help`. Do not instruct users to run:
 
-## Flow B — the user was invited to an existing workspace
+- `spine login`
+- `spine logout`
+- `spine whoami`
+- `spine workspace ...`
+- `spine publish ...`
+- `spine rationale ...`
+- `spine drift check --push`
+- `spine template pull`
+- `spine template list --workspace`
 
-The invite arrives as a URL like `https://projectspine.dev/invite/<code>` (7-day TTL, single-use).
+## What to recommend instead
 
-Walk the user through:
+For team sharing today:
 
-1. Open the URL in a browser.
-2. Sign in with GitHub (one-click if they've used Project Spine before).
-3. Accept the invite — they land on the workspace page.
+- Commit project-local templates under `./.project-spine-templates/<name>/`.
+- Save personal reusable templates with `spine template save --location user`.
+- Share generated `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, `.cursor/rules/project-spine.mdc`, and `.project-spine/exports/*` through normal version control.
+- Use `spine drift check --fail-on any` in CI without `--push`.
 
-Then in their terminal:
+For client-facing summaries:
 
-```bash
-spine login         # one-time, if they haven't already on this machine
-spine workspace list
-```
+- Review `.project-spine/exports/rationale.md` locally.
+- Share it through the user's existing docs, email, or client portal workflow.
 
-The workspace they just joined appears in the list. Switch to it:
+## If the user insists on hosted workspaces
 
-```bash
-spine workspace switch <slug>
-```
+Be explicit:
 
-## Flow C — invite a teammate (owner or admin only)
+> Hosted workspace code exists in the repository, but it is not part of the public CLI surface right now. The OSS launch is intentionally local-first. Use project-local templates and CI drift checks until a hosted workspace release is intentionally routed and documented.
 
-From the CLI:
-
-```bash
-spine workspace invite --role member
-# prints an invite URL + expiry
-```
-
-Or from the web UI:
-
-1. Open `https://projectspine.dev/w/<slug>` (the workspace page).
-2. Use the "Invite a teammate" panel at the bottom.
-3. Pick role (member or admin), click "Create invite link", copy the URL.
-
-Roles today:
-
-- **owner** — full control; created the workspace.
-- **admin** — can invite, push/pull templates, publish rationales, push drift, revoke invites.
-- **member** — same as admin today (role distinction matures in later releases).
-
-## Flow D — check who's in the workspace
-
-```bash
-spine workspace members
-```
-
-Lists every member with their role and join date.
-
-## Workspace + templates + rationale + drift chain
-
-Once a workspace exists:
-
-- Save a template to it: `spine template save --location workspace --name <n>`
-- Pull a template from it: `spine template pull <name>`
-- Publish a rationale under its branding: `spine publish rationale`
-- Push drift results into its fleet view: `spine drift check --push`
-
-Chain to **project-spine-template**, **project-spine-rationale**, or **project-spine-drift** for each of those.
-
-## CI and automation
-
-For pushing from CI (no browser), use the env-var override:
-
-```bash
-# on the user's local machine, once:
-spine login
-cat ~/.project-spine/config.json   # copy `auth.token` to a GitHub Actions secret
-
-# in CI:
-env:
-  SPINE_API_TOKEN: ${{ secrets.SPINE_API_TOKEN }}
-  SPINE_WORKSPACE: my-agency
-```
-
-The CLI honors `SPINE_API_TOKEN` + `SPINE_WORKSPACE` without needing a config file.
-
-## Env var overrides for scripted use
-
-| Var | Purpose |
-|---|---|
-| `SPINE_API_TOKEN` | Bearer token from `~/.project-spine/config.json` auth.token |
-| `SPINE_WORKSPACE` | Active workspace slug (overrides config) |
-| `SPINE_API_URL` | Override API base URL (default `https://projectspine.dev`) |
-| `ANTHROPIC_API_KEY` | For `--enrich` on compile |
-
-## What NOT to do
-
-- Don't commit `~/.project-spine/config.json` — it contains the bearer token. The file is chmod 0600 by default.
-- Don't share invite URLs in public channels (they're single-use; if used by the wrong person, revoke via the workspace page).
-- Don't create a workspace per-project. One workspace per team/agency is the expected pattern; projects live inside as `projects` rows populated by `spine drift check --push`.
-
-## Troubleshooting
-
-- `not signed in` after `spine login` succeeded → token write may have failed; check `~/.project-spine/config.json` exists and contains an `auth` object.
-- `workspace not found` → either the slug is wrong or the user isn't a member. List workspaces with `spine workspace list`.
-- `invite expired` after 7 days → ask the owner to create a fresh one.
+Then continue with the local workflow that gets them closest to their goal.

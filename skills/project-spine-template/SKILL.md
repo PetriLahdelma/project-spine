@@ -1,9 +1,9 @@
 ---
 name: project-spine-template
-description: Use when the user wants to apply an agency / team template to a new project, pull a shared workspace template, or save the current project as a reusable template. Phrases like "use our agency starter", "pull my team's template", "save this as a template for future clients", "apply the shared saas-marketing starter".
+description: Use when the user wants to apply a bundled, user-local, or project-local template to a new project, or save the current project as a reusable template. Phrases like "use our agency starter", "save this as a template for future clients", "apply the shared saas-marketing starter".
 ---
 
-# Template save / pull / apply flow
+# Template save / apply flow
 
 **Goal:** reuse a team's agreed-upon project structure (brief scaffold + design rules + compile-time contributions) across client projects.
 
@@ -11,10 +11,9 @@ description: Use when the user wants to apply an agency / team template to a new
 
 Project Spine resolves templates from these roots (highest priority first):
 
-1. **Workspace** — hosted, synced across the team. Requires `spine login` + active workspace. Pulled into the user library before use.
-2. **Project-local** — `./.project-spine-templates/<name>/` committed to the current repo.
-3. **User-local** — `~/.project-spine/templates/<name>/` on this machine.
-4. **Bundled** — `saas-marketing`, `app-dashboard`, `design-system`, `docs-portal` ship with the CLI.
+1. **Project-local** — `./.project-spine-templates/<name>/` committed to the current repo.
+2. **User-local** — `~/.project-spine/templates/<name>/` on this machine.
+3. **Bundled** — `saas-marketing`, `app-dashboard`, `design-system`, `docs-portal`, `api-service`, and `monorepo` ship with the CLI.
 
 Same name in a higher tier overrides lower tiers.
 
@@ -48,28 +47,10 @@ spine template save \
 
 - `user` (default) — saves to `~/.project-spine/templates/<name>/`; follows you across projects on this machine.
 - `project` — saves to `./.project-spine-templates/<name>/`; commits to the repo, shared via VCS.
-- `workspace` — pushes to the active hosted workspace; shared via `spine template pull` across the team. Requires `spine login`.
 
-## Flow C — pull a template from a workspace
+## When to recommend saving as project-local vs user-local
 
-```bash
-# prerequisite: signed in with an active workspace
-spine login
-spine workspace switch <slug>
-
-spine template list --workspace
-spine template pull <name>
-```
-
-`pull` fetches into the **user-local** library (`~/.project-spine/templates/<name>/`). After pulling:
-
-```bash
-spine init --template <name>
-```
-
-## When to recommend saving as a workspace template vs user-local
-
-Save **workspace** if:
+Save **project-local** if:
 
 - The template represents a shared agency convention
 - Multiple teammates will use it across client projects
@@ -81,18 +62,12 @@ Save **user-local** if:
 - You're experimenting with a template before committing the team to it
 - The team hasn't set up a workspace yet
 
-Save **project-local** if:
-
-- This template is specific to one client's ongoing engagements
-- You want it in the client's repo next to their code
-
 ## What NOT to do
 
-- Don't edit a pulled template in place and expect it to push back — `pull` is one-way. Use Flow B to save a new version.
 - Don't save a template from an uncompiled project. The `contributes` block derives from `spine.json`; without it the template is just a brief scaffold with empty rules.
 - Don't name templates generically (`my-template`, `template1`). `spine template save` requires lowercase-kebab names; pick something meaningful (`my-agency-saas`, `client-admin-dashboard`).
 
 ## Follow-up conversations
 
-If the user is setting up a workspace for the first time → switch to project-spine-workspace.
-If they want to share the template's output (rationale) with a client → switch to project-spine-rationale.
+If they ask for hosted workspace sync, switch to project-spine-workspace so the agent explains that workspace commands are dormant in the public OSS CLI.
+If they want to share the template's output (rationale) with a client → switch to project-spine-rationale for local review.
