@@ -21,7 +21,7 @@ projectType: "api-service"
 - <!-- Compliance scope (PCI / HIPAA / GDPR region pinning) -->
 
 ## Assumptions
-- <!-- e.g. Traffic stays under 500 rps for the alpha window -->
+- <!-- e.g. Traffic stays under 500 rps for the beta window -->
 - <!-- e.g. Only internal consumers during v1 — public release is v2 -->
 
 ## Risks

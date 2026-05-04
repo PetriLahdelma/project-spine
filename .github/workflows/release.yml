@@ -1,7 +1,7 @@
 name: Release
 
-# Fires when a version tag is pushed (e.g. `git tag v0.9.2-alpha.0 && git push --tags`).
-# Flow: install -> typecheck -> test -> build -> `npm publish --tag next` -> GitHub Release.
+# Fires when a version tag is pushed (e.g. `git tag v0.9.2-beta.0 && git push --tags`).
+# Flow: install -> typecheck -> test -> build -> `npm publish --tag beta` -> GitHub Release.
 # Manual release steps still documented in CONTRIBUTING.md as the fallback path.
 
 on:
@@ -68,7 +68,7 @@ jobs:
         run: scripts/generate-changelog.sh > CHANGELOG.md
 
       - name: Publish to npm
-        run: npm publish --tag next --access public
+        run: npm publish --tag beta --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
@@ -109,7 +109,7 @@ jobs:
             echo "npm install -g project-spine@${GITHUB_REF_NAME#v}"
             echo '```'
             echo ""
-            echo "Or grab the latest alpha via \`npm install -g project-spine@next\`."
+            echo "Or grab the latest beta via \`npm install -g project-spine@beta\`."
           } > /tmp/notes.md
           echo "path=/tmp/notes.md" >> "$GITHUB_OUTPUT"
 
@@ -119,5 +119,5 @@ jobs:
         uses: softprops/action-gh-release@v3
         with:
           body_path: ${{ steps.notes.outputs.path }}
-          prerelease: ${{ contains(github.ref_name, 'alpha') || contains(github.ref_name, 'beta') || contains(github.ref_name, 'rc') }}
+          prerelease: ${{ contains(github.ref_name, 'beta') || contains(github.ref_name, 'rc') }}
           generate_release_notes: false

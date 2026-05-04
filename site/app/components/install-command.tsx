@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-const COMMAND = "npm install -g project-spine@next";
+const COMMAND = "npm install -g project-spine@beta";
 
 function CopyIcon() {
   return (

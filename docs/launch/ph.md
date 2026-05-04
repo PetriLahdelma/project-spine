@@ -62,7 +62,7 @@ All 1270×760. Terminal slots captured in real Ghostty (not simulated) via `scre
 | [`drift-diff.png`](gallery/drift-diff.png) | `spine drift diff` showing the `+# hand edit` that slipped in | 60 KB | Ghostty, `capture-drift-diff.sh` |
 | [`tree.png`](gallery/tree.png) | The 3 tool-discovery files + 11 compiled exports (the "19 files per compile" proof) | 128 KB | Ghostty, `capture-tree.sh` |
 | [`templates.png`](gallery/templates.png) | `spine template list` — all 6 bundled templates with descriptions | 136 KB | Ghostty, `capture-templates.sh` |
-| [`changelog.png`](gallery/changelog.png) | `/changelog` page: "What shipped, when, and what changed" with the 0.9.x-alpha aside | 112 KB | Headless Chromium |
+| [`changelog.png`](gallery/changelog.png) | `/changelog` page: "What shipped, when, and what changed" with the 0.9.x-beta aside | 112 KB | Headless Chromium |
 | [`claude.png`](gallery/claude.png) | **The money shot.** `claude -p "Read AGENTS.md and summarise…"` answering with a 3-bullet summary pulled from the Spine-generated AGENTS.md. Closes the loop: brief → compile → AGENTS.md → real Claude consumes it. | 128 KB | Ghostty + claude CLI, `capture-claude.sh` |
 
 **Recommended 5-slot order for the PH upload:**
@@ -77,7 +77,7 @@ All 1270×760. Terminal slots captured in real Ghostty (not simulated) via `scre
 
 ### Regenerating
 
-Every capture script lives alongside its output in `gallery/`. `spine` must be on PATH (`npm i -g project-spine@next`). Scripts assume Ghostty is your terminal — they print into whichever window is frontmost when run from your shell. For terminal slots:
+Every capture script lives alongside its output in `gallery/`. `spine` must be on PATH (`npm i -g project-spine@beta`). Scripts assume Ghostty is your terminal — they print into whichever window is frontmost when run from your shell. For terminal slots:
 
 ```bash
 bash docs/launch/gallery/capture-drift-diff.sh   # writes drift-diff content; screenshot the window
@@ -113,24 +113,31 @@ CHROMIUM='/Users/petrilahdelma/Library/Caches/ms-playwright/chromium-1217/chrome
 "$CHROMIUM" --headless --disable-gpu --hide-scrollbars --window-size=1270,760 --virtual-time-budget=10000 --screenshot=docs/launch/gallery/changelog.png https://projectspine.dev/changelog
 ```
 
-## 4. Version signal — alpha vs beta vs drop-tag
+## 4. Version signal — beta
 
-PH audience splits on "alpha". Some reflex-downvote. Three options:
+PH audience expects a usable public product. The readiness work moved Spine
+past early-preview framing: the compiler, drift checks, Cursor export, MCP,
+GitHub Action, package-surface checks, docs, and generated launch assets are
+all present and verified.
 
 | Option | Version | Signal | Honest? |
 |--------|---------|--------|---------|
-| A | `0.9.2-alpha.0` (current) | "Early, expect rough edges" | Yes, but the tests + dogfood + sample outputs say otherwise. |
-| B | `0.9.3` or `0.10.0` (drop alpha tag) | "Pre-1.0 stable, ready to try" | Yes — the feature set matches PRD v0.1 targets, tests are green, APIs aren't changing day to day. |
+| A | `0.9.2-beta.0` | "Public beta, ready to try" | Yes — the feature set matches PRD v0.1 targets, tests are green, APIs are not changing day to day. |
+| B | `0.10.0-beta.0` | "Public beta with a minor line bump" | Yes, but unnecessary unless the release needs a larger semantic marker. |
 | C | `1.0.0-beta.0` | "MVP done, hardening" | Borderline. Jumps the 0.x line early. PRD explicitly targets v0.1 first. |
 
-**Recommendation:** B. Cut `0.10.0` as the launch-day release. Drops the "alpha" drag without inflating to 1.0 — matches CONTRIBUTING.md's posture of staying honest about pre-1.0 status. The reason to keep 0.x is that the hosted tier and several templates in the roadmap are 1.0 gates; shipping those and then cutting 1.0 is truer than shipping now and calling it 1.0-beta.
+**Recommendation:** A. Cut `0.9.2-beta.0` as the launch release. It promotes the
+actual public signal without pretending the project has crossed the 1.0
+stability bar. The reason to keep 0.x is that the hosted tier and several
+templates in the roadmap are 1.0 gates; shipping those and then cutting 1.0 is
+truer than shipping now and calling it 1.0.
 
 Ship a CHANGELOG entry that names the surface area this covers (CLI end-to-end, drift, tokens, six templates, spine-mcp stdio server, GitHub Action for drift check, 124 tests). No hype.
 
 **Decision (2026-04-23):** **Cut `0.10.0` on launch day, not before.** Sequence:
 
-1. Day -1: merge the readiness PRs from this branch to `main`. Site + CLI at `0.9.2-alpha.0`, no user-visible change.
-2. Launch day, ~2 h before go-time: `npm version minor` (→ `0.10.0`) + push the tag. The existing release workflow publishes to npm `latest` and the `next` tag moves too.
+1. Day -1: merge the readiness PRs from this branch to `main`. Site + CLI at `0.9.2-beta.0`, no user-visible mismatch.
+2. Launch day, ~2 h before go-time: push the `v0.9.2-beta.0` tag. The existing release workflow publishes to npm with the `beta` tag.
 3. Day 0, 00:01 PT: submit PH. Maker comment within 15 min. HN Show HN at +1 h. X/LinkedIn at 08:00 PT.
 4. If anyone reports a smell in the first hour, `npm publish project-spine@0.10.1` is faster than debating it.
 
@@ -142,7 +149,7 @@ Day -3:
 - [x] Tagline chosen — **#5: "The missing context layer for software delivery"** (48 chars). Same as the site tagline; keep the brand voice consistent across surfaces.
 - [x] Maker comment chosen — **Draft A** (warm, ~155 words). Post within 15 min of PH going live.
 - [x] Gallery — 6 assets captured, all 1270×760, real Ghostty for terminal slots (see `docs/launch/gallery/`); pick 5 for upload
-- [x] Version decision — **cut `0.10.0` on launch day, not before** (see §4 sequence). Drops the alpha drag without inflating to 1.0.
+- [x] Version decision — **cut `0.9.2-beta.0` for launch** (see §4 sequence). Promotes the public signal without inflating to 1.0.
 - [x] Mobile LCP reconfirmed — **2.6 s** on 2026-04-23 (was 3.5 s before PRs #39 / #41). Marginally over the 2.5 s "Good" cutoff but overall Performance score 97 (A11y 96, Best Practices 96, SEO 100). Shipping without the mobile WebP fallback; revisit if a hunter calls it out.
 
 Day -1:

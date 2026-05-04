@@ -24,14 +24,14 @@ export default function TermsPage() {
       </div>
       <h1 style={{ fontSize: 32, letterSpacing: "-0.01em", marginBottom: 24 }}>Terms of use</h1>
       <p style={{ color: "var(--ink-soft)", marginBottom: 32 }}>
-        Project Spine is an alpha developer tool operated by Petri Lahdelma. These terms cover
+        Project Spine is a beta developer tool operated by Petri Lahdelma. These terms cover
         legacy hosted-service surfaces at <code>projectspine.dev</code>. The public OSS CLI is
         separately licensed under MIT (see the repository) and does not require an account.
       </p>
 
-      <Section title="Status: alpha">
+      <Section title="Status: beta">
         <p>
-          The service is alpha. Interfaces, data shapes, and pricing may change without
+          The service is beta. Interfaces, data shapes, and pricing may change without
           notice. There is no SLA. You should not rely on the hosted service for anything
           production-critical.
         </p>

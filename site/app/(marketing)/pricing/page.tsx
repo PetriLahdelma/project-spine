@@ -22,7 +22,7 @@ export default function PricingPage() {
         <p className="eyebrow">Pricing</p>
         <h1>Free.</h1>
         <p className="lede">
-          Project Spine is an alpha OSS CLI under the MIT license. It runs
+          Project Spine is a beta OSS CLI under the MIT license. It runs
           offline, needs no account, and the full pipeline — compile, drift,
           templates, exports, design tokens — is unlocked for everyone.
         </p>

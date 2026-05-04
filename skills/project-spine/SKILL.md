@@ -43,7 +43,7 @@ Before running anything, verify the CLI is installed:
 spine --version
 ```
 
-Expected: `0.9.2-alpha.0` or later. If missing:
+Expected: `0.9.2-beta.0` or later. If missing:
 
 ```bash
 npm install -g project-spine
@@ -73,7 +73,7 @@ Requires Node ≥ 20.
 
 ## Honest limitations
 
-- **Alpha.** The `spine.json` schema is versioned but interfaces can still shift.
+- **Beta.** The `spine.json` schema is versioned and the core compiler is stable, but interfaces can still shift before 1.0.
 - **CLI is offline by default.** The routed OSS commands do not upload your repo. `spine tokens pull` and `spine compile --enrich` are explicit opt-in network paths.
 - **Hosted workspace commands are dormant.** Do not tell users to run `spine login`, `workspace`, `publish`, or `rationale` in the public OSS CLI unless they are on an experimental branch where those commands are routed.
 - **LLM enrichment is opt-in** via `--enrich` + `ANTHROPIC_API_KEY`. Most flows don't need it; the deterministic output is the canonical one.

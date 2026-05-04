@@ -9,7 +9,7 @@ description: Use when the user wants to set up Project Spine for a new project �
 
 ## Prerequisites — check before proceeding
 
-1. CLI installed: `spine --version` returns `0.9.2-alpha.0` or later
+1. CLI installed: `spine --version` returns `0.9.2-beta.0` or later
 2. Current directory is the project root (has `package.json` or equivalent)
 3. No `.project-spine/` directory yet (if there is, this is probably a **drift** scenario — switch to project-spine-drift)
 

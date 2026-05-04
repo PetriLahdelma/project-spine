@@ -67,7 +67,7 @@ export default async function NewWorkspacePage({
           <ol style={{ margin: 0, paddingLeft: 20, color: "var(--ink-soft)", fontSize: 15, lineHeight: 1.65 }}>
             <li>You land on your workspace dashboard as the owner.</li>
             <li>
-              You install the CLI (<code>npm install -g project-spine@next</code>) and
+              You install the CLI (<code>npm install -g project-spine@beta</code>) and
               use the local <code>init</code>, <code>compile</code>, template, and drift commands.
             </li>
             <li>

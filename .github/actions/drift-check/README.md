@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: PetriLahdelma/project-spine/.github/actions/drift-check@v0.9.2-alpha.0
+      - uses: PetriLahdelma/project-spine/.github/actions/drift-check@v0.9.2-beta.0
 ```
 
 By default it runs `spine drift check --fail-on any` from the repo root. Non-zero exit fails the job.
@@ -27,7 +27,7 @@ By default it runs `spine drift check --fail-on any` from the repo root. Non-zer
 
 | Name | Default | What it does |
 |---|---|---|
-| `version` | `next` | `project-spine` npm dist-tag or exact version. Pin to a tag (e.g. `0.9.2-alpha.0`) for reproducibility. |
+| `version` | `beta` | `project-spine` npm dist-tag or exact version. Pin to a tag (e.g. `0.9.2-beta.0`) for reproducibility. |
 | `node-version` | `20` | Node major version for the CLI. |
 | `repo-path` | `.` | Repo root. Must contain a `.project-spine/` directory produced by a prior `spine compile`. |
 | `fail-on` | `any` | One of `none` / `any` / `inputs` / `exports`. |
@@ -44,7 +44,7 @@ By default it runs `spine drift check --fail-on any` from the repo root. Non-zer
 ### Only fail on input drift (brief / tokens changed), ignore hand-edits to exports
 
 ```yaml
-- uses: PetriLahdelma/project-spine/.github/actions/drift-check@v0.9.2-alpha.0
+- uses: PetriLahdelma/project-spine/.github/actions/drift-check@v0.9.2-beta.0
   with:
     fail-on: inputs
 ```
@@ -53,7 +53,7 @@ By default it runs `spine drift check --fail-on any` from the repo root. Non-zer
 
 ```yaml
 - id: drift
-  uses: PetriLahdelma/project-spine/.github/actions/drift-check@v0.9.2-alpha.0
+  uses: PetriLahdelma/project-spine/.github/actions/drift-check@v0.9.2-beta.0
   with:
     fail-on: any
     json: true
@@ -64,9 +64,9 @@ By default it runs `spine drift check --fail-on any` from the repo root. Non-zer
 ### Pin to an exact CLI version
 
 ```yaml
-- uses: PetriLahdelma/project-spine/.github/actions/drift-check@v0.9.2-alpha.0
+- uses: PetriLahdelma/project-spine/.github/actions/drift-check@v0.9.2-beta.0
   with:
-    version: "0.9.2-alpha.0"
+    version: "0.9.2-beta.0"
 ```
 
 ## What it does under the hood
@@ -87,6 +87,6 @@ Pair this with a second step that calls `spine compile` when drift is caused by 
 
 ## Status
 
-- Alpha, same train as the CLI (`0.9.x`).
+- Beta, same train as the CLI (`0.9.x`).
 - Not listed on GitHub Marketplace yet. Reference by full repo path: `PetriLahdelma/project-spine/.github/actions/drift-check@<ref>`.
 - License: MIT, same as the CLI.

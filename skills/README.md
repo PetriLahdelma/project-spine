@@ -56,7 +56,7 @@ Each skill is a single self-contained `SKILL.md` with frontmatter. Paste the rel
 
 ## Compatibility
 
-- CLI version: **`project-spine@0.9.2-alpha.0`** or later.
+- CLI version: **`project-spine@0.9.2-beta.0`** or later.
 - Runtime: Node ≥ 20.
 - Hosted features are dormant in the public OSS CLI; the workspace skill exists to stop agents from inventing commands.
 
