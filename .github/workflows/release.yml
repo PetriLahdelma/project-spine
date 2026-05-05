@@ -72,6 +72,15 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+      - name: Promote public npm dist-tags
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          npm dist-tag add "project-spine@${VERSION}" latest
+          npm dist-tag add "project-spine@${VERSION}" next
+          npm dist-tag add "project-spine@${VERSION}" beta
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - name: Commit CHANGELOG.md back to main
         # CHANGELOG.md is a generated mirror of git tags. Regenerate and push
         # it back to main after a successful npm publish so npm consumers and
