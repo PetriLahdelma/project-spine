@@ -17,7 +17,7 @@ PH caps the tagline at 60 characters. Shorter reads faster on the feed. Current 
 
 **Recommendation:** #4 or #1. #4 reads as a verb the audience recognises (the re-briefing pain is real). #1 is boring but accurate and uses the category word "compile" that makes the shape obvious.
 
-**Decision (2026-04-23):** **#5, "The missing context layer for software delivery."** Matches the site tagline; same voice across surfaces beats marginal optimisation on PH alone.
+**Decision (2026-05-05):** **"Stop re-briefing coding agents."** The benchmark pass showed that PH developer-tool launches convert faster when the pain is plain before the mechanism is explained. The site still owns the deeper context-compiler story below the fold.
 
 ## 2. Maker first comment
 
@@ -39,7 +39,7 @@ Length: ~155 words. Feels right.
 >
 > Spine reads your actual brief, your actual `package.json`, your actual design tokens if you have them, and compiles a repo-specific operating layer — with drift detection so the output doesn't silently rot. No signup. No hosted tier. One CLI, six templates, 19 generated files per compile.
 >
-> This is v0.9.x. It runs end-to-end, 121 tests green, dogfooded on its own repo. I'd rather hear "here's what I'd change" than "nice launch" — so fire away.
+> This is v0.9.x beta. It runs end-to-end, the full test suite is green, and it is dogfooded on its own repo. I'd rather hear "here's what I'd change" than "nice launch" — so fire away.
 
 Length: ~110 words. Sharper, might split the room.
 
@@ -57,10 +57,10 @@ All 1270×760. Terminal slots captured in real Ghostty (not simulated) via `scre
 
 | File | What it shows | Size | Source |
 |---|---|---|---|
-| [`hero.png`](gallery/hero.png) | Site hero: wordmark + "The context layer your coding agents are missing." | 108 KB | Headless Chromium on `projectspine.dev` |
+| [`hero.png`](gallery/hero.png) | Site hero: wordmark + "Stop re-explaining your repo to coding agents." | 108 KB | Headless Chromium on `projectspine.dev` |
 | [`demo.gif`](gallery/demo.gif) | 60-s CLI demo: init → compile → drift check → drift diff | 1.1 MB, 1100×700 | `docs/demo/demo.tape` (VHS) |
 | [`drift-diff.png`](gallery/drift-diff.png) | `spine drift diff` showing the `+# hand edit` that slipped in | 60 KB | Ghostty, `capture-drift-diff.sh` |
-| [`tree.png`](gallery/tree.png) | The 3 tool-discovery files + 11 compiled exports (the "19 files per compile" proof) | 128 KB | Ghostty, `capture-tree.sh` |
+| [`tree.png`](gallery/tree.png) | The 4 tool-discovery files + compiled exports (the "21 files per compile" proof) | 128 KB | Ghostty, `capture-tree.sh` |
 | [`templates.png`](gallery/templates.png) | `spine template list` — all 6 bundled templates with descriptions | 136 KB | Ghostty, `capture-templates.sh` |
 | [`changelog.png`](gallery/changelog.png) | `/changelog` page: "What shipped, when, and what changed" with the 0.9.x-beta aside | 112 KB | Headless Chromium |
 | [`claude.png`](gallery/claude.png) | **The money shot.** `claude -p "Read AGENTS.md and summarise…"` answering with a 3-bullet summary pulled from the Spine-generated AGENTS.md. Closes the loop: brief → compile → AGENTS.md → real Claude consumes it. | 128 KB | Ghostty + claude CLI, `capture-claude.sh` |
@@ -70,7 +70,7 @@ All 1270×760. Terminal slots captured in real Ghostty (not simulated) via `scre
 1. `hero.png` — brand, sets the feed preview
 2. `claude.png` — the downstream proof, answers "what do I actually get"
 3. `drift-diff.png` — shows the distinctive capability (determinism + drift detection)
-4. `tree.png` — concrete output, 19 files
+4. `tree.png` — concrete output, 21 files
 5. `demo.gif` — the motion asset
 
 `templates.png` and `changelog.png` are held back as swap options if you want to replace any of the above.
@@ -132,7 +132,7 @@ stability bar. The reason to keep 0.x is that the hosted tier and several
 templates in the roadmap are 1.0 gates; shipping those and then cutting 1.0 is
 truer than shipping now and calling it 1.0.
 
-Ship a CHANGELOG entry that names the surface area this covers (CLI end-to-end, drift, tokens, six templates, spine-mcp stdio server, GitHub Action for drift check, 124 tests). No hype.
+Ship a CHANGELOG entry that names the surface area this covers (CLI end-to-end, doctor, drift, tokens, six templates, spine-mcp stdio server, GitHub Action for drift check, full test suite). No hype.
 
 **Decision (2026-04-23):** **Cut `0.10.0` on launch day, not before.** Sequence:
 

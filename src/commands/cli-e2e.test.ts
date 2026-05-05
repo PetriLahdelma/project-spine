@@ -70,7 +70,7 @@ const DORMANT_HOSTED_COMMAND_MODULES = [
 ];
 
 describe("spine --help", () => {
-  it("lists exactly the eight routed commands", async () => {
+  it("lists exactly the nine routed commands", async () => {
     const { stdout, exitCode } = await spawn(["--help"]);
     expect(exitCode).toBe(0);
     for (const cmd of [
@@ -82,6 +82,7 @@ describe("spine --help", () => {
       "explain",
       "drift",
       "tokens",
+      "doctor",
     ]) {
       expect(stdout).toContain(cmd);
     }
@@ -103,6 +104,41 @@ describe("spine --help", () => {
     const { stdout, exitCode } = await spawn([]);
     expect(exitCode).toBe(0);
     expect(stdout).toContain("USAGE");
+  });
+});
+
+describe("spine doctor", () => {
+  it("prints beta readiness checks as JSON", async () => {
+    const work = await mkdtemp(join(tmpdir(), "spine-doctor-"));
+    try {
+      const { stdout, exitCode } = await spawn(["doctor", "--json"], work);
+      expect(exitCode).toBe(0);
+      const payload = JSON.parse(stdout) as {
+        ok: boolean;
+        version: string;
+        checks: Array<{ name: string; status: string; detail: string }>;
+      };
+      expect(payload.ok).toBe(true);
+      expect(payload.version).toContain("-beta.");
+      expect(payload.checks.find((check) => check.name === "release channel")?.detail).toContain("beta");
+      expect(payload.checks.find((check) => check.name === "routed commands")?.detail).toContain("doctor");
+      expect(payload.checks.find((check) => check.name === "local drift")?.status).toBe("pass");
+    } finally {
+      await rm(work, { recursive: true, force: true });
+    }
+  });
+
+  it("strict mode passes before first compile but explains the missing manifest", async () => {
+    const work = await mkdtemp(join(tmpdir(), "spine-doctor-strict-"));
+    try {
+      const { stdout, exitCode } = await spawn(["doctor", "--strict"], work);
+      expect(exitCode).toBe(0);
+      expect(stdout).toContain("[ok]");
+      expect(stdout).toContain("local drift");
+      expect(stdout).toContain("not compiled yet");
+    } finally {
+      await rm(work, { recursive: true, force: true });
+    }
   });
 });
 

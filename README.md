@@ -89,7 +89,10 @@ spine inspect --repo .
 # 5. check drift between last compile and current state (CI-friendly)
 spine drift check --fail-on any
 
-# 6. browse templates
+# 6. verify local beta readiness
+spine doctor
+
+# 7. browse templates
 spine template list
 spine template show design-system
 ```
@@ -202,7 +205,7 @@ Each skill is a single `SKILL.md` with YAML frontmatter describing its trigger p
 
 ## MCP server (`spine-mcp`)
 
-The npm install also drops a second binary on `PATH`: `spine-mcp`, a stdio MCP server that exposes `compile`, `drift check`, `drift diff`, `init`, and `tokens pull` as tools any MCP-speaking client can call — Claude Code, Cursor, Continue.
+The npm install also drops a second binary on `PATH`: `spine-mcp`, a stdio MCP server that exposes `compile`, `doctor`, `drift check`, `drift diff`, `init`, and `tokens pull` as tools any MCP-speaking client can call — Claude Code, Cursor, Continue.
 
 Claude Code / Cursor config:
 
@@ -264,7 +267,8 @@ src/
   brief/         Markdown + frontmatter brief parser (§7.1)
   cli-client/    auth + API client for dormant hosted experiments
   commands/      citty subcommands. Routed today:
-                 init, compile, inspect, export, template, explain, drift.
+                 init, compile, inspect, export, template, explain, drift,
+                 tokens, doctor.
                  Dormant hosted experiments are excluded from the public
                  npm build while they remain unrouted:
                  login, logout, whoami, workspace, publish, rationale.

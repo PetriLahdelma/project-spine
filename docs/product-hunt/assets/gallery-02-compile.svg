@@ -19,6 +19,7 @@
 <text x="106" y="470" font-family="Menlo, Consolas, monospace" font-size="24" font-weight="700" fill="#f7f4ee">agent files: AGENTS.md 5.5 KB, CLAUDE.md 2.3 KB</text>
 <text x="106" y="509" font-family="Menlo, Consolas, monospace" font-size="24" font-weight="700" fill="#f7f4ee">             Copilot 2.9 KB, Cursor 868 B</text>
 <text x="106" y="548" font-family="Menlo, Consolas, monospace" font-size="24" font-weight="700" fill="#d7ff59">wrote 21 files under ./.project-spine and repo root</text>
+<text x="106" y="587" font-family="Menlo, Consolas, monospace" font-size="24" font-weight="700" fill="#45f4ff">$ spine doctor --strict</text>
   <rect x="910" y="110" width="286" height="520" rx="26" fill="#101116" stroke="#30323d" stroke-width="2"/>
   <text x="946" y="178" font-family="Arial, sans-serif" font-size="96" font-weight="900" fill="#ff4fb4">21</text>
   <text x="946" y="248" font-family="Arial, sans-serif" font-size="25" font-weight="800" fill="#f7f4ee">
