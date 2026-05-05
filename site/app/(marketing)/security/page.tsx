@@ -40,7 +40,8 @@ export default function SecurityPage() {
             <code>spine init</code>, <code>spine compile</code>,{" "}
             <code>spine inspect</code>, <code>spine export</code>,{" "}
             <code>spine template</code>, <code>spine explain</code>, and{" "}
-            <code>spine drift check</code> run entirely offline. The only
+            <code>spine drift check</code> run entirely offline.{" "}
+            <code>spine doctor</code> verifies that local posture. The only
             routed network command today is <code>spine tokens pull</code>,
             which requires an explicit Figma file key or URL and{" "}
             <code>FIGMA_TOKEN</code>.

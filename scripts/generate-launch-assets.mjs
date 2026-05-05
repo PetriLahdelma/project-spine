@@ -112,22 +112,22 @@ function thumbnail() {
   <circle cx="470" cy="126" r="78" fill="${COLORS.cyan}" opacity="0.2"/>
   <circle cx="140" cy="470" r="96" fill="${COLORS.pink}" opacity="0.22"/>
   ${wordmark(74, 190, 1.05)}
-  ${wrap(74, 362, "Drift-proof context for coding agents", 32, 42, 430, COLORS.ink, 800)}
-  ${pill(74, 486, "MIT CLI", COLORS.lime)}`;
+  ${wrap(74, 350, "Stop re-explaining your repo to coding agents", 31, 40, 430, COLORS.ink, 800)}
+  ${pill(74, 486, "Public beta", COLORS.lime)}`;
 }
 
 function hero() {
   return `
-  ${pill(72, 74, "Product Hunt launch kit", COLORS.pink)}
+  ${pill(72, 74, "Public beta · MIT CLI", COLORS.pink)}
   ${wordmark(72, 198, 1.2)}
-  ${wrap(72, 394, "Drift-proof context for coding agents.", 58, 66, 650, COLORS.ink, 900)}
+  ${wrap(72, 394, "Stop re-explaining your repo to coding agents.", 56, 64, 720, COLORS.ink, 900)}
   ${wrap(72, 552, "Compile a brief, repo, and design tokens into AGENTS.md, CLAUDE.md, Copilot, Cursor rules, scaffold plans, QA guardrails, and a CI drift gate.", 27, 36, 760, COLORS.dim, 500)}
   <rect x="870" y="116" width="302" height="430" rx="26" fill="${COLORS.panel}" stroke="${COLORS.line}" stroke-width="2"/>
   ${text(910, 184, "brief.md", 27, COLORS.cyan)}
   ${text(910, 247, "repo/", 27, COLORS.pink)}
   ${text(910, 310, "tokens.json", 27, COLORS.lime)}
   ${text(910, 392, "spine.json", 32, COLORS.ink, 900)}
-  ${text(910, 457, "agent files", 27, COLORS.dim, 700)}
+  ${text(910, 457, "spine doctor", 27, COLORS.dim, 700)}
   <path d="M1022 330 L1022 358" stroke="${COLORS.cyan}" stroke-width="4"/>
   <path d="M993 349 L1022 378 L1051 349" fill="none" stroke="${COLORS.cyan}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>`;
 }
@@ -142,6 +142,7 @@ function compile() {
     { text: "agent files: AGENTS.md 5.5 KB, CLAUDE.md 2.3 KB" },
     { text: "             Copilot 2.9 KB, Cursor 868 B" },
     { text: "wrote 21 files under ./.project-spine and repo root", color: COLORS.lime },
+    { text: "$ spine doctor --strict", color: COLORS.cyan },
   ])}
   <rect x="910" y="110" width="286" height="520" rx="26" fill="${COLORS.panel}" stroke="${COLORS.line}" stroke-width="2"/>
   ${text(946, 178, "21", 96, COLORS.pink, 900)}
@@ -184,15 +185,15 @@ function agents() {
 function social() {
   return `
   ${wordmark(68, 164, 1)}
-  ${wrap(68, 326, "Drift-proof context for coding agents.", 58, 66, 660, COLORS.ink, 900)}
+  ${wrap(68, 326, "Stop re-explaining your repo to coding agents.", 54, 62, 700, COLORS.ink, 900)}
   ${wrap(68, 486, "Brief + repo + design tokens -> AGENTS.md, CLAUDE.md, Copilot, Cursor, QA, backlog, drift checks.", 27, 36, 710, COLORS.dim, 500)}
   ${terminal(790, 96, 330, 432, [
     { text: "$ spine compile", color: COLORS.cyan, size: 22 },
     { text: "hash: 3333f867f40d3e43", size: 20 },
     { text: "agent files: 4", size: 20 },
     { text: "warnings: 0", size: 20 },
-    { text: "$ spine drift check", color: COLORS.cyan, size: 22 },
-    { text: "clean", color: COLORS.lime, size: 22 },
+    { text: "$ spine doctor", color: COLORS.cyan, size: 22 },
+    { text: "beta channel clean", color: COLORS.lime, size: 22 },
   ])}`;
 }
 

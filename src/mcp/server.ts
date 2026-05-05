@@ -62,7 +62,7 @@ export function buildServer(): McpServer {
     {
       capabilities: { tools: {}, resources: {} },
       instructions:
-        "Project Spine compiles a client brief, a repo, and optional design tokens into repo-native agent instructions (AGENTS.md, CLAUDE.md, .github/copilot-instructions.md) plus a full .project-spine/ operating layer. Use spine_drift_check before modifying generated files, and spine_compile to refresh them after input changes.",
+        "Project Spine compiles a client brief, a repo, and optional design tokens into repo-native agent instructions (AGENTS.md, CLAUDE.md, .github/copilot-instructions.md, Cursor rules) plus a full .project-spine/ operating layer. Use spine_doctor to verify the local beta CLI surface, spine_drift_check before modifying generated files, and spine_compile to refresh them after input changes.",
     },
   );
 
@@ -73,7 +73,7 @@ export function buildServer(): McpServer {
     {
       title: "Compile brief + repo → agent instructions",
       description:
-        "Compile a client brief, repo, and optional design tokens into the 19-file Spine operating layer (AGENTS.md, CLAUDE.md, copilot-instructions, plus .project-spine/). Writes to the filesystem. Re-run whenever brief, repo, or tokens change.",
+        "Compile a client brief, repo, and optional design tokens into the 21-file Spine operating layer (AGENTS.md, CLAUDE.md, copilot-instructions, Cursor rules, plus .project-spine/). Writes to the filesystem. Re-run whenever brief, repo, or tokens change.",
       inputSchema: {
         brief: z
           .string()
@@ -107,6 +107,34 @@ export function buildServer(): McpServer {
       if (tokens) args.push("--tokens", tokens);
       const run = await runSpine(args, { cwd: resolvePath(repoPath) });
       return shapeResult("compile", run);
+    },
+  );
+
+  server.registerTool(
+    "spine_doctor",
+    {
+      title: "Verify local Project Spine readiness",
+      description:
+        "Runs the public beta readiness checks: package version, npm channel, Node runtime, routed CLI surface, hosted command guardrails, network posture, and local drift state.",
+      inputSchema: {
+        repoPath: z.string().default(".").describe("Repo root to check."),
+        strict: z
+          .boolean()
+          .default(false)
+          .describe("Exit non-zero when warnings are present, not only failures."),
+      },
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: false,
+      },
+    },
+    async ({ repoPath, strict }) => {
+      const args = ["doctor", "--repo", repoPath, "--json"];
+      if (strict) args.push("--strict");
+      const run = await runSpine(args, { cwd: resolvePath(repoPath) });
+      return shapeResult("doctor", run, { jsonStdout: true });
     },
   );
 

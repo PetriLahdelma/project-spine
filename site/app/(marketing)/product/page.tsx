@@ -103,9 +103,9 @@ design.md  ──┘                     sprint-1-backlog.md · rationale.md`}
           <strong>No account in the critical path.</strong>
           <span>
             The OSS CLI runs locally by default: compile, export, inspect,
-            templates, and drift checks do not upload your repo. The only
-            routed network command is <code>spine tokens pull</code>, and that
-            requires an explicit Figma token and file URL.
+            templates, doctor, and drift checks do not upload your repo. The
+            only routed network command is <code>spine tokens pull</code>, and
+            that requires an explicit Figma token and file URL.
           </span>
         </li>
         <li>

@@ -4,9 +4,9 @@
 
   <text x="68" y="164" font-family="Arial Black, Arial, sans-serif" font-size="58" font-weight="900" letter-spacing="0" fill="#f7f4ee">PROJECT</text>
   <text x="68" y="216.2" font-family="Arial Black, Arial, sans-serif" font-size="58" font-weight="900" letter-spacing="0" fill="#ff4fb4">SPINE</text>
-  <text x="68" y="326" font-family="Arial, sans-serif" font-size="58" font-weight="900" fill="#f7f4ee">
-    <tspan x="68" dy="0">Drift-proof context</tspan>
-    <tspan x="68" dy="66">for coding agents.</tspan>
+  <text x="68" y="326" font-family="Arial, sans-serif" font-size="54" font-weight="900" fill="#f7f4ee">
+    <tspan x="68" dy="0">Stop re-explaining your</tspan>
+    <tspan x="68" dy="62">repo to coding agents.</tspan>
   </text>
   <text x="68" y="486" font-family="Arial, sans-serif" font-size="27" font-weight="500" fill="#a4a7b5">
     <tspan x="68" dy="0">Brief + repo + design tokens -&gt; AGENTS.md,</tspan>
@@ -22,6 +22,6 @@
 <text x="824" y="221" font-family="Menlo, Consolas, monospace" font-size="20" font-weight="700" fill="#f7f4ee">hash: 3333f867f40d3e43</text>
 <text x="824" y="260" font-family="Menlo, Consolas, monospace" font-size="20" font-weight="700" fill="#f7f4ee">agent files: 4</text>
 <text x="824" y="299" font-family="Menlo, Consolas, monospace" font-size="20" font-weight="700" fill="#f7f4ee">warnings: 0</text>
-<text x="824" y="338" font-family="Menlo, Consolas, monospace" font-size="22" font-weight="700" fill="#45f4ff">$ spine drift check</text>
-<text x="824" y="377" font-family="Menlo, Consolas, monospace" font-size="22" font-weight="700" fill="#d7ff59">clean</text>
+<text x="824" y="338" font-family="Menlo, Consolas, monospace" font-size="22" font-weight="700" fill="#45f4ff">$ spine doctor</text>
+<text x="824" y="377" font-family="Menlo, Consolas, monospace" font-size="22" font-weight="700" fill="#d7ff59">beta channel clean</text>
 </svg>

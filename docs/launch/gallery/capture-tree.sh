@@ -10,7 +10,7 @@ mkdir -p app && printf '{"compilerOptions":{"strict":true}}' > tsconfig.json
 spine compile --brief ./brief.md --repo . --template saas-marketing >/dev/null 2>&1
 clear
 echo '# tool-discovery files (Claude Code / Cursor / Copilot read these)'
-ls -1 AGENTS.md CLAUDE.md .github/copilot-instructions.md
+ls -1 AGENTS.md CLAUDE.md .github/copilot-instructions.md .cursor/rules/project-spine.mdc
 echo
 echo '# full compiled layer'
 ls -1 .project-spine/exports/

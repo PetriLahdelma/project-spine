@@ -27,6 +27,7 @@
     "**/*.test.ts",
     "examples",
     "templates",
+    "src/commands/cli-e2e.setup.ts",
     "src/cli-client/**/*",
     "src/commands/login.ts",
     "src/commands/logout.ts",

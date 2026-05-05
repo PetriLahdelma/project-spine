@@ -6,9 +6,9 @@ _Last updated: 2026-05-05._
 
 **Product name:** Project Spine
 
-**Tagline:** Drift-proof context for coding agents
+**Tagline:** Stop re-briefing coding agents
 
-Tagline length: 39 characters.
+Tagline length: 31 characters.
 
 **Primary URL:** https://projectspine.dev
 
@@ -18,7 +18,7 @@ Tagline length: 39 characters.
 
 **Description:**
 
-Project Spine is an open-source context compiler for software projects. It turns a brief, repo, and optional design tokens into AGENTS.md, CLAUDE.md, Copilot instructions, Cursor rules, scaffold plans, QA guardrails, backlog, and CI drift checks. Same inputs, same hash, no account, no telemetry.
+Project Spine is an open-source context compiler for software projects. It turns a brief, repo, and optional design tokens into AGENTS.md, CLAUDE.md, Copilot instructions, Cursor rules, scaffold plans, QA guardrails, backlog, and CI drift checks. Same inputs, same hash, no account, no telemetry, and `spine doctor` proves the local beta surface.
 
 **Suggested topics:**
 
@@ -68,7 +68,8 @@ Generated files:
 
 - Product URL points to `https://projectspine.dev`, not a tracking redirect.
 - GitHub README install path uses `npm install -g project-spine@beta`.
-- `npm view project-spine version dist-tags --json` matches the version shown on the site.
+- `npm view project-spine dist-tags.beta --json` matches the version shown on the site.
+- `spine doctor --strict` passes on the release checkout.
 - `npm run typecheck`, `npm test`, `npm run build`, and `npm run pack:check` pass.
 - `npm run launch:check` passes.
 - `cd site && npm run typecheck && npm run build` passes.

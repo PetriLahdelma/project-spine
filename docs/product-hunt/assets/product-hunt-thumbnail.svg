@@ -7,11 +7,11 @@
 
   <text x="74" y="190" font-family="Arial Black, Arial, sans-serif" font-size="60.900000000000006" font-weight="900" letter-spacing="0" fill="#f7f4ee">PROJECT</text>
   <text x="74" y="244.81" font-family="Arial Black, Arial, sans-serif" font-size="60.900000000000006" font-weight="900" letter-spacing="0" fill="#ff4fb4">SPINE</text>
-  <text x="74" y="362" font-family="Arial, sans-serif" font-size="32" font-weight="800" fill="#f7f4ee">
-    <tspan x="74" dy="0">Drift-proof context for</tspan>
-    <tspan x="74" dy="42">coding agents</tspan>
+  <text x="74" y="350" font-family="Arial, sans-serif" font-size="31" font-weight="800" fill="#f7f4ee">
+    <tspan x="74" dy="0">Stop re-explaining your</tspan>
+    <tspan x="74" dy="40">repo to coding agents</tspan>
   </text>
 
-  <rect x="74" y="486" width="90.8" height="34" rx="17" fill="#d7ff59" opacity="0.14"/>
-  <text x="88" y="509" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#d7ff59">MIT CLI</text>
+  <rect x="74" y="486" width="132.4" height="34" rx="17" fill="#d7ff59" opacity="0.14"/>
+  <text x="88" y="509" font-family="Arial, sans-serif" font-size="15" font-weight="700" fill="#d7ff59">Public beta</text>
 </svg>

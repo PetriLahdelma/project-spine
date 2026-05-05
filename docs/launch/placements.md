@@ -19,7 +19,7 @@ All submissions can be filed by Petri in under 30 minutes total.
 **Entry to paste (alphabetically placed among siblings):**
 
 ```markdown
-- **[Project Spine](https://github.com/PetriLahdelma/project-spine)** – Compile a client brief, repo, and design tokens into repo-native agent instructions (`AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`) with drift detection. MCP server exposes `spine_compile`, `spine_drift_check`, `spine_drift_diff`, `spine_init`, and `spine_tokens_pull`.
+- **[Project Spine](https://github.com/PetriLahdelma/project-spine)** – Compile a client brief, repo, and design tokens into repo-native agent instructions (`AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, Cursor rules) with drift detection. MCP server exposes `spine_compile`, `spine_doctor`, `spine_drift_check`, `spine_drift_diff`, `spine_init`, and `spine_tokens_pull`.
 ```
 
 **PR title:** `docs: add Project Spine to community servers`

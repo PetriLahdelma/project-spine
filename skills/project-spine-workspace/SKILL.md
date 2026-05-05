@@ -20,6 +20,7 @@ spine template list|show|save
 spine explain
 spine drift check|diff
 spine tokens pull
+spine doctor
 ```
 
 Hosted workspace commands are dormant in source but intentionally not exposed from `spine --help`. Do not instruct users to run:

@@ -15,7 +15,8 @@ which spine spine-mcp
 
 | Name | Purpose | Read-only? |
 |---|---|---|
-| `spine_compile` | Compile brief + repo (+ optional tokens, template) into the 19-file operating layer. Writes to the filesystem. | No |
+| `spine_compile` | Compile brief + repo (+ optional tokens, template) into the 21-file operating layer. Writes to the filesystem. | No |
+| `spine_doctor` | Verify package version, beta channel, Node runtime, routed CLI surface, hosted-command guardrails, network posture, and local drift state. | Yes |
 | `spine_drift_check` | Check whether inputs or generated exports have changed since the last compile. Returns structured drift report. | Yes |
 | `spine_drift_diff` | Unified diffs for each generated file that has been hand-edited since the last compile. | Yes |
 | `spine_init` | Scaffold `brief.md` from a template. | No |
@@ -97,7 +98,7 @@ The server uses the standard MCP stdio transport. `command: "spine-mcp"` with no
 
 > "Scaffold a SaaS marketing brief here and compile it."
 
-The agent calls `spine_init` then `spine_compile`. You get 19 generated files in a fresh repo without leaving the chat.
+The agent calls `spine_init` then `spine_compile`. You get 21 generated files in a fresh repo without leaving the chat.
 
 **Catch drift before you commit.**
 
@@ -127,7 +128,7 @@ Check that the client is speaking the `2025-03-26` MCP protocol revision or newe
 
 ## Implementation notes
 
-The server is a thin wrapper — each tool shells out to the sibling `spine` binary via `process.execPath`. This preserves CLI behavior 1:1, including error messages, exit codes, and output formatting. CLI flags with `--json` support (`drift check`, `drift diff`) round-trip their JSON payload as `structuredContent` on the tool response so clients that prefer structured data over text get it for free.
+The server is a thin wrapper — each tool shells out to the sibling `spine` binary via `process.execPath`. This preserves CLI behavior 1:1, including error messages, exit codes, and output formatting. CLI flags with `--json` support (`doctor`, `drift check`, `drift diff`) round-trip their JSON payload as `structuredContent` on the tool response so clients that prefer structured data over text get it for free.
 
 No Spine-specific state lives in the server; everything is derived from the cwd the client sends via `repoPath` (default `.`). Running two MCP clients against the same repo is safe; each call is a fresh process.
 

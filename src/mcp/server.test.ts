@@ -4,9 +4,10 @@
  * Uses an in-memory duplex transport pair to drive the server without
  * spawning a subprocess. Exercises the three highest-leverage paths:
  *   1. initialize + tools/list returns the expected tool names.
- *   2. calling spine_drift_check on an empty dir surfaces a useful error
+ *   2. calling spine_doctor returns structured readiness checks.
+ *   3. calling spine_drift_check on an empty dir surfaces a useful error
  *      (the CLI reports "manifest:missing", exit code non-zero).
- *   3. calling spine_init writes brief.md to a tmp dir and exits zero.
+ *   4. calling spine_init writes brief.md to a tmp dir and exits zero.
  */
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { mkdtemp, rm, access, constants as fsConstants } from "node:fs/promises";
@@ -43,6 +44,7 @@ describe("spine-mcp", () => {
       const names = listed.tools.map((t) => t.name).sort();
       expect(names).toEqual([
         "spine_compile",
+        "spine_doctor",
         "spine_drift_check",
         "spine_drift_diff",
         "spine_init",
@@ -53,11 +55,33 @@ describe("spine-mcp", () => {
       expect(check?.annotations?.readOnlyHint).toBe(true);
       const compile = listed.tools.find((t) => t.name === "spine_compile");
       expect(compile?.annotations?.destructiveHint).toBe(true);
+      const doctor = listed.tools.find((t) => t.name === "spine_doctor");
+      expect(doctor?.annotations?.readOnlyHint).toBe(true);
     } finally {
       await client.close();
       await server.close();
     }
   });
+
+  it("spine_doctor returns structured beta readiness checks", async () => {
+    const { client, server } = await connect();
+    try {
+      const result = await client.callTool({
+        name: "spine_doctor",
+        arguments: { repoPath: work },
+      });
+      expect(result.isError).toBeFalsy();
+      const sc = result.structuredContent as
+        | { ok?: boolean; version?: string; checks?: { name?: string; status?: string }[] }
+        | undefined;
+      expect(sc?.ok).toBe(true);
+      expect(sc?.version).toContain("-beta.");
+      expect(sc?.checks?.some((check) => check.name === "routed commands")).toBe(true);
+    } finally {
+      await client.close();
+      await server.close();
+    }
+  }, 30_000);
 
   it("spine_init writes brief.md into the target repoPath", async () => {
     const { client, server } = await connect();

@@ -132,6 +132,43 @@ const FEATURES: Array<{ title: string; body: React.ReactNode }> = [
   },
 ];
 
+const TRUST_POINTS: Array<{ label: string; value: React.ReactNode }> = [
+  { label: "Offline by default", value: "No repo upload, no telemetry, no account." },
+  { label: "Deterministic", value: "Same inputs produce the same spine hash." },
+  {
+    label: "Beta proof",
+    value: (
+      <>
+        <code>spine doctor</code> verifies version, channel, runtime, and drift.
+      </>
+    ),
+  },
+  { label: "CI-native", value: "GitHub Action fails when exports drift." },
+];
+
+const COMPARISON_ROWS = [
+  {
+    tool: "Agent feedback tools",
+    focus: "Turn UI review into coding-agent tasks.",
+    spine: "Compiles the project operating layer those agents should obey.",
+  },
+  {
+    tool: "Rule libraries",
+    focus: "Collect reusable AI coding rules.",
+    spine: "Generates source-pointed rules from the actual brief, repo, template, and tokens.",
+  },
+  {
+    tool: "Context-sharing CLIs",
+    focus: "Expose docs and tasks to agents.",
+    spine: "Writes durable repo files and hashes them so drift is enforceable in CI.",
+  },
+  {
+    tool: "Agent orchestration",
+    focus: "Run agents in parallel workspaces.",
+    spine: "Gives every agent the same deterministic project contract before work starts.",
+  },
+];
+
 const CLAUDE_POINTS: React.ReactNode[] = [
   <>
     Different <code>AGENTS.md</code> every time you ask. Non-deterministic by
@@ -183,7 +220,7 @@ export default async function Home() {
           <p className="poster-hero__eyebrow">beta · now with Figma tokens import</p>
           <HeroWordmark line1="PROJECT" line2="SPINE" />
           <h1 className="poster-hero__tagline">
-            The context layer your coding agents are missing.
+            Stop re-explaining your repo to coding agents.
           </h1>
         </div>
       </section>
@@ -192,10 +229,10 @@ export default async function Home() {
       <section className="hero-band">
         <div className="hero-band__inner">
           <p className="hero-band__lede">
-            Compile your brief, repo, and design tokens into AGENTS.md,
-            CLAUDE.md, copilot-instructions, and Cursor rules from one
-            deterministic source.
-            With drift detection that fails CI before it fails trust.
+            Turn one brief into <code>AGENTS.md</code>, <code>CLAUDE.md</code>,
+            Copilot instructions, Cursor rules, a scaffold plan, QA guardrails,
+            and a sprint backlog. Then fail CI when those files drift from the
+            source of truth.
           </p>
           <div className="hero-band__install">
             <InstallCommand />
@@ -223,6 +260,14 @@ export default async function Home() {
               Read the docs
             </Link>
           </div>
+          <dl className="trust-strip" aria-label="Project Spine trust guarantees">
+            {TRUST_POINTS.map((point) => (
+              <div key={point.label} className="trust-strip__item">
+                <dt>{point.label}</dt>
+                <dd>{point.value}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
       </section>
 
@@ -266,6 +311,18 @@ export default async function Home() {
           {"\n"}
           <span className="tok-success">✓ clean</span>
           <span className="tok-dim"> · spine hash 3333f867f40d3e43 matches current.</span>
+          {"\n\n"}
+          <span className="tok-prompt">$ </span>
+          <span className="tok-command">spine doctor --strict</span>
+          {"\n"}
+          <span className="tok-success">[ok]</span>
+          <span> version          project-spine 0.9.2-beta.0</span>
+          {"\n"}
+          <span className="tok-success">[ok]</span>
+          <span> release channel  npm publish tag beta</span>
+          {"\n"}
+          <span className="tok-success">[ok]</span>
+          <span> local drift      clean</span>
         </TerminalMock>
       </section>
 
@@ -355,11 +412,53 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* Proof */}
+      <section className="section section--band">
+        <div className="section-header">
+          <div className="section-header__kicker">
+            <span className="section-header__num">02</span>
+            <span className="section-header__label">Proof</span>
+          </div>
+          <h2>Not a prompt. A contract you can audit.</h2>
+          <p className="sub">
+            Product Hunt launches in this category win when the promise is
+            visible. Spine now exposes the proof directly: source pointers,
+            drift diffs, and a local readiness command.
+          </p>
+        </div>
+        <div className="proof-grid">
+          <div className="proof-panel">
+            <p className="proof-panel__label">Generated rule</p>
+            <pre><code>{`- Use TypeScript strict mode.
+  source: repo-profile#language.strict
+
+- Keep LCP below 2.5s on mobile.
+  source: template:saas-marketing/qa#performance
+
+- Never remove visible focus states.
+  source: design-rules.md#accessibility`}</code></pre>
+          </div>
+          <div className="proof-panel">
+            <p className="proof-panel__label">CI drift failure</p>
+            <pre><code>{`$ spine drift diff
+--- .project-spine/exports/AGENTS.md
++++ AGENTS.md
+@@
+- Node >= 20 is required.
++ Node >= 18 is fine.
+
+input drift: 0
+export hand-edits: 1
+next: update the brief or regenerate exports`}</code></pre>
+          </div>
+        </div>
+      </section>
+
       {/* Claude vs Spine */}
       <section className="section">
         <div className="section-header">
           <div className="section-header__kicker">
-            <span className="section-header__num">02</span>
+            <span className="section-header__num">03</span>
             <span className="section-header__label">The moat</span>
           </div>
           <h2>Why not just use Claude?</h2>
@@ -402,11 +501,41 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* Competitive position */}
+      <section className="section section--tight">
+        <div className="section-header">
+          <div className="section-header__kicker">
+            <span className="section-header__num">04</span>
+            <span className="section-header__label">Positioning</span>
+          </div>
+          <h2>Where Spine sits in the agent stack.</h2>
+          <p className="sub">
+            Benchmarked against current Product Hunt agent launches, the gap
+            was clarity: Spine is not another agent runner. It is the source of
+            truth agent runners should start from.
+          </p>
+        </div>
+        <div className="comparison-table" role="table" aria-label="Project Spine competitive positioning">
+          <div className="comparison-table__row comparison-table__row--head" role="row">
+            <span role="columnheader">Category</span>
+            <span role="columnheader">What they do</span>
+            <span role="columnheader">What Spine owns</span>
+          </div>
+          {COMPARISON_ROWS.map((row) => (
+            <div key={row.tool} className="comparison-table__row" role="row">
+              <span role="cell">{row.tool}</span>
+              <span role="cell">{row.focus}</span>
+              <span role="cell">{row.spine}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* Features — editorial list */}
       <section className="section">
         <div className="section-header">
           <div className="section-header__kicker">
-            <span className="section-header__num">03</span>
+            <span className="section-header__num">05</span>
             <span className="section-header__label">Capabilities</span>
           </div>
           <h2>Everything a real kickoff needs. Nothing you don&apos;t.</h2>

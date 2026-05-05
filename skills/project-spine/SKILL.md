@@ -62,6 +62,7 @@ Requires Node ≥ 20.
 | `spine template list/show/save` | Bundled, user-local, and project-local templates |
 | `spine explain <warning-id>` | Expand on a warning from `warnings.json` |
 | `spine tokens pull` | Explicit Figma Variables pull into local tokens JSON |
+| `spine doctor` | Verify beta version/channel, Node runtime, routed commands, hosted guardrails, and local drift state |
 
 ## Chain into a specific skill
 
