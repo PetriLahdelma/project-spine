@@ -56,8 +56,8 @@ export function HeroWordmark({ line1, line2 }: Props) {
       className="hero-wordmark"
       viewBox="0 0 1400 900"
       preserveAspectRatio="xMidYMid meet"
-      aria-label={lines.join(" ")}
-      role="img"
+      aria-hidden="true"
+      focusable="false"
     >
       <defs>
         {/* Shadow silhouette: stacked copies of the text = solid shape */}

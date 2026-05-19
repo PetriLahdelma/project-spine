@@ -421,9 +421,9 @@ export default async function Home() {
           </div>
           <h2>Not a prompt. A contract you can audit.</h2>
           <p className="sub">
-            Product Hunt launches in this category win when the promise is
-            visible. Spine now exposes the proof directly: source pointers,
-            drift diffs, and a local readiness command.
+            The promise is visible in the artifacts themselves: source
+            pointers, drift diffs, and a local readiness command that proves
+            the public beta surface on your machine.
           </p>
         </div>
         <div className="proof-grid">
@@ -510,9 +510,9 @@ next: update the brief or regenerate exports`}</code></pre>
           </div>
           <h2>Where Spine sits in the agent stack.</h2>
           <p className="sub">
-            Benchmarked against current Product Hunt agent launches, the gap
-            was clarity: Spine is not another agent runner. It is the source of
-            truth agent runners should start from.
+            Spine is not another agent runner or task queue. It is the source
+            of truth those agents should start from before they touch the
+            repo.
           </p>
         </div>
         <div className="comparison-table" role="table" aria-label="Project Spine competitive positioning">
