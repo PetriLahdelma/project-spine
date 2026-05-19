@@ -9,6 +9,23 @@ import { HeaderLogo } from "./header-logo";
 type Item = { label: string; href: string };
 type ProductItem = { label: string; href: string; desc: string };
 
+const FOCUSABLE_SELECTOR = [
+  "a[href]",
+  "button:not([disabled])",
+  "input:not([disabled])",
+  "select:not([disabled])",
+  "textarea:not([disabled])",
+  "[tabindex]:not([tabindex='-1'])",
+].join(",");
+
+function getFocusableElements(root: HTMLElement | null): HTMLElement[] {
+  if (!root) return [];
+  return Array.from(root.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)).filter((element) => {
+    const style = window.getComputedStyle(element);
+    return style.display !== "none" && style.visibility !== "hidden";
+  });
+}
+
 function HamburgerIcon() {
   return (
     <svg width={18} height={18} viewBox="0 0 18 18" fill="none" aria-hidden="true">
@@ -47,7 +64,7 @@ export function MobileNav({
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
-  const panelRef = useRef<HTMLDivElement | null>(null);
+  const panelRef = useRef<HTMLElement | null>(null);
   const toggleRef = useRef<HTMLButtonElement | null>(null);
   const hasOpenedRef = useRef(false);
   const panelId = useId();
@@ -69,15 +86,54 @@ export function MobileNav({
     setOpen(false);
   }, [pathname]);
 
-  // ESC to close + scroll lock + focus management
+  // ESC/Tab handling + scroll/background isolation while the drawer is modal.
   useEffect(() => {
     if (open) {
       hasOpenedRef.current = true;
-      const first = panelRef.current?.querySelector<HTMLElement>("a, button");
+      const first = getFocusableElements(panelRef.current)[0] ?? panelRef.current;
       first?.focus();
 
+      const backgroundElements = Array.from(document.body.children).filter(
+        (element): element is HTMLElement =>
+          element instanceof HTMLElement && !element.classList.contains("mobile-nav"),
+      );
+      const previousBackgroundState = backgroundElements.map((element) => ({
+        element,
+        ariaHidden: element.getAttribute("aria-hidden"),
+        inert: element.inert,
+      }));
+      for (const element of backgroundElements) {
+        element.inert = true;
+        element.setAttribute("aria-hidden", "true");
+      }
+
       const onKey = (e: KeyboardEvent) => {
-        if (e.key === "Escape") setOpen(false);
+        if (e.key === "Escape") {
+          e.preventDefault();
+          setOpen(false);
+          return;
+        }
+
+        if (e.key !== "Tab") return;
+
+        const focusable = getFocusableElements(panelRef.current);
+        if (focusable.length === 0) {
+          e.preventDefault();
+          panelRef.current?.focus();
+          return;
+        }
+
+        const firstElement = focusable[0];
+        const lastElement = focusable[focusable.length - 1];
+        const activeElement = document.activeElement;
+
+        if (e.shiftKey && activeElement === firstElement) {
+          e.preventDefault();
+          lastElement.focus();
+        } else if (!e.shiftKey && activeElement === lastElement) {
+          e.preventDefault();
+          firstElement.focus();
+        }
       };
       document.addEventListener("keydown", onKey);
 
@@ -87,6 +143,14 @@ export function MobileNav({
       return () => {
         document.removeEventListener("keydown", onKey);
         document.body.style.overflow = prevOverflow;
+        for (const { element, ariaHidden, inert } of previousBackgroundState) {
+          element.inert = inert;
+          if (ariaHidden === null) {
+            element.removeAttribute("aria-hidden");
+          } else {
+            element.setAttribute("aria-hidden", ariaHidden);
+          }
+        }
       };
     } else if (hasOpenedRef.current) {
       toggleRef.current?.focus();
@@ -99,7 +163,7 @@ export function MobileNav({
           type="button"
           className="mobile-nav__scrim"
           aria-label="Close menu"
-          tabIndex={open ? 0 : -1}
+          tabIndex={-1}
           onClick={() => setOpen(false)}
         />
         <aside
@@ -109,6 +173,7 @@ export function MobileNav({
           role="dialog"
           aria-modal="true"
           aria-label="Site navigation"
+          tabIndex={-1}
         >
           <div className="mobile-nav__header">
             <Link href="/" className="mobile-nav__brand" onClick={() => setOpen(false)}>
