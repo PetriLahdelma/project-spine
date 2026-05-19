@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 
 const ROOT = dirname(dirname(fileURLToPath(import.meta.url)));
-const OUT = join(ROOT, "docs", "product-hunt", "assets");
+const OUT = join(ROOT, "docs", "marketing", "assets");
 const PUBLIC = join(ROOT, "site", "public");
 
 const COLORS = {
@@ -24,7 +24,7 @@ const COLORS = {
 await mkdir(OUT, { recursive: true });
 await mkdir(PUBLIC, { recursive: true });
 
-await asset("product-hunt-thumbnail", 600, 600, thumbnail());
+await asset("square-thumbnail", 600, 600, thumbnail());
 await asset("gallery-01-hero", 1270, 760, hero());
 await asset("gallery-02-compile", 1270, 760, compile());
 await asset("gallery-03-drift", 1270, 760, drift());

@@ -36,7 +36,7 @@ The first pass through the roadmap is done. Keeping the entries here (not delete
 
 ## Readiness pass (what's next)
 
-Second round: polish the codebase and public surface so it lands as a best-in-class OSS example + clears the Product Hunt polish bar. No launch-channel work — memory says growth targets are polish bars, not launch directives, and this plan reads that way.
+Second round: polish the codebase and public surface so it lands as a best-in-class OSS example. No launch-channel work — growth targets are polish bars, not launch directives, and this plan reads that way.
 
 ### R0.1 · Dogfood: compile Project Spine with itself
 

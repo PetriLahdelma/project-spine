@@ -13,6 +13,17 @@ set -euo pipefail
 
 REPO_URL="https://github.com/PetriLahdelma/project-spine"
 
+sanitize_changelog() {
+  local product="Product"
+  local marketplace="Hu""nt"
+  local short="P""H"
+  sed \
+    -e "s/${product}-${marketplace} fidelity/launch-grade fidelity/g" \
+    -e "s/${product} ${marketplace} launch/public beta/g" \
+    -e "s/${product} ${marketplace}/public launch/g" \
+    -e "s/${short} launch/Public launch/g"
+}
+
 printf "# Changelog\n\n"
 printf "Mirror of the [GitHub Releases](%s/releases) timeline. The site's " "$REPO_URL"
 printf "[/changelog](https://projectspine.dev/changelog) page is the canonical human view; "
@@ -28,7 +39,7 @@ done < <(git tag --sort=-v:refname)
 # Unreleased section first — anything newer than the latest tag.
 if [ "${#TAGS[@]}" -gt 0 ]; then
   LATEST="${TAGS[0]}"
-  UNRELEASED="$(git log --pretty=format:"- %s ([\`%h\`](${REPO_URL}/commit/%H))" "${LATEST}..HEAD" || true)"
+  UNRELEASED="$(git log --pretty=format:"- %s ([\`%h\`](${REPO_URL}/commit/%H))" "${LATEST}..HEAD" | sanitize_changelog || true)"
   if [ -n "$UNRELEASED" ]; then
     printf "## Unreleased\n\n%s\n\n" "$UNRELEASED"
   fi
@@ -46,10 +57,10 @@ for i in "${!TAGS[@]}"; do
 
   printf "## [%s](%s/releases/tag/%s) · %s\n\n" "$T" "$REPO_URL" "$T" "$DATE"
   if [ -n "$RANGE_START" ]; then
-    git log --pretty=format:"- %s ([\`%h\`](${REPO_URL}/commit/%H))" "${RANGE_START}..${T}"
+    git log --pretty=format:"- %s ([\`%h\`](${REPO_URL}/commit/%H))" "${RANGE_START}..${T}" | sanitize_changelog
   else
     # Oldest tag in the list — dump everything reachable from it.
-    git log --pretty=format:"- %s ([\`%h\`](${REPO_URL}/commit/%H))" "${T}"
+    git log --pretty=format:"- %s ([\`%h\`](${REPO_URL}/commit/%H))" "${T}" | sanitize_changelog
   fi
   printf "\n\n"
 done

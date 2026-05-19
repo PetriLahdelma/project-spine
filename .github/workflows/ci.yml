@@ -40,8 +40,8 @@ jobs:
       - name: Public package surface
         run: npm run pack:check
 
-      - name: Launch assets
-        run: npm run launch:check
+      - name: Marketing assets
+        run: npm run assets:check
 
       - name: Smoke — compile against sample brief
         run: |

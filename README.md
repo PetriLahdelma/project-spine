@@ -27,11 +27,9 @@ design.md ─┘                    scaffold-plan.md, qa-guardrails.md, sprint-1
                                 component-plan.md, route-inventory.md, rationale.md
 ```
 
-> **Status — v0.9.x (beta).** The CLI works end-to-end: brief + repo + optional design + optional template → canonical `spine.json` + generated exports. Drift detection, design-token ingestion, Cursor-native exports, MCP, the GitHub drift action, generated launch assets, and agent skills for Claude Code / Codex / Cursor are all live. The compiler path is ready for public evaluation while templates and integrations continue to harden before 1.0.
+> **Status — v0.9.x (beta).** The CLI works end-to-end: brief + repo + optional design + optional template → canonical `spine.json` + generated exports. Drift detection, design-token ingestion, Cursor-native exports, MCP, the GitHub drift action, generated social assets, and agent skills for Claude Code / Codex / Cursor are all live. The compiler path is ready for public evaluation while templates and integrations continue to harden before 1.0.
 
 See the full product thinking in [PRD.md](./PRD.md), the research evidence in [docs/research-citations.md](./docs/research-citations.md), and the "why not just Claude?" moat analysis in [docs/positioning.md](./docs/positioning.md).
-
-Product Hunt launch copy and generated gallery assets live in [docs/product-hunt-launch.md](./docs/product-hunt-launch.md).
 
 ---
 
