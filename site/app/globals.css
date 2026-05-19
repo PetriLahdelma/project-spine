@@ -281,7 +281,7 @@ footer a {
   margin-left: 12px;
   flex: 1;
 }
-.site-header__nav a {
+.site-header__nav > a {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
@@ -291,8 +291,8 @@ footer a {
   text-decoration: none;
   font-size: 14px;
 }
-.site-header__nav a:hover,
-.site-header__nav a[aria-current="page"] {
+.site-header__nav > a:hover,
+.site-header__nav > a[aria-current="page"] {
   color: var(--ink);
 }
 .site-header__actions {
@@ -1250,7 +1250,8 @@ main.landing {
   position: absolute;
   top: calc(100% + 10px);
   left: -20px;
-  min-width: 380px;
+  width: 380px;
+  max-width: calc(100vw - 32px);
   background: #fff;
   border: 1px solid var(--line);
   border-radius: 12px;
@@ -1273,10 +1274,13 @@ main.landing {
 .nav-group__item {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 2px;
+  width: 100%;
   padding: 10px 12px;
   border-radius: 8px;
   text-decoration: none;
+  text-align: left;
   color: var(--ink);
   transition: background 120ms ease;
 }
