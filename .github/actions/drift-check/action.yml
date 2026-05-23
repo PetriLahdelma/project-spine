@@ -7,7 +7,7 @@ branding:
 
 inputs:
   version:
-    description: "project-spine npm dist-tag or exact version. Examples: beta, latest, 0.9.2-beta.0."
+    description: "project-spine npm dist-tag or exact semver. Examples: beta, latest, or a pinned release."
     required: false
     default: "beta"
   node-version:
