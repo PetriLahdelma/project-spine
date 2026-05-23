@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { TerminalMock } from "../components/terminal-mock";
 import { InstallCommand } from "../components/install-command";
 import { HeroWordmark } from "../components/hero-wordmark";
+import { PROJECT_SPINE_VERSION } from "../../lib/project-version";
 
 const SITE = "https://projectspine.dev";
 
@@ -33,7 +34,7 @@ const LANDING_JSON_LD = {
   url: SITE,
   author: { "@type": "Organization", name: "Project Spine", url: SITE },
   offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-  softwareVersion: "0.9.2-beta.0",
+  softwareVersion: PROJECT_SPINE_VERSION,
   license: "https://opensource.org/licenses/MIT",
 };
 
@@ -316,7 +317,7 @@ export default async function Home() {
           <span className="tok-command">spine doctor --strict</span>
           {"\n"}
           <span className="tok-success">[ok]</span>
-          <span> version          project-spine 0.9.2-beta.0</span>
+          <span> version          project-spine {PROJECT_SPINE_VERSION}</span>
           {"\n"}
           <span className="tok-success">[ok]</span>
           <span> release channel  npm publish tag beta</span>

@@ -1,5 +1,6 @@
 import { fileURLToPath } from "node:url";
 import { dirname } from "node:path";
+import rootPackage from "../package.json" with { type: "json" };
 
 /** @type {import('next').NextConfig} */
 
@@ -8,6 +9,9 @@ import { dirname } from "node:path";
 // doesn't need per-request variance.
 const nextConfig = {
   reactStrictMode: true,
+  env: {
+    NEXT_PUBLIC_PROJECT_SPINE_VERSION: rootPackage.version,
+  },
   // Hide the dev-only N badge / issues overlay in the bottom-left. It only
   // renders in `next dev`, never in production, so this is a dev-UX choice.
   devIndicators: false,

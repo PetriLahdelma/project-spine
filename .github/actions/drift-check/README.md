@@ -18,16 +18,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: PetriLahdelma/project-spine/.github/actions/drift-check@v0.9.2-beta.0
+      - uses: PetriLahdelma/project-spine/.github/actions/drift-check@main
 ```
 
 By default it runs `spine drift check --fail-on any` from the repo root. Non-zero exit fails the job.
+Use `@main` to track the current action. Pin the action ref to a release tag
+or commit SHA when you need immutable CI.
 
 ## Inputs
 
 | Name | Default | What it does |
 |---|---|---|
-| `version` | `beta` | `project-spine` npm dist-tag or exact version. Pin to a tag (e.g. `0.9.2-beta.0`) for reproducibility. |
+| `version` | `beta` | `project-spine` npm dist-tag or exact version. Pin to an exact semver for reproducibility. |
 | `node-version` | `20` | Node major version for the CLI. |
 | `repo-path` | `.` | Repo root. Must contain a `.project-spine/` directory produced by a prior `spine compile`. |
 | `fail-on` | `any` | One of `none` / `any` / `inputs` / `exports`. |
@@ -44,7 +46,7 @@ By default it runs `spine drift check --fail-on any` from the repo root. Non-zer
 ### Only fail on input drift (brief / tokens changed), ignore hand-edits to exports
 
 ```yaml
-- uses: PetriLahdelma/project-spine/.github/actions/drift-check@v0.9.2-beta.0
+- uses: PetriLahdelma/project-spine/.github/actions/drift-check@main
   with:
     fail-on: inputs
 ```
@@ -53,7 +55,7 @@ By default it runs `spine drift check --fail-on any` from the repo root. Non-zer
 
 ```yaml
 - id: drift
-  uses: PetriLahdelma/project-spine/.github/actions/drift-check@v0.9.2-beta.0
+  uses: PetriLahdelma/project-spine/.github/actions/drift-check@main
   with:
     fail-on: any
     json: true
@@ -61,12 +63,12 @@ By default it runs `spine drift check --fail-on any` from the repo root. Non-zer
   run: echo "Drift detected — see prior step for the JSON report."
 ```
 
-### Pin to an exact CLI version
+### Pin the CLI version used by the action
 
 ```yaml
-- uses: PetriLahdelma/project-spine/.github/actions/drift-check@v0.9.2-beta.0
+- uses: PetriLahdelma/project-spine/.github/actions/drift-check@main
   with:
-    version: "0.9.2-beta.0"
+    version: "<exact-project-spine-version>"
 ```
 
 ## What it does under the hood

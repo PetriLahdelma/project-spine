@@ -224,10 +224,13 @@ Full setup notes + tool reference: [docs/mcp.md](./docs/mcp.md).
 Fail your own CI when `AGENTS.md` / `CLAUDE.md` / `copilot-instructions.md` drift from the brief or tokens. No release to Marketplace yet — reference by full repo path:
 
 ```yaml
-- uses: PetriLahdelma/project-spine/.github/actions/drift-check@v0.9.2-beta.0
+- uses: PetriLahdelma/project-spine/.github/actions/drift-check@main
   with:
     fail-on: any
 ```
+
+Use `@main` to track the current action. Pin the action ref to a release tag
+or commit SHA when you need immutable CI.
 
 Inputs, outputs, and more examples: [.github/actions/drift-check/README.md](./.github/actions/drift-check/README.md).
 
