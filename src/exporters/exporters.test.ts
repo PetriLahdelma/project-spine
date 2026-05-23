@@ -1,10 +1,12 @@
 import { describe, it, expect } from "vitest";
-import { resolve } from "node:path";
+import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join, resolve } from "node:path";
 import { analyzeRepo } from "../analyzer/index.js";
 import { parseBriefFromFile, parseBrief } from "../brief/parse.js";
 import { parseDesign } from "../design/parse.js";
 import { compileSpine } from "../compiler/compile.js";
-import { renderAllExports, parseTargets, ALL_TARGETS, exportFilename } from "./index.js";
+import { renderAllExports, parseTargets, ALL_TARGETS, exportFilename, preserveLocalBlocks, writeAllExports } from "./index.js";
 
 const FIXED_NOW = () => "2026-04-18T00:00:00.000Z";
 const repoRoot = resolve(__dirname, "..", "..");
@@ -88,6 +90,62 @@ describe("exporters — render all", () => {
     for (const target of ALL_TARGETS) {
       expect(a[target]).toBe(b[target]);
     }
+  });
+
+  it("preserves marker-bounded local blocks in root tool-discovery exports", async () => {
+    const [brief, repo] = await Promise.all([parseBriefFromFile(briefPath), analyzeRepo(repoRoot)]);
+    const spine = compileSpine({ brief, repo, design: null, now: FIXED_NOW });
+    const work = await mkdtemp(join(tmpdir(), "spine-export-"));
+    const block = `<!-- LLM-WIKI:START -->
+## Cross-project LLM-wiki
+
+Keep this local block.
+<!-- LLM-WIKI:END -->`;
+
+    try {
+      await writeFile(join(work, "AGENTS.md"), `old generated content\n\n${block}\n`, "utf8");
+
+      await writeAllExports(spine, {
+        repoRoot: work,
+        outDir: join(work, ".project-spine"),
+        targets: ["agents"],
+      });
+
+      const rootAgents = await readFile(join(work, "AGENTS.md"), "utf8");
+      const canonicalAgents = await readFile(join(work, ".project-spine", "exports", "AGENTS.md"), "utf8");
+
+      expect(rootAgents).toContain(block);
+      expect(canonicalAgents).not.toContain("LLM-WIKI");
+
+      await writeAllExports(spine, {
+        repoRoot: work,
+        outDir: join(work, ".project-spine"),
+        targets: ["agents"],
+      });
+
+      const rerunAgents = await readFile(join(work, "AGENTS.md"), "utf8");
+      expect(rerunAgents.match(/LLM-WIKI:START/g)?.length).toBe(1);
+    } finally {
+      await rm(work, { recursive: true, force: true });
+    }
+  });
+
+  it("preserves multiple generic local blocks without changing pure generated content", () => {
+    const generated = "generated\n";
+    const existing = `before
+<!-- FOO:START -->
+foo
+<!-- FOO:END -->
+middle
+<!-- BAR_BAZ:START -->
+bar
+<!-- BAR_BAZ:END -->
+after`;
+
+    const merged = preserveLocalBlocks(generated, existing);
+    expect(merged).toContain("<!-- FOO:START -->");
+    expect(merged).toContain("<!-- BAR_BAZ:START -->");
+    expect(preserveLocalBlocks(generated, "no local block")).toBe(generated);
   });
 
   it("design rules flow into componentGuidance inside component-plan.md", async () => {
