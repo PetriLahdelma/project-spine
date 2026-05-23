@@ -21,7 +21,7 @@ Project Spine is not competing with coding agents directly. It competes with the
 4. **Launch demo credibility.** Repomix wins on one-command clarity. Spine should keep the happy path brutally simple: install, init, compile, drift check.
 5. **Package-surface hygiene.** The public npm tarball should ship only the routed OSS surface. Dormant hosted experiments can remain in source, but they must not appear in build output or package contents.
 
-## Product Hunt benchmark pass — 2026 agent launches
+## Public benchmark pass — 2026 agent launches
 
 | Benchmark pattern | Products checked | What they do better | Spine response |
 |---|---|---|---|
@@ -29,9 +29,9 @@ Project Spine is not competing with coding agents directly. It competes with the
 | Rule/context management | Straion, Knowns CLI | Puts the pain in plain language: stop copy-pasting context, manage rules for agents. | Copy now says "Stop re-explaining your repo" and the comparison section explains compiled, source-pointed rules versus manual rule libraries. |
 | Repo self-setup / agent orchestration | Keystone, Mngr, Baton, Open Agents | One memorable action plus visible proof that agents can work across a repo. | `spine doctor` gives Project Spine a launch-friendly proof command for version, beta channel, runtime, routed commands, hosted guardrails, network posture, and drift. |
 | Security / sandbox posture | SuperHQ | Makes trust concrete instead of burying it in docs. | Homepage trust strip and security copy now surface offline-by-default, no telemetry/account, and no routed upload path. |
-| Design-to-agent workflow | Figma for Agents | Makes design-system context feel native to agent work. | Homepage and launch copy keep tokens/design drift in the first-screen promise, not only in docs. |
+| Design-to-agent workflow | Figma for Agents | Makes design-system context feel native to agent work. | Homepage copy keeps tokens/design drift in the first-screen promise, not only in docs. |
 
-Source pages reviewed: Product Hunt product pages for Agentation, Straion, Knowns CLI, Keystone / Mngr by Imbue, Baton, Open Agents, SuperHQ, Claude Code /ultrareview, and Figma for Agents.
+Source pages reviewed: public product pages for Agentation, Straion, Knowns CLI, Keystone / Mngr by Imbue, Baton, Open Agents, SuperHQ, Claude Code /ultrareview, and Figma for Agents.
 
 ## Upgrades landed from this pass
 
@@ -43,7 +43,7 @@ Source pages reviewed: Product Hunt product pages for Agentation, Straion, Known
 - Compile output now reports per-file byte budgets for `AGENTS.md`, `CLAUDE.md`, Copilot, and Cursor.
 - `spine doctor` verifies beta version/channel, Node runtime, routed command surface, hosted-command guardrails, network posture, and local drift state.
 - `spine-mcp` exposes `spine_doctor` so MCP clients can verify readiness before compiling or editing generated files.
-- Homepage now includes a trust strip, source-pointer/drift proof panels, and a category-positioning table grounded in the Product Hunt benchmark pass.
+- Homepage now includes a trust strip, source-pointer/drift proof panels, and a category-positioning table grounded in the benchmark pass.
 
 ## Sources
 

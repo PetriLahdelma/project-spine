@@ -1,4 +1,4 @@
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { join, dirname } from "node:path";
 import type { SpineModel } from "../model/spine.js";
 import { renderAgentsMd } from "./agents.js";
@@ -97,24 +97,69 @@ export async function writeAllExports(
     written.push(path);
   };
 
+  const pushRoot = async (path: string, content: string) => {
+    const existing = await readFile(path, "utf8").catch(() => "");
+    await push(path, preserveLocalBlocks(content, existing));
+  };
+
   for (const target of targets) {
     const content = rendered[target];
     const filename = exportFilename(target);
     tasks.push(push(join(exportsDir, filename), content));
 
     // Tool-discovery locations at repo root
-    if (target === "agents") tasks.push(push(join(opts.repoRoot, "AGENTS.md"), content));
-    if (target === "claude") tasks.push(push(join(opts.repoRoot, "CLAUDE.md"), content));
+    if (target === "agents") tasks.push(pushRoot(join(opts.repoRoot, "AGENTS.md"), content));
+    if (target === "claude") tasks.push(pushRoot(join(opts.repoRoot, "CLAUDE.md"), content));
     if (target === "copilot")
-      tasks.push(push(join(opts.repoRoot, ".github", "copilot-instructions.md"), content));
+      tasks.push(pushRoot(join(opts.repoRoot, ".github", "copilot-instructions.md"), content));
     if (target === "cursor")
-      tasks.push(push(join(opts.repoRoot, ".cursor", "rules", "project-spine.mdc"), content));
+      tasks.push(pushRoot(join(opts.repoRoot, ".cursor", "rules", "project-spine.mdc"), content));
   }
   await Promise.all(tasks);
   written.sort();
 
   const fingerprints = await Promise.all(written.map((p) => fingerprintFile(p, opts.repoRoot)));
   return { written, fingerprints };
+}
+
+export function preserveLocalBlocks(generated: string, existing: string): string {
+  const blocks = extractLocalBlocks(existing).filter((block) => !generated.includes(block.start));
+  if (blocks.length === 0) return generated;
+
+  const normalized = generated.endsWith("\n") ? generated.trimEnd() : generated;
+  return `${normalized}\n\n${blocks.map((block) => block.content).join("\n\n")}\n`;
+}
+
+type LocalBlock = {
+  start: string;
+  content: string;
+};
+
+function extractLocalBlocks(text: string): LocalBlock[] {
+  const blocks: LocalBlock[] = [];
+  const markerPattern = /<!--\s*([A-Z][A-Z0-9_-]*):START\s*-->/g;
+  let match: RegExpExecArray | null;
+
+  while ((match = markerPattern.exec(text)) !== null) {
+    const name = match[1]!;
+    const start = match[0];
+    const endPattern = new RegExp(`<!--\\s*${escapeRegExp(name)}:END\\s*-->`, "g");
+    endPattern.lastIndex = markerPattern.lastIndex;
+    const end = endPattern.exec(text);
+    if (!end) continue;
+
+    blocks.push({
+      start,
+      content: text.slice(match.index, end.index + end[0].length).trim(),
+    });
+    markerPattern.lastIndex = end.index + end[0].length;
+  }
+
+  return blocks;
+}
+
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 export function exportFilename(target: ExportTarget): string {

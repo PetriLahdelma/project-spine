@@ -27,11 +27,9 @@ design.md ─┘                    scaffold-plan.md, qa-guardrails.md, sprint-1
                                 component-plan.md, route-inventory.md, rationale.md
 ```
 
-> **Status — v0.9.x (beta).** The CLI works end-to-end: brief + repo + optional design + optional template → canonical `spine.json` + generated exports. Drift detection, design-token ingestion, Cursor-native exports, MCP, the GitHub drift action, generated launch assets, and agent skills for Claude Code / Codex / Cursor are all live. The compiler path is ready for public evaluation while templates and integrations continue to harden before 1.0.
+> **Status — v0.9.x (beta).** The CLI works end-to-end: brief + repo + optional design + optional template → canonical `spine.json` + generated exports. Drift detection, design-token ingestion, Cursor-native exports, MCP, the GitHub drift action, generated social assets, and agent skills for Claude Code / Codex / Cursor are all live. The compiler path is ready for public evaluation while templates and integrations continue to harden before 1.0.
 
 See the full product thinking in [PRD.md](./PRD.md), the research evidence in [docs/research-citations.md](./docs/research-citations.md), and the "why not just Claude?" moat analysis in [docs/positioning.md](./docs/positioning.md).
-
-Product Hunt launch copy and generated gallery assets live in [docs/product-hunt-launch.md](./docs/product-hunt-launch.md).
 
 ---
 
@@ -226,10 +224,13 @@ Full setup notes + tool reference: [docs/mcp.md](./docs/mcp.md).
 Fail your own CI when `AGENTS.md` / `CLAUDE.md` / `copilot-instructions.md` drift from the brief or tokens. No release to Marketplace yet — reference by full repo path:
 
 ```yaml
-- uses: PetriLahdelma/project-spine/.github/actions/drift-check@v0.9.2-beta.0
+- uses: PetriLahdelma/project-spine/.github/actions/drift-check@main
   with:
     fail-on: any
 ```
+
+Use `@main` to track the current action. Pin the action ref to a release tag
+or commit SHA when you need immutable CI.
 
 Inputs, outputs, and more examples: [.github/actions/drift-check/README.md](./.github/actions/drift-check/README.md).
 

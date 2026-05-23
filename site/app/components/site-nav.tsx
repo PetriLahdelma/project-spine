@@ -28,7 +28,6 @@ export function SiteNav({
         <Link
           href="/product"
           className="nav-group__trigger"
-          aria-haspopup="menu"
           aria-current={productActive ? "page" : undefined}
         >
           Product
@@ -47,9 +46,9 @@ export function SiteNav({
             <path d="M2 3.5l3 3 3-3" />
           </svg>
         </Link>
-        <div className="nav-group__panel" role="menu">
+        <div className="nav-group__panel">
           {productMenu.map((item) => (
-            <Link key={item.href} href={item.href} role="menuitem" className="nav-group__item">
+            <Link key={item.href} href={item.href} className="nav-group__item">
               <span className="nav-group__item-label">{item.label}</span>
               <span className="nav-group__item-desc">{item.desc}</span>
             </Link>

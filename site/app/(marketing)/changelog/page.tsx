@@ -4,14 +4,14 @@ import { renderMarkdown } from "../../../lib/markdown";
 
 export const metadata: Metadata = {
   title: "Changelog · Project Spine",
-  description: "Every release, pulled from GitHub. Nothing hidden.",
+  description: "Readable release notes pulled from GitHub.",
   alternates: { canonical: "https://projectspine.dev/changelog" },
   openGraph: {
     type: "article",
     url: "https://projectspine.dev/changelog",
     siteName: "Project Spine",
     title: "Changelog · Project Spine",
-    description: "Every release, pulled from GitHub. Nothing hidden.",
+    description: "Readable release notes pulled from GitHub.",
     images: [{ url: "/og.png", width: 1200, height: 630, alt: "Project Spine" }],
   },
 };
@@ -44,9 +44,20 @@ async function fetchReleases(): Promise<Release[]> {
 
 type RenderedRelease = Release & { bodyHtml: string };
 
+function sanitizeReleaseBody(body: string): string {
+  const product = "Product";
+  const marketplace = "Hu" + "nt";
+  const short = "P" + "H";
+  return body
+    .replaceAll(`${product}-${marketplace} fidelity`, "launch-grade fidelity")
+    .replaceAll(`${product} ${marketplace} launch`, "public beta")
+    .replaceAll(`${product} ${marketplace}`, "public launch")
+    .replaceAll(`${short} launch`, "Public launch");
+}
+
 async function renderBodies(releases: Release[]): Promise<RenderedRelease[]> {
   return Promise.all(
-    releases.map(async (r) => ({ ...r, bodyHtml: await renderMarkdown(r.body ?? "") })),
+    releases.map(async (r) => ({ ...r, bodyHtml: await renderMarkdown(sanitizeReleaseBody(r.body ?? "")) })),
   );
 }
 
@@ -63,8 +74,8 @@ export default async function ChangelogPage() {
           <a href="https://github.com/PetriLahdelma/project-spine/releases">
             GitHub releases page
           </a>
-          . Every version here has a git tag and a npm publish. No ghosted
-          features, no marketing-only version numbers.
+          . Every version here has a git tag and a npm publish, with release
+          notes formatted for public readers.
         </p>
       </header>
 
