@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { GOOGLE_ANALYTICS } from "@/lib/agent-discovery";
 
 export const metadata: Metadata = {
   title: "Privacy · Project Spine",
@@ -61,8 +62,9 @@ export default function PrivacyPage() {
           </li>
           <li>
             <strong>Analytics.</strong> Google Analytics measures aggregate site usage through
-            the tag <code>G-PGVBQ7SHQC</code>. The public CLI compile and drift workflows remain
-            local and do not upload repo source, briefs, generated exports, or drift reports.
+            the tag <code>{GOOGLE_ANALYTICS.measurementId}</code>. The public CLI compile and
+            drift workflows remain local and do not upload repo source, briefs, generated exports,
+            or drift reports.
           </li>
         </ul>
       </Section>

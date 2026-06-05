@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Fraunces } from "next/font/google";
 import Script from "next/script";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { GOOGLE_ANALYTICS } from "@/lib/agent-discovery";
 import { WebMcpProvider } from "./components/webmcp-provider";
 import "./globals.css";
 
@@ -32,7 +33,7 @@ export const dynamic = "force-dynamic";
 
 const description =
   "Project Spine turns a client brief, a repo, and optional design inputs into a repo-native operating layer: AGENTS.md, CLAUDE.md, copilot-instructions, Cursor rules, scaffold plan, QA guardrails, and a sprint-1 backlog.";
-const googleAnalyticsId = "G-PGVBQ7SHQC";
+const googleAnalyticsId = GOOGLE_ANALYTICS.measurementId;
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://projectspine.dev"),
