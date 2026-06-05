@@ -64,6 +64,12 @@ export function stableStringify(value: unknown): string {
   return "{" + keys.map((k) => JSON.stringify(k) + ":" + stableStringify((value as Record<string, unknown>)[k])).join(",") + "}";
 }
 
+export function deterministicTimestampFromHash(hash: string): string {
+  const seconds = Number.parseInt(hash.slice(0, 8), 16);
+  const boundedSeconds = Number.isFinite(seconds) ? seconds % (365 * 24 * 60 * 60) : 0;
+  return new Date(Date.UTC(2000, 0, 1) + boundedSeconds * 1000).toISOString();
+}
+
 export function shortId(prefix: string, parts: string[]): string {
   const base = createHash("sha256").update(parts.join("|")).digest("hex").slice(0, 8);
   return `${prefix}-${base}`;

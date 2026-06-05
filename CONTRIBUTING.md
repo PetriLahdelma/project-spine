@@ -72,12 +72,12 @@ An **Automation** token is required because it bypasses 2FA for CI publishes. Pu
 
 ### Release flow
 
-Tag push is the contract. [.github/workflows/release.yml](./.github/workflows/release.yml) installs, typechecks, tests, builds, checks package surface, runs `release:readiness`, verifies the tag matches `package.json`, publishes to npm with provenance and `--tag beta`, regenerates `CHANGELOG.md` from git tags, and creates a GitHub Release with notes diffed from the previous tag. A separate post-publish smoke workflow installs the published package from npm and runs `spine init` plus `spine compile`.
+Tag push is the contract. [.github/workflows/release.yml](./.github/workflows/release.yml) installs, typechecks, tests, builds, checks package surface, runs `release:readiness` and `stable:check`, verifies the tag matches `package.json`, publishes to npm with provenance and `--tag beta`, regenerates `CHANGELOG.md` from git tags, and creates a GitHub Release with notes diffed from the previous tag. A separate post-publish smoke workflow installs the published package from npm and runs `spine init` plus `spine compile`.
 
 From the maintainer's workstation:
 
 1. Bump `package.json` `version` (e.g. `npm version prerelease --preid=beta --no-git-tag-version`). `src/cli.ts` reads it at runtime — no second bump.
-2. `npm run build`, `npm run pack:check`, and `npm run release:readiness`.
+2. `npm run build`, `npm run pack:check`, `npm run release:readiness`, and `npm run stable:check`.
 3. Verify `node dist/cli.js --version` prints the new value locally.
 4. Commit as `vX.Y.Z-beta.N: <short summary>` on a release branch, open a PR, squash-merge to `main`.
 5. Tag the merge commit: `git tag vX.Y.Z-beta.N && git push --tags`. The Action takes over from here.
@@ -87,7 +87,7 @@ Prefer patch bumps for polish-only changes. Keep breaking changes out of the bet
 **Fallback (manual publish)** — if the Action is red or npm access needs to happen offline:
 
 ```bash
-npm run typecheck && npm test && npm run build && npm run pack:check && npm run release:readiness
+npm run typecheck && npm test && npm run build && npm run pack:check && npm run release:readiness && npm run stable:check
 npm publish --provenance --tag beta --access public
 gh release create vX.Y.Z-beta.N --prerelease --notes "…"
 ```

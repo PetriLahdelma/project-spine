@@ -43,13 +43,18 @@ for (const path of ["dist", "templates", "skills", "scripts/postinstall-hint.mjs
   check(`package files include ${path}`, files.has(path), "package.json files allowlist");
 }
 
-for (const name of ["typecheck", "test", "build", "pack:check", "release:readiness", "prepublishOnly"]) {
+for (const name of ["typecheck", "test", "build", "pack:check", "release:readiness", "stable:check", "prepublishOnly"]) {
   check(`script ${name}`, typeof scripts[name] === "string", scripts[name] ?? "(missing)");
 }
 
 check(
   "prepublish readiness gate",
   typeof scripts.prepublishOnly === "string" && scripts.prepublishOnly.includes("npm run release:readiness"),
+  scripts.prepublishOnly ?? "(missing)",
+);
+check(
+  "prepublish stable gate",
+  typeof scripts.prepublishOnly === "string" && scripts.prepublishOnly.includes("npm run stable:check"),
   scripts.prepublishOnly ?? "(missing)",
 );
 check("publish access", pkg.publishConfig?.access === "public", `access=${pkg.publishConfig?.access ?? "(missing)"}`);
@@ -72,6 +77,7 @@ const ci = readText(".github/workflows/ci.yml");
 check("ci node matrix", ci.includes("node: [20, 22]"), "CI must cover Node 20 and 22");
 check("ci pack check", ci.includes("npm run pack:check"), "CI must validate npm package surface");
 check("ci release readiness", ci.includes("npm run release:readiness"), "CI must run release readiness gate");
+check("ci stable readiness", ci.includes("npm run stable:check"), "CI must run stable readiness gate");
 check("ci site build", ci.includes("npm run build") && ci.includes("working-directory: site"), "CI must build marketing site");
 
 const drift = readText(".github/workflows/drift.yml");
@@ -81,6 +87,7 @@ const release = readText(".github/workflows/release.yml");
 check("release token guard", release.includes("Verify NPM_TOKEN secret is set"), "release must fail fast when NPM_TOKEN is absent");
 check("release package tag guard", release.includes("Verify tag matches package.json"), "release tag must match package version");
 check("release readiness gate", release.includes("npm run release:readiness"), "release workflow must run readiness check");
+check("release stable gate", release.includes("npm run stable:check"), "release workflow must run stable readiness check");
 check("release provenance permission", release.includes("id-token: write"), "npm provenance needs OIDC token permission");
 check("release provenance publish", release.includes("npm publish --provenance --tag beta --access public"), "npm publish must use provenance");
 check("release dist-tag promotion", release.includes("npm dist-tag add"), "release must promote public dist-tags");

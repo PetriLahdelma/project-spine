@@ -3,7 +3,7 @@ import type { RepoProfile } from "../model/repo-profile.js";
 import type { DesignRules, DesignItem } from "../model/design-rules.js";
 import { SpineModel, type Rule, type Warning as SpineWarning } from "../model/spine.js";
 import type { TemplateManifest } from "../templates/model.js";
-import { computeInputHash, shortId } from "./hash.js";
+import { computeInputHash, deterministicTimestampFromHash, shortId } from "./hash.js";
 
 export type CompileInput = {
   brief: NormalizedBrief;
@@ -19,7 +19,6 @@ export function compileSpine(input: CompileInput): SpineModel {
   const { brief, repo, design } = input;
   const name = input.projectName ?? brief.name ?? derivePackageName(repo) ?? "unnamed-project";
   const version = input.projectVersion ?? "0.1.0";
-  const now = input.now ?? (() => new Date().toISOString());
 
   const goals = briefItemsToRules(brief.sections.goals, "goal");
   const nonGoals = briefItemsToRules(brief.sections.nonGoals, "nongoal");
@@ -54,7 +53,7 @@ export function compileSpine(input: CompileInput): SpineModel {
       ...(w.suggestion !== undefined && { suggestion: w.suggestion }),
     });
   }
-  for (const w of repo.warnings) {
+  for (const w of repo.warnings.filter((warning) => warning.id !== "no-agent-files")) {
     warnings.push({
       id: `repo:${w.id}`,
       severity: w.severity,
@@ -92,12 +91,13 @@ export function compileSpine(input: CompileInput): SpineModel {
   }
 
   const hash = computeInputHash(brief, repo, design, template);
+  const createdAt = input.now ? input.now() : deterministicTimestampFromHash(hash);
   const model: SpineModel = {
     metadata: {
       name,
       version,
       schemaVersion: 1,
-      createdAt: now(),
+      createdAt,
       hash,
     },
     projectType: brief.projectType,
@@ -394,14 +394,12 @@ function buildScaffoldPlan(
 
   // Setup items — derived from repo state, not the brief. These are the
   // "clear the runway" tasks an agent or engineer does before shipping features.
-  if (!repo.agentFiles.agentsMd && !repo.agentFiles.claudeMd && !repo.agentFiles.copilotInstructions && !repo.agentFiles.cursorRules) {
-    sprint1.push(
-      setupRule(
-        "agent-files",
-        "Commit the Project Spine–generated `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, and `.cursor/rules/project-spine.mdc` after review."
-      )
-    );
-  }
+  sprint1.push(
+    setupRule(
+      "agent-files",
+      "Commit the Project Spine–generated `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, and `.cursor/rules/project-spine.mdc` after review."
+    )
+  );
   if (repo.language.typescript && repo.language.strict === false) {
     sprint1.push(setupRule("ts-strict", "Enable `strict: true` in tsconfig.json and resolve the fallout."));
   }

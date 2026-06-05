@@ -7,7 +7,12 @@ import type { DesignRules } from "../model/design-rules.js";
 import type { SpineModel } from "../model/spine.js";
 import type { TemplateManifest } from "../templates/model.js";
 import type { ExportManifest, FileFingerprint } from "../model/export-manifest.js";
-import { stableStringify, canonicalizeForHash, canonicalizeRepoForHash } from "./hash.js";
+import {
+  canonicalizeForHash,
+  canonicalizeRepoForHash,
+  deterministicTimestampFromHash,
+  stableStringify,
+} from "./hash.js";
 
 export function sha256OfString(content: string): string {
   return "sha256:" + createHash("sha256").update(content).digest("hex");
@@ -49,7 +54,7 @@ export function buildManifest(params: {
   repoRoot: string;
   now?: () => string;
 }): ExportManifest {
-  const now = params.now ?? (() => new Date().toISOString());
+  const now = params.now ?? (() => deterministicTimestampFromHash(params.spine.metadata.hash));
   // Hash payloads are canonicalized to drop timestamps and any fields Spine
   // itself writes (so compile is idempotent — a second run with no user change
   // must produce the same manifest).
@@ -78,4 +83,3 @@ export function buildManifest(params: {
     exports: params.exports.slice().sort((a, b) => a.path.localeCompare(b.path)),
   };
 }
-
