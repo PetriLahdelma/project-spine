@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'none'; font-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'"
+    >
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Project Spine</title>
+    <link rel="stylesheet" href="./styles.css">
+    <script type="module" src="./index.js"></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Project Spine</p>
+        <h1>Desktop compiler</h1>
+      </div>
+      <div class="status-group" aria-live="polite">
+        <span id="status-text" data-status="warn">Starting</span>
+        <span id="cli-source">CLI resolving</span>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <form id="compile-form" class="panel">
+        <div class="section-heading">
+          <h2>Inputs</h2>
+          <button type="button" id="templates" class="secondary">Templates</button>
+        </div>
+
+        <div class="field-grid">
+          <label>
+            <span>Repo</span>
+            <input id="repo-path" name="repo" autocomplete="off" placeholder="/path/to/project">
+          </label>
+          <button type="button" id="choose-repo" class="picker">Choose</button>
+
+          <label>
+            <span>Brief</span>
+            <input id="brief-path" name="brief" autocomplete="off" placeholder="/path/to/project/brief.md">
+          </label>
+          <button type="button" id="choose-brief" class="picker">Choose</button>
+
+          <label>
+            <span>Design rules</span>
+            <input id="design-path" name="design" autocomplete="off" placeholder="Optional">
+          </label>
+          <button type="button" id="choose-design" class="picker">Choose</button>
+
+          <label>
+            <span>Tokens</span>
+            <input id="tokens-path" name="tokens" autocomplete="off" placeholder="Optional">
+          </label>
+          <button type="button" id="choose-tokens" class="picker">Choose</button>
+        </div>
+
+        <div class="options-grid">
+          <label>
+            <span>Template</span>
+            <input id="template" name="template" list="template-presets" autocomplete="off" placeholder="None">
+            <datalist id="template-presets">
+              <option value="saas-marketing"></option>
+              <option value="app-dashboard"></option>
+              <option value="design-system"></option>
+              <option value="docs-portal"></option>
+              <option value="api-service"></option>
+              <option value="monorepo"></option>
+            </datalist>
+          </label>
+
+          <label>
+            <span>Fail on</span>
+            <select id="fail-on" name="fail-on">
+              <option value="never">Never</option>
+              <option value="warn">Warn</option>
+              <option value="error">Error</option>
+              <option value="info">Info</option>
+            </select>
+          </label>
+
+          <label>
+            <span>Output</span>
+            <input id="out-path" name="out" autocomplete="off" value=".project-spine">
+          </label>
+        </div>
+
+        <div class="actions">
+          <button type="button" id="doctor" class="secondary">Doctor</button>
+          <button type="submit" id="compile" class="primary">Compile</button>
+          <button type="button" id="open-output" class="secondary">Open output</button>
+        </div>
+      </form>
+
+      <section class="panel output-panel" aria-labelledby="output-title">
+        <div class="section-heading">
+          <h2 id="output-title">Output</h2>
+          <p id="command-meta"></p>
+        </div>
+        <pre id="command-output" tabindex="0">(no command run)</pre>
+      </section>
+    </main>
+  </body>
+</html>

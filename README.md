@@ -222,6 +222,21 @@ read-only GA4 MCP server. Setup notes: [docs/ga4-observability.md](./docs/ga4-ob
 
 ---
 
+## Desktop wrapper
+
+The opt-in Electron wrapper in [apps/desktop](./apps/desktop/) runs `spine doctor`, `spine compile`, and `spine template list` against a local repo through the same public CLI surface. It is a private companion package, not part of the root npm tarball.
+
+```bash
+npm install --prefix apps/desktop
+npm run build
+npm run verify --prefix apps/desktop
+npm start --prefix apps/desktop
+```
+
+Security posture: the renderer loads local files only, Node integration is disabled, context isolation and sandboxing are enabled, IPC is whitelisted in preload, and CLI commands are spawned without a shell.
+
+---
+
 ## GitHub Action: `spine drift check` in your CI
 
 Fail your own CI when `AGENTS.md` / `CLAUDE.md` / `copilot-instructions.md` drift from the brief or tokens. No release to Marketplace yet — reference by full repo path:
@@ -247,6 +262,7 @@ What's shipped (beta train):
 - **v0.3** — `spine drift check` with CI-friendly `--fail-on`, idempotent compile, hash manifest.
 - **v0.8** — agent skills for Claude Code, Codex CLI, and Cursor (`skills/install.sh`).
 - **v0.9** — `--tokens` import for DTCG and Tokens Studio design tokens. `spine tokens pull` pulls directly from Figma Variables on Enterprise plans; [Tokens Studio plugin export](./docs/tokens.md#tokens-studio-plugin-path-team--pro--starter-plans) is the path on Team / Pro / Starter.
+- **Desktop companion** — an opt-in Electron wrapper under `apps/desktop` for running the public CLI from a local GUI without changing the npm CLI package.
 
 What's next is TBD. Project Spine is positioned as pure OSS for now — the direction will be shaped by what agencies and dev-tool teams actually use it for. Open an issue, a discussion, or email with field notes and we'll fold it into the plan.
 
