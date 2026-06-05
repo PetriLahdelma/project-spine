@@ -99,8 +99,9 @@ export default function AboutPage() {
         <li>
           <strong>Tracking.</strong>
           <span>
-            No analytics, no third-party scripts, no cookie banner theatre.
-            Check the site&apos;s CSP. It&apos;s{" "}
+            Google Analytics is loaded for aggregate site measurement. The CLI
+            still runs offline for compile and drift, and repo contents are
+            not uploaded by the public workflow. Check the site&apos;s CSP; it&apos;s{" "}
             <a href="https://github.com/PetriLahdelma/project-spine/blob/main/SECURITY.md">
               documented
             </a>

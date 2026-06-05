@@ -113,13 +113,17 @@ export default function SecurityPage() {
           </span>
         </li>
         <li>
-          <strong>Analytics or third-party trackers.</strong>
+          <strong>Repo-source analytics.</strong>
           <span>
-            Zero. Check the site&apos;s Content-Security-Policy header in
-            devtools. <code>connect-src</code> allows{" "}
+            The website loads Google Analytics for aggregate site measurement,
+            but the public CLI workflow still uploads no repo source, briefs,
+            generated exports, or drift reports. Check the site&apos;s
+            Content-Security-Policy header in devtools. <code>connect-src</code>{" "}
+            allows{" "}
             <code>&apos;self&apos;</code>,{" "}
             <code>api.github.com</code>, and{" "}
-            <code>registry.npmjs.org</code>. Nothing else.
+            <code>registry.npmjs.org</code> for product features, plus Google
+            Analytics endpoints for measurement.
           </span>
         </li>
         <li>
