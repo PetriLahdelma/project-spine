@@ -2,11 +2,19 @@ export const SITE = "https://projectspine.dev";
 export const PROJECT_SPINE_VERSION = process.env["NEXT_PUBLIC_PROJECT_SPINE_VERSION"] ?? "0.9.2-beta.1";
 
 export const CONTENT_SIGNAL = "ai-train=no, search=yes, ai-input=yes";
+export const GOOGLE_ANALYTICS = {
+  provider: "Google Analytics",
+  streamName: "Project Spine",
+  streamUrl: SITE,
+  streamId: "15010753552",
+  measurementId: "G-PGVBQ7SHQC",
+} as const;
 
 export const AGENT_LINK_HEADER = [
   '</llms.txt>; rel="alternate"; type="text/markdown"; title="Project Spine llms.txt"',
   '</index.md>; rel="alternate"; type="text/markdown"; title="Project Spine homepage markdown"',
   '</.well-known/api-catalog>; rel="api-catalog"; type="application/linkset+json"',
+  '</.well-known/site-analytics.json>; rel="service-meta"; type="application/json"; title="Project Spine public analytics metadata"',
   '</.well-known/agent-skills/index.json>; rel="agent-skills"; type="application/json"',
   '</.well-known/mcp/server-card.json>; rel="service-desc"; type="application/json"; title="Project Spine MCP server card"',
   '</.well-known/oauth-protected-resource>; rel="service-meta"; type="application/json"; title="Project Spine OAuth protected resource metadata"',
@@ -60,6 +68,7 @@ Project Spine publishes agent-readable discovery documents:
 - \`${SITE}/llms.txt\`
 - \`${SITE}/auth.md\`
 - \`${SITE}/.well-known/api-catalog\`
+- \`${SITE}/.well-known/site-analytics.json\`
 - \`${SITE}/.well-known/mcp/server-card.json\`
 - \`${SITE}/.well-known/agent-skills/index.json\`
 
@@ -81,6 +90,7 @@ compile, doctor, drift, init, and tokens workflows to MCP-speaking clients.
 - Product overview: ${SITE}/product
 - Changelog: ${SITE}/changelog
 - Security: ${SITE}/security
+- Public analytics metadata: ${SITE}/.well-known/site-analytics.json
 - GitHub: https://github.com/PetriLahdelma/project-spine
 `;
 
@@ -110,6 +120,7 @@ GitHub Copilot instructions, Cursor rules, and a full .project-spine scaffold.
 - Auth guidance: ${SITE}/auth.md
 - OAuth protected resource metadata: ${SITE}/.well-known/oauth-protected-resource
 - API catalog: ${SITE}/.well-known/api-catalog
+- Public analytics metadata: ${SITE}/.well-known/site-analytics.json
 - MCP server card: ${SITE}/.well-known/mcp/server-card.json
 - Agent skills index: ${SITE}/.well-known/agent-skills/index.json
 
@@ -376,6 +387,11 @@ export function apiCatalog(): Record<string, unknown> {
             type: "application/json",
             title: "Project Spine Agent Skills index",
           },
+          {
+            href: `${SITE}/.well-known/site-analytics.json`,
+            type: "application/json",
+            title: "Project Spine public analytics metadata",
+          },
         ],
         item: [
           { href: `${SITE}/api/health`, type: "application/json", title: "Public health endpoint" },
@@ -389,6 +405,117 @@ export function apiCatalog(): Record<string, unknown> {
         status: [{ href: `${SITE}/api/health`, type: "application/json", title: "Health check" }],
       },
     ],
+  };
+}
+
+export function publicAnalyticsMetadata(): Record<string, unknown> {
+  return {
+    $schema: `${SITE}/schemas/public-site-analytics.v1.json`,
+    schemaVersion: 1,
+    kind: "public_site_analytics_metadata",
+    site: {
+      name: "Project Spine",
+      url: SITE,
+    },
+    analytics: {
+      provider: GOOGLE_ANALYTICS.provider,
+      purpose: "aggregate_public_website_measurement",
+      stream: {
+        name: GOOGLE_ANALYTICS.streamName,
+        url: GOOGLE_ANALYTICS.streamUrl,
+        id: GOOGLE_ANALYTICS.streamId,
+        measurementId: GOOGLE_ANALYTICS.measurementId,
+      },
+    },
+    security: {
+      classification: "public_identifier",
+      containsSecrets: false,
+      credential: false,
+      safeForAgentsToRead: true,
+      handling:
+        "These identifiers are public analytics configuration, not API keys, bearer tokens, client secrets, or refresh tokens.",
+    },
+    privacy: {
+      cliTelemetry: false,
+      repoDataUploadedThroughAnalytics: false,
+      sourceCodeUploadedThroughAnalytics: false,
+      documentation: `${SITE}/privacy`,
+    },
+    updated: "2026-06-05",
+  };
+}
+
+export function publicAnalyticsMetadataSchema(): Record<string, unknown> {
+  return {
+    $schema: "https://json-schema.org/draft/2020-12/schema",
+    $id: `${SITE}/schemas/public-site-analytics.v1.json`,
+    title: "Project Spine public site analytics metadata",
+    type: "object",
+    additionalProperties: false,
+    required: ["schemaVersion", "kind", "site", "analytics", "security", "privacy", "updated"],
+    properties: {
+      $schema: { type: "string", format: "uri" },
+      schemaVersion: { const: 1 },
+      kind: { const: "public_site_analytics_metadata" },
+      site: {
+        type: "object",
+        additionalProperties: false,
+        required: ["name", "url"],
+        properties: {
+          name: { type: "string" },
+          url: { type: "string", format: "uri" },
+        },
+      },
+      analytics: {
+        type: "object",
+        additionalProperties: false,
+        required: ["provider", "purpose", "stream"],
+        properties: {
+          provider: { type: "string" },
+          purpose: { const: "aggregate_public_website_measurement" },
+          stream: {
+            type: "object",
+            additionalProperties: false,
+            required: ["name", "url", "id", "measurementId"],
+            properties: {
+              name: { type: "string" },
+              url: { type: "string", format: "uri" },
+              id: { type: "string" },
+              measurementId: { type: "string" },
+            },
+          },
+        },
+      },
+      security: {
+        type: "object",
+        additionalProperties: false,
+        required: ["classification", "containsSecrets", "credential", "safeForAgentsToRead", "handling"],
+        properties: {
+          classification: { const: "public_identifier" },
+          containsSecrets: { const: false },
+          credential: { const: false },
+          safeForAgentsToRead: { const: true },
+          handling: { type: "string" },
+        },
+      },
+      privacy: {
+        type: "object",
+        additionalProperties: false,
+        required: [
+          "cliTelemetry",
+          "repoDataUploadedThroughAnalytics",
+          "sourceCodeUploadedThroughAnalytics",
+          "documentation",
+        ],
+        properties: {
+          cliTelemetry: { const: false },
+          repoDataUploadedThroughAnalytics: { const: false },
+          sourceCodeUploadedThroughAnalytics: { const: false },
+          documentation: { type: "string", format: "uri" },
+        },
+      },
+      updated: { type: "string", format: "date" },
+    },
   };
 }
 
