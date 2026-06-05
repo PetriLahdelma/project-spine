@@ -1,0 +1,87 @@
+name: Post Publish Smoke
+
+on:
+  workflow_run:
+    workflows: ["Release"]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "project-spine version to smoke test. Defaults to package.json."
+        required: false
+        type: string
+      ref:
+        description: "Git ref to check out before running the smoke test."
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  npm-smoke:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout published commit
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.ref || github.event.workflow_run.head_sha || github.sha }}
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Resolve package version
+        id: pkg
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
+        run: |
+          if [ -n "$INPUT_VERSION" ]; then
+            version="$INPUT_VERSION"
+          else
+            version="$(node -p "require('./package.json').version")"
+          fi
+
+          if [ -z "$version" ]; then
+            echo "::error::Package version could not be resolved."
+            exit 1
+          fi
+
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Check package visibility on npm
+        id: registry
+        env:
+          VERSION: ${{ steps.pkg.outputs.version }}
+        run: |
+          if npm view "project-spine@$VERSION" version >/dev/null 2>&1; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "available=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Skip smoke because package is not published
+        if: steps.registry.outputs.available != 'true'
+        run: |
+          echo "project-spine@${{ steps.pkg.outputs.version }} is not on npm."
+          echo "Skipping npm-registry smoke test."
+
+      - name: Install and compile from npm package
+        if: steps.registry.outputs.available == 'true'
+        env:
+          VERSION: ${{ steps.pkg.outputs.version }}
+        run: |
+          tmp="$(mktemp -d)"
+          cd "$tmp"
+          npm init -y
+          npm install "project-spine@$VERSION"
+          npx spine --version
+          npx spine --help
+          npx spine init --template saas-marketing
+          npx spine compile --brief ./brief.md --repo . --template saas-marketing --name "npm-smoke" --version "$VERSION"
+          test -f .project-spine/spine.json
+          test -f AGENTS.md
+          test -f CLAUDE.md

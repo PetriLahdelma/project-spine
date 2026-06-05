@@ -1,7 +1,7 @@
 name: Release
 
 # Fires when a version tag is pushed (e.g. `git tag v0.9.2-beta.0 && git push --tags`).
-# Flow: install -> typecheck -> test -> build -> `npm publish --tag beta` -> GitHub Release.
+# Flow: install -> typecheck -> test -> build -> readiness -> `npm publish --provenance --tag beta` -> GitHub Release.
 # Manual release steps still documented in CONTRIBUTING.md as the fallback path.
 
 on:
@@ -11,6 +11,7 @@ on:
 
 permissions:
   contents: write # needed to create the GitHub Release
+  id-token: write # needed for npm provenance attestations
 
 jobs:
   publish:
@@ -55,6 +56,12 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Public package surface
+        run: npm run pack:check
+
+      - name: Release readiness
+        run: npm run release:readiness
+
       - name: Verify tag matches package.json
         run: |
           TAG="${GITHUB_REF_NAME#v}"
@@ -68,7 +75,7 @@ jobs:
         run: scripts/generate-changelog.sh > CHANGELOG.md
 
       - name: Publish to npm
-        run: npm publish --tag beta --access public
+        run: npm publish --provenance --tag beta --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 

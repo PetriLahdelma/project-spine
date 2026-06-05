@@ -32,7 +32,8 @@
     "assets:generate": "node scripts/generate-launch-assets.mjs",
     "assets:check": "node scripts/check-launch-assets.mjs",
     "pack:check": "node scripts/check-public-package.mjs",
-    "prepublishOnly": "npm run typecheck && npm test && npm run build && npm run pack:check",
+    "release:readiness": "node scripts/check-release-readiness.mjs",
+    "prepublishOnly": "npm run typecheck && npm test && npm run build && npm run pack:check && npm run release:readiness",
     "postinstall": "node scripts/postinstall-hint.mjs"
   },
   "keywords": [
