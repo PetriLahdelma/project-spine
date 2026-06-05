@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { WebMcpProvider } from "./components/webmcp-provider";
 import "./globals.css";
 
 // Fraunces is used only at 900 italic with SOFT axis — the wordmark, section
@@ -79,6 +80,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={fraunces.variable}>
       <body>
         {children}
+        <WebMcpProvider />
         <SpeedInsights />
       </body>
     </html>

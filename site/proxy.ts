@@ -1,4 +1,10 @@
 import { NextResponse, type NextRequest } from "next/server";
+import {
+  AGENT_LINK_HEADER,
+  CONTENT_SIGNAL,
+  markdownForPath,
+  markdownResponse,
+} from "./lib/agent-discovery";
 
 /**
  * Per-request CSP nonce proxy.
@@ -29,6 +35,13 @@ import { NextResponse, type NextRequest } from "next/server";
  * the matcher below so the proxy isn't invoked for every byte of bundle.
  */
 export function proxy(request: NextRequest) {
+  if (request.method === "GET" && wantsMarkdown(request)) {
+    const markdown = markdownForPath(request.nextUrl.pathname);
+    if (markdown) {
+      return markdownResponse(markdown);
+    }
+  }
+
   // Uint8Array → base64 via btoa. 16 bytes → 24-char nonce.
   const bytes = new Uint8Array(16);
   crypto.getRandomValues(bytes);
@@ -58,10 +71,17 @@ export function proxy(request: NextRequest) {
 
   const response = NextResponse.next({ request: { headers: requestHeaders } });
   response.headers.set("Content-Security-Policy", csp);
+  response.headers.set("Content-Signal", CONTENT_SIGNAL);
+  response.headers.set("Link", AGENT_LINK_HEADER);
   if (shouldNoIndex(request.nextUrl.pathname)) {
     response.headers.set("X-Robots-Tag", "noindex, nofollow");
   }
   return response;
+}
+
+function wantsMarkdown(request: NextRequest): boolean {
+  const accept = request.headers.get("accept");
+  return Boolean(accept?.toLowerCase().includes("text/markdown"));
 }
 
 function shouldNoIndex(pathname: string): boolean {
