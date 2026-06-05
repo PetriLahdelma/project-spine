@@ -1,0 +1,19 @@
+{
+  "name": "@project-spine/desktop",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Opt-in Electron wrapper for the Project Spine CLI.",
+  "type": "commonjs",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "node scripts/clean-dist.mjs && tsc -p tsconfig.json && tsc -p tsconfig.renderer.json && node scripts/copy-renderer.mjs",
+    "start": "npm run build && electron dist/main.js",
+    "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.renderer.json",
+    "verify": "npm run typecheck && npm run build && node scripts/validate-build.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^25.9.1",
+    "electron": "^42.3.3",
+    "typescript": "^6.0.3"
+  }
+}

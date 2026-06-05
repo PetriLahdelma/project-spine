@@ -4,6 +4,9 @@ node_modules/
 # build
 dist/
 *.tsbuildinfo
+/apps/desktop/dist/
+/apps/desktop/out/
+/apps/desktop/release/
 
 # test
 coverage/
