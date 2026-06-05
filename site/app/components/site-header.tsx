@@ -14,7 +14,7 @@ const PRODUCT_MENU: Array<{ label: string; href: string; desc: string }> = [
   { label: "Drift detection", href: "https://github.com/PetriLahdelma/project-spine/blob/main/docs/drift.md", desc: "sha256-backed manifest, CI-friendly exit codes." },
   { label: "Design tokens", href: "https://github.com/PetriLahdelma/project-spine/blob/main/docs/tokens.md", desc: "DTCG and Tokens Studio JSON, alias resolution." },
   { label: "Agent skills", href: "https://github.com/PetriLahdelma/project-spine/tree/main/skills", desc: "Six SKILL.md files for Claude Code, Codex, Cursor." },
-  { label: "Security", href: "/security", desc: "CSP nonces, rate limits, hashed tokens, no tracking." },
+  { label: "Security", href: "/security", desc: "CSP nonces, rate limits, hashed tokens, analytics disclosed." },
 ];
 
 function GitHubIcon() {

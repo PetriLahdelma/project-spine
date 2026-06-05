@@ -62,7 +62,7 @@ export function SiteFooter() {
 
       <div className="site-footer__legal">
         <span>© {new Date().getFullYear()} Petri Lahdelma · Project Spine</span>
-        <span>Built in the open. Cookieless, anonymized analytics only.</span>
+        <span>Built in the open. Google Analytics measurement is disclosed in Privacy.</span>
       </div>
     </footer>
   );

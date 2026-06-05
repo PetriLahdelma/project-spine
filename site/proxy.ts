@@ -49,11 +49,11 @@ export function proxy(request: NextRequest) {
 
   const cspDirectives = [
     "default-src 'self'",
-    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https://va.vercel-scripts.com`,
+    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https://va.vercel-scripts.com https://www.googletagmanager.com`,
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: https:",
     "font-src 'self' data:",
-    "connect-src 'self' https://api.github.com https://registry.npmjs.org https://vitals.vercel-insights.com https://va.vercel-scripts.com",
+    "connect-src 'self' https://api.github.com https://registry.npmjs.org https://vitals.vercel-insights.com https://va.vercel-scripts.com https://www.google-analytics.com https://region1.google-analytics.com https://analytics.google.com",
     "frame-ancestors 'none'",
     "base-uri 'self'",
     "form-action 'self' https://github.com",

@@ -20,7 +20,7 @@ export default function PrivacyPage() {
           marginBottom: 12,
         }}
       >
-        Policy · last updated 2026-04-18
+        Policy · last updated 2026-06-05
       </div>
       <h1 style={{ fontSize: 32, letterSpacing: "-0.01em", marginBottom: 24 }}>Privacy</h1>
       <p style={{ color: "var(--ink-soft)", marginBottom: 32 }}>
@@ -59,6 +59,11 @@ export default function PrivacyPage() {
             timestamp) for up to 30 days to help us investigate errors. No request bodies are
             logged by default.
           </li>
+          <li>
+            <strong>Analytics.</strong> Google Analytics measures aggregate site usage through
+            the tag <code>G-PGVBQ7SHQC</code>. The public CLI compile and drift workflows remain
+            local and do not upload repo source, briefs, generated exports, or drift reports.
+          </li>
         </ul>
       </Section>
 
@@ -66,7 +71,7 @@ export default function PrivacyPage() {
         <ul>
           <li>Your repo source code. The CLI runs offline for compile and drift checks.</li>
           <li>Your GitHub access token beyond the short-lived one used to identify you.</li>
-          <li>Analytics cookies or third-party trackers on the landing page or hosted routes.</li>
+          <li>Repo contents, briefs, generated exports, or drift reports through analytics.</li>
         </ul>
       </Section>
 
@@ -109,6 +114,7 @@ export default function PrivacyPage() {
         <ul>
           <li>GitHub (OAuth identity, source-of-truth for your repo)</li>
           <li>Vercel (hosting, DNS, logging)</li>
+          <li>Google Analytics (aggregate website measurement)</li>
           <li>Neon (Postgres)</li>
           <li>Cloudflare (DNS for projectspine.dev)</li>
         </ul>
