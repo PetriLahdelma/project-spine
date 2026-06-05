@@ -24,6 +24,11 @@ coverage/
 npm-debug.log*
 pnpm-debug.log*
 
+# generated public metadata snapshots - the Next route source stays tracked
+public-site-analytics.v1.json
+!site/app/schemas/public-site-analytics.v1.json/
+!site/app/schemas/public-site-analytics.v1.json/route.ts
+
 # project-spine compile outputs at repo root — the tool's own output.
 # Regenerate with `spine compile`. A committed snapshot lives in docs/sample-output/.
 /.project-spine/
