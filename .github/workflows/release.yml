@@ -62,6 +62,9 @@ jobs:
       - name: Release readiness
         run: npm run release:readiness
 
+      - name: Stable readiness
+        run: npm run stable:check
+
       - name: Verify tag matches package.json
         run: |
           TAG="${GITHUB_REF_NAME#v}"

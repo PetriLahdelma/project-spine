@@ -14,11 +14,19 @@ npm test
 npm run build
 npm run pack:check
 npm run release:readiness
+npm run stable:check
 ```
 
 The `release:readiness` gate checks package metadata, published file allowlist,
 CI/release/security workflows, provenance publishing, post-publish smoke tests,
 and required public docs. It does not generate files.
+
+The `stable:check` gate installs the packed package into a temporary project,
+runs `spine init` and `spine compile`, then verifies the stable-release claims:
+no hosted command leakage in help or the tarball, first package install/init/
+compile under 30 seconds, byte-identical `spine.json` on identical inputs,
+stable export hashes, drift failure on changed inputs, unified drift diffs for
+hand-edited exports, and non-empty rule source pointers.
 
 ## Borrowed patterns
 
@@ -44,6 +52,8 @@ Applied in Project Spine:
 Applied in Project Spine:
 
 - `npm run release:readiness` is a deterministic readiness contract.
+- `npm run stable:check` turns the stable-release bar into an installed-package
+  smoke test.
 - CI and release workflows both run package-surface and readiness gates.
 
 ### DSharp DesignSystem
@@ -75,8 +85,8 @@ Do not cut `1.0.0` until these are true:
 
 - The beta package has at least one successful post-publish smoke run on the
   exact version to promote.
-- CI, drift, security, site build, `pack:check`, and `release:readiness` pass on
-  the release commit.
+- CI, drift, security, site build, `pack:check`, `release:readiness`, and
+  `stable:check` pass on the release commit.
 - `spine --help` still lists only routed OSS commands.
 - Recompiling identical inputs produces byte-identical `spine.json` and export
   hashes.

@@ -4,7 +4,6 @@ import { analyzeRepo } from "../analyzer/index.js";
 import { parseBriefFromFile, parseBrief } from "../brief/parse.js";
 import { parseDesign } from "../design/parse.js";
 import { compileSpine } from "./compile.js";
-import { stableStringify } from "./hash.js";
 
 const FIXED_NOW = () => "2026-04-18T00:00:00.000Z";
 
@@ -39,11 +38,11 @@ describe("compileSpine — examples + self repo", () => {
     }
   });
 
-  it("is deterministic — identical inputs produce identical spine (modulo createdAt)", async () => {
+  it("is deterministic — identical inputs produce identical spine bytes by default", async () => {
     const [brief, repo] = await Promise.all([parseBriefFromFile(briefPath), analyzeRepo(repoRoot)]);
-    const a = compileSpine({ brief, repo, design: null, now: FIXED_NOW });
-    const b = compileSpine({ brief, repo, design: null, now: FIXED_NOW });
-    expect(stableStringify(a)).toBe(stableStringify(b));
+    const a = compileSpine({ brief, repo, design: null });
+    const b = compileSpine({ brief, repo, design: null });
+    expect(JSON.stringify(a, null, 2)).toBe(JSON.stringify(b, null, 2));
     expect(a.metadata.hash).toBe(b.metadata.hash);
   });
 

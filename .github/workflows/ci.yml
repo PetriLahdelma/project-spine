@@ -43,6 +43,9 @@ jobs:
       - name: Release readiness
         run: npm run release:readiness
 
+      - name: Stable readiness
+        run: npm run stable:check
+
       - name: Marketing assets
         run: npm run assets:check
 
