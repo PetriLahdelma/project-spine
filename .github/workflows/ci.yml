@@ -40,6 +40,9 @@ jobs:
       - name: Public package surface
         run: npm run pack:check
 
+      - name: Release readiness
+        run: npm run release:readiness
+
       - name: Marketing assets
         run: npm run assets:check
 
