@@ -9,6 +9,54 @@ export const GOOGLE_ANALYTICS = {
   streamId: "15010753552",
   measurementId: "G-PGVBQ7SHQC",
 } as const;
+export const GOOGLE_ANALYTICS_OBSERVABILITY = {
+  mcp: {
+    name: "analytics-mcp",
+    status: "official_experimental_read_only",
+    package: "analytics-mcp",
+    command: "pipx",
+    args: ["run", "analytics-mcp"],
+    repository: "https://github.com/googleanalytics/google-analytics-mcp",
+    docs: "https://developers.google.com/analytics/devguides/MCP",
+  },
+  requiredPrivateConfig: [
+    {
+      name: "ga4PropertyId",
+      env: "GA4_PROPERTY_ID",
+      classification: "private_identifier",
+      requiredFor: ["run_report", "run_realtime_report", "run_funnel_report"],
+      note: "Numeric GA4 property ID, not the public G- measurement ID and not the stream ID.",
+    },
+    {
+      name: "applicationDefaultCredentials",
+      env: "GOOGLE_APPLICATION_CREDENTIALS",
+      classification: "secret_path",
+      requiredFor: ["analytics-mcp"],
+      note: "Path to local Google Application Default Credentials with analytics.readonly scope. Do not publish the file or token contents.",
+    },
+    {
+      name: "googleCloudProject",
+      env: "GOOGLE_PROJECT_ID",
+      classification: "private_identifier",
+      requiredFor: ["analytics-mcp"],
+      note: "Google Cloud project with Google Analytics Admin API and Google Analytics Data API enabled.",
+    },
+  ],
+  usefulMcpTools: [
+    "get_account_summaries",
+    "get_property_details",
+    "run_report",
+    "run_realtime_report",
+    "run_funnel_report",
+    "get_custom_dimensions_and_metrics",
+  ],
+  suggestedPrompts: [
+    "Use get_account_summaries to find the Project Spine GA4 property ID.",
+    "Run a realtime report for activeUsers by eventName for the Project Spine property.",
+    "Run a 7-day report for activeUsers, sessions, screenPageViews, and eventCount by pagePath.",
+    "Filter reports to streamId 15010753552 when validating the projectspine.dev web stream.",
+  ],
+} as const;
 
 export const AGENT_LINK_HEADER = [
   '</llms.txt>; rel="alternate"; type="text/markdown"; title="Project Spine llms.txt"',
@@ -426,6 +474,7 @@ export function publicAnalyticsMetadata(): Record<string, unknown> {
         id: GOOGLE_ANALYTICS.streamId,
         measurementId: GOOGLE_ANALYTICS.measurementId,
       },
+      observability: GOOGLE_ANALYTICS_OBSERVABILITY,
     },
     security: {
       classification: "public_identifier",
@@ -469,7 +518,7 @@ export function publicAnalyticsMetadataSchema(): Record<string, unknown> {
       analytics: {
         type: "object",
         additionalProperties: false,
-        required: ["provider", "purpose", "stream"],
+        required: ["provider", "purpose", "stream", "observability"],
         properties: {
           provider: { type: "string" },
           purpose: { const: "aggregate_public_website_measurement" },
@@ -482,6 +531,44 @@ export function publicAnalyticsMetadataSchema(): Record<string, unknown> {
               url: { type: "string", format: "uri" },
               id: { type: "string" },
               measurementId: { type: "string" },
+            },
+          },
+          observability: {
+            type: "object",
+            additionalProperties: false,
+            required: ["mcp", "requiredPrivateConfig", "usefulMcpTools", "suggestedPrompts"],
+            properties: {
+              mcp: {
+                type: "object",
+                additionalProperties: false,
+                required: ["name", "status", "package", "command", "args", "repository", "docs"],
+                properties: {
+                  name: { type: "string" },
+                  status: { const: "official_experimental_read_only" },
+                  package: { type: "string" },
+                  command: { type: "string" },
+                  args: { type: "array", items: { type: "string" } },
+                  repository: { type: "string", format: "uri" },
+                  docs: { type: "string", format: "uri" },
+                },
+              },
+              requiredPrivateConfig: {
+                type: "array",
+                items: {
+                  type: "object",
+                  additionalProperties: false,
+                  required: ["name", "env", "classification", "requiredFor", "note"],
+                  properties: {
+                    name: { type: "string" },
+                    env: { type: "string" },
+                    classification: { enum: ["private_identifier", "secret_path"] },
+                    requiredFor: { type: "array", items: { type: "string" } },
+                    note: { type: "string" },
+                  },
+                },
+              },
+              usefulMcpTools: { type: "array", items: { type: "string" } },
+              suggestedPrompts: { type: "array", items: { type: "string" } },
             },
           },
         },

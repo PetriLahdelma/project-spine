@@ -217,6 +217,9 @@ Claude Code / Cursor config:
 
 Full setup notes + tool reference: [docs/mcp.md](./docs/mcp.md).
 
+For site analytics observability, use the public stream metadata plus Google's
+read-only GA4 MCP server. Setup notes: [docs/ga4-observability.md](./docs/ga4-observability.md).
+
 ---
 
 ## GitHub Action: `spine drift check` in your CI
