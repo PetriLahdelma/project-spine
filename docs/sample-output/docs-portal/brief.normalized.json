@@ -1,0 +1,143 @@
+{
+  "schemaVersion": 1,
+  "parsedAt": "2000-01-01T00:00:00.000Z",
+  "frontmatter": {
+    "name": "Atlas Docs",
+    "projectType": "docs-portal"
+  },
+  "name": "Atlas Docs",
+  "projectType": "docs-portal",
+  "projectTypeConfidence": 1,
+  "projectTypeEvidence": [
+    "frontmatter.projectType = docs-portal"
+  ],
+  "sections": {
+    "goals": [
+      {
+        "text": "Launch a technical docs portal that gets new users to hello world in under 5 minutes.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section0/item0"
+        }
+      },
+      {
+        "text": "Keep guides, reference pages, and changelog entries versioned with the repo.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section0/item1"
+        }
+      },
+      {
+        "text": "Make stale docs fail CI through broken-link and copyable-code checks.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section0/item2"
+        }
+      }
+    ],
+    "nonGoals": [],
+    "audience": [
+      {
+        "text": "New developers installing Atlas for the first time.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section1/item0"
+        }
+      },
+      {
+        "text": "Integrators who need stable API reference pages.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section1/item1"
+        }
+      },
+      {
+        "text": "Support engineers linking users to canonical troubleshooting guides.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section1/item2"
+        }
+      }
+    ],
+    "constraints": [
+      {
+        "text": "Docs are Markdown/MDX in the repo; no CMS for v1.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section2/item0"
+        }
+      },
+      {
+        "text": "API reference is generated from source metadata during build.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section2/item1"
+        }
+      },
+      {
+        "text": "Search index must rebuild on every deploy.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section2/item2"
+        }
+      }
+    ],
+    "assumptions": [
+      {
+        "text": "The first release has one supported major version.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section3/item0"
+        }
+      },
+      {
+        "text": "Guides can be reviewed by DevRel before launch.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section3/item1"
+        }
+      }
+    ],
+    "risks": [
+      {
+        "text": "Reference generation may lag behind source changes.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section4/item0"
+        }
+      },
+      {
+        "text": "Search quality can hide good docs if headings are inconsistent.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section4/item1"
+        }
+      }
+    ],
+    "successCriteria": [
+      {
+        "text": "Quickstart command sequence runs from a clean machine without edits.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section5/item0"
+        }
+      },
+      {
+        "text": "Broken-link count is zero in CI.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section5/item1"
+        }
+      },
+      {
+        "text": "Every generated reference page links back to its source.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section5/item2"
+        }
+      }
+    ]
+  },
+  "unknownSections": [],
+  "warnings": []
+}

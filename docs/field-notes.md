@@ -56,3 +56,30 @@ Detection at the repo root:
 
 - **Monorepo support is a real gap.** Any serious frontend team above ~5 engineers is on a pnpm / turbo / nx workspace. We can't claim "works on real repos" until we handle this gracefully.
 - **Confidence scoring saves us.** The 0.4 confidence on shadcn correctly flagged the detection as suspect. The warning text could be sharper.
+
+## 2026-06-16 — scripted sample-output proof pack
+
+Added a repeatable local generator for committed sample outputs:
+
+```bash
+npm run build
+npm run samples:generate
+```
+
+The generator builds isolated fixtures, runs the real compiled CLI, and copies the generated operating layer into `docs/sample-output/`. It now covers:
+
+| Snapshot | Fixture signal | Warnings |
+|---|---|---|
+| `project-spine` | temporary copy of the current tracked repo | 0 |
+| `saas-marketing` | Next.js + Tailwind app | 0 |
+| `app-dashboard` | Next.js app-router dashboard | 0 |
+| `api-service` | Fastify-style Node API | 0 |
+| `design-system` | React package + Storybook + design rules | 0 |
+| `docs-portal` | Next.js docs route | 0 |
+| `monorepo` | pnpm workspace with `apps/web` and `packages/ui` | 1 expected `repo:monorepo-detected` |
+
+What this pass confirmed:
+
+- Node libraries and common Node API frameworks should not trigger `framework-uncertain` warnings.
+- Template-backed outputs are now reproducible from a single script instead of hand-refreshed snapshots.
+- Monorepo compiles generate path-scoped Cursor rules for detected workspaces while keeping the root warning that tells users to compile against a specific workspace for precise framework guidance.

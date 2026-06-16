@@ -22,9 +22,9 @@ export function SiteFooter() {
           <ul>
             <li><Link href="/product">Overview</Link></li>
             <li><Link href="/pricing">Pricing</Link></li>
-            <li><Link href="/changelog">Changelog</Link></li>
+            <li><Link href="/changelog" data-ps-event="changelog_click" data-ps-label="footer product">Changelog</Link></li>
             <li><Link href="/security">Security</Link></li>
-            <li><Link href="/docs">Documentation</Link></li>
+            <li><Link href="/docs" data-ps-event="docs_click" data-ps-label="footer product">Documentation</Link></li>
           </ul>
         </div>
 
@@ -44,8 +44,8 @@ export function SiteFooter() {
           <ul>
             <li><Link href="/about">About</Link></li>
             <li><a href="mailto:support@projectspine.dev">Contact</a></li>
-            <li><a href="https://github.com/PetriLahdelma/project-spine">GitHub</a></li>
-            <li><a href="https://www.npmjs.com/package/project-spine">npm</a></li>
+            <li><a href="https://github.com/PetriLahdelma/project-spine" data-ps-event="github_click" data-ps-label="footer company">GitHub</a></li>
+            <li><a href="https://www.npmjs.com/package/project-spine" data-ps-event="npm_click" data-ps-label="footer company">npm</a></li>
           </ul>
         </div>
 

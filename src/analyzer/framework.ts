@@ -43,6 +43,11 @@ export async function detectFramework(
     evidence.push(`expo in dependencies`);
     return { value: "expo", confidence: 1, evidence };
   }
+  const apiFramework = ["fastify", "express", "hono"].find((name) => deps[name]);
+  if (apiFramework) {
+    evidence.push(`${apiFramework}@${deps[apiFramework]} in dependencies`);
+    return { value: "node-app", confidence: 0.75, evidence };
+  }
   if (deps["vite"]) {
     if (deps["react"]) {
       evidence.push("vite + react");
@@ -61,7 +66,7 @@ export async function detectFramework(
     const isLibrary = Boolean((pkg as { main?: string; module?: string; exports?: unknown }).exports ||
       (pkg as { main?: string }).main);
     evidence.push(isLibrary ? "no framework dep; looks like a node library" : "no framework dep detected");
-    return { value: isLibrary ? "node-library" : "node-app", confidence: 0.4, evidence };
+    return { value: isLibrary ? "node-library" : "node-app", confidence: isLibrary ? 0.75 : 0.4, evidence };
   }
 
   // no package.json at all

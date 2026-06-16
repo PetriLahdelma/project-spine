@@ -9,9 +9,9 @@ alwaysApply: true
 
 **Ledger API** — Ship v1 of the Ledger billing API for internal consumers in 8 weeks.
 
-**Stack:** node-library • typescript • tests: vitest • pm: npm
+**Stack:** node-app • typescript • tests: vitest
 
-Source of truth: `.project-spine/spine.json` (hash `7040c29c1d1f2ab2`).
+Source of truth: `.project-spine/spine.json` (hash `d4f9df671b0e81f3`).
 
 ## How to use this rule
 

@@ -1,6 +1,8 @@
 import { describe, it, expect } from "vitest";
 import { analyzeRepo } from "./index.js";
-import { resolve } from "node:path";
+import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join, resolve } from "node:path";
 
 describe("analyzeRepo — self test", () => {
   it("analyzes its own repo root", async () => {
@@ -25,5 +27,39 @@ describe("analyzeRepo — self test", () => {
     const { detectedAt: _a, ...aRest } = a;
     const { detectedAt: _b, ...bRest } = b;
     expect(aRest).toEqual(bRest);
+  });
+
+  it("does not warn when a package is clearly a Node library", async () => {
+    const work = await mkdtemp(join(tmpdir(), "spine-node-library-"));
+    try {
+      await writeFile(
+        join(work, "package.json"),
+        JSON.stringify({ name: "library", type: "module", exports: { ".": "./dist/index.js" } }),
+        "utf8",
+      );
+      const profile = await analyzeRepo(work);
+      expect(profile.framework.value).toBe("node-library");
+      expect(profile.framework.confidence).toBeGreaterThanOrEqual(0.5);
+      expect(profile.warnings.some((warning) => warning.id === "framework-uncertain")).toBe(false);
+    } finally {
+      await rm(work, { recursive: true, force: true });
+    }
+  });
+
+  it("does not warn when a package uses a common Node API framework", async () => {
+    const work = await mkdtemp(join(tmpdir(), "spine-node-api-"));
+    try {
+      await writeFile(
+        join(work, "package.json"),
+        JSON.stringify({ name: "api", type: "module", dependencies: { fastify: "5.0.0" } }),
+        "utf8",
+      );
+      const profile = await analyzeRepo(work);
+      expect(profile.framework.value).toBe("node-app");
+      expect(profile.framework.confidence).toBeGreaterThanOrEqual(0.5);
+      expect(profile.warnings.some((warning) => warning.id === "framework-uncertain")).toBe(false);
+    } finally {
+      await rm(work, { recursive: true, force: true });
+    }
   });
 });

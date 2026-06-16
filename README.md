@@ -84,6 +84,9 @@ spine export --targets claude,copilot,cursor
 # 4. analyze any existing repo without a brief
 spine inspect --repo .
 
+# optional: inspect what Codex, Claude, Copilot, and Cursor will load
+spine inspect --repo . --agent-files
+
 # 5. check drift between last compile and current state (CI-friendly)
 spine drift check --fail-on any
 
@@ -99,13 +102,14 @@ spine template show design-system
 
 ## What you get
 
-A single `spine compile` run writes **21 files**:
+A single `spine compile` run writes **at least 21 files**:
 
 ```
 ./AGENTS.md                                  (agents.md convention — tool-discovery location)
 ./CLAUDE.md                                  (Claude Code — uses @import to keep lean)
 ./.github/copilot-instructions.md            (Copilot — self-contained)
 ./.cursor/rules/project-spine.mdc            (Cursor — always-on project rule)
+./.cursor/rules/project-spine-*.mdc          (Cursor — scoped workspace rules for monorepos)
 
 ./.project-spine/
   spine.json                                 canonical machine-readable model (hashed)
@@ -125,7 +129,7 @@ A single `spine compile` run writes **21 files**:
     rationale.md                             client-facing project rationale
 ```
 
-See [docs/sample-output/](./docs/sample-output/) for real compiled examples — including [this repo compiled by itself](./docs/sample-output/project-spine/).
+See [docs/sample-output/](./docs/sample-output/) for real compiled examples — including [this repo compiled by itself](./docs/sample-output/project-spine/). Regenerate the template-backed proof pack with `npm run build && npm run samples:generate`.
 
 ---
 

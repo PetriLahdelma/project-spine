@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "root": "<sample:monorepo>",
+  "detectedAt": "2000-01-01T00:00:00.000Z",
+  "packageManager": {
+    "value": "unknown",
+    "confidence": 0,
+    "evidence": [
+      "no lockfile found"
+    ]
+  },
+  "framework": {
+    "value": "node-app",
+    "confidence": 0.4,
+    "evidence": [
+      "no framework dep detected"
+    ]
+  },
+  "routing": {
+    "value": "none",
+    "confidence": 0.8,
+    "evidence": [
+      "non-routed framework"
+    ]
+  },
+  "styling": {
+    "value": "unknown",
+    "confidence": 0,
+    "evidence": [
+      "no styling library detected"
+    ]
+  },
+  "language": {
+    "typescript": true,
+    "strict": true,
+    "evidence": [
+      "tsconfig.json present",
+      "compilerOptions.strict = true"
+    ]
+  },
+  "testing": {
+    "runners": [
+      "vitest"
+    ],
+    "storybook": false,
+    "storybookVersion": null,
+    "evidence": [
+      "vitest@4.1.8"
+    ]
+  },
+  "linting": {
+    "eslint": false,
+    "biome": false,
+    "prettier": false,
+    "oxlint": false,
+    "evidence": []
+  },
+  "ci": {
+    "githubActions": true,
+    "workflows": [
+      ".github/workflows/ci.yml"
+    ],
+    "other": [],
+    "evidence": [
+      ".github/workflows/ (1 files)"
+    ]
+  },
+  "agentFiles": {
+    "agentsMd": false,
+    "claudeMd": false,
+    "copilotInstructions": false,
+    "cursorRules": false,
+    "projectSpineDir": false
+  },
+  "monorepo": {
+    "isMonorepo": true,
+    "tool": "pnpm",
+    "workspaces": [
+      "apps/web",
+      "packages/ui"
+    ],
+    "evidence": [
+      "package.json \"workspaces\": apps/*, packages/*",
+      "pnpm-workspace.yaml: apps/*, packages/*",
+      "turbo.json present"
+    ]
+  },
+  "rawPackageJson": {
+    "name": "atlas-workspace",
+    "private": true,
+    "workspaces": [
+      "apps/*",
+      "packages/*"
+    ],
+    "devDependencies": {
+      "turbo": "2.0.0",
+      "vitest": "4.1.8",
+      "typescript": "6.0.3"
+    }
+  },
+  "warnings": [
+    {
+      "id": "monorepo-detected",
+      "severity": "warn",
+      "message": "Detected a pnpm monorepo with 2 workspaces. Framework detection at the root is unreliable; compile against a specific workspace instead.",
+      "suggestion": "Re-run with `--repo apps/web` (or another workspace). Workspaces detected: apps/web, packages/ui."
+    },
+    {
+      "id": "no-agent-files",
+      "severity": "info",
+      "message": "No agent instruction files found.",
+      "suggestion": "Run `spine compile --brief ./brief.md --repo .` to generate AGENTS.md, CLAUDE.md, copilot-instructions.md, and a Cursor project rule."
+    }
+  ]
+}

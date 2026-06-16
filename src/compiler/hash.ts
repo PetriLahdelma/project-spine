@@ -45,14 +45,10 @@ export function canonicalizeRepoForHash(repo: RepoProfile): Record<string, unkno
   const filteredWarnings = (repo.warnings ?? []).filter((w) => w.id !== "no-agent-files");
   return {
     ...base,
+    root: undefined,
     agentFiles: undefined,
     warnings: filteredWarnings,
   };
-}
-
-function stripTimestamps<T extends Record<string, unknown>>(obj: T): Omit<T, "parsedAt" | "detectedAt"> {
-  const { parsedAt: _p, detectedAt: _d, ...rest } = obj as Record<string, unknown>;
-  return rest as Omit<T, "parsedAt" | "detectedAt">;
 }
 
 export function stableStringify(value: unknown): string {

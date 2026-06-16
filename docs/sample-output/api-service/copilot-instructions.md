@@ -4,12 +4,11 @@
 
 **Ledger API** — Ship v1 of the Ledger billing API for internal consumers in 8 weeks.
 
-**Stack:** node-library • typescript • tests: vitest • pm: npm
+**Stack:** node-app • typescript • tests: vitest
 
 ## Repo conventions
 
 - TypeScript strict mode is on. Never use `any`; prefer `unknown` + narrow at the boundary.
-- Use `npm` for all dependency operations. Do not commit lockfiles from other package managers.
 
 ## Do / Don't
 
@@ -54,6 +53,6 @@ _Full QA guardrails: `.project-spine/exports/qa-guardrails.md`._
 - Respect `prefers-reduced-motion` for any non-essential animation.
 - Responses include explicit Content-Language when returning localised error messages.
 
-_Source of truth: `.project-spine/spine.json` (hash `7040c29c1d1f2ab2`)._
+_Source of truth: `.project-spine/spine.json` (hash `d4f9df671b0e81f3`)._
 
 <!-- spine:deterministic -->

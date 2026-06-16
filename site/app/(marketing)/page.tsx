@@ -247,6 +247,8 @@ export default async function Home() {
               className="btn-primary"
               target="_blank"
               rel="noopener noreferrer"
+              data-ps-event="github_click"
+              data-ps-label="hero primary"
             >
               <GitHubIcon />
               View on GitHub
@@ -257,7 +259,7 @@ export default async function Home() {
                 </span>
               ) : null}
             </a>
-            <Link href="/docs" className="btn-secondary">
+            <Link href="/docs" className="btn-secondary" data-ps-event="docs_click" data-ps-label="hero secondary">
               Read the docs
             </Link>
           </div>
@@ -273,7 +275,7 @@ export default async function Home() {
       </section>
 
       {/* Terminal artifact */}
-      <section className="section section--tight">
+      <section className="section section--tight" data-ps-view="demo_terminal_view" data-ps-label="homepage terminal proof">
         <TerminalMock title="~/acme-payroll — spine compile">
           <span className="tok-prompt">$ </span>
           <span className="tok-command">spine compile --brief ./brief.md --repo . --tokens ./tokens.json</span>
@@ -592,10 +594,12 @@ next: update the brief or regenerate exports`}</code></pre>
               className="btn-on-cyan btn-on-cyan--primary"
               target="_blank"
               rel="noopener noreferrer"
+              data-ps-event="github_click"
+              data-ps-label="poster closer"
             >
               View on GitHub
             </a>
-            <Link href="/docs" className="btn-on-cyan btn-on-cyan--secondary">
+            <Link href="/docs" className="btn-on-cyan btn-on-cyan--secondary" data-ps-event="docs_click" data-ps-label="poster closer">
               Install the CLI
             </Link>
           </div>

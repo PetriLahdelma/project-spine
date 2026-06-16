@@ -46,6 +46,23 @@ describe("compileSpine — examples + self repo", () => {
     expect(a.metadata.hash).toBe(b.metadata.hash);
   });
 
+  it("does not include machine-specific repo metadata in the spine hash", async () => {
+    const [brief, repo] = await Promise.all([parseBriefFromFile(briefPath), analyzeRepo(repoRoot)]);
+    const local = compileSpine({ brief, repo, design: null });
+    const elsewhere = compileSpine({
+      brief,
+      repo: {
+        ...repo,
+        root: "/tmp/same-repo-different-checkout",
+        detectedAt: "2099-01-01T00:00:00.000Z",
+      },
+      design: null,
+    });
+
+    expect(elsewhere.metadata.hash).toBe(local.metadata.hash);
+    expect(elsewhere.metadata.createdAt).toBe(local.metadata.createdAt);
+  });
+
   it("hash changes when any input changes", async () => {
     const [brief, repo] = await Promise.all([parseBriefFromFile(briefPath), analyzeRepo(repoRoot)]);
     const base = compileSpine({ brief, repo, design: null, now: FIXED_NOW });
@@ -76,9 +93,20 @@ describe("compileSpine — examples + self repo", () => {
 `,
       "tiny.md"
     );
-    const [repo] = await Promise.all([analyzeRepo(repoRoot)]);
+    const repo = await analyzeRepo(repoRoot);
+    const repoWithWarning = {
+      ...repo,
+      warnings: [
+        ...repo.warnings,
+        {
+          id: "synthetic-repo-warning",
+          severity: "warn" as const,
+          message: "Synthetic repo warning for propagation coverage.",
+        },
+      ],
+    };
     const design = parseDesign(`# Design\n`, "empty-design.md");
-    const spine = compileSpine({ brief, repo, design, now: FIXED_NOW });
+    const spine = compileSpine({ brief, repo: repoWithWarning, design, now: FIXED_NOW });
     const ids = spine.warnings.map((w) => w.id);
     expect(ids.some((id) => id.startsWith("brief:"))).toBe(true);
     expect(ids.some((id) => id.startsWith("repo:"))).toBe(true);

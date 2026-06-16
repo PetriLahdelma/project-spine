@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "root": "<sample:design-system>",
+  "detectedAt": "2000-01-01T00:00:00.000Z",
+  "packageManager": {
+    "value": "unknown",
+    "confidence": 0,
+    "evidence": [
+      "no lockfile found"
+    ]
+  },
+  "framework": {
+    "value": "node-library",
+    "confidence": 0.75,
+    "evidence": [
+      "no framework dep; looks like a node library"
+    ]
+  },
+  "routing": {
+    "value": "none",
+    "confidence": 0.8,
+    "evidence": [
+      "non-routed framework"
+    ]
+  },
+  "styling": {
+    "value": "unknown",
+    "confidence": 0,
+    "evidence": [
+      "no styling library detected"
+    ]
+  },
+  "language": {
+    "typescript": true,
+    "strict": true,
+    "evidence": [
+      "tsconfig.json present",
+      "compilerOptions.strict = true"
+    ]
+  },
+  "testing": {
+    "runners": [
+      "vitest",
+      "testing-library"
+    ],
+    "storybook": true,
+    "storybookVersion": "8.6.0",
+    "evidence": [
+      "vitest@4.1.8",
+      "@testing-library present",
+      ".storybook/ directory"
+    ]
+  },
+  "linting": {
+    "eslint": false,
+    "biome": false,
+    "prettier": false,
+    "oxlint": false,
+    "evidence": []
+  },
+  "ci": {
+    "githubActions": true,
+    "workflows": [
+      ".github/workflows/ci.yml"
+    ],
+    "other": [],
+    "evidence": [
+      ".github/workflows/ (1 files)"
+    ]
+  },
+  "agentFiles": {
+    "agentsMd": false,
+    "claudeMd": false,
+    "copilotInstructions": false,
+    "cursorRules": false,
+    "projectSpineDir": false
+  },
+  "monorepo": {
+    "isMonorepo": false,
+    "tool": null,
+    "workspaces": [],
+    "evidence": []
+  },
+  "rawPackageJson": {
+    "name": "@aster/design-system",
+    "private": true,
+    "type": "module",
+    "exports": {
+      ".": "./src/index.ts"
+    },
+    "dependencies": {
+      "react": "19.2.4"
+    },
+    "devDependencies": {
+      "@storybook/react": "8.6.0",
+      "@testing-library/react": "16.0.0",
+      "vitest": "4.1.8",
+      "typescript": "6.0.3"
+    }
+  },
+  "warnings": [
+    {
+      "id": "no-agent-files",
+      "severity": "info",
+      "message": "No agent instruction files found.",
+      "suggestion": "Run `spine compile --brief ./brief.md --repo .` to generate AGENTS.md, CLAUDE.md, copilot-instructions.md, and a Cursor project rule."
+    }
+  ]
+}

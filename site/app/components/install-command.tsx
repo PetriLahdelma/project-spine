@@ -49,6 +49,8 @@ export function InstallCommand() {
           onClick={copy}
           className="install-block__copy"
           aria-label={copied ? "Copied" : "Copy install command"}
+          data-ps-event="install_copy"
+          data-ps-label="install block"
         >
           {copied ? <CheckIcon /> : <CopyIcon />}
           <span>{copied ? "Copied" : "Copy"}</span>

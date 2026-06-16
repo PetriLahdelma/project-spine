@@ -4,7 +4,7 @@ import type { SpineModel } from "../model/spine.js";
 import { renderAgentsMd } from "./agents.js";
 import { renderClaudeMd } from "./claude.js";
 import { renderCopilotInstructions } from "./copilot.js";
-import { renderCursorProjectRule } from "./cursor.js";
+import { renderCursorProjectRule, renderCursorWorkspaceRules } from "./cursor.js";
 import { renderScaffoldPlan } from "./scaffold-plan.js";
 import { renderRouteInventory } from "./route-inventory.js";
 import { renderComponentPlan } from "./component-plan.js";
@@ -73,7 +73,8 @@ export type WriteOptions = {
 /**
  * Writes exports to both locations:
  * - repo root: AGENTS.md, CLAUDE.md, .github/copilot-instructions.md,
- *   .cursor/rules/project-spine.mdc (where tools look)
+ *   .cursor/rules/project-spine.mdc plus scoped workspace rules when detected
+ *   (where tools look)
  * - .project-spine/exports/: canonical copies + the scaffold/docs family
  *
  * Returns the list of absolute paths written AND their sha256 fingerprints
@@ -112,8 +113,13 @@ export async function writeAllExports(
     if (target === "claude") tasks.push(pushRoot(join(opts.repoRoot, "CLAUDE.md"), content));
     if (target === "copilot")
       tasks.push(pushRoot(join(opts.repoRoot, ".github", "copilot-instructions.md"), content));
-    if (target === "cursor")
+    if (target === "cursor") {
       tasks.push(pushRoot(join(opts.repoRoot, ".cursor", "rules", "project-spine.mdc"), content));
+      for (const rule of renderCursorWorkspaceRules(spine)) {
+        tasks.push(push(join(exportsDir, "cursor-rules", rule.filename), rule.content));
+        tasks.push(pushRoot(join(opts.repoRoot, ".cursor", "rules", rule.filename), rule.content));
+      }
+    }
   }
   await Promise.all(tasks);
   written.sort();

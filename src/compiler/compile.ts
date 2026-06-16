@@ -164,6 +164,7 @@ function buildStack(repo: RepoProfile): SpineModel["stack"] {
       tsStrict: repo.language.strict,
       storybook: repo.testing.storybook,
       ci: { githubActions: repo.ci.githubActions, workflows: repo.ci.workflows.length },
+      monorepo: repo.monorepo,
     },
   };
 }

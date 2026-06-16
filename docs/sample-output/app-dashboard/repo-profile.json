@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "root": "<sample:app-dashboard>",
+  "detectedAt": "2000-01-01T00:00:00.000Z",
+  "packageManager": {
+    "value": "unknown",
+    "confidence": 0,
+    "evidence": [
+      "no lockfile found"
+    ]
+  },
+  "framework": {
+    "value": "next",
+    "confidence": 1,
+    "evidence": [
+      "next@16.2.4 in dependencies"
+    ]
+  },
+  "routing": {
+    "value": "next-app-router",
+    "confidence": 1,
+    "evidence": [
+      "app/ directory"
+    ]
+  },
+  "styling": {
+    "value": "tailwind",
+    "confidence": 1,
+    "evidence": [
+      "tailwind config or dependency"
+    ]
+  },
+  "language": {
+    "typescript": true,
+    "strict": true,
+    "evidence": [
+      "tsconfig.json present",
+      "compilerOptions.strict = true"
+    ]
+  },
+  "testing": {
+    "runners": [
+      "vitest"
+    ],
+    "storybook": false,
+    "storybookVersion": null,
+    "evidence": [
+      "vitest@4.1.8"
+    ]
+  },
+  "linting": {
+    "eslint": false,
+    "biome": false,
+    "prettier": false,
+    "oxlint": false,
+    "evidence": []
+  },
+  "ci": {
+    "githubActions": true,
+    "workflows": [
+      ".github/workflows/ci.yml"
+    ],
+    "other": [],
+    "evidence": [
+      ".github/workflows/ (1 files)"
+    ]
+  },
+  "agentFiles": {
+    "agentsMd": false,
+    "claudeMd": false,
+    "copilotInstructions": false,
+    "cursorRules": false,
+    "projectSpineDir": false
+  },
+  "monorepo": {
+    "isMonorepo": false,
+    "tool": null,
+    "workspaces": [],
+    "evidence": []
+  },
+  "rawPackageJson": {
+    "name": "northstar-dashboard",
+    "private": true,
+    "dependencies": {
+      "next": "16.2.4",
+      "react": "19.2.4",
+      "react-dom": "19.2.4"
+    },
+    "devDependencies": {
+      "tailwindcss": "4.1.0",
+      "vitest": "4.1.8",
+      "typescript": "6.0.3"
+    }
+  },
+  "warnings": [
+    {
+      "id": "no-agent-files",
+      "severity": "info",
+      "message": "No agent instruction files found.",
+      "suggestion": "Run `spine compile --brief ./brief.md --repo .` to generate AGENTS.md, CLAUDE.md, copilot-instructions.md, and a Cursor project rule."
+    }
+  ]
+}

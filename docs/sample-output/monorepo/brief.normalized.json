@@ -1,0 +1,143 @@
+{
+  "schemaVersion": 1,
+  "parsedAt": "2000-01-01T00:00:00.000Z",
+  "frontmatter": {
+    "name": "Atlas Workspace",
+    "projectType": "monorepo"
+  },
+  "name": "Atlas Workspace",
+  "projectType": "monorepo",
+  "projectTypeConfidence": 1,
+  "projectTypeEvidence": [
+    "frontmatter.projectType = monorepo"
+  ],
+  "sections": {
+    "goals": [
+      {
+        "text": "Consolidate the web app and shared UI package into one workspace.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section0/item0"
+        }
+      },
+      {
+        "text": "Cut CI time with affected-only builds and cached task outputs.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section0/item1"
+        }
+      },
+      {
+        "text": "Share a typed UI package without allowing apps to become package dependencies.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section0/item2"
+        }
+      }
+    ],
+    "nonGoals": [],
+    "audience": [
+      {
+        "text": "Product engineers working in apps/web daily.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section1/item0"
+        }
+      },
+      {
+        "text": "Platform maintainers who own packages/ui and build tooling.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section1/item1"
+        }
+      },
+      {
+        "text": "Release managers who need predictable package versioning.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section1/item2"
+        }
+      }
+    ],
+    "constraints": [
+      {
+        "text": "pnpm workspaces with Turborepo task orchestration.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section2/item0"
+        }
+      },
+      {
+        "text": "Node 20 baseline across every package.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section2/item1"
+        }
+      },
+      {
+        "text": "One lockfile, one root tsconfig, one root CI workflow.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section2/item2"
+        }
+      }
+    ],
+    "assumptions": [
+      {
+        "text": "Packages can build in isolation once dependencies are declared correctly.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section3/item0"
+        }
+      },
+      {
+        "text": "Remote cache access is available in CI but not required locally.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section3/item1"
+        }
+      }
+    ],
+    "risks": [
+      {
+        "text": "Cross-package relative imports could bypass the declared graph.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section4/item0"
+        }
+      },
+      {
+        "text": "Circular dependencies may appear during migration.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section4/item1"
+        }
+      }
+    ],
+    "successCriteria": [
+      {
+        "text": "Every workspace builds and tests in isolation.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section5/item0"
+        }
+      },
+      {
+        "text": "A no-op PR finishes affected-only CI in under 60 seconds.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section5/item1"
+        }
+      },
+      {
+        "text": "Release flow uses changesets; no manual package version bumps.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section5/item2"
+        }
+      }
+    ]
+  },
+  "unknownSections": [],
+  "warnings": []
+}

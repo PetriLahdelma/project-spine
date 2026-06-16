@@ -2,13 +2,23 @@
 
 > Starter items with acceptance criteria. Setup items clear the runway; delivery items trace to brief goals.
 
-_Generated from `spine.json` — hash `9ea72686cdffd1cd`, project type `saas-marketing`._
+_Generated from `spine.json` — hash `f2c638c046f2ee9c`, project type `saas-marketing`._
 
 <!-- spine:deterministic -->
 
 ## Setup — clear the runway
 
-### S1. Pick and configure a linter (Biome or ESLint) with a minimal rule set.
+### S1. Commit the Project Spine–generated `AGENTS.md`, `CLAUDE.md`, `.github…
+
+**Detail:** Commit the Project Spine–generated `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, and `.cursor/rules/project-spine.mdc` after review.
+
+**Acceptance:**
+- [ ] Change landed on main (or a release branch) and merged.
+- [ ] Verified locally and in CI where applicable.
+
+**Source:** `inference:inferred:setup/agent-files`
+
+### S2. Pick and configure a linter (Biome or ESLint) with a minimal rule set.
 
 **Detail:** Pick and configure a linter (Biome or ESLint) with a minimal rule set.
 

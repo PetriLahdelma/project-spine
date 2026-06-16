@@ -34,6 +34,7 @@
     "pack:check": "node scripts/check-public-package.mjs",
     "release:readiness": "node scripts/check-release-readiness.mjs",
     "stable:check": "node scripts/check-stable-readiness.mjs",
+    "samples:generate": "node scripts/generate-sample-output.mjs",
     "prepublishOnly": "npm run typecheck && npm test && npm run build && npm run pack:check && npm run release:readiness && npm run stable:check",
     "postinstall": "node scripts/postinstall-hint.mjs"
   },

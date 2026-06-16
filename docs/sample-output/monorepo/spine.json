@@ -1,0 +1,614 @@
+{
+  "metadata": {
+    "name": "Atlas Workspace",
+    "version": "0.1.0",
+    "schemaVersion": 1,
+    "createdAt": "2000-11-08T22:44:19.000Z",
+    "hash": "5632a143e1b77025"
+  },
+  "projectType": "monorepo",
+  "goals": [
+    {
+      "id": "goal-4fad1c2f",
+      "text": "Consolidate the web app and shared UI package into one workspace.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section0/item0"
+      }
+    },
+    {
+      "id": "goal-910219c0",
+      "text": "Cut CI time with affected-only builds and cached task outputs.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section0/item1"
+      }
+    },
+    {
+      "id": "goal-c4c52122",
+      "text": "Share a typed UI package without allowing apps to become package dependencies.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section0/item2"
+      }
+    }
+  ],
+  "nonGoals": [],
+  "audience": [
+    {
+      "id": "aud-e8b6960d",
+      "text": "Product engineers working in apps/web daily.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section1/item0"
+      }
+    },
+    {
+      "id": "aud-34074d50",
+      "text": "Platform maintainers who own packages/ui and build tooling.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section1/item1"
+      }
+    },
+    {
+      "id": "aud-e1e2e033",
+      "text": "Release managers who need predictable package versioning.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section1/item2"
+      }
+    }
+  ],
+  "constraints": [
+    {
+      "id": "con-24ad6093",
+      "text": "pnpm workspaces with Turborepo task orchestration.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section2/item0"
+      }
+    },
+    {
+      "id": "con-f87428d6",
+      "text": "Node 20 baseline across every package.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section2/item1"
+      }
+    },
+    {
+      "id": "con-44b52c12",
+      "text": "One lockfile, one root tsconfig, one root CI workflow.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section2/item2"
+      }
+    }
+  ],
+  "assumptions": [
+    {
+      "id": "asm-a99eeddb",
+      "text": "Packages can build in isolation once dependencies are declared correctly.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section3/item0"
+      }
+    },
+    {
+      "id": "asm-0a4e405a",
+      "text": "Remote cache access is available in CI but not required locally.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section3/item1"
+      }
+    }
+  ],
+  "risks": [
+    {
+      "id": "risk-4e05b932",
+      "text": "Cross-package relative imports could bypass the declared graph.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section4/item0"
+      }
+    },
+    {
+      "id": "risk-af4ef383",
+      "text": "Circular dependencies may appear during migration.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section4/item1"
+      }
+    }
+  ],
+  "stack": {
+    "framework": "node-app",
+    "language": "typescript",
+    "packageManager": "unknown",
+    "runtime": "node",
+    "styling": "unknown",
+    "testing": [
+      "vitest"
+    ],
+    "detected": {
+      "routing": "none",
+      "tsStrict": true,
+      "storybook": false,
+      "ci": {
+        "githubActions": true,
+        "workflows": 1
+      },
+      "monorepo": {
+        "isMonorepo": true,
+        "tool": "pnpm",
+        "workspaces": [
+          "apps/web",
+          "packages/ui"
+        ],
+        "evidence": [
+          "package.json \"workspaces\": apps/*, packages/*",
+          "pnpm-workspace.yaml: apps/*, packages/*",
+          "turbo.json present"
+        ]
+      }
+    }
+  },
+  "repoConventions": [
+    {
+      "id": "conv-9eee0397",
+      "text": "TypeScript strict mode is on. Never use `any`; prefer `unknown` + narrow at the boundary.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:typescript/strict"
+      }
+    }
+  ],
+  "designRules": [],
+  "uxRules": [
+    {
+      "id": "ux-tpl-beccf072",
+      "text": "`tsconfig.json` at the repo root defines shared compiler options; package tsconfigs extend it and only add overrides.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:monorepo/contributes#0"
+      }
+    },
+    {
+      "id": "ux-tpl-e319b409",
+      "text": "Naming: `@scope/utils`, `@scope/ui`, `@scope/config`. The scope prefix makes internal-vs-external explicit in every import.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:monorepo/contributes#1"
+      }
+    },
+    {
+      "id": "ux-tpl-b8b8efeb",
+      "text": "Each package has its own README explaining what it exports and the boundary with the rest of the repo.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:monorepo/contributes#2"
+      }
+    }
+  ],
+  "a11yRules": [
+    {
+      "id": "a11y-e68796a1",
+      "text": "All interactive elements must be reachable and operable with the keyboard alone.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:keyboard"
+      }
+    },
+    {
+      "id": "a11y-6a7fd559",
+      "text": "Focus must be visible at all times; never remove outlines without replacing them.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:focus"
+      }
+    },
+    {
+      "id": "a11y-7a33cd2b",
+      "text": "Text contrast must meet WCAG AA (4.5:1 for body, 3:1 for large text).",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:contrast"
+      }
+    },
+    {
+      "id": "a11y-e9db2d49",
+      "text": "Every form control has a programmatic label.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:labels"
+      }
+    },
+    {
+      "id": "a11y-5b4177a5",
+      "text": "Pages use proper landmark regions (header, main, nav, footer) and a sensible heading order.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:landmarks"
+      }
+    },
+    {
+      "id": "a11y-7e08ce1a",
+      "text": "Respect `prefers-reduced-motion` for any non-essential animation.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:motion"
+      }
+    }
+  ],
+  "componentGuidance": [
+    {
+      "id": "cmp-tpl-beee5eb9",
+      "text": "packages/* — internal libraries. Private by default; each exports a typed public surface via index.ts.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:monorepo/contributes#0"
+      }
+    },
+    {
+      "id": "cmp-tpl-0fed58ed",
+      "text": "apps/* — deployable targets. Depend on packages/, never the other way around.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:monorepo/contributes#1"
+      }
+    },
+    {
+      "id": "cmp-tpl-9a9caf77",
+      "text": "tools/* — repo-local scripts, codegens, CI helpers. Not published.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:monorepo/contributes#2"
+      }
+    },
+    {
+      "id": "cmp-tpl-3c2779cc",
+      "text": "BuildGraph — one root config (turbo.json, nx.json, or a root package.json scripts map) that declares task deps. Every script is reproducible from a clean clone.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:monorepo/contributes#3"
+      }
+    },
+    {
+      "id": "cmp-tpl-a31a5ca7",
+      "text": "ChangeGate — affected-package detection for CI: only run the build / test / lint for packages that actually changed (or depend on a change).",
+      "source": {
+        "kind": "template",
+        "pointer": "template:monorepo/contributes#4"
+      }
+    }
+  ],
+  "qaGuardrails": [
+    {
+      "id": "qa-2971d23b",
+      "text": "Unit tests live next to source as `*.test.ts`. Run `vitest run` in CI and before every commit touching business logic.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:vitest"
+      }
+    },
+    {
+      "id": "qa-7c4f14e6",
+      "text": "`tsc --noEmit` must pass on every PR.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:typecheck"
+      }
+    },
+    {
+      "id": "qa-brief-65cec606",
+      "text": "Success criterion to verify before launch: Every workspace builds and tests in isolation.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section5/item0"
+      }
+    },
+    {
+      "id": "qa-brief-1b853940",
+      "text": "Success criterion to verify before launch: A no-op PR finishes affected-only CI in under 60 seconds.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section5/item1"
+      }
+    },
+    {
+      "id": "qa-brief-18b09755",
+      "text": "Success criterion to verify before launch: Release flow uses changesets; no manual package version bumps.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section5/item2"
+      }
+    },
+    {
+      "id": "qa-tpl-54c820fc",
+      "text": "Every package compiles in isolation: `cd packages/<name> && npm run build` succeeds without repo-root tooling on PATH.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:monorepo/contributes#0"
+      }
+    },
+    {
+      "id": "qa-tpl-9bc336d0",
+      "text": "Cross-package imports go through the package name, not a relative ../../../../ path.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:monorepo/contributes#1"
+      }
+    },
+    {
+      "id": "qa-tpl-c03d595a",
+      "text": "CI uses affected-only runs and caches build artefacts. A no-op PR finishes in under 60s.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:monorepo/contributes#2"
+      }
+    },
+    {
+      "id": "qa-tpl-e0e15a85",
+      "text": "Every publishable package has a CHANGELOG.md updated via changesets or equivalent — never hand-edited in the release commit.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:monorepo/contributes#3"
+      }
+    },
+    {
+      "id": "qa-tpl-6d62e487",
+      "text": "Version bumps flow through a single tool (changesets / lerna / nx release) — no manual `npm version` in a package.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:monorepo/contributes#4"
+      }
+    },
+    {
+      "id": "qa-tpl-51af3133",
+      "text": "Lockfile is a single source of truth (pnpm-lock.yaml or package-lock.json). No per-package lockfiles.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:monorepo/contributes#5"
+      }
+    }
+  ],
+  "agentInstructions": {
+    "dosAndDonts": [
+      {
+        "id": "do-9ad0f600",
+        "text": "Prefer small, focused diffs. One concern per PR or patch.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:diff"
+        }
+      },
+      {
+        "id": "do-9f52191a",
+        "text": "Always show the exact test or typecheck command you ran and its result.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:test-cmd"
+        }
+      },
+      {
+        "id": "do-cba0e959",
+        "text": "When following a rule from this file, cite it by section heading so reviewers can audit.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:trace"
+        }
+      },
+      {
+        "id": "dont-d429caec",
+        "text": "Do not refactor code unrelated to the task, even if it looks better.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:scope"
+        }
+      },
+      {
+        "id": "dont-d6da3150",
+        "text": "Do not add new dependencies without flagging the choice and reason.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:deps"
+        }
+      },
+      {
+        "id": "do-tpl-40df52e7",
+        "text": "When adding a new package, use the repo's generator / template if one exists. If not, copy the smallest existing package wholesale and edit from there.",
+        "source": {
+          "kind": "template",
+          "pointer": "template:monorepo/contributes#0"
+        }
+      },
+      {
+        "id": "do-tpl-3aa7ce0d",
+        "text": "Declare dependencies explicitly in each package's package.json — hoisting works, but the declared graph is what CI trusts.",
+        "source": {
+          "kind": "template",
+          "pointer": "template:monorepo/contributes#1"
+        }
+      },
+      {
+        "id": "do-tpl-577922bb",
+        "text": "Keep the build graph DAG: packages/* never import from apps/*.",
+        "source": {
+          "kind": "template",
+          "pointer": "template:monorepo/contributes#2"
+        }
+      },
+      {
+        "id": "dont-tpl-c4a20998",
+        "text": "Do not add a global helper in the repo root. It belongs in a package.",
+        "source": {
+          "kind": "template",
+          "pointer": "template:monorepo/contributes#0"
+        }
+      },
+      {
+        "id": "dont-tpl-5be4ef7a",
+        "text": "Do not cross-reference packages with relative paths (`../../../other-package`). Use the package name so the build graph is honest.",
+        "source": {
+          "kind": "template",
+          "pointer": "template:monorepo/contributes#1"
+        }
+      },
+      {
+        "id": "dont-tpl-2e626caa",
+        "text": "Do not mix ESM and CommonJS within a single package. Pick one per package and stick to it.",
+        "source": {
+          "kind": "template",
+          "pointer": "template:monorepo/contributes#2"
+        }
+      }
+    ],
+    "unsafeActions": [
+      {
+        "id": "unsafe-dfc94927",
+        "text": "Never modify generated files (anything under `dist/`, `build/`, `.next/`, or marked `@generated`).",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:generated"
+        }
+      },
+      {
+        "id": "unsafe-9cc52688",
+        "text": "Never edit lockfiles manually.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:lockfile"
+        }
+      },
+      {
+        "id": "unsafe-74a0844b",
+        "text": "Never commit secrets. Redact any `.env*` content that appears in logs or diffs.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:secrets"
+        }
+      },
+      {
+        "id": "unsafe-tpl-3ad816bf",
+        "text": "Never hand-edit generated files in `dist/` or `.turbo/` or `.nx/` — they get blown away on the next build.",
+        "source": {
+          "kind": "template",
+          "pointer": "template:monorepo/contributes#0"
+        }
+      },
+      {
+        "id": "unsafe-tpl-1591a4a3",
+        "text": "Never bypass the changeset / release tool to publish a package manually; that's how versions diverge from the changelog.",
+        "source": {
+          "kind": "template",
+          "pointer": "template:monorepo/contributes#1"
+        }
+      }
+    ],
+    "filePlacement": [],
+    "responseExpectations": [
+      {
+        "id": "resp-2fa1aaa3",
+        "text": "Before claiming work is complete, run the repo's typecheck and test commands and show the output.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:verify"
+        }
+      },
+      {
+        "id": "resp-837d9493",
+        "text": "If the brief is ambiguous on a specific section, ask rather than guess. Cite the section heading.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:ask"
+        }
+      }
+    ]
+  },
+  "scaffoldPlan": {
+    "routes": [],
+    "components": [
+      {
+        "id": "cmp-bucket-e051805e",
+        "text": "Layout primitives: `AppShell`, `PageHeader`, `Section`, `Stack`.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:layout"
+        }
+      },
+      {
+        "id": "cmp-bucket-4d650fce",
+        "text": "UI primitives: `Button`, `Input`, `Field`, `Dialog`, `Toast`.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:primitives"
+        }
+      },
+      {
+        "id": "cmp-bucket-b1f7e9ba",
+        "text": "Feature components live co-located with the route or feature folder that owns them.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:features"
+        }
+      }
+    ],
+    "sprint1": [
+      {
+        "id": "setup-f7966e78",
+        "text": "Commit the Project Spine–generated `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, and `.cursor/rules/project-spine.mdc` after review.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:setup/agent-files"
+        }
+      },
+      {
+        "id": "setup-e2afd63d",
+        "text": "Pick and configure a linter (Biome or ESLint) with a minimal rule set.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:setup/lint"
+        }
+      },
+      {
+        "id": "s1-eb32bf5c",
+        "text": "Deliver: Consolidate the web app and shared UI package into one workspace.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section0/item0"
+        }
+      },
+      {
+        "id": "s1-55aad04d",
+        "text": "Deliver: Cut CI time with affected-only builds and cached task outputs.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section0/item1"
+        }
+      },
+      {
+        "id": "s1-1473face",
+        "text": "Deliver: Share a typed UI package without allowing apps to become package dependencies.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section0/item2"
+        }
+      }
+    ]
+  },
+  "warnings": [
+    {
+      "id": "repo:monorepo-detected",
+      "severity": "warn",
+      "message": "Detected a pnpm monorepo with 2 workspaces. Framework detection at the root is unreliable; compile against a specific workspace instead.",
+      "sources": [
+        {
+          "kind": "repo",
+          "pointer": "repo-profile"
+        }
+      ],
+      "suggestion": "Re-run with `--repo apps/web` (or another workspace). Workspaces detected: apps/web, packages/ui."
+    }
+  ]
+}

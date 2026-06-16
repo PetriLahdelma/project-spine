@@ -1,0 +1,143 @@
+{
+  "schemaVersion": 1,
+  "parsedAt": "2000-01-01T00:00:00.000Z",
+  "frontmatter": {
+    "name": "Northstar Ops Dashboard",
+    "projectType": "app-dashboard"
+  },
+  "name": "Northstar Ops Dashboard",
+  "projectType": "app-dashboard",
+  "projectTypeConfidence": 1,
+  "projectTypeEvidence": [
+    "frontmatter.projectType = app-dashboard"
+  ],
+  "sections": {
+    "goals": [
+      {
+        "text": "Ship a role-aware operations dashboard for support leads within 8 weeks.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section0/item0"
+        }
+      },
+      {
+        "text": "Reduce manual queue triage by surfacing priority accounts and stale cases.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section0/item1"
+        }
+      },
+      {
+        "text": "Give managers exportable weekly metrics without ad-hoc SQL requests.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section0/item2"
+        }
+      }
+    ],
+    "nonGoals": [],
+    "audience": [
+      {
+        "text": "Support leads who rebalance queues several times per day.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section1/item0"
+        }
+      },
+      {
+        "text": "Operations managers who review response times and escalation quality weekly.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section1/item1"
+        }
+      },
+      {
+        "text": "Workspace admins who invite agents and assign roles.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section1/item2"
+        }
+      }
+    ],
+    "constraints": [
+      {
+        "text": "Stack is Next.js app router with server actions for mutations.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section2/item0"
+        }
+      },
+      {
+        "text": "Auth comes from the existing SSO provider; no new identity system in v1.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section2/item1"
+        }
+      },
+      {
+        "text": "Tables may include customer names and emails, so analytics and logs must not contain PII.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section2/item2"
+        }
+      }
+    ],
+    "assumptions": [
+      {
+        "text": "Workspaces stay under 200 active agents during the beta.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section3/item0"
+        }
+      },
+      {
+        "text": "The existing API can provide queue and user data with p95 under 300ms.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section3/item1"
+        }
+      }
+    ],
+    "risks": [
+      {
+        "text": "Large exports could block the UI unless moved to a background job.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section4/item0"
+        }
+      },
+      {
+        "text": "Permission mistakes are more damaging than missing convenience features.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section4/item1"
+        }
+      }
+    ],
+    "successCriteria": [
+      {
+        "text": "New support lead reaches the default queue view in under 2 minutes.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section5/item0"
+        }
+      },
+      {
+        "text": "Role-gated routes deny access with a clear recovery path.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section5/item1"
+        }
+      },
+      {
+        "text": "Queue table handles 10,000 rows through server-side pagination.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section5/item2"
+        }
+      }
+    ]
+  },
+  "unknownSections": [],
+  "warnings": []
+}

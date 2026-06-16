@@ -1,0 +1,612 @@
+{
+  "metadata": {
+    "name": "Atlas Docs",
+    "version": "0.1.0",
+    "schemaVersion": 1,
+    "createdAt": "2000-05-09T06:40:50.000Z",
+    "hash": "cbac2972d9a29995"
+  },
+  "projectType": "docs-portal",
+  "goals": [
+    {
+      "id": "goal-68e495c8",
+      "text": "Launch a technical docs portal that gets new users to hello world in under 5 minutes.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section0/item0"
+      }
+    },
+    {
+      "id": "goal-f726f05f",
+      "text": "Keep guides, reference pages, and changelog entries versioned with the repo.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section0/item1"
+      }
+    },
+    {
+      "id": "goal-baffec85",
+      "text": "Make stale docs fail CI through broken-link and copyable-code checks.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section0/item2"
+      }
+    }
+  ],
+  "nonGoals": [],
+  "audience": [
+    {
+      "id": "aud-fca7d105",
+      "text": "New developers installing Atlas for the first time.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section1/item0"
+      }
+    },
+    {
+      "id": "aud-a7b8cbe2",
+      "text": "Integrators who need stable API reference pages.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section1/item1"
+      }
+    },
+    {
+      "id": "aud-6331c6ba",
+      "text": "Support engineers linking users to canonical troubleshooting guides.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section1/item2"
+      }
+    }
+  ],
+  "constraints": [
+    {
+      "id": "con-5cabadf5",
+      "text": "Docs are Markdown/MDX in the repo; no CMS for v1.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section2/item0"
+      }
+    },
+    {
+      "id": "con-b02a5d6f",
+      "text": "API reference is generated from source metadata during build.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section2/item1"
+      }
+    },
+    {
+      "id": "con-e094d26f",
+      "text": "Search index must rebuild on every deploy.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section2/item2"
+      }
+    }
+  ],
+  "assumptions": [
+    {
+      "id": "asm-a0ee08c1",
+      "text": "The first release has one supported major version.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section3/item0"
+      }
+    },
+    {
+      "id": "asm-362e0df7",
+      "text": "Guides can be reviewed by DevRel before launch.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section3/item1"
+      }
+    }
+  ],
+  "risks": [
+    {
+      "id": "risk-7c4a9c4f",
+      "text": "Reference generation may lag behind source changes.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section4/item0"
+      }
+    },
+    {
+      "id": "risk-7d870889",
+      "text": "Search quality can hide good docs if headings are inconsistent.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section4/item1"
+      }
+    }
+  ],
+  "stack": {
+    "framework": "next",
+    "language": "typescript",
+    "packageManager": "unknown",
+    "runtime": "node",
+    "styling": "tailwind",
+    "testing": [
+      "vitest"
+    ],
+    "detected": {
+      "routing": "next-app-router",
+      "tsStrict": true,
+      "storybook": false,
+      "ci": {
+        "githubActions": true,
+        "workflows": 1
+      },
+      "monorepo": {
+        "isMonorepo": false,
+        "tool": null,
+        "workspaces": [],
+        "evidence": []
+      }
+    }
+  },
+  "repoConventions": [
+    {
+      "id": "conv-73b7f1ee",
+      "text": "Use the Next.js App Router (`app/`). Prefer server components by default; only opt into client components via `\"use client\"` when needed.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:next/app-router"
+      }
+    },
+    {
+      "id": "conv-2deb53da",
+      "text": "Style exclusively with Tailwind utility classes. Do not add inline `style` props or ad-hoc CSS unless the component is outside the design system.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:tailwind"
+      }
+    },
+    {
+      "id": "conv-9eee0397",
+      "text": "TypeScript strict mode is on. Never use `any`; prefer `unknown` + narrow at the boundary.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:typescript/strict"
+      }
+    }
+  ],
+  "designRules": [],
+  "uxRules": [
+    {
+      "id": "ux-tpl-d71f46c6",
+      "text": "Guides are task-oriented, not concept-oriented; each one ends with 'Next steps' that link forward.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:docs-portal/contributes#0"
+      }
+    },
+    {
+      "id": "ux-tpl-b25ef062",
+      "text": "Landing hero contains a runnable quickstart, not marketing.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:docs-portal/contributes#1"
+      }
+    }
+  ],
+  "a11yRules": [
+    {
+      "id": "a11y-e68796a1",
+      "text": "All interactive elements must be reachable and operable with the keyboard alone.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:keyboard"
+      }
+    },
+    {
+      "id": "a11y-6a7fd559",
+      "text": "Focus must be visible at all times; never remove outlines without replacing them.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:focus"
+      }
+    },
+    {
+      "id": "a11y-7a33cd2b",
+      "text": "Text contrast must meet WCAG AA (4.5:1 for body, 3:1 for large text).",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:contrast"
+      }
+    },
+    {
+      "id": "a11y-e9db2d49",
+      "text": "Every form control has a programmatic label.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:labels"
+      }
+    },
+    {
+      "id": "a11y-5b4177a5",
+      "text": "Pages use proper landmark regions (header, main, nav, footer) and a sensible heading order.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:landmarks"
+      }
+    },
+    {
+      "id": "a11y-7e08ce1a",
+      "text": "Respect `prefers-reduced-motion` for any non-essential animation.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:motion"
+      }
+    },
+    {
+      "id": "a11y-tpl-7eda4e98",
+      "text": "Skip-to-content link is the first focusable element.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:docs-portal/contributes#0"
+      }
+    },
+    {
+      "id": "a11y-tpl-bdf722f8",
+      "text": "Code block copy buttons have an aria-label and visible focus state.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:docs-portal/contributes#1"
+      }
+    }
+  ],
+  "componentGuidance": [
+    {
+      "id": "cmp-tpl-6cea8391",
+      "text": "Sidebar — Nested nav with active-state highlighting and collapsible sections.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:docs-portal/contributes#0"
+      }
+    },
+    {
+      "id": "cmp-tpl-9c667a23",
+      "text": "TOC — Right-rail table of contents with scroll-spy.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:docs-portal/contributes#1"
+      }
+    },
+    {
+      "id": "cmp-tpl-cb4f2070",
+      "text": "CodeBlock — Copy button, language label, line highlights.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:docs-portal/contributes#2"
+      }
+    },
+    {
+      "id": "cmp-tpl-ae7da619",
+      "text": "Callout — Info / warning / success variants with proper semantics.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:docs-portal/contributes#3"
+      }
+    },
+    {
+      "id": "cmp-tpl-6362ab02",
+      "text": "SearchBar — Instant search with keyboard-only navigation of results.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:docs-portal/contributes#4"
+      }
+    },
+    {
+      "id": "cmp-tpl-28c63053",
+      "text": "VersionSwitcher — Version-aware navigation where applicable.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:docs-portal/contributes#5"
+      }
+    }
+  ],
+  "qaGuardrails": [
+    {
+      "id": "qa-2971d23b",
+      "text": "Unit tests live next to source as `*.test.ts`. Run `vitest run` in CI and before every commit touching business logic.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:vitest"
+      }
+    },
+    {
+      "id": "qa-7c4f14e6",
+      "text": "`tsc --noEmit` must pass on every PR.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:typecheck"
+      }
+    },
+    {
+      "id": "qa-brief-38ff719d",
+      "text": "Success criterion to verify before launch: Quickstart command sequence runs from a clean machine without edits.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section5/item0"
+      }
+    },
+    {
+      "id": "qa-brief-4a64a591",
+      "text": "Success criterion to verify before launch: Broken-link count is zero in CI.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section5/item1"
+      }
+    },
+    {
+      "id": "qa-brief-018e0ea0",
+      "text": "Success criterion to verify before launch: Every generated reference page links back to its source.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section5/item2"
+      }
+    },
+    {
+      "id": "qa-tpl-1eb4295e",
+      "text": "Docs build passes on every PR; broken-link check enforced.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:docs-portal/contributes#0"
+      }
+    },
+    {
+      "id": "qa-tpl-0c9c7ec8",
+      "text": "Search index rebuild runs on each deploy.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:docs-portal/contributes#1"
+      }
+    },
+    {
+      "id": "qa-tpl-d4c1ca3e",
+      "text": "Every code block is copy-verified (pastes + runs without edit).",
+      "source": {
+        "kind": "template",
+        "pointer": "template:docs-portal/contributes#2"
+      }
+    },
+    {
+      "id": "qa-tpl-7907eeb6",
+      "text": "All generated reference pages link back to source.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:docs-portal/contributes#3"
+      }
+    }
+  ],
+  "agentInstructions": {
+    "dosAndDonts": [
+      {
+        "id": "do-9ad0f600",
+        "text": "Prefer small, focused diffs. One concern per PR or patch.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:diff"
+        }
+      },
+      {
+        "id": "do-9f52191a",
+        "text": "Always show the exact test or typecheck command you ran and its result.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:test-cmd"
+        }
+      },
+      {
+        "id": "do-cba0e959",
+        "text": "When following a rule from this file, cite it by section heading so reviewers can audit.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:trace"
+        }
+      },
+      {
+        "id": "dont-d429caec",
+        "text": "Do not refactor code unrelated to the task, even if it looks better.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:scope"
+        }
+      },
+      {
+        "id": "dont-d6da3150",
+        "text": "Do not add new dependencies without flagging the choice and reason.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:deps"
+        }
+      },
+      {
+        "id": "do-tpl-67be98c5",
+        "text": "When adding a guide, cross-link it from the nearest landing / index page and the top-level guides index.",
+        "source": {
+          "kind": "template",
+          "pointer": "template:docs-portal/contributes#0"
+        }
+      },
+      {
+        "id": "dont-tpl-86826269",
+        "text": "Do not write guides as prose walls. Use headings, code blocks, and short paragraphs.",
+        "source": {
+          "kind": "template",
+          "pointer": "template:docs-portal/contributes#0"
+        }
+      }
+    ],
+    "unsafeActions": [
+      {
+        "id": "unsafe-dfc94927",
+        "text": "Never modify generated files (anything under `dist/`, `build/`, `.next/`, or marked `@generated`).",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:generated"
+        }
+      },
+      {
+        "id": "unsafe-9cc52688",
+        "text": "Never edit lockfiles manually.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:lockfile"
+        }
+      },
+      {
+        "id": "unsafe-74a0844b",
+        "text": "Never commit secrets. Redact any `.env*` content that appears in logs or diffs.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:secrets"
+        }
+      }
+    ],
+    "filePlacement": [
+      {
+        "id": "placement-3013c574",
+        "text": "Pages go in `app/`. Route segments use `page.tsx`. Shared UI goes in `components/` or `src/components/`.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:next-app"
+        }
+      }
+    ],
+    "responseExpectations": [
+      {
+        "id": "resp-2fa1aaa3",
+        "text": "Before claiming work is complete, run the repo's typecheck and test commands and show the output.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:verify"
+        }
+      },
+      {
+        "id": "resp-837d9493",
+        "text": "If the brief is ambiguous on a specific section, ask rather than guess. Cite the section heading.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:ask"
+        }
+      }
+    ]
+  },
+  "scaffoldPlan": {
+    "routes": [
+      {
+        "id": "route-tpl-60f9d9f6",
+        "text": "/ — Landing with quickstart CTA and top guides.",
+        "source": {
+          "kind": "template",
+          "pointer": "template:docs-portal/contributes#0"
+        }
+      },
+      {
+        "id": "route-tpl-946b0c5b",
+        "text": "/quickstart — Minimum viable setup in under 5 minutes.",
+        "source": {
+          "kind": "template",
+          "pointer": "template:docs-portal/contributes#1"
+        }
+      },
+      {
+        "id": "route-tpl-dd2c3b63",
+        "text": "/guides — Topic index; each guide is task-oriented.",
+        "source": {
+          "kind": "template",
+          "pointer": "template:docs-portal/contributes#2"
+        }
+      },
+      {
+        "id": "route-tpl-677256d7",
+        "text": "/reference — Generated API reference.",
+        "source": {
+          "kind": "template",
+          "pointer": "template:docs-portal/contributes#3"
+        }
+      },
+      {
+        "id": "route-tpl-60b7d387",
+        "text": "/changelog — Release notes, newest first.",
+        "source": {
+          "kind": "template",
+          "pointer": "template:docs-portal/contributes#4"
+        }
+      }
+    ],
+    "components": [
+      {
+        "id": "cmp-bucket-e051805e",
+        "text": "Layout primitives: `AppShell`, `PageHeader`, `Section`, `Stack`.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:layout"
+        }
+      },
+      {
+        "id": "cmp-bucket-4d650fce",
+        "text": "UI primitives: `Button`, `Input`, `Field`, `Dialog`, `Toast`.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:primitives"
+        }
+      },
+      {
+        "id": "cmp-bucket-b1f7e9ba",
+        "text": "Feature components live co-located with the route or feature folder that owns them.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:features"
+        }
+      }
+    ],
+    "sprint1": [
+      {
+        "id": "setup-f7966e78",
+        "text": "Commit the Project Spine–generated `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, and `.cursor/rules/project-spine.mdc` after review.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:setup/agent-files"
+        }
+      },
+      {
+        "id": "setup-e2afd63d",
+        "text": "Pick and configure a linter (Biome or ESLint) with a minimal rule set.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:setup/lint"
+        }
+      },
+      {
+        "id": "s1-28137dd5",
+        "text": "Deliver: Launch a technical docs portal that gets new users to hello world in under 5 minutes.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section0/item0"
+        }
+      },
+      {
+        "id": "s1-b6e01209",
+        "text": "Deliver: Keep guides, reference pages, and changelog entries versioned with the repo.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section0/item1"
+        }
+      },
+      {
+        "id": "s1-8d7c1384",
+        "text": "Deliver: Make stale docs fail CI through broken-link and copyable-code checks.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section0/item2"
+        }
+      }
+    ]
+  },
+  "warnings": []
+}

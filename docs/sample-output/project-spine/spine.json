@@ -3,8 +3,8 @@
     "name": "Project Spine",
     "version": "0.1.0",
     "schemaVersion": 1,
-    "createdAt": "2026-05-04T21:04:10.750Z",
-    "hash": "ce09cb93352dfefb"
+    "createdAt": "2000-10-06T03:50:11.000Z",
+    "hash": "ae5e8a737294995d"
   },
   "projectType": "other",
   "goals": [
@@ -169,7 +169,13 @@
       "storybook": false,
       "ci": {
         "githubActions": true,
-        "workflows": 3
+        "workflows": 6
+      },
+      "monorepo": {
+        "isMonorepo": false,
+        "tool": null,
+        "workspaces": [],
+        "evidence": []
       }
     }
   },
@@ -421,6 +427,14 @@
     ],
     "sprint1": [
       {
+        "id": "setup-f7966e78",
+        "text": "Commit the Project Spine–generated `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, and `.cursor/rules/project-spine.mdc` after review.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:setup/agent-files"
+        }
+      },
+      {
         "id": "setup-e2afd63d",
         "text": "Pick and configure a linter (Biome or ESLint) with a minimal rule set.",
         "source": {
@@ -462,18 +476,5 @@
       }
     ]
   },
-  "warnings": [
-    {
-      "id": "repo:framework-uncertain",
-      "severity": "warn",
-      "message": "Framework detection confidence 0.4. Evidence: no framework dep; looks like a node library",
-      "sources": [
-        {
-          "kind": "repo",
-          "pointer": "repo-profile"
-        }
-      ],
-      "suggestion": "Install the framework dependency explicitly (e.g., `npm i next`), or bootstrap from a framework starter before compiling."
-    }
-  ]
+  "warnings": []
 }

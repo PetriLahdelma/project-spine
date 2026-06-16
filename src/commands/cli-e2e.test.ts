@@ -248,6 +248,35 @@ describe("spine inspect", () => {
     expect(exports).toContain("architecture-summary.md");
   });
 
+  it("explains agent files and approximate budgets", async () => {
+    await spawn(["compile", "--brief", "./brief.md", "--repo", "."], work);
+    const { exitCode, stderr, stdout } = await spawn(["inspect", "--repo", ".", "--agent-files"], work);
+    expect(exitCode, stderr).toBe(0);
+    expect(stdout).toContain("agent files:");
+    expect(stdout).toContain("Codex / generic agents: AGENTS.md");
+    expect(stdout).toContain("GitHub Copilot: .github/copilot-instructions.md");
+    expect(stdout).toContain("~");
+    expect(stdout).toContain("tokens");
+  });
+
+  it("prints inspect --agent-files --json as profile plus agent file report", async () => {
+    await spawn(["compile", "--brief", "./brief.md", "--repo", "."], work);
+    const { exitCode, stderr, stdout } = await spawn(["inspect", "--repo", ".", "--agent-files", "--json"], work);
+    expect(exitCode, stderr).toBe(0);
+    const payload = JSON.parse(stdout) as {
+      profile: { framework: { value: string } };
+      agentFiles: {
+        byteBudget: number;
+        tokenBudget: number;
+        files: Array<{ consumer: string; path: string; status: string; estimatedTokens: number }>;
+      };
+    };
+    expect(payload.profile.framework.value).toBe("next");
+    expect(payload.agentFiles.byteBudget).toBe(32 * 1024);
+    expect(payload.agentFiles.tokenBudget).toBe(8000);
+    expect(payload.agentFiles.files.some((file) => file.path === "AGENTS.md" && file.status === "ok")).toBe(true);
+  });
+
   // inspect is deliberately lenient — an empty or missing dir analyses to
   // "everything unknown" rather than erroring, so there's no natural error
   // path to cover here.

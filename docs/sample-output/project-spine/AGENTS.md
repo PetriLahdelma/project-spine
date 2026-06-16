@@ -8,7 +8,7 @@
 
 **Project type:** `other`
 
-> Source of truth: `.project-spine/spine.json` (hash `ce09cb93352dfefb`). Every rule below has a traceable source. If a rule is wrong, fix the upstream input (`brief.md`, repo state, or `design-rules.md`) and rerun `spine compile`.
+> Source of truth: `.project-spine/spine.json` (hash `ae5e8a737294995d`). Every rule below has a traceable source. If a rule is wrong, fix the upstream input (`brief.md`, repo state, or `design-rules.md`) and rerun `spine compile`.
 
 ## Repo conventions
 
@@ -84,10 +84,6 @@ _(none)_
 - Scope creep into "another AI coding tool" dilutes the pitch. The compiler framing has to stay front and centre.
 - Figma API changes (variables endpoint shape) could break spine tokens pull silently. Need integration checks.
 - Hosted-tier code still lives in-tree (dormant) — if it leaks back into the CLI surface, the OSS positioning breaks again.
-
-## Open warnings
-
-There is 1 unresolved warning in `warnings.json`. Agents should review them before starting a new capability.
 
 ---
 

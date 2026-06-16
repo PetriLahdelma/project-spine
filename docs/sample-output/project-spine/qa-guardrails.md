@@ -2,7 +2,7 @@
 
 > What 'done' means for this project. Every item here is actionable.
 
-_Generated from `spine.json` — hash `ce09cb93352dfefb`, project type `other`._
+_Generated from `spine.json` — hash `ae5e8a737294995d`, project type `other`._
 
 <!-- spine:deterministic -->
 
@@ -35,7 +35,3 @@ _Generated from `spine.json` — hash `ce09cb93352dfefb`, project type `other`._
 - [ ] Screen reader pass on primary flows.
 - [ ] No new dependencies added without explicit rationale.
 - [ ] Generated files (`AGENTS.md`, `CLAUDE.md`, `copilot-instructions.md`, `project-spine.mdc`) reflect the current spine hash.
-
-## Open warnings
-
-- **[warn] repo:framework-uncertain** — Framework detection confidence 0.4. Evidence: no framework dep; looks like a node library

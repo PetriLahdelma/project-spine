@@ -3,8 +3,8 @@
     "name": "Ledger API",
     "version": "0.1.0",
     "schemaVersion": 1,
-    "createdAt": "2026-05-04T21:04:10.744Z",
-    "hash": "7040c29c1d1f2ab2"
+    "createdAt": "2000-04-20T20:24:07.000Z",
+    "hash": "d4f9df671b0e81f3"
   },
   "projectType": "api-service",
   "goals": [
@@ -104,7 +104,7 @@
   ],
   "assumptions": [
     {
-      "id": "asm-ea22e62e",
+      "id": "asm-973c8e42",
       "text": "Traffic stays under 500 rps during the beta window; headroom is fine.",
       "source": {
         "kind": "brief",
@@ -112,7 +112,7 @@
       }
     },
     {
-      "id": "asm-0644694d",
+      "id": "asm-3a28ce97",
       "text": "Internal consumers accept beta-level SLAs (99.5% availability, 48h incident-response).",
       "source": {
         "kind": "brief",
@@ -155,9 +155,9 @@
     }
   ],
   "stack": {
-    "framework": "node-library",
+    "framework": "node-app",
     "language": "typescript",
-    "packageManager": "npm",
+    "packageManager": "unknown",
     "runtime": "node",
     "styling": "unknown",
     "testing": [
@@ -169,7 +169,13 @@
       "storybook": false,
       "ci": {
         "githubActions": true,
-        "workflows": 3
+        "workflows": 1
+      },
+      "monorepo": {
+        "isMonorepo": false,
+        "tool": null,
+        "workspaces": [],
+        "evidence": []
       }
     }
   },
@@ -180,14 +186,6 @@
       "source": {
         "kind": "inference",
         "pointer": "inferred:typescript/strict"
-      }
-    },
-    {
-      "id": "conv-14199504",
-      "text": "Use `npm` for all dependency operations. Do not commit lockfiles from other package managers.",
-      "source": {
-        "kind": "inference",
-        "pointer": "inferred:pm/npm"
       }
     }
   ],
@@ -360,7 +358,7 @@
       }
     },
     {
-      "id": "qa-brief-a9e83dfc",
+      "id": "qa-brief-383e6922",
       "text": "Success criterion to verify before launch: Zero raw stack traces in client responses across 7 days of beta traffic.",
       "source": {
         "kind": "brief",
@@ -640,6 +638,14 @@
     ],
     "sprint1": [
       {
+        "id": "setup-f7966e78",
+        "text": "Commit the Project Spine–generated `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, and `.cursor/rules/project-spine.mdc` after review.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:setup/agent-files"
+        }
+      },
+      {
         "id": "setup-e2afd63d",
         "text": "Pick and configure a linter (Biome or ESLint) with a minimal rule set.",
         "source": {
@@ -681,18 +687,5 @@
       }
     ]
   },
-  "warnings": [
-    {
-      "id": "repo:framework-uncertain",
-      "severity": "warn",
-      "message": "Framework detection confidence 0.4. Evidence: no framework dep; looks like a node library",
-      "sources": [
-        {
-          "kind": "repo",
-          "pointer": "repo-profile"
-        }
-      ],
-      "suggestion": "Install the framework dependency explicitly (e.g., `npm i next`), or bootstrap from a framework starter before compiling."
-    }
-  ]
+  "warnings": []
 }

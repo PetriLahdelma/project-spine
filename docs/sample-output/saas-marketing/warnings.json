@@ -1,17 +1,4 @@
 {
-  "count": 1,
-  "warnings": [
-    {
-      "id": "repo:framework-uncertain",
-      "severity": "warn",
-      "message": "Framework detection confidence 0.4. Evidence: no framework dep; looks like a node library",
-      "sources": [
-        {
-          "kind": "repo",
-          "pointer": "repo-profile"
-        }
-      ],
-      "suggestion": "Install the framework dependency explicitly (e.g., `npm i next`), or bootstrap from a framework starter before compiling."
-    }
-  ]
+  "count": 0,
+  "warnings": []
 }
