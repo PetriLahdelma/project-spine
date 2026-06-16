@@ -62,9 +62,9 @@ export default function PrivacyPage() {
           </li>
           <li>
             <strong>Analytics.</strong> Google Analytics measures aggregate site usage through
-            the tag <code>{GOOGLE_ANALYTICS.measurementId}</code>. The public CLI compile and
-            drift workflows remain local and do not upload repo source, briefs, generated exports,
-            or drift reports.
+            the tag <code>{GOOGLE_ANALYTICS.measurementId}</code>, and Ahrefs Web Analytics
+            measures aggregate website visits. The public CLI compile and drift workflows remain
+            local and do not upload repo source, briefs, generated exports, or drift reports.
           </li>
         </ul>
       </Section>
@@ -117,6 +117,7 @@ export default function PrivacyPage() {
           <li>GitHub (OAuth identity, source-of-truth for your repo)</li>
           <li>Vercel (hosting, DNS, logging)</li>
           <li>Google Analytics (aggregate website measurement)</li>
+          <li>Ahrefs Web Analytics (aggregate website measurement)</li>
           <li>Neon (Postgres)</li>
           <li>Cloudflare (DNS for projectspine.dev)</li>
         </ul>

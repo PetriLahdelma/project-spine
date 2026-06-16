@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Fraunces } from "next/font/google";
 import Script from "next/script";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { GOOGLE_ANALYTICS } from "@/lib/agent-discovery";
+import { AHREFS_ANALYTICS, GOOGLE_ANALYTICS } from "@/lib/agent-discovery";
 import { AnalyticsEvents } from "./components/analytics-events";
 import { WebMcpProvider } from "./components/webmcp-provider";
 import "./globals.css";
@@ -86,6 +86,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Script
           async
           src={`https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`}
+          strategy="afterInteractive"
+        />
+        <Script
+          async
+          data-key={AHREFS_ANALYTICS.publicId}
+          src={AHREFS_ANALYTICS.scriptUrl}
           strategy="afterInteractive"
         />
         <Script id="google-analytics" strategy="afterInteractive">

@@ -123,7 +123,7 @@ export default function SecurityPage() {
             <code>&apos;self&apos;</code>,{" "}
             <code>api.github.com</code>, and{" "}
             <code>registry.npmjs.org</code> for product features, plus Google
-            Analytics endpoints for measurement.
+            Analytics and Ahrefs endpoints for measurement.
           </span>
         </li>
         <li>
