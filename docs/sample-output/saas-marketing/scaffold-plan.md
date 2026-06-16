@@ -2,7 +2,7 @@
 
 > Concrete setup decisions derived from the brief, the repo profile, and any design-system input.
 
-_Generated from `spine.json` — hash `9ea72686cdffd1cd`, project type `saas-marketing`._
+_Generated from `spine.json` — hash `f2c638c046f2ee9c`, project type `saas-marketing`._
 
 <!-- spine:deterministic -->
 
@@ -24,6 +24,7 @@ _Generated from `spine.json` — hash `9ea72686cdffd1cd`, project type `saas-mar
 
 ## Sprint 1 seed
 
+- Commit the Project Spine–generated `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, and `.cursor/rules/project-spine.mdc` after review. <sup>`inference:inferred:setup/agent-files`</sup>
 - Pick and configure a linter (Biome or ESLint) with a minimal rule set. <sup>`inference:inferred:setup/lint`</sup>
 - Deliver: Launch a marketing site for Acme Payroll's new SMB product line within 6 weeks. <sup>`brief:brief.md#section0/item0`</sup>
 - Deliver: Generate qualified trial signups from SMB founders in the US and UK. <sup>`brief:brief.md#section0/item1`</sup>
@@ -32,12 +33,8 @@ _Generated from `spine.json` — hash `9ea72686cdffd1cd`, project type `saas-mar
 
 ## Stack notes
 
-- **Framework:** `node-library`
+- **Framework:** `next`
 - **Language:** `typescript`
-- **Styling:** `unknown`
-- **Package manager:** `npm`
+- **Styling:** `tailwind`
+- **Package manager:** `unknown`
 - **Testing:** `vitest`
-
-## Warnings worth resolving before build
-
-- **[warn] repo:framework-uncertain** — Framework detection confidence 0.4. Evidence: no framework dep; looks like a node library

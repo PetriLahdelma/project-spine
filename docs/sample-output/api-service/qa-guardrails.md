@@ -2,7 +2,7 @@
 
 > What 'done' means for this project. Every item here is actionable.
 
-_Generated from `spine.json` — hash `7040c29c1d1f2ab2`, project type `api-service`._
+_Generated from `spine.json` — hash `d4f9df671b0e81f3`, project type `api-service`._
 
 <!-- spine:deterministic -->
 
@@ -42,7 +42,3 @@ _Generated from `spine.json` — hash `7040c29c1d1f2ab2`, project type `api-serv
 - [ ] Screen reader pass on primary flows.
 - [ ] No new dependencies added without explicit rationale.
 - [ ] Generated files (`AGENTS.md`, `CLAUDE.md`, `copilot-instructions.md`, `project-spine.mdc`) reflect the current spine hash.
-
-## Open warnings
-
-- **[warn] repo:framework-uncertain** — Framework detection confidence 0.4. Evidence: no framework dep; looks like a node library

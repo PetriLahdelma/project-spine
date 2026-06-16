@@ -236,6 +236,8 @@ export function MobileNav({
               className="mobile-nav__github"
               target="_blank"
               rel="noopener noreferrer"
+              data-ps-event="github_click"
+              data-ps-label="mobile nav"
             >
               <GitHubIcon />
               <span>GitHub</span>

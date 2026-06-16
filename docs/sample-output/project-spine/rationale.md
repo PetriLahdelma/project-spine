@@ -2,7 +2,7 @@
 
 > Why the project is set up this way. Shareable with clients and non-technical stakeholders.
 
-_Generated from `spine.json` — hash `ce09cb93352dfefb`, project type `other`._
+_Generated from `spine.json` — hash `ae5e8a737294995d`, project type `other`._
 
 <!-- spine:deterministic -->
 
@@ -50,7 +50,3 @@ We enforce accessibility and testing guardrails from day one, not at the end. Ev
 
 Project context is compiled into a machine-readable layer (`.project-spine/spine.json`). Agent instruction files (`AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, `.cursor/rules/project-spine.mdc`) are generated from that same source, so humans and coding agents stay aligned without hand-editing duplicated docs.
 When the brief or design evolves, we update the upstream input and recompile. That keeps the working context honest.
-
-## Open questions
-
-- Framework detection confidence 0.4. Evidence: no framework dep; looks like a node library

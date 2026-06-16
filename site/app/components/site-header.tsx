@@ -41,6 +41,8 @@ export function SiteHeader() {
             aria-label="GitHub"
             target="_blank"
             rel="noopener noreferrer"
+            data-ps-event="github_click"
+            data-ps-label="site header"
           >
             <GitHubIcon />
           </a>

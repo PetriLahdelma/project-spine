@@ -1,0 +1,17 @@
+{
+  "count": 1,
+  "warnings": [
+    {
+      "id": "repo:monorepo-detected",
+      "severity": "warn",
+      "message": "Detected a pnpm monorepo with 2 workspaces. Framework detection at the root is unreliable; compile against a specific workspace instead.",
+      "sources": [
+        {
+          "kind": "repo",
+          "pointer": "repo-profile"
+        }
+      ],
+      "suggestion": "Re-run with `--repo apps/web` (or another workspace). Workspaces detected: apps/web, packages/ui."
+    }
+  ]
+}

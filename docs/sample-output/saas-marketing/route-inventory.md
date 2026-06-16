@@ -2,7 +2,7 @@
 
 > Proposed routes for the project, derived from project type and brief goals.
 
-_Generated from `spine.json` — hash `9ea72686cdffd1cd`, project type `saas-marketing`._
+_Generated from `spine.json` — hash `f2c638c046f2ee9c`, project type `saas-marketing`._
 
 <!-- spine:deterministic -->
 

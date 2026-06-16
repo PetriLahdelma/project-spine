@@ -1,10 +1,10 @@
 {
   "metadata": {
-    "name": "Project Spine",
+    "name": "Acme Payroll Marketing Site",
     "version": "0.1.0",
     "schemaVersion": 1,
-    "createdAt": "2026-05-04T21:04:10.727Z",
-    "hash": "9ea72686cdffd1cd"
+    "createdAt": "2000-02-27T02:15:28.000Z",
+    "hash": "f2c638c046f2ee9c"
   },
   "projectType": "saas-marketing",
   "goals": [
@@ -147,39 +147,53 @@
     }
   ],
   "stack": {
-    "framework": "node-library",
+    "framework": "next",
     "language": "typescript",
-    "packageManager": "npm",
+    "packageManager": "unknown",
     "runtime": "node",
-    "styling": "unknown",
+    "styling": "tailwind",
     "testing": [
       "vitest"
     ],
     "detected": {
-      "routing": "none",
+      "routing": "next-app-router",
       "tsStrict": true,
       "storybook": false,
       "ci": {
         "githubActions": true,
-        "workflows": 3
+        "workflows": 1
+      },
+      "monorepo": {
+        "isMonorepo": false,
+        "tool": null,
+        "workspaces": [],
+        "evidence": []
       }
     }
   },
   "repoConventions": [
+    {
+      "id": "conv-73b7f1ee",
+      "text": "Use the Next.js App Router (`app/`). Prefer server components by default; only opt into client components via `\"use client\"` when needed.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:next/app-router"
+      }
+    },
+    {
+      "id": "conv-2deb53da",
+      "text": "Style exclusively with Tailwind utility classes. Do not add inline `style` props or ad-hoc CSS unless the component is outside the design system.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:tailwind"
+      }
+    },
     {
       "id": "conv-9eee0397",
       "text": "TypeScript strict mode is on. Never use `any`; prefer `unknown` + narrow at the boundary.",
       "source": {
         "kind": "inference",
         "pointer": "inferred:typescript/strict"
-      }
-    },
-    {
-      "id": "conv-14199504",
-      "text": "Use `npm` for all dependency operations. Do not commit lockfiles from other package managers.",
-      "source": {
-        "kind": "inference",
-        "pointer": "inferred:pm/npm"
       }
     }
   ],
@@ -525,7 +539,16 @@
         }
       }
     ],
-    "filePlacement": [],
+    "filePlacement": [
+      {
+        "id": "placement-3013c574",
+        "text": "Pages go in `app/`. Route segments use `page.tsx`. Shared UI goes in `components/` or `src/components/`.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:next-app"
+        }
+      }
+    ],
     "responseExpectations": [
       {
         "id": "resp-2fa1aaa3",
@@ -632,6 +655,14 @@
     ],
     "sprint1": [
       {
+        "id": "setup-f7966e78",
+        "text": "Commit the Project Spine–generated `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, and `.cursor/rules/project-spine.mdc` after review.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:setup/agent-files"
+        }
+      },
+      {
         "id": "setup-e2afd63d",
         "text": "Pick and configure a linter (Biome or ESLint) with a minimal rule set.",
         "source": {
@@ -673,18 +704,5 @@
       }
     ]
   },
-  "warnings": [
-    {
-      "id": "repo:framework-uncertain",
-      "severity": "warn",
-      "message": "Framework detection confidence 0.4. Evidence: no framework dep; looks like a node library",
-      "sources": [
-        {
-          "kind": "repo",
-          "pointer": "repo-profile"
-        }
-      ],
-      "suggestion": "Install the framework dependency explicitly (e.g., `npm i next`), or bootstrap from a framework starter before compiling."
-    }
-  ]
+  "warnings": []
 }

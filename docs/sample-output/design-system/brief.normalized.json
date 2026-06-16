@@ -1,0 +1,143 @@
+{
+  "schemaVersion": 1,
+  "parsedAt": "2000-01-01T00:00:00.000Z",
+  "frontmatter": {
+    "name": "Aster Design System",
+    "projectType": "design-system"
+  },
+  "name": "Aster Design System",
+  "projectType": "design-system",
+  "projectTypeConfidence": 1,
+  "projectTypeEvidence": [
+    "frontmatter.projectType = design-system"
+  ],
+  "sections": {
+    "goals": [
+      {
+        "text": "Standardize product UI primitives across three web apps.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section0/item0"
+        }
+      },
+      {
+        "text": "Move all color, spacing, radius, and typography decisions into semantic tokens.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section0/item1"
+        }
+      },
+      {
+        "text": "Publish a stable React package with Storybook docs and migration examples.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section0/item2"
+        }
+      }
+    ],
+    "nonGoals": [],
+    "audience": [
+      {
+        "text": "Product designers defining tokens and component states.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section1/item0"
+        }
+      },
+      {
+        "text": "Platform engineers maintaining the package.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section1/item1"
+        }
+      },
+      {
+        "text": "App teams consuming primitives in production surfaces.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section1/item2"
+        }
+      }
+    ],
+    "constraints": [
+      {
+        "text": "React-only v1, TypeScript strict, ESM package output.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section2/item0"
+        }
+      },
+      {
+        "text": "Tokens are exported from Figma as JSON and transformed before publish.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section2/item1"
+        }
+      },
+      {
+        "text": "Downstream apps need light, dark, and high-contrast themes.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section2/item2"
+        }
+      }
+    ],
+    "assumptions": [
+      {
+        "text": "Designers own token naming; engineers own package boundaries.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section3/item0"
+        }
+      },
+      {
+        "text": "Breaking changes can ship monthly with deprecation notes.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section3/item1"
+        }
+      }
+    ],
+    "risks": [
+      {
+        "text": "Teams may fork primitives if migration docs are thin.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section4/item0"
+        }
+      },
+      {
+        "text": "Token aliases could drift from Figma unless exports are checked in CI.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section4/item1"
+        }
+      }
+    ],
+    "successCriteria": [
+      {
+        "text": "Button, Input, Field, Dialog, Tooltip, and Toast ship with docs and tests.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section5/item0"
+        }
+      },
+      {
+        "text": "Axe checks pass for every primitive story.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section5/item1"
+        }
+      },
+      {
+        "text": "First downstream app replaces 80% of raw form controls with primitives.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section5/item2"
+        }
+      }
+    ]
+  },
+  "unknownSections": [],
+  "warnings": []
+}

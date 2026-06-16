@@ -1,0 +1,636 @@
+{
+  "metadata": {
+    "name": "Northstar Ops Dashboard",
+    "version": "0.1.0",
+    "schemaVersion": 1,
+    "createdAt": "2000-09-16T12:57:39.000Z",
+    "hash": "6314a0c307118ea7"
+  },
+  "projectType": "app-dashboard",
+  "goals": [
+    {
+      "id": "goal-3cb33a2c",
+      "text": "Ship a role-aware operations dashboard for support leads within 8 weeks.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section0/item0"
+      }
+    },
+    {
+      "id": "goal-e217885e",
+      "text": "Reduce manual queue triage by surfacing priority accounts and stale cases.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section0/item1"
+      }
+    },
+    {
+      "id": "goal-1263f725",
+      "text": "Give managers exportable weekly metrics without ad-hoc SQL requests.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section0/item2"
+      }
+    }
+  ],
+  "nonGoals": [],
+  "audience": [
+    {
+      "id": "aud-7d74d0f2",
+      "text": "Support leads who rebalance queues several times per day.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section1/item0"
+      }
+    },
+    {
+      "id": "aud-b796000f",
+      "text": "Operations managers who review response times and escalation quality weekly.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section1/item1"
+      }
+    },
+    {
+      "id": "aud-a62cc44b",
+      "text": "Workspace admins who invite agents and assign roles.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section1/item2"
+      }
+    }
+  ],
+  "constraints": [
+    {
+      "id": "con-5d31ca64",
+      "text": "Stack is Next.js app router with server actions for mutations.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section2/item0"
+      }
+    },
+    {
+      "id": "con-a72fe5cd",
+      "text": "Auth comes from the existing SSO provider; no new identity system in v1.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section2/item1"
+      }
+    },
+    {
+      "id": "con-31e2c655",
+      "text": "Tables may include customer names and emails, so analytics and logs must not contain PII.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section2/item2"
+      }
+    }
+  ],
+  "assumptions": [
+    {
+      "id": "asm-b0162a00",
+      "text": "Workspaces stay under 200 active agents during the beta.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section3/item0"
+      }
+    },
+    {
+      "id": "asm-6cc5ace6",
+      "text": "The existing API can provide queue and user data with p95 under 300ms.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section3/item1"
+      }
+    }
+  ],
+  "risks": [
+    {
+      "id": "risk-39bd76c8",
+      "text": "Large exports could block the UI unless moved to a background job.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section4/item0"
+      }
+    },
+    {
+      "id": "risk-880ef557",
+      "text": "Permission mistakes are more damaging than missing convenience features.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section4/item1"
+      }
+    }
+  ],
+  "stack": {
+    "framework": "next",
+    "language": "typescript",
+    "packageManager": "unknown",
+    "runtime": "node",
+    "styling": "tailwind",
+    "testing": [
+      "vitest"
+    ],
+    "detected": {
+      "routing": "next-app-router",
+      "tsStrict": true,
+      "storybook": false,
+      "ci": {
+        "githubActions": true,
+        "workflows": 1
+      },
+      "monorepo": {
+        "isMonorepo": false,
+        "tool": null,
+        "workspaces": [],
+        "evidence": []
+      }
+    }
+  },
+  "repoConventions": [
+    {
+      "id": "conv-73b7f1ee",
+      "text": "Use the Next.js App Router (`app/`). Prefer server components by default; only opt into client components via `\"use client\"` when needed.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:next/app-router"
+      }
+    },
+    {
+      "id": "conv-2deb53da",
+      "text": "Style exclusively with Tailwind utility classes. Do not add inline `style` props or ad-hoc CSS unless the component is outside the design system.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:tailwind"
+      }
+    },
+    {
+      "id": "conv-9eee0397",
+      "text": "TypeScript strict mode is on. Never use `any`; prefer `unknown` + narrow at the boundary.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:typescript/strict"
+      }
+    }
+  ],
+  "designRules": [],
+  "uxRules": [
+    {
+      "id": "ux-a6c0dad1",
+      "text": "Every data surface has explicit loading, empty, error, and partial states.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:dashboard/states"
+      }
+    },
+    {
+      "id": "ux-tpl-3d14d2de",
+      "text": "Destructive actions require confirmation and always present an undo path when feasible.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:app-dashboard/contributes#0"
+      }
+    },
+    {
+      "id": "ux-tpl-9b0aa1f8",
+      "text": "Bulk operations show progress and a cancel affordance.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:app-dashboard/contributes#1"
+      }
+    }
+  ],
+  "a11yRules": [
+    {
+      "id": "a11y-e68796a1",
+      "text": "All interactive elements must be reachable and operable with the keyboard alone.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:keyboard"
+      }
+    },
+    {
+      "id": "a11y-6a7fd559",
+      "text": "Focus must be visible at all times; never remove outlines without replacing them.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:focus"
+      }
+    },
+    {
+      "id": "a11y-7a33cd2b",
+      "text": "Text contrast must meet WCAG AA (4.5:1 for body, 3:1 for large text).",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:contrast"
+      }
+    },
+    {
+      "id": "a11y-e9db2d49",
+      "text": "Every form control has a programmatic label.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:labels"
+      }
+    },
+    {
+      "id": "a11y-5b4177a5",
+      "text": "Pages use proper landmark regions (header, main, nav, footer) and a sensible heading order.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:landmarks"
+      }
+    },
+    {
+      "id": "a11y-7e08ce1a",
+      "text": "Respect `prefers-reduced-motion` for any non-essential animation.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:motion"
+      }
+    },
+    {
+      "id": "a11y-tpl-8f367b60",
+      "text": "Modals trap focus and restore focus to the trigger on close.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:app-dashboard/contributes#0"
+      }
+    },
+    {
+      "id": "a11y-tpl-616872fe",
+      "text": "All interactive tables are keyboard-navigable (ArrowKeys, Home/End, Enter/Space).",
+      "source": {
+        "kind": "template",
+        "pointer": "template:app-dashboard/contributes#1"
+      }
+    }
+  ],
+  "componentGuidance": [
+    {
+      "id": "cmp-tpl-0a4770e7",
+      "text": "AppShell — Sidebar + TopBar + main content area; handles collapsed/expanded states.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:app-dashboard/contributes#0"
+      }
+    },
+    {
+      "id": "cmp-tpl-e8f5bd10",
+      "text": "Sidebar — Nav with role-gated items; keyboard and screen-reader navigable.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:app-dashboard/contributes#1"
+      }
+    },
+    {
+      "id": "cmp-tpl-4801431f",
+      "text": "TopBar — Search, notifications, user menu.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:app-dashboard/contributes#2"
+      }
+    },
+    {
+      "id": "cmp-tpl-c4d5b82a",
+      "text": "DataTable — Sortable, paginated, keyboard-navigable; supports row selection.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:app-dashboard/contributes#3"
+      }
+    },
+    {
+      "id": "cmp-tpl-edbfdc4d",
+      "text": "EmptyState — First-run / no-data copy with suggested next action.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:app-dashboard/contributes#4"
+      }
+    },
+    {
+      "id": "cmp-tpl-4380a3fc",
+      "text": "FormDialog — Consistent modal with focus trap and escape-to-close.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:app-dashboard/contributes#5"
+      }
+    },
+    {
+      "id": "cmp-tpl-1a329043",
+      "text": "PermissionGate — Hides or disables UI based on the current user's role.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:app-dashboard/contributes#6"
+      }
+    }
+  ],
+  "qaGuardrails": [
+    {
+      "id": "qa-2971d23b",
+      "text": "Unit tests live next to source as `*.test.ts`. Run `vitest run` in CI and before every commit touching business logic.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:vitest"
+      }
+    },
+    {
+      "id": "qa-7c4f14e6",
+      "text": "`tsc --noEmit` must pass on every PR.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:typecheck"
+      }
+    },
+    {
+      "id": "qa-brief-87ce06d1",
+      "text": "Success criterion to verify before launch: New support lead reaches the default queue view in under 2 minutes.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section5/item0"
+      }
+    },
+    {
+      "id": "qa-brief-46dbd9eb",
+      "text": "Success criterion to verify before launch: Role-gated routes deny access with a clear recovery path.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section5/item1"
+      }
+    },
+    {
+      "id": "qa-brief-cf835009",
+      "text": "Success criterion to verify before launch: Queue table handles 10,000 rows through server-side pagination.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section5/item2"
+      }
+    },
+    {
+      "id": "qa-tpl-04eadd63",
+      "text": "Every data surface has loading, empty, error, and partial states covered.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:app-dashboard/contributes#0"
+      }
+    },
+    {
+      "id": "qa-tpl-80761c10",
+      "text": "Role-gated routes denied with a clear affordance, never a silent 404.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:app-dashboard/contributes#1"
+      }
+    },
+    {
+      "id": "qa-tpl-d9e92e04",
+      "text": "No PII in client-side logs or analytics payloads.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:app-dashboard/contributes#2"
+      }
+    },
+    {
+      "id": "qa-tpl-622eaf0e",
+      "text": "Session timeout and re-auth flow tested end-to-end.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:app-dashboard/contributes#3"
+      }
+    }
+  ],
+  "agentInstructions": {
+    "dosAndDonts": [
+      {
+        "id": "do-9ad0f600",
+        "text": "Prefer small, focused diffs. One concern per PR or patch.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:diff"
+        }
+      },
+      {
+        "id": "do-9f52191a",
+        "text": "Always show the exact test or typecheck command you ran and its result.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:test-cmd"
+        }
+      },
+      {
+        "id": "do-cba0e959",
+        "text": "When following a rule from this file, cite it by section heading so reviewers can audit.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:trace"
+        }
+      },
+      {
+        "id": "dont-d429caec",
+        "text": "Do not refactor code unrelated to the task, even if it looks better.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:scope"
+        }
+      },
+      {
+        "id": "dont-d6da3150",
+        "text": "Do not add new dependencies without flagging the choice and reason.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:deps"
+        }
+      },
+      {
+        "id": "do-tpl-42e8d6ad",
+        "text": "Favor server actions or RPC over ad-hoc fetches in client components.",
+        "source": {
+          "kind": "template",
+          "pointer": "template:app-dashboard/contributes#0"
+        }
+      },
+      {
+        "id": "dont-tpl-493d8be6",
+        "text": "Do not paper over permission checks at the component level; they belong at the data layer.",
+        "source": {
+          "kind": "template",
+          "pointer": "template:app-dashboard/contributes#0"
+        }
+      }
+    ],
+    "unsafeActions": [
+      {
+        "id": "unsafe-dfc94927",
+        "text": "Never modify generated files (anything under `dist/`, `build/`, `.next/`, or marked `@generated`).",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:generated"
+        }
+      },
+      {
+        "id": "unsafe-9cc52688",
+        "text": "Never edit lockfiles manually.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:lockfile"
+        }
+      },
+      {
+        "id": "unsafe-74a0844b",
+        "text": "Never commit secrets. Redact any `.env*` content that appears in logs or diffs.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:secrets"
+        }
+      },
+      {
+        "id": "unsafe-tpl-c9e51fab",
+        "text": "Never log, serialize, or include tokens/emails/IDs in Sentry or analytics payloads without scrubbing.",
+        "source": {
+          "kind": "template",
+          "pointer": "template:app-dashboard/contributes#0"
+        }
+      }
+    ],
+    "filePlacement": [
+      {
+        "id": "placement-3013c574",
+        "text": "Pages go in `app/`. Route segments use `page.tsx`. Shared UI goes in `components/` or `src/components/`.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:next-app"
+        }
+      }
+    ],
+    "responseExpectations": [
+      {
+        "id": "resp-2fa1aaa3",
+        "text": "Before claiming work is complete, run the repo's typecheck and test commands and show the output.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:verify"
+        }
+      },
+      {
+        "id": "resp-837d9493",
+        "text": "If the brief is ambiguous on a specific section, ask rather than guess. Cite the section heading.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:ask"
+        }
+      }
+    ]
+  },
+  "scaffoldPlan": {
+    "routes": [
+      {
+        "id": "route-tpl-97b04e81",
+        "text": "/login — Auth entry; supports SSO and email/password paths as configured.",
+        "source": {
+          "kind": "template",
+          "pointer": "template:app-dashboard/contributes#0"
+        }
+      },
+      {
+        "id": "route-tpl-90e4f12e",
+        "text": "/app — Default authenticated surface, role-aware landing.",
+        "source": {
+          "kind": "template",
+          "pointer": "template:app-dashboard/contributes#1"
+        }
+      },
+      {
+        "id": "route-tpl-de50b4be",
+        "text": "/app/settings — User/workspace settings.",
+        "source": {
+          "kind": "template",
+          "pointer": "template:app-dashboard/contributes#2"
+        }
+      },
+      {
+        "id": "route-tpl-1382a1dc",
+        "text": "/app/team — Members, roles, invites.",
+        "source": {
+          "kind": "template",
+          "pointer": "template:app-dashboard/contributes#3"
+        }
+      },
+      {
+        "id": "route-tpl-1646ee36",
+        "text": "/app/billing — Subscription and invoices (admin-only).",
+        "source": {
+          "kind": "template",
+          "pointer": "template:app-dashboard/contributes#4"
+        }
+      }
+    ],
+    "components": [
+      {
+        "id": "cmp-bucket-e051805e",
+        "text": "Layout primitives: `AppShell`, `PageHeader`, `Section`, `Stack`.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:layout"
+        }
+      },
+      {
+        "id": "cmp-bucket-4d650fce",
+        "text": "UI primitives: `Button`, `Input`, `Field`, `Dialog`, `Toast`.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:primitives"
+        }
+      },
+      {
+        "id": "cmp-bucket-b1f7e9ba",
+        "text": "Feature components live co-located with the route or feature folder that owns them.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:features"
+        }
+      }
+    ],
+    "sprint1": [
+      {
+        "id": "setup-f7966e78",
+        "text": "Commit the Project Spine–generated `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, and `.cursor/rules/project-spine.mdc` after review.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:setup/agent-files"
+        }
+      },
+      {
+        "id": "setup-e2afd63d",
+        "text": "Pick and configure a linter (Biome or ESLint) with a minimal rule set.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:setup/lint"
+        }
+      },
+      {
+        "id": "s1-2923b4df",
+        "text": "Deliver: Ship a role-aware operations dashboard for support leads within 8 weeks.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section0/item0"
+        }
+      },
+      {
+        "id": "s1-5228edd2",
+        "text": "Deliver: Reduce manual queue triage by surfacing priority accounts and stale cases.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section0/item1"
+        }
+      },
+      {
+        "id": "s1-671cc58d",
+        "text": "Deliver: Give managers exportable weekly metrics without ad-hoc SQL requests.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section0/item2"
+        }
+      }
+    ]
+  },
+  "warnings": []
+}

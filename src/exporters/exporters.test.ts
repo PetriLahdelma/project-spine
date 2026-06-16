@@ -7,6 +7,7 @@ import { parseBriefFromFile, parseBrief } from "../brief/parse.js";
 import { parseDesign } from "../design/parse.js";
 import { compileSpine } from "../compiler/compile.js";
 import { renderAllExports, parseTargets, ALL_TARGETS, exportFilename, preserveLocalBlocks, writeAllExports } from "./index.js";
+import { renderCursorWorkspaceRules } from "./cursor.js";
 
 const FIXED_NOW = () => "2026-04-18T00:00:00.000Z";
 const repoRoot = resolve(__dirname, "..", "..");
@@ -61,6 +62,96 @@ describe("exporters — render all", () => {
     expect(cursor).toContain("@AGENTS.md");
     expect(cursor).toContain("@.project-spine/exports/qa-guardrails.md");
     expect(cursor).toContain(spine.metadata.hash);
+  });
+
+  it("Cursor scoped workspace rules are generated for monorepos", async () => {
+    const brief = parseBrief(`# Brief
+
+## Goals
+- Keep workspaces aligned.
+`, "monorepo.md");
+    const fakeRepo = {
+      schemaVersion: 1 as const,
+      root: "/fake",
+      detectedAt: "2026-04-18T00:00:00.000Z",
+      packageManager: { value: "pnpm" as const, confidence: 1, evidence: [] },
+      framework: { value: "node-app" as const, confidence: 0.4, evidence: [] },
+      routing: { value: "none" as const, confidence: 0.8, evidence: [] },
+      styling: { value: "unknown" as const, confidence: 0, evidence: [] },
+      language: { typescript: true, strict: true, evidence: [] },
+      testing: { runners: ["vitest" as const], storybook: false, storybookVersion: null, evidence: [] },
+      linting: { eslint: true, biome: false, prettier: false, oxlint: false, evidence: [] },
+      ci: { githubActions: true, workflows: ["ci.yml"], other: [], evidence: [] },
+      agentFiles: { agentsMd: false, claudeMd: false, copilotInstructions: false, cursorRules: false, projectSpineDir: false },
+      monorepo: {
+        isMonorepo: true,
+        tool: "pnpm" as const,
+        workspaces: ["apps/web", "packages/ui"],
+        evidence: ["pnpm-workspace.yaml: apps/*, packages/*"],
+      },
+      rawPackageJson: { name: "fake-monorepo" },
+      warnings: [],
+    };
+    const spine = compileSpine({ brief, repo: fakeRepo, design: null, now: FIXED_NOW });
+    const { cursor } = renderAllExports(spine);
+    const scoped = renderCursorWorkspaceRules(spine);
+
+    expect(cursor).toContain("`apps/web`");
+    expect(scoped.map((rule) => rule.filename)).toEqual([
+      "project-spine-apps-web.mdc",
+      "project-spine-packages-ui.mdc",
+    ]);
+    expect(scoped[0]?.content).toContain('globs: "apps/web/**"');
+    expect(scoped[0]?.content).toContain("spine compile --brief ./brief.md --repo apps/web");
+  });
+
+  it("writes Cursor scoped workspace rules to root and canonical exports", async () => {
+    const brief = parseBrief(`# Brief
+
+## Goals
+- Keep workspaces aligned.
+`, "monorepo.md");
+    const fakeRepo = {
+      schemaVersion: 1 as const,
+      root: "/fake",
+      detectedAt: "2026-04-18T00:00:00.000Z",
+      packageManager: { value: "pnpm" as const, confidence: 1, evidence: [] },
+      framework: { value: "node-app" as const, confidence: 0.4, evidence: [] },
+      routing: { value: "none" as const, confidence: 0.8, evidence: [] },
+      styling: { value: "unknown" as const, confidence: 0, evidence: [] },
+      language: { typescript: true, strict: true, evidence: [] },
+      testing: { runners: ["vitest" as const], storybook: false, storybookVersion: null, evidence: [] },
+      linting: { eslint: true, biome: false, prettier: false, oxlint: false, evidence: [] },
+      ci: { githubActions: true, workflows: ["ci.yml"], other: [], evidence: [] },
+      agentFiles: { agentsMd: false, claudeMd: false, copilotInstructions: false, cursorRules: false, projectSpineDir: false },
+      monorepo: {
+        isMonorepo: true,
+        tool: "pnpm" as const,
+        workspaces: ["apps/web"],
+        evidence: ["pnpm-workspace.yaml: apps/*"],
+      },
+      rawPackageJson: { name: "fake-monorepo" },
+      warnings: [],
+    };
+    const spine = compileSpine({ brief, repo: fakeRepo, design: null, now: FIXED_NOW });
+    const work = await mkdtemp(join(tmpdir(), "spine-cursor-scoped-"));
+    try {
+      const { fingerprints } = await writeAllExports(spine, {
+        repoRoot: work,
+        outDir: join(work, ".project-spine"),
+        targets: ["cursor"],
+      });
+      expect(await readFile(join(work, ".cursor", "rules", "project-spine-apps-web.mdc"), "utf8")).toContain("apps/web");
+      expect(await readFile(join(work, ".project-spine", "exports", "cursor-rules", "project-spine-apps-web.mdc"), "utf8")).toContain("apps/web");
+      expect(fingerprints.map((file) => file.path)).toEqual(
+        expect.arrayContaining([
+          ".cursor/rules/project-spine-apps-web.mdc",
+          ".project-spine/exports/cursor-rules/project-spine-apps-web.mdc",
+        ]),
+      );
+    } finally {
+      await rm(work, { recursive: true, force: true });
+    }
   });
 
   it("sprint-1-backlog.md has acceptance checkboxes and source traces", async () => {
@@ -208,6 +299,7 @@ after`;
       linting: { eslint: false, biome: false, prettier: false, oxlint: false, evidence: [] },
       ci: { githubActions: false, workflows: [], other: [], evidence: [] },
       agentFiles: { agentsMd: false, claudeMd: false, copilotInstructions: false, cursorRules: false, projectSpineDir: false },
+      monorepo: { isMonorepo: false, tool: null, workspaces: [], evidence: [] },
       rawPackageJson: null,
       warnings: [
         { id: "no-package-json", severity: "warn" as const, message: "No package.json found." },

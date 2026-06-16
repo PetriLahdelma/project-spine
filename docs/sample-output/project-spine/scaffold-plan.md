@@ -2,7 +2,7 @@
 
 > Concrete setup decisions derived from the brief, the repo profile, and any design-system input.
 
-_Generated from `spine.json` — hash `ce09cb93352dfefb`, project type `other`._
+_Generated from `spine.json` — hash `ae5e8a737294995d`, project type `other`._
 
 <!-- spine:deterministic -->
 
@@ -18,6 +18,7 @@ _(none)_
 
 ## Sprint 1 seed
 
+- Commit the Project Spine–generated `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, and `.cursor/rules/project-spine.mdc` after review. <sup>`inference:inferred:setup/agent-files`</sup>
 - Pick and configure a linter (Biome or ESLint) with a minimal rule set. <sup>`inference:inferred:setup/lint`</sup>
 - Deliver: Ship a deterministic context compiler that turns a client brief + a repo + optional design inputs into a repo-native operating layer for coding agents (AGENTS.md / CLAUDE.md / copilot-instructions.md plus a full scaffold plan). <sup>`brief:brief.md#section0/item0`</sup>
 - Deliver: Stay useful without AI in the loop. Every artefact must be worth keeping even if a human reviews it by hand. <sup>`brief:brief.md#section0/item1`</sup>
@@ -31,7 +32,3 @@ _(none)_
 - **Styling:** `unknown`
 - **Package manager:** `npm`
 - **Testing:** `vitest`
-
-## Warnings worth resolving before build
-
-- **[warn] repo:framework-uncertain** — Framework detection confidence 0.4. Evidence: no framework dep; looks like a node library

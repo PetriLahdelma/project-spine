@@ -1,29 +1,85 @@
 # Sample output
 
-Committed snapshots of what `spine compile` produces against three different repos. Read these to see the *shape* of the outputs before you install anything — the AGENTS.md / CLAUDE.md files are the ones your coding agents will actually load.
+Committed snapshots of what `spine compile` produces against representative repos. Read these to see the *shape* of the outputs before you install anything — the AGENTS.md / CLAUDE.md files are the ones your coding agents will actually load.
+
+Regenerate the template-backed snapshots from a built CLI:
+
+```bash
+npm run build
+npm run samples:generate
+```
 
 ## [saas-marketing/](./saas-marketing) — marketing-site kickoff
 
-`spine compile` run against the `saas-marketing` template and `examples/brief.md`. The hot path for most agency work.
+`spine compile` run against the `saas-marketing` template and a Next.js/Tailwind fixture. The hot path for most agency work.
 
 ```bash
 spine compile \
-  --brief ./examples/brief.md \
-  --repo . \
+  --brief ./docs/sample-output/saas-marketing/brief.md \
+  --repo <fixture> \
   --template saas-marketing \
-  --name "Project Spine"
+  --name "Acme Payroll Marketing Site"
+```
+
+## [app-dashboard/](./app-dashboard) — authenticated product dashboard
+
+`spine compile` run against the `app-dashboard` template and a Next.js app fixture with authenticated app routes.
+
+```bash
+spine compile \
+  --brief ./docs/sample-output/app-dashboard/brief.md \
+  --repo <fixture> \
+  --template app-dashboard \
+  --name "Northstar Ops Dashboard"
 ```
 
 ## [api-service/](./api-service) — HTTP API backend
 
-`spine compile` run against the `api-service` template with a Fastify / PostgreSQL stack. Shows how the compiler lifts template-contributed conventions (error envelope, versioned `/v{N}/` routes, cursor pagination, zod-parsed inputs) into the export set.
+`spine compile` run against the `api-service` template with a Fastify-style fixture. Shows how the compiler lifts template-contributed conventions (error envelope, versioned `/v{N}/` routes, cursor pagination, zod-parsed inputs) into the export set.
 
 ```bash
 spine compile \
   --brief ./docs/sample-output/api-service/brief.md \
-  --repo . \
+  --repo <fixture> \
   --template api-service \
   --name "Ledger API"
+```
+
+## [design-system/](./design-system) — tokens and primitives
+
+`spine compile` run against the `design-system` template, its bundled design rules, and a Storybook-style library fixture. Shows token and primitive guidance flowing into agent instructions and component planning.
+
+```bash
+spine compile \
+  --brief ./docs/sample-output/design-system/brief.md \
+  --repo <fixture> \
+  --design ./docs/sample-output/design-system/design-rules.md \
+  --template design-system \
+  --name "Aster Design System"
+```
+
+## [docs-portal/](./docs-portal) — technical docs site
+
+`spine compile` run against the `docs-portal` template and a Next.js docs fixture.
+
+```bash
+spine compile \
+  --brief ./docs/sample-output/docs-portal/brief.md \
+  --repo <fixture> \
+  --template docs-portal \
+  --name "Atlas Docs"
+```
+
+## [monorepo/](./monorepo) — multi-package workspace
+
+`spine compile` run against the `monorepo` template and a pnpm/Turborepo-style fixture with `apps/web` and `packages/ui`. This snapshot includes generated scoped Cursor rules under `cursor-rules/`.
+
+```bash
+spine compile \
+  --brief ./docs/sample-output/monorepo/brief.md \
+  --repo <fixture> \
+  --template monorepo \
+  --name "Atlas Workspace"
 ```
 
 ## [project-spine/](./project-spine) — dogfood
@@ -37,13 +93,13 @@ spine compile \
   --name "Project Spine"
 ```
 
-The briefs live alongside their snapshots (`project-spine/brief.md`, `api-service/brief.md`). `saas-marketing/` uses the shared `examples/brief.md` at the repo root. Recompiling against current repo state will produce different hashes whenever the brief or the repo itself changes — that's drift detection doing its job.
+The briefs live alongside their snapshots. Recompiling against current repo state will produce different hashes whenever the brief or the repo itself changes — that's drift detection doing its job.
 
 ---
 
 ## What's in each folder
 
-Every snapshot is the full 21-file output of a compile run:
+Every snapshot is the full output of a compile run:
 
 | File | Purpose |
 |---|---|
@@ -52,6 +108,7 @@ Every snapshot is the full 21-file output of a compile run:
 | `CLAUDE.md` | Claude Code instruction file with `@import` links to deeper docs. |
 | `copilot-instructions.md` | Self-contained Copilot instructions. |
 | `cursor-project-rule.mdc` | Cursor project rule that imports the generated operating contract. |
+| `cursor-rules/` *(monorepos only)* | Path-scoped Cursor rules for detected workspaces. |
 | `architecture-summary.md` | Detected stack, conventions, tool presence. |
 | `brief-summary.md` | Normalized brief for human review. |
 | `scaffold-plan.md` | Routes, component buckets, sprint-1 seed. |

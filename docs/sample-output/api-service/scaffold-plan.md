@@ -2,7 +2,7 @@
 
 > Concrete setup decisions derived from the brief, the repo profile, and any design-system input.
 
-_Generated from `spine.json` — hash `7040c29c1d1f2ab2`, project type `api-service`._
+_Generated from `spine.json` — hash `d4f9df671b0e81f3`, project type `api-service`._
 
 <!-- spine:deterministic -->
 
@@ -21,6 +21,7 @@ _Generated from `spine.json` — hash `7040c29c1d1f2ab2`, project type `api-serv
 
 ## Sprint 1 seed
 
+- Commit the Project Spine–generated `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, and `.cursor/rules/project-spine.mdc` after review. <sup>`inference:inferred:setup/agent-files`</sup>
 - Pick and configure a linter (Biome or ESLint) with a minimal rule set. <sup>`inference:inferred:setup/lint`</sup>
 - Deliver: Ship v1 of the Ledger billing API for internal consumers in 8 weeks. <sup>`brief:brief.md#section0/item0`</sup>
 - Deliver: p95 read-path latency under 120ms; p95 write-path under 250ms. <sup>`brief:brief.md#section0/item1`</sup>
@@ -29,12 +30,8 @@ _Generated from `spine.json` — hash `7040c29c1d1f2ab2`, project type `api-serv
 
 ## Stack notes
 
-- **Framework:** `node-library`
+- **Framework:** `node-app`
 - **Language:** `typescript`
 - **Styling:** `unknown`
-- **Package manager:** `npm`
+- **Package manager:** `unknown`
 - **Testing:** `vitest`
-
-## Warnings worth resolving before build
-
-- **[warn] repo:framework-uncertain** — Framework detection confidence 0.4. Evidence: no framework dep; looks like a node library

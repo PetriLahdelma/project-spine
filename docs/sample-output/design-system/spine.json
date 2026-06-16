@@ -1,0 +1,725 @@
+{
+  "metadata": {
+    "name": "Aster Design System",
+    "version": "0.1.0",
+    "schemaVersion": 1,
+    "createdAt": "2000-04-22T00:12:38.000Z",
+    "hash": "045611f6e141e981"
+  },
+  "projectType": "design-system",
+  "goals": [
+    {
+      "id": "goal-2efad01f",
+      "text": "Standardize product UI primitives across three web apps.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section0/item0"
+      }
+    },
+    {
+      "id": "goal-0a29d0aa",
+      "text": "Move all color, spacing, radius, and typography decisions into semantic tokens.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section0/item1"
+      }
+    },
+    {
+      "id": "goal-97feeeda",
+      "text": "Publish a stable React package with Storybook docs and migration examples.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section0/item2"
+      }
+    }
+  ],
+  "nonGoals": [],
+  "audience": [
+    {
+      "id": "aud-9324e513",
+      "text": "Product designers defining tokens and component states.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section1/item0"
+      }
+    },
+    {
+      "id": "aud-09dd4dbd",
+      "text": "Platform engineers maintaining the package.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section1/item1"
+      }
+    },
+    {
+      "id": "aud-397ee447",
+      "text": "App teams consuming primitives in production surfaces.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section1/item2"
+      }
+    }
+  ],
+  "constraints": [
+    {
+      "id": "con-ca21065c",
+      "text": "React-only v1, TypeScript strict, ESM package output.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section2/item0"
+      }
+    },
+    {
+      "id": "con-9530faf2",
+      "text": "Tokens are exported from Figma as JSON and transformed before publish.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section2/item1"
+      }
+    },
+    {
+      "id": "con-9624a101",
+      "text": "Downstream apps need light, dark, and high-contrast themes.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section2/item2"
+      }
+    }
+  ],
+  "assumptions": [
+    {
+      "id": "asm-bb76b850",
+      "text": "Designers own token naming; engineers own package boundaries.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section3/item0"
+      }
+    },
+    {
+      "id": "asm-30b55e7a",
+      "text": "Breaking changes can ship monthly with deprecation notes.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section3/item1"
+      }
+    }
+  ],
+  "risks": [
+    {
+      "id": "risk-a986fc39",
+      "text": "Teams may fork primitives if migration docs are thin.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section4/item0"
+      }
+    },
+    {
+      "id": "risk-37ce1e1a",
+      "text": "Token aliases could drift from Figma unless exports are checked in CI.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section4/item1"
+      }
+    }
+  ],
+  "stack": {
+    "framework": "node-library",
+    "language": "typescript",
+    "packageManager": "unknown",
+    "runtime": "node",
+    "styling": "unknown",
+    "testing": [
+      "vitest",
+      "testing-library"
+    ],
+    "detected": {
+      "routing": "none",
+      "tsStrict": true,
+      "storybook": true,
+      "ci": {
+        "githubActions": true,
+        "workflows": 1
+      },
+      "monorepo": {
+        "isMonorepo": false,
+        "tool": null,
+        "workspaces": [],
+        "evidence": []
+      }
+    }
+  },
+  "repoConventions": [
+    {
+      "id": "conv-9eee0397",
+      "text": "TypeScript strict mode is on. Never use `any`; prefer `unknown` + narrow at the boundary.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:typescript/strict"
+      }
+    }
+  ],
+  "designRules": [
+    {
+      "id": "dtok-7847b106",
+      "text": "All color, spacing, radius, and typography values live as tokens. No raw hex, px, or font-family in components.",
+      "source": {
+        "kind": "design",
+        "pointer": "design-rules.md#section0/item0"
+      }
+    },
+    {
+      "id": "dtok-bbccb310",
+      "text": "Tokens are the only safe cross-cut between themes; component styles always read from token references.",
+      "source": {
+        "kind": "design",
+        "pointer": "design-rules.md#section0/item1"
+      }
+    },
+    {
+      "id": "dtok-3c91f42b",
+      "text": "Token names are semantic (color.surface.default) not presentational (color.gray-100).",
+      "source": {
+        "kind": "design",
+        "pointer": "design-rules.md#section0/item2"
+      }
+    },
+    {
+      "id": "dcmp-f28fcdc2",
+      "text": "Every primitive exposes a stable, documented prop API. Breaking changes require a deprecation notice and a major bump.",
+      "source": {
+        "kind": "design",
+        "pointer": "design-rules.md#section1/item0"
+      }
+    },
+    {
+      "id": "dcmp-fd6854dd",
+      "text": "Primitives never own business logic or data fetching.",
+      "source": {
+        "kind": "design",
+        "pointer": "design-rules.md#section1/item1"
+      }
+    },
+    {
+      "id": "dcmp-de6a1715",
+      "text": "Composition over configuration: prefer slot props over boolean flags when a consumer might need more control.",
+      "source": {
+        "kind": "design",
+        "pointer": "design-rules.md#section1/item2"
+      }
+    },
+    {
+      "id": "dux-f7efdd4c",
+      "text": "Motion defaults under 200ms; anything longer needs a rationale (progress, context change).",
+      "source": {
+        "kind": "design",
+        "pointer": "design-rules.md#section2/item0"
+      }
+    },
+    {
+      "id": "dux-d3914e45",
+      "text": "Every state transition has a stable from → to mapping; avoid intermediate flicker.",
+      "source": {
+        "kind": "design",
+        "pointer": "design-rules.md#section2/item1"
+      }
+    },
+    {
+      "id": "dux-24fe515d",
+      "text": "Focus is visible for keyboard users; mouse users get the hover treatment instead.",
+      "source": {
+        "kind": "design",
+        "pointer": "design-rules.md#section2/item2"
+      }
+    },
+    {
+      "id": "da11y-684de84e",
+      "text": "All interactive primitives meet WCAG 2.2 AA at default and dense sizes.",
+      "source": {
+        "kind": "design",
+        "pointer": "design-rules.md#section3/item0"
+      }
+    },
+    {
+      "id": "da11y-565bb59b",
+      "text": "Focus trap inside modals, restoring focus to trigger on close.",
+      "source": {
+        "kind": "design",
+        "pointer": "design-rules.md#section3/item1"
+      }
+    },
+    {
+      "id": "da11y-668ef238",
+      "text": "Announce async state changes to screen readers (aria-live polite by default).",
+      "source": {
+        "kind": "design",
+        "pointer": "design-rules.md#section3/item2"
+      }
+    },
+    {
+      "id": "da11y-905250d4",
+      "text": "Motion respects prefers-reduced-motion.",
+      "source": {
+        "kind": "design",
+        "pointer": "design-rules.md#section3/item3"
+      }
+    }
+  ],
+  "uxRules": [
+    {
+      "id": "ux-2aece640",
+      "text": "Motion defaults under 200ms; anything longer needs a rationale (progress, context change).",
+      "source": {
+        "kind": "design",
+        "pointer": "design-rules.md#section2/item0"
+      }
+    },
+    {
+      "id": "ux-1fb74964",
+      "text": "Every state transition has a stable from → to mapping; avoid intermediate flicker.",
+      "source": {
+        "kind": "design",
+        "pointer": "design-rules.md#section2/item1"
+      }
+    },
+    {
+      "id": "ux-7c3f0155",
+      "text": "Focus is visible for keyboard users; mouse users get the hover treatment instead.",
+      "source": {
+        "kind": "design",
+        "pointer": "design-rules.md#section2/item2"
+      }
+    },
+    {
+      "id": "ux-tpl-b7919e10",
+      "text": "Props follow a consistent shape across primitives (size, tone, variant, disabled, loading).",
+      "source": {
+        "kind": "template",
+        "pointer": "template:design-system/contributes#0"
+      }
+    },
+    {
+      "id": "ux-tpl-b4fcbf98",
+      "text": "Primitives never embed business logic; they are purely presentational.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:design-system/contributes#1"
+      }
+    }
+  ],
+  "a11yRules": [
+    {
+      "id": "a11y-e68796a1",
+      "text": "All interactive elements must be reachable and operable with the keyboard alone.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:keyboard"
+      }
+    },
+    {
+      "id": "a11y-6a7fd559",
+      "text": "Focus must be visible at all times; never remove outlines without replacing them.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:focus"
+      }
+    },
+    {
+      "id": "a11y-7a33cd2b",
+      "text": "Text contrast must meet WCAG AA (4.5:1 for body, 3:1 for large text).",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:contrast"
+      }
+    },
+    {
+      "id": "a11y-e9db2d49",
+      "text": "Every form control has a programmatic label.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:labels"
+      }
+    },
+    {
+      "id": "a11y-5b4177a5",
+      "text": "Pages use proper landmark regions (header, main, nav, footer) and a sensible heading order.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:landmarks"
+      }
+    },
+    {
+      "id": "a11y-7e08ce1a",
+      "text": "Respect `prefers-reduced-motion` for any non-essential animation.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:motion"
+      }
+    },
+    {
+      "id": "a11y-tpl-020e878d",
+      "text": "Every interactive primitive exposes a focus ring by default; removal requires an explicit prop.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:design-system/contributes#0"
+      }
+    },
+    {
+      "id": "a11y-tpl-5d3e3fe7",
+      "text": "Labels, descriptions, and error states are composable via documented slot props.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:design-system/contributes#1"
+      }
+    }
+  ],
+  "componentGuidance": [
+    {
+      "id": "cmp-0b641f23",
+      "text": "Every primitive exposes a stable, documented prop API. Breaking changes require a deprecation notice and a major bump.",
+      "source": {
+        "kind": "design",
+        "pointer": "design-rules.md#section1/item0"
+      }
+    },
+    {
+      "id": "cmp-dfd57072",
+      "text": "Primitives never own business logic or data fetching.",
+      "source": {
+        "kind": "design",
+        "pointer": "design-rules.md#section1/item1"
+      }
+    },
+    {
+      "id": "cmp-ae511fbd",
+      "text": "Composition over configuration: prefer slot props over boolean flags when a consumer might need more control.",
+      "source": {
+        "kind": "design",
+        "pointer": "design-rules.md#section1/item2"
+      }
+    },
+    {
+      "id": "cmp-83f2e79e",
+      "text": "Every shared UI component must have at least one Storybook story covering default and loading/error states where applicable.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:storybook"
+      }
+    },
+    {
+      "id": "cmp-tpl-af7ef67d",
+      "text": "Token schema — colors, spacing, radius, motion, typography; all values live as tokens.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:design-system/contributes#0"
+      }
+    },
+    {
+      "id": "cmp-tpl-745636ed",
+      "text": "Primitive set — Button, Input, Field, Select, Checkbox, Radio, Switch, Tooltip, Dialog, Toast.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:design-system/contributes#1"
+      }
+    },
+    {
+      "id": "cmp-tpl-3a1cfca7",
+      "text": "Layout primitives — Stack, Inline, Grid, Box with consistent spacing scale.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:design-system/contributes#2"
+      }
+    },
+    {
+      "id": "cmp-tpl-5e7d244e",
+      "text": "Icon set — single source, tree-shakeable, accessible by default (role, title).",
+      "source": {
+        "kind": "template",
+        "pointer": "template:design-system/contributes#3"
+      }
+    },
+    {
+      "id": "cmp-tpl-d80b22d1",
+      "text": "Theme surfaces — light/dark/high-contrast themes wired through tokens.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:design-system/contributes#4"
+      }
+    }
+  ],
+  "qaGuardrails": [
+    {
+      "id": "qa-2971d23b",
+      "text": "Unit tests live next to source as `*.test.ts`. Run `vitest run` in CI and before every commit touching business logic.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:vitest"
+      }
+    },
+    {
+      "id": "qa-7c4f14e6",
+      "text": "`tsc --noEmit` must pass on every PR.",
+      "source": {
+        "kind": "inference",
+        "pointer": "inferred:typecheck"
+      }
+    },
+    {
+      "id": "qa-brief-8cec4c7f",
+      "text": "Success criterion to verify before launch: Button, Input, Field, Dialog, Tooltip, and Toast ship with docs and tests.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section5/item0"
+      }
+    },
+    {
+      "id": "qa-brief-61cd8cbd",
+      "text": "Success criterion to verify before launch: Axe checks pass for every primitive story.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section5/item1"
+      }
+    },
+    {
+      "id": "qa-brief-12b8e0a9",
+      "text": "Success criterion to verify before launch: First downstream app replaces 80% of raw form controls with primitives.",
+      "source": {
+        "kind": "brief",
+        "pointer": "brief.md#section5/item2"
+      }
+    },
+    {
+      "id": "qa-tpl-e9618691",
+      "text": "Every primitive has at least one Storybook story covering default, hover, focus, disabled, and loading where applicable.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:design-system/contributes#0"
+      }
+    },
+    {
+      "id": "qa-tpl-52d53021",
+      "text": "Visual regression (Chromatic / Playwright snapshots) runs on every PR.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:design-system/contributes#1"
+      }
+    },
+    {
+      "id": "qa-tpl-d2c275c2",
+      "text": "Axe accessibility check passes per primitive at default and interactive states.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:design-system/contributes#2"
+      }
+    },
+    {
+      "id": "qa-tpl-a269086e",
+      "text": "Bundle-size budget enforced per primitive; new primitives require a budget entry.",
+      "source": {
+        "kind": "template",
+        "pointer": "template:design-system/contributes#3"
+      }
+    }
+  ],
+  "agentInstructions": {
+    "dosAndDonts": [
+      {
+        "id": "do-9ad0f600",
+        "text": "Prefer small, focused diffs. One concern per PR or patch.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:diff"
+        }
+      },
+      {
+        "id": "do-9f52191a",
+        "text": "Always show the exact test or typecheck command you ran and its result.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:test-cmd"
+        }
+      },
+      {
+        "id": "do-cba0e959",
+        "text": "When following a rule from this file, cite it by section heading so reviewers can audit.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:trace"
+        }
+      },
+      {
+        "id": "dont-d429caec",
+        "text": "Do not refactor code unrelated to the task, even if it looks better.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:scope"
+        }
+      },
+      {
+        "id": "dont-d6da3150",
+        "text": "Do not add new dependencies without flagging the choice and reason.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:deps"
+        }
+      },
+      {
+        "id": "do-tpl-86b5859e",
+        "text": "Add a story, an axe test, and a docs entry whenever a primitive is added or changed.",
+        "source": {
+          "kind": "template",
+          "pointer": "template:design-system/contributes#0"
+        }
+      },
+      {
+        "id": "dont-tpl-f10b0bb7",
+        "text": "Do not introduce hardcoded colors, radii, or spacings in primitives — reference tokens only.",
+        "source": {
+          "kind": "template",
+          "pointer": "template:design-system/contributes#0"
+        }
+      },
+      {
+        "id": "dont-tpl-f0c5073d",
+        "text": "Do not import app-level code into the design system.",
+        "source": {
+          "kind": "template",
+          "pointer": "template:design-system/contributes#1"
+        }
+      }
+    ],
+    "unsafeActions": [
+      {
+        "id": "unsafe-dfc94927",
+        "text": "Never modify generated files (anything under `dist/`, `build/`, `.next/`, or marked `@generated`).",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:generated"
+        }
+      },
+      {
+        "id": "unsafe-9cc52688",
+        "text": "Never edit lockfiles manually.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:lockfile"
+        }
+      },
+      {
+        "id": "unsafe-74a0844b",
+        "text": "Never commit secrets. Redact any `.env*` content that appears in logs or diffs.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:secrets"
+        }
+      },
+      {
+        "id": "unsafe-tpl-e24003c2",
+        "text": "Never fork a token inside a primitive; update it at the token layer.",
+        "source": {
+          "kind": "template",
+          "pointer": "template:design-system/contributes#0"
+        }
+      }
+    ],
+    "filePlacement": [
+      {
+        "id": "placement-cf35ca85",
+        "text": "Stories live next to components as `*.stories.tsx`.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:stories"
+        }
+      }
+    ],
+    "responseExpectations": [
+      {
+        "id": "resp-2fa1aaa3",
+        "text": "Before claiming work is complete, run the repo's typecheck and test commands and show the output.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:verify"
+        }
+      },
+      {
+        "id": "resp-837d9493",
+        "text": "If the brief is ambiguous on a specific section, ask rather than guess. Cite the section heading.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:ask"
+        }
+      }
+    ]
+  },
+  "scaffoldPlan": {
+    "routes": [],
+    "components": [
+      {
+        "id": "cmp-bucket-e051805e",
+        "text": "Layout primitives: `AppShell`, `PageHeader`, `Section`, `Stack`.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:layout"
+        }
+      },
+      {
+        "id": "cmp-bucket-4d650fce",
+        "text": "UI primitives: `Button`, `Input`, `Field`, `Dialog`, `Toast`.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:primitives"
+        }
+      },
+      {
+        "id": "cmp-bucket-b1f7e9ba",
+        "text": "Feature components live co-located with the route or feature folder that owns them.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:features"
+        }
+      }
+    ],
+    "sprint1": [
+      {
+        "id": "setup-f7966e78",
+        "text": "Commit the Project Spine–generated `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, and `.cursor/rules/project-spine.mdc` after review.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:setup/agent-files"
+        }
+      },
+      {
+        "id": "setup-e2afd63d",
+        "text": "Pick and configure a linter (Biome or ESLint) with a minimal rule set.",
+        "source": {
+          "kind": "inference",
+          "pointer": "inferred:setup/lint"
+        }
+      },
+      {
+        "id": "s1-7393e7f3",
+        "text": "Deliver: Standardize product UI primitives across three web apps.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section0/item0"
+        }
+      },
+      {
+        "id": "s1-8ee04d95",
+        "text": "Deliver: Move all color, spacing, radius, and typography decisions into semantic tokens.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section0/item1"
+        }
+      },
+      {
+        "id": "s1-90f748f5",
+        "text": "Deliver: Publish a stable React package with Storybook docs and migration examples.",
+        "source": {
+          "kind": "brief",
+          "pointer": "brief.md#section0/item2"
+        }
+      }
+    ]
+  },
+  "warnings": []
+}

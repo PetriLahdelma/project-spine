@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "compiledAt": "2026-05-04T21:04:10.731Z",
-  "spineHash": "9ea72686cdffd1cd",
+  "compiledAt": "2000-02-27T02:15:28.000Z",
+  "spineHash": "f2c638c046f2ee9c",
   "inputs": {
-    "briefPath": "examples/brief.md",
+    "briefPath": "../../../../../../../Users/petrilahdelma/SAPDevelop/.codex-worktrees/project-spine-high-roi/examples/brief.md",
     "briefSha256": "sha256:0b726daa14561ff9f2eb56b6cd5493c8d4bb89a3d163dfe5a631fa604cb06d63",
     "designPath": null,
     "designSha256": null,
@@ -11,78 +11,78 @@
     "tokensSha256": null,
     "templateName": "saas-marketing",
     "templateSha256": "sha256:5d82f9394d49c03360ed7bae10e8baa078eb130c69deaf2bd3f370ef60955d8e",
-    "repoProfileSha256": "sha256:e0f9267ba5691220d5a800a99de2994b4c20691af0b804f699b59e6d84db2e5b"
+    "repoProfileSha256": "sha256:5a221104718b7d0a42c940ff42d028247b96aa8b7300762e18195660e022d47a"
   },
   "exports": [
     {
       "path": ".cursor/rules/project-spine.mdc",
-      "sha256": "sha256:3680d94a50a23cfbce6673a89c022f725778ddd6aaba6f031c95cbe177c233a4",
-      "bytes": 871
+      "sha256": "sha256:6a82b92f74f55444e53a51e32d930e75d32b8c4bb9016d5b0f321c3de3556e29",
+      "bytes": 892
     },
     {
       "path": ".github/copilot-instructions.md",
-      "sha256": "sha256:10a3c5caa341afae1d207f68af1d089257f12597d9e3b7e6882061940e2784ab",
-      "bytes": 2898
+      "sha256": "sha256:d74f261d395b65e33527e354fe113e89752cdbda394b66dabe2075cdf0407d00",
+      "bytes": 3224
     },
     {
       "path": ".project-spine/exports/AGENTS.md",
-      "sha256": "sha256:46f93d814bcebd9ba06ebba43be4260a3af353d318edf62f78b1c93e69b03590",
-      "bytes": 5669
+      "sha256": "sha256:6d4e5f1abde751bfec04716aaae31ac5922dfe13642d3e0a6277a9c56a32f83d",
+      "bytes": 5837
     },
     {
       "path": ".project-spine/exports/CLAUDE.md",
-      "sha256": "sha256:86d57e8e00df66090a8a997423217c90021f71a2c2d86cac21ba700e8e1ef70e",
-      "bytes": 2276
+      "sha256": "sha256:78d5f8d286013566de3d4e2ca7a32eff06de8456a71ced044bdff62d32dcac30",
+      "bytes": 2332
     },
     {
       "path": ".project-spine/exports/component-plan.md",
-      "sha256": "sha256:ad45584c5caac1705bcb3ec12380be89dd67a62c03a5a22e80835518e5a2c654",
+      "sha256": "sha256:e5ed3f01a6ef090533e98c4291be8536a3aa6a1609ebb6a32d26c4a43e653e02",
       "bytes": 1970
     },
     {
       "path": ".project-spine/exports/copilot-instructions.md",
-      "sha256": "sha256:10a3c5caa341afae1d207f68af1d089257f12597d9e3b7e6882061940e2784ab",
-      "bytes": 2898
+      "sha256": "sha256:d74f261d395b65e33527e354fe113e89752cdbda394b66dabe2075cdf0407d00",
+      "bytes": 3224
     },
     {
       "path": ".project-spine/exports/cursor-project-rule.mdc",
-      "sha256": "sha256:3680d94a50a23cfbce6673a89c022f725778ddd6aaba6f031c95cbe177c233a4",
-      "bytes": 871
+      "sha256": "sha256:6a82b92f74f55444e53a51e32d930e75d32b8c4bb9016d5b0f321c3de3556e29",
+      "bytes": 892
     },
     {
       "path": ".project-spine/exports/qa-guardrails.md",
-      "sha256": "sha256:f10aef3edbac5e88598b96711ceac3e921ef4dcee59c26c0fb9504e2d5f14b8a",
-      "bytes": 3270
+      "sha256": "sha256:bfb68652110b58b622ca9b29ee8deab1e59cbea59ec04ab5e568fc531105fe71",
+      "bytes": 3119
     },
     {
       "path": ".project-spine/exports/rationale.md",
-      "sha256": "sha256:4126405ae220e7ae7e912eaab301f2d0190ed720bb1abe818a3f9ec0fb108a1e",
-      "bytes": 2501
+      "sha256": "sha256:b968eaedd2accb63a96db9f52015ff838b17ee8300af6b0161d4119213c14be4",
+      "bytes": 2418
     },
     {
       "path": ".project-spine/exports/route-inventory.md",
-      "sha256": "sha256:f6630860df71d81d6cea67bb6f741726f487912127db36614ff22d782d165688",
+      "sha256": "sha256:8078b86969ecdd7de1808a7f73ae7679bdd3f0e17dc44da54d52d61a1a5996ab",
       "bytes": 1300
     },
     {
       "path": ".project-spine/exports/scaffold-plan.md",
-      "sha256": "sha256:18f918b0333354dc2589dd0c5429d2a2aff6c2d84c35b188ea5767bc4aed14ce",
-      "bytes": 1776
+      "sha256": "sha256:1eddfcf58ae00eed19a5504004d6f6793606e9409a463d298b545334f4e27edb",
+      "bytes": 1800
     },
     {
       "path": ".project-spine/exports/sprint-1-backlog.md",
-      "sha256": "sha256:2da44a636b71f4c51ca0718313e2a1ca6aa6a521c6773c7926f4b746c1417e7b",
-      "bytes": 2765
+      "sha256": "sha256:7ba887d984d6c5123a567f7b92a6b95025834629a463db9a22ce4f4811ebf4f1",
+      "bytes": 3194
     },
     {
       "path": "AGENTS.md",
-      "sha256": "sha256:46f93d814bcebd9ba06ebba43be4260a3af353d318edf62f78b1c93e69b03590",
-      "bytes": 5669
+      "sha256": "sha256:6d4e5f1abde751bfec04716aaae31ac5922dfe13642d3e0a6277a9c56a32f83d",
+      "bytes": 5837
     },
     {
       "path": "CLAUDE.md",
-      "sha256": "sha256:86d57e8e00df66090a8a997423217c90021f71a2c2d86cac21ba700e8e1ef70e",
-      "bytes": 2276
+      "sha256": "sha256:78d5f8d286013566de3d4e2ca7a32eff06de8456a71ced044bdff62d32dcac30",
+      "bytes": 2332
     }
   ]
 }

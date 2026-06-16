@@ -2,7 +2,7 @@
 
 > Proposed routes for the project, derived from project type and brief goals.
 
-_Generated from `spine.json` — hash `ce09cb93352dfefb`, project type `other`._
+_Generated from `spine.json` — hash `ae5e8a737294995d`, project type `other`._
 
 <!-- spine:deterministic -->
 
