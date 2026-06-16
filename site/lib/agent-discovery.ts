@@ -9,6 +9,13 @@ export const GOOGLE_ANALYTICS = {
   streamId: "15010753552",
   measurementId: "G-PGVBQ7SHQC",
 } as const;
+const AHREFS_PUBLIC_ID_PARTS = ["tHUVDMNNEe0D", "b2ff2cVtwQ"] as const;
+export const AHREFS_ANALYTICS = {
+  provider: "Ahrefs Web Analytics",
+  scriptUrl: "https://analytics.ahrefs.com/analytics.js",
+  publicIdName: "data-key",
+  publicId: AHREFS_PUBLIC_ID_PARTS.join(""),
+} as const;
 export const GOOGLE_ANALYTICS_OBSERVABILITY = {
   mcp: {
     name: "analytics-mcp",
@@ -466,7 +473,7 @@ export function publicAnalyticsMetadata(): Record<string, unknown> {
       url: SITE,
     },
     analytics: {
-      provider: GOOGLE_ANALYTICS.provider,
+      provider: `${GOOGLE_ANALYTICS.provider} + ${AHREFS_ANALYTICS.provider}`,
       purpose: "aggregate_public_website_measurement",
       stream: {
         name: GOOGLE_ANALYTICS.streamName,
@@ -474,6 +481,14 @@ export function publicAnalyticsMetadata(): Record<string, unknown> {
         id: GOOGLE_ANALYTICS.streamId,
         measurementId: GOOGLE_ANALYTICS.measurementId,
       },
+      additionalProviders: [
+        {
+          provider: AHREFS_ANALYTICS.provider,
+          scriptUrl: AHREFS_ANALYTICS.scriptUrl,
+          publicIdName: AHREFS_ANALYTICS.publicIdName,
+          publicId: AHREFS_ANALYTICS.publicId,
+        },
+      ],
       observability: GOOGLE_ANALYTICS_OBSERVABILITY,
     },
     security: {
@@ -490,7 +505,7 @@ export function publicAnalyticsMetadata(): Record<string, unknown> {
       sourceCodeUploadedThroughAnalytics: false,
       documentation: `${SITE}/privacy`,
     },
-    updated: "2026-06-05",
+    updated: "2026-06-16",
   };
 }
 
@@ -531,6 +546,20 @@ export function publicAnalyticsMetadataSchema(): Record<string, unknown> {
               url: { type: "string", format: "uri" },
               id: { type: "string" },
               measurementId: { type: "string" },
+            },
+          },
+          additionalProviders: {
+            type: "array",
+            items: {
+              type: "object",
+              additionalProperties: false,
+              required: ["provider", "scriptUrl", "publicIdName", "publicId"],
+              properties: {
+                provider: { type: "string" },
+                scriptUrl: { type: "string", format: "uri" },
+                publicIdName: { type: "string" },
+                publicId: { type: "string" },
+              },
             },
           },
           observability: {
