@@ -11,7 +11,7 @@ alwaysApply: true
 
 **Stack:** node-library • typescript • tests: vitest • pm: npm
 
-Source of truth: `.project-spine/spine.json` (hash `ae5e8a737294995d`).
+Source of truth: `.project-spine/spine.json` (hash `20300a2f0159299c`).
 
 ## How to use this rule
 
