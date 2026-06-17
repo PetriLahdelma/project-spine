@@ -5,7 +5,7 @@
   "inputs": {
     "briefPath": "brief.md",
     "briefSha256": "sha256:aac143cc67258abb12b6bdcebf92982a0467876fc5989dae47d99f389c047fda",
-    "designPath": "../../../../../../../Users/petrilahdelma/SAPDevelop/.codex-worktrees/project-spine-high-roi/templates/design-system/design-rules.md",
+    "designPath": "../../../../../../../Users/petrilahdelma/SAPDevelop/ProjectSpine/templates/design-system/design-rules.md",
     "designSha256": "sha256:93c5dd0e69685b3f647520422820cdf008ae85895f98c18075227ba1811d74ff",
     "tokensPath": null,
     "tokensSha256": null,

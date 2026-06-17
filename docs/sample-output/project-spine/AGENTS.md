@@ -8,7 +8,7 @@
 
 **Project type:** `other`
 
-> Source of truth: `.project-spine/spine.json` (hash `ae5e8a737294995d`). Every rule below has a traceable source. If a rule is wrong, fix the upstream input (`brief.md`, repo state, or `design-rules.md`) and rerun `spine compile`.
+> Source of truth: `.project-spine/spine.json` (hash `20300a2f0159299c`). Every rule below has a traceable source. If a rule is wrong, fix the upstream input (`brief.md`, repo state, or `design-rules.md`) and rerun `spine compile`.
 
 ## Repo conventions
 

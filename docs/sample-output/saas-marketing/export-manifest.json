@@ -3,7 +3,7 @@
   "compiledAt": "2000-02-27T02:15:28.000Z",
   "spineHash": "f2c638c046f2ee9c",
   "inputs": {
-    "briefPath": "../../../../../../../Users/petrilahdelma/SAPDevelop/.codex-worktrees/project-spine-high-roi/examples/brief.md",
+    "briefPath": "../../../../../../../Users/petrilahdelma/SAPDevelop/ProjectSpine/examples/brief.md",
     "briefSha256": "sha256:0b726daa14561ff9f2eb56b6cd5493c8d4bb89a3d163dfe5a631fa604cb06d63",
     "designPath": null,
     "designSha256": null,

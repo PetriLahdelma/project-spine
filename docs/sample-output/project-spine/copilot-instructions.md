@@ -45,6 +45,6 @@ _Full QA guardrails: `.project-spine/exports/qa-guardrails.md`._
 - Pages use proper landmark regions (header, main, nav, footer) and a sensible heading order.
 - Respect `prefers-reduced-motion` for any non-essential animation.
 
-_Source of truth: `.project-spine/spine.json` (hash `ae5e8a737294995d`)._
+_Source of truth: `.project-spine/spine.json` (hash `20300a2f0159299c`)._
 
 <!-- spine:deterministic -->
