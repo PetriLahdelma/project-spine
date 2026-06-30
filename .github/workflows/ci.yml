@@ -2,87 +2,98 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, ci/self-hosted-farm]
   pull_request:
-    branches: [main]
+    branches: [main, ci/self-hosted-farm]
 
 permissions:
   contents: read
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
+  # Heavy compute on push-to-main runs on the self-hosted farm (both arches).
+  test-farm:
+    if: github.event_name != 'pull_request'
     strategy:
       fail-fast: false
       matrix:
         node: [20, 22]
+        runner:
+          - [self-hosted, linux, arm64, project-spine, macmini]
+          - [self-hosted, linux, amd64, project-spine, gaming-pc]
+    runs-on: ${{ matrix.runner }}
     steps:
       - uses: actions/checkout@v6
-
-      - name: Use Node.js ${{ matrix.node }}
-        uses: actions/setup-node@v6
+      - uses: ./.github/actions/spine-ci
         with:
           node-version: ${{ matrix.node }}
-          cache: npm
+          use-hosted-cache: "false"
 
-      - name: Install
-        run: npm ci
-
-      - name: Typecheck
-        run: npm run typecheck
-
-      - name: Build
-        run: npm run build
-
-      - name: Test
-        run: npm test
-
-      - name: Public package surface
-        run: npm run pack:check
-
-      - name: Release readiness
-        run: npm run release:readiness
-
-      - name: Stable readiness
-        run: npm run stable:check
-
-      - name: Marketing assets
-        run: npm run assets:check
-
-      - name: Smoke — compile against sample brief
-        run: |
-          node dist/cli.js compile \
-            --brief ./examples/brief.md \
-            --repo . \
-            --template saas-marketing \
-            --name "ci-smoke" \
-            --version "0.0.0-ci"
-          test -f .project-spine/spine.json
-          test -f AGENTS.md
-          test -f CLAUDE.md
-          test -f .github/copilot-instructions.md
-          test -f .cursor/rules/project-spine.mdc
-
-  site:
+  # Fork pull requests NEVER touch the farm — they run on GitHub-hosted runners.
+  test-hosted:
+    if: github.event_name == 'pull_request'
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [20, 22]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+      - uses: ./.github/actions/spine-ci
+        with:
+          node-version: ${{ matrix.node }}
+          use-hosted-cache: "true"
 
-      - name: Use Node.js 22
-        uses: actions/setup-node@v6
+  site-farm:
+    if: github.event_name != 'pull_request'
+    strategy:
+      fail-fast: false
+      matrix:
+        runner:
+          - [self-hosted, linux, arm64, project-spine, macmini]
+          - [self-hosted, linux, amd64, project-spine, gaming-pc]
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+      - run: npm ci
+        working-directory: site
+      - run: npm run typecheck
+        working-directory: site
+      - run: npm run build
+        working-directory: site
+
+  site-hosted:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
           node-version: 22
           cache: npm
           cache-dependency-path: site/package-lock.json
-
-      - name: Install
+      - run: npm ci
         working-directory: site
-        run: npm ci
-
-      - name: Typecheck
+      - run: npm run typecheck
         working-directory: site
-        run: npm run typecheck
-
-      - name: Build
+      - run: npm run build
         working-directory: site
-        run: npm run build
+
+  # Single stable required check: succeeds when the active legs passed (skipped is OK).
+  gate:
+    needs: [test-farm, test-hosted, site-farm, site-hosted]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require the active legs to have passed
+        run: |
+          for r in "${{ needs.test-farm.result }}" "${{ needs.test-hosted.result }}" \
+                   "${{ needs.site-farm.result }}" "${{ needs.site-hosted.result }}"; do
+            case "$r" in
+              success|skipped) ;;
+              *) echo "a required leg did not pass: $r"; exit 1 ;;
+            esac
+          done
+          echo "all active legs passed"

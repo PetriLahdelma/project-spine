@@ -11,26 +11,61 @@ permissions:
   contents: read
 
 jobs:
-  audit:
+  # npm audit + gitleaks on the farm for push/dispatch; fork PRs stay GitHub-hosted.
+  audit-farm:
+    if: github.event_name != 'pull_request'
+    strategy:
+      fail-fast: false
+      matrix:
+        runner:
+          - [self-hosted, linux, arm64, project-spine, macmini]
+          - [self-hosted, linux, amd64, project-spine, gaming-pc]
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+      - run: npm ci
+      - name: High severity npm audit
+        run: npm audit --audit-level=high
+      - name: Secret scan
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  audit-hosted:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
-
-      - name: Use Node.js 22
-        uses: actions/setup-node@v6
+      - uses: actions/setup-node@v6
         with:
           node-version: 22
           cache: npm
-
-      - name: Install
-        run: npm ci
-
+      - run: npm ci
       - name: High severity npm audit
         run: npm audit --audit-level=high
-
       - name: Secret scan
         uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  security-gate:
+    needs: [audit-farm, audit-hosted]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require the active audit leg to have passed
+        run: |
+          for r in "${{ needs.audit-farm.result }}" "${{ needs.audit-hosted.result }}"; do
+            case "$r" in
+              success|skipped) ;;
+              *) echo "audit leg did not pass: $r"; exit 1 ;;
+            esac
+          done
+          echo "audit passed"
