@@ -2,9 +2,9 @@ name: Security
 
 on:
   push:
-    branches: [main, ci/self-hosted-farm]
+    branches: [main]
   pull_request:
-    branches: [main, ci/self-hosted-farm]
+    branches: [main]
   workflow_dispatch:
 
 permissions:

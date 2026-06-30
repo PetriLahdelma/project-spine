@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [main, ci/self-hosted-farm]
+    branches: [main]
   pull_request:
-    branches: [main, ci/self-hosted-farm]
+    branches: [main]
 
 permissions:
   contents: read
