@@ -43,13 +43,16 @@ jobs:
           node-version: ${{ matrix.node }}
           use-hosted-cache: "true"
 
+  # amd64 only: the site's transitive native dep (bufferutil via ws) has no arm64 prebuilt and
+  # the runner container has no C toolchain, so node-gyp can't build it on arm64. The marketing
+  # site isn't shipped per-arch, so amd64 (the parity primary) is sufficient. The main test job
+  # keeps both arches.
   site-farm:
     if: github.event_name != 'pull_request'
     strategy:
       fail-fast: false
       matrix:
         runner:
-          - [self-hosted, linux, arm64, project-spine, macmini]
           - [self-hosted, linux, amd64, project-spine, gaming-pc]
     runs-on: ${{ matrix.runner }}
     steps:

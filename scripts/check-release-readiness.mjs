@@ -73,7 +73,11 @@ for (const path of requiredDocs) {
   check(`doc exists ${path}`, hasFile(path), path);
 }
 
-const ci = readText(".github/workflows/ci.yml");
+// CI steps may live in ci.yml or in the shared composite action it calls, so scan both.
+const ci = [".github/workflows/ci.yml", ".github/actions/spine-ci/action.yml"]
+  .filter((p) => existsSync(join(root, p)))
+  .map(readText)
+  .join("\n");
 check("ci node matrix", ci.includes("node: [20, 22]"), "CI must cover Node 20 and 22");
 check("ci pack check", ci.includes("npm run pack:check"), "CI must validate npm package surface");
 check("ci release readiness", ci.includes("npm run release:readiness"), "CI must run release readiness gate");
