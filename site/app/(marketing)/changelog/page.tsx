@@ -74,7 +74,7 @@ export default async function ChangelogPage() {
           <a href="https://github.com/PetriLahdelma/project-spine/releases">
             GitHub releases page
           </a>
-          . Published versions have a git tag and npm release. The maintained
+          . Releases identify tagged source and note package availability. The maintained
           source includes the repository-learning workflow.
         </p>
       </header>
