@@ -20,11 +20,11 @@ The existing context compiler, design-token support and drift checks remain avai
 
 ## See the complete loop
 
-The repository contains the **0.10 beta implementation**. Until this version is
-published to npm, build from this source checkout. Node 22+ and Git are required.
+The repository contains the **0.10 beta implementation**. Build reproducibly from
+source with Node 22+ and Git. Published beta packages are listed on the releases page.
 
 ```sh
-git clone --branch feat/repository-learning https://github.com/PetriLahdelma/project-spine.git
+git clone --branch main https://github.com/PetriLahdelma/project-spine.git
 cd project-spine
 npm ci
 npm run build

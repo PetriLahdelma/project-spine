@@ -11,8 +11,8 @@ const NAV: Array<{ label: string; href: string }> = [
 
 const PRODUCT_MENU: Array<{ label: string; href: string; desc: string }> = [
   { label: "Overview", href: "/product", desc: "Evidence, literal rules, Git replay, and CI enforcement." },
-  { label: "Local quickstart", href: "/docs", desc: "Build the forthcoming beta and run a failure case." },
-  { label: "Learning guide", href: "https://github.com/PetriLahdelma/project-spine/blob/feat/repository-learning/docs/learning.md", desc: "Cases, replay, CI, context, and product boundaries." },
+  { label: "Local quickstart", href: "/docs", desc: "Build the beta and run a failure case." },
+  { label: "Learning guide", href: "https://github.com/PetriLahdelma/project-spine/blob/main/docs/learning.md", desc: "Cases, replay, CI, context, and product boundaries." },
   { label: "MCP", href: "https://github.com/PetriLahdelma/project-spine/blob/main/docs/mcp.md", desc: "Serve relevant repository context to any agent." },
   { label: "Security", href: "/security", desc: "Local evidence, read-only replay, explicit network paths." },
 ];

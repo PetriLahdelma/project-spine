@@ -69,7 +69,7 @@ verified rule → CI guard → file-relevant context → MCP`}</code></pre>
         </li>
       </ul>
       <p>
-        Evaluation does not provide an OS sandbox. Review the adapter and repository before enabling execution. See the <a href={`${REPO}/blob/feat/repository-learning/docs/evaluation.md`}>evaluation contract</a> for the adapter schema, recorded outputs, and cleanup behavior.
+        Evaluation does not provide an OS sandbox. Review the adapter and repository before enabling execution. See the <a href={`${REPO}/blob/main/docs/evaluation.md`}>evaluation contract</a> for the adapter schema, recorded outputs, and cleanup behavior.
       </p>
 
       <h2>What remains</h2>

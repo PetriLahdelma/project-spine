@@ -74,18 +74,17 @@ export default async function ChangelogPage() {
           <a href="https://github.com/PetriLahdelma/project-spine/releases">
             GitHub releases page
           </a>
-          . Published versions have a git tag and npm release. The forthcoming
-          repository-learning beta is available from source before publication.
+          . Published versions have a git tag and npm release. The maintained
+          source includes the repository-learning workflow.
         </p>
       </header>
 
       <aside className="changelog__beta-note">
         <p>
-          <strong>Two beta surfaces are visible right now.</strong> The current
-          npm beta contains the established compile and drift workflows. The
-          next beta evolves Spine around evidence, Git replay, verified literal
-          guardrails, CI, reports, and relevant MCP context; build the source
-          branch to evaluate that work before it is published.
+          <strong>The 0.10 beta adds repository learning.</strong> Reviewed
+          evidence, Git replay, verified literal guardrails, CI, reports and
+          relevant MCP context join the established compile and drift workflows.
+          Build from source to try the complete local demo.
         </p>
       </aside>
 

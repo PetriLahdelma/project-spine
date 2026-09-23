@@ -31,8 +31,8 @@ export function SiteFooter() {
         <div className="site-footer__col">
           <h3>Resources</h3>
           <ul>
-            <li><a href="https://github.com/PetriLahdelma/project-spine/blob/feat/repository-learning/docs/learning.md">Learning guide</a></li>
-            <li><a href="https://github.com/PetriLahdelma/project-spine/blob/feat/repository-learning/docs/evaluation.md">Evaluation guide</a></li>
+            <li><a href="https://github.com/PetriLahdelma/project-spine/blob/main/docs/learning.md">Learning guide</a></li>
+            <li><a href="https://github.com/PetriLahdelma/project-spine/blob/main/docs/evaluation.md">Evaluation guide</a></li>
             <li><a href="https://github.com/PetriLahdelma/project-spine#readme">Source quickstart</a></li>
             <li><a href="https://github.com/PetriLahdelma/project-spine/blob/main/docs/mcp.md">MCP setup</a></li>
             <li><a href="https://github.com/PetriLahdelma/project-spine/blob/main/docs/drift.md">Compile + drift</a></li>

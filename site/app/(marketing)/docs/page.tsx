@@ -5,7 +5,7 @@ const REPO = "https://github.com/PetriLahdelma/project-spine";
 
 export const metadata: Metadata = {
   title: "Docs · Project Spine",
-  description: "Build the forthcoming Project Spine beta from source and run the repository learning workflow locally.",
+  description: "Build Project Spine from source and run the repository learning workflow locally.",
   alternates: { canonical: "https://projectspine.dev/docs" },
 };
 
@@ -16,12 +16,12 @@ export default function DocsPage() {
         <p className="eyebrow">Docs</p>
         <h1>Run the learning loop locally.</h1>
         <p className="lede">
-          The repository-learning commands are being prepared for the next beta. Build the current source to evaluate them now. The published npm beta still describes the earlier compile-first product.
+          Build the v0.10 beta from the maintained source and run the complete learning workflow. Node 22 or newer and Git are required. The existing compiler and drift workflows remain supported.
         </p>
       </header>
 
       <h2>Source build</h2>
-      <pre tabIndex={0}><code>{`git clone --branch feat/repository-learning https://github.com/PetriLahdelma/project-spine.git
+      <pre tabIndex={0}><code>{`git clone --branch main https://github.com/PetriLahdelma/project-spine.git
 cd project-spine
 npm ci
 npm run build
@@ -83,7 +83,7 @@ node dist/cli.js report --format html --out report.html`}</code></pre>
         Evaluation is separate from historical replay. It executes the configured adapter in temporary clones and requires explicit <code>--allow-execution</code>. There is no OS sandbox. The adapter may use the network, invoke a model, and incur provider costs. Review it before running.
       </p>
       <p>
-        Read <a href={`${REPO}/blob/feat/repository-learning/docs/evaluation.md`}>docs/evaluation.md</a> for the adapter contract and result format. Use <code>replay</code> when you only need deterministic, read-only verification against existing Git history.
+        Read <a href={`${REPO}/blob/main/docs/evaluation.md`}>docs/evaluation.md</a> for the adapter contract and result format. Use <code>replay</code> when you only need deterministic, read-only verification against existing Git history.
       </p>
 
       <h2>Existing workflows</h2>
@@ -93,8 +93,8 @@ node dist/cli.js report --format html --out report.html`}</code></pre>
 
       <div className="cta-row">
         <a href={`${REPO}#readme`}>Repository README →</a>
-        <a href={`${REPO}/blob/feat/repository-learning/docs/learning.md`}>Learning guide →</a>
-        <a href={`${REPO}/blob/feat/repository-learning/docs/evaluation.md`}>Evaluation guide →</a>
+        <a href={`${REPO}/blob/main/docs/learning.md`}>Learning guide →</a>
+        <a href={`${REPO}/blob/main/docs/evaluation.md`}>Evaluation guide →</a>
         <Link href="/product">Product boundaries →</Link>
       </div>
     </main>

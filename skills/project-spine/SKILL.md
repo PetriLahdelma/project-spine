@@ -69,10 +69,11 @@ spine --version
 ```
 
 The original compiler works with `0.9.2-beta.0` or later. Learning commands require
-the 0.10 source build until that release is published. For the published compiler:
+0.10 or newer. Check the installed version; build from source when the registry
+channel does not yet include the learning release:
 
 ```bash
-npm install -g project-spine
+npm install -g project-spine@beta
 ```
 
 The current source requires Node ≥ 22.

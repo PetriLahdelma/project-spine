@@ -51,7 +51,7 @@ export default function Home() {
 
       <section className="poster-hero learning-hero">
         <div className="poster-hero__inner">
-          <p className="poster-hero__eyebrow">v0.10 beta · source build preview</p>
+          <p className="poster-hero__eyebrow">v0.10 beta · local repository learning</p>
           <HeroWordmark line1="PROJECT" line2="SPINE" />
           <h1 className="learning-hero__headline">Teach your repository from the fixes that mattered.</h1>
           <p className="learning-hero__sub">
@@ -69,7 +69,7 @@ export default function Home() {
           <p className="eyebrow">A failure becomes repository memory</p>
           <h2 id="demo-title">One review. One replay. One rule your tools can check.</h2>
           <p>
-            This is the v0.10 beta path under active development. The preview is illustrative; the source build includes a seeded case you can run without credentials or network access.
+            Follow the complete v0.10 beta workflow. This preview is illustrative; the source build includes a seeded case you can run without credentials or network access.
           </p>
           <Link href="/docs" className="text-link">Follow the source-build quickstart →</Link>
         </div>
@@ -122,15 +122,15 @@ source:   manual review evidence`}</code></pre>
           ))}
         </div>
         <p className="learning-evaluation-note">
-          Need to test an actual configured agent or evaluator? <code>spine evaluate</code> is a separate, explicit execution path with different risks and costs. <a href={`${REPO}/blob/feat/repository-learning/docs/evaluation.md`}>Read the evaluation contract →</a>
+          Need to test an actual configured agent or evaluator? <code>spine evaluate</code> is a separate, explicit execution path with different risks and costs. <a href={`${REPO}/blob/main/docs/evaluation.md`}>Read the evaluation contract →</a>
         </p>
       </section>
 
       <section className="learning-install" aria-labelledby="install-title">
         <div>
-          <p className="eyebrow">Try the forthcoming beta today</p>
+          <p className="eyebrow">Try the learning loop today</p>
           <h2 id="install-title">Clone it. Build it. Run the seeded case.</h2>
-          <p>The learning workflow is being prepared for the next beta release. Until it is published, the source build is the accurate path.</p>
+          <p>Build from the maintained source and run the complete local demo. No account or model key required.</p>
         </div>
         <InstallCommand />
         <div className="learning-install__links">

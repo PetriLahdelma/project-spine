@@ -96,7 +96,7 @@ rules available to CI and coding agents.
 ## Forthcoming beta source build
 
 \`\`\`bash
-git clone --branch feat/repository-learning https://github.com/PetriLahdelma/project-spine.git
+git clone --branch main https://github.com/PetriLahdelma/project-spine.git
 cd project-spine && npm ci && npm run build
 node dist/cli.js demo
 \`\`\`
@@ -182,7 +182,7 @@ compile and drift surfaces remain available.
 ## Forthcoming beta source build
 
 \`\`\`bash
-git clone --branch feat/repository-learning https://github.com/PetriLahdelma/project-spine.git
+git clone --branch main https://github.com/PetriLahdelma/project-spine.git
 cd project-spine && npm ci && npm run build
 node dist/cli.js demo
 \`\`\`
@@ -283,7 +283,7 @@ GitHub OAuth grant for hosted workspace sessions.
 No service account is required for the public CLI:
 
 \`\`\`bash
-git clone --branch feat/repository-learning https://github.com/PetriLahdelma/project-spine.git
+git clone --branch main https://github.com/PetriLahdelma/project-spine.git
 cd project-spine && npm ci && npm run build
 node dist/cli.js demo
 \`\`\`
@@ -346,10 +346,10 @@ spine --version
 spine doctor --strict
 \`\`\`
 
-For the forthcoming repository-learning beta:
+For the repository-learning beta:
 
 \`\`\`bash
-git clone --branch feat/repository-learning https://github.com/PetriLahdelma/project-spine.git
+git clone --branch main https://github.com/PetriLahdelma/project-spine.git
 cd project-spine && npm ci && npm run build
 node dist/cli.js demo
 \`\`\`
@@ -662,7 +662,7 @@ export function mcpServerCard(): Record<string, unknown> {
     transport: {
       type: "stdio",
       command: "spine-mcp",
-      install: "Build the forthcoming beta from source; see https://projectspine.dev/docs",
+      install: "Build the beta from source; see https://projectspine.dev/docs",
     },
     capabilities: {
       tools: true,
@@ -729,7 +729,7 @@ export function mcpServerCard(): Record<string, unknown> {
     resources: [{ uri: "spine://manifest", name: "Project Spine export manifest" }],
     authentication: { required: false },
     documentationUrl: `${SITE}/docs`,
-    sourceUrl: "https://github.com/PetriLahdelma/project-spine/blob/feat/repository-learning/docs/mcp.md",
+    sourceUrl: "https://github.com/PetriLahdelma/project-spine/blob/main/docs/mcp.md",
   };
 }
 

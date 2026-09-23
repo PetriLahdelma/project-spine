@@ -27,9 +27,9 @@ export default function PricingPage() {
           drift need no account or paid tier.
         </p>
         <p>
-          The learning workflow is forthcoming in the next beta and can be
-          evaluated from source today. The published npm beta still exposes
-          the earlier compile-first surface.
+          The v0.10 beta learning workflow is available from the maintained
+          source. Optional evaluation adapters may use billable third-party
+          model services; Spine itself requires no subscription.
         </p>
       </header>
 

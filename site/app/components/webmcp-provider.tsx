@@ -54,7 +54,7 @@ const projectSpineTool: WebMcpTool = {
   async execute() {
     return {
       title: "Project Spine getting started",
-      install: "git clone --branch feat/repository-learning https://github.com/PetriLahdelma/project-spine.git && cd project-spine && npm ci && npm run build && node dist/cli.js demo",
+      install: "git clone --branch main https://github.com/PetriLahdelma/project-spine.git && cd project-spine && npm ci && npm run build && node dist/cli.js demo",
       docs: "https://projectspine.dev/docs",
       mcp: {
         command: "spine-mcp",

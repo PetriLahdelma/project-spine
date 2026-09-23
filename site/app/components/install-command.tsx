@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-const COMMAND = "git clone --branch feat/repository-learning https://github.com/PetriLahdelma/project-spine.git && cd project-spine && npm ci && npm run build && node dist/cli.js demo";
+const COMMAND = "git clone --branch main https://github.com/PetriLahdelma/project-spine.git && cd project-spine && npm ci && npm run build && node dist/cli.js demo";
 
 function CopyIcon() {
   return (
@@ -32,12 +32,12 @@ export function InstallCommand() {
     }
   }
   return (
-    <div className="install-block" role="group" aria-label="Build the forthcoming beta from source">
+    <div className="install-block" role="group" aria-label="Build the beta from source">
       <div className="install-block__rail">
         <span className="install-block__dot install-block__dot--r" aria-hidden="true" />
         <span className="install-block__dot install-block__dot--y" aria-hidden="true" />
         <span className="install-block__dot install-block__dot--g" aria-hidden="true" />
-        <span className="install-block__caption">build the forthcoming beta from source</span>
+        <span className="install-block__caption">build the beta from source</span>
       </div>
       <div className="install-block__row">
         <code className="install-block__command" tabIndex={0}>

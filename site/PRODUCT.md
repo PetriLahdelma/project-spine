@@ -16,7 +16,7 @@ Evaluation is separate from historical replay: it executes the provided adapter
 inside temporary clones, has no OS sandbox, and may use the network, call models,
 or incur provider costs.
 
-The current learning workflow is described as the forthcoming v0.10 beta and evaluated through a source build. The published npm beta is clearly identified as the earlier compile-first product until a matching release exists.
+The current learning workflow is the v0.10 beta. The source quickstart targets the default branch and includes the local demo. Do not claim an npm release is available before its publication has been verified.
 
 The site must not claim repository immunity, guaranteed prevention, autonomous semantic rule inference, agent reruns, adoption figures, benchmark results, cost savings, or a hosted fleet product. A passing replay means that a literal rule failed on a recorded broken commit and passed on a recorded correction.
 
@@ -26,7 +26,7 @@ Primary conversion: run the source build and local demo. Secondary conversions: 
 
 ## Release promotion note
 
-While the preview pull request is pending, every source-build command must clone
-`--branch feat/repository-learning`. Remove the branch flag from the homepage,
-docs, agent-discovery documents, WebMCP response, and install component as part
-of merging the feature to the default branch or publishing the matching beta.
+Source links and quickstarts target `main`. Publish beta packages through the
+existing release workflow, verify registry installation and preserve the stable
+`latest` tag. Production copy must continue distinguishing historical replay from
+executable evaluation and illustrative preview from measured results.

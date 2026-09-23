@@ -1,6 +1,6 @@
 # MCP server (`spine-mcp`)
 
-For the 0.10 learning tools, build the `feat/repository-learning` source branch and
+For the 0.10 learning tools, build the `main` source branch and
 configure the client to run `node /absolute/path/to/project-spine/dist/mcp/server.js`.
 The npm install instructions below apply to the currently published beta; new tools
 are available from npm only after the 0.10 release is published.

@@ -86,7 +86,7 @@ export default function SecurityPage() {
           <strong>Agent evaluation is an explicit execution boundary.</strong>
           <span>
             <code>spine evaluate</code> runs only with <code>--allow-execution</code>. It creates temporary clones and invokes the adapter you configure. There is no OS sandbox; that adapter can execute local programs, use the network, call a model, and incur provider costs. Historical <code>spine replay</code> never does this. Read the{" "}
-            <a href="https://github.com/PetriLahdelma/project-spine/blob/feat/repository-learning/docs/evaluation.md">evaluation security contract</a> before enabling it.
+            <a href="https://github.com/PetriLahdelma/project-spine/blob/main/docs/evaluation.md">evaluation security contract</a> before enabling it.
           </span>
         </li>
       </ul>

@@ -104,7 +104,10 @@ jobs:
             git checkout main
             scripts/generate-changelog.sh > CHANGELOG.md
             git add CHANGELOG.md
-            git commit -m "chore: update CHANGELOG.md for ${GITHUB_REF_NAME}"
+            git commit -m "Keep release history aligned with ${GITHUB_REF_NAME}" \
+              -m "Regenerate the committed release mirror after successful package publication." \
+              -m "Confidence: high" -m "Scope-risk: narrow" \
+              -m "Tested: Release workflow verification and npm publication"
             git push origin main
           fi
 
