@@ -15,9 +15,9 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # npm audit + gitleaks on the farm for push/dispatch; fork PRs stay GitHub-hosted.
+  # Hosted by default; farm use is an explicit opt-in. Fork PRs remain hosted.
   audit-farm:
-    if: github.event_name != 'pull_request'
+    if: github.event_name != 'pull_request' && vars.SPINE_USE_SELF_HOSTED == 'true'
     strategy:
       fail-fast: false
       matrix:
@@ -52,7 +52,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   audit-hosted:
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' || vars.SPINE_USE_SELF_HOSTED != 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:

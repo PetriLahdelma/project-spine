@@ -6,6 +6,12 @@ smoke test after publication.
 
 ## Current release gate
 
+CI and security run on GitHub-hosted runners by default for pull requests and main.
+Set the repository variable `SPINE_USE_SELF_HOSTED=true` only when both configured
+farm runners are online to move push/dispatch workloads back to the farm. Fork
+pull requests always stay on hosted runners. The stable `gate` and `security-gate`
+checks enforce whichever legs are active.
+
 Run this before a release branch or tag:
 
 ```bash
