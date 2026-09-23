@@ -1,171 +1,95 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 
+const REPO = "https://github.com/PetriLahdelma/project-spine";
+
 export const metadata: Metadata = {
   title: "Product · Project Spine",
-  description:
-    "Compile briefs, repos, and design tokens into verifiable agent instructions. Drift-aware, portable across Claude, Cursor, and Copilot.",
+  description: "How Project Spine turns reviewed failures into evidence-backed literal guardrails, verifies them against Git history, and enforces them in CI.",
   alternates: { canonical: "https://projectspine.dev/product" },
-  openGraph: {
-    type: "article",
-    url: "https://projectspine.dev/product",
-    siteName: "Project Spine",
-    title: "Product · Project Spine",
-    description:
-      "Compile briefs, repos, and design tokens into verifiable agent instructions. Drift-aware, portable across Claude, Cursor, and Copilot.",
-    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Project Spine" }],
-  },
 };
+
+const COMMANDS = [
+  ["spine learn --case failure.json", "Import explicit evidence and create a candidate scoped rule."],
+  ["spine learn --from-pr <url>", "Import GitHub review metadata when network access is intentionally requested."],
+  ["spine replay <case-id>", "Check the candidate against recorded broken and corrected Git commits."],
+  ["spine guard --diff HEAD~1", "Evaluate verified rules against changed files; add --json for CI."],
+  ["spine context --files 'src/a.ts'", "Return only the verified rules relevant to a set of files."],
+  ["spine report --format html --out report.html", "Write a local, inspectable evidence and verification report."],
+  ["spine evaluate <case-id> --adapter adapter.json --allow-execution --runs 1 --json", "Optionally execute a configured agent or evaluator in temporary clones."],
+] as const;
 
 export default function ProductPage() {
   return (
     <main>
       <header className="page-header">
         <p className="eyebrow">Product</p>
-        <h1>One deterministic compile. Every agent file you need.</h1>
+        <h1>A learning loop for repository guardrails.</h1>
         <p className="lede">
-          Project Spine reads a brief, a repo, and optional design tokens and
-          writes <code>AGENTS.md</code>, <code>CLAUDE.md</code>,{" "}
-          <code>.github/copilot-instructions.md</code>,{" "}
-          <code>.cursor/rules/project-spine.mdc</code>, a scaffold plan, QA
-          guardrails, and a sprint-1 backlog. All with source pointers back to
-          the inputs, all covered by a drift check you can put in CI.
+          Project Spine records a reviewed failure and a maintainer-authored literal rule, then reads Git history to verify that the rule catches the recorded break without rejecting its correction. Verified rules can then run in CI and reach coding agents through relevant context.
         </p>
       </header>
 
-      <h2>Pipeline</h2>
-      <pre tabIndex={0}>
-{`brief.md   ──┐
-repo/      ──┼──▶  spine.json  ──▶  AGENTS.md + CLAUDE.md + copilot-instructions.md + project-spine.mdc
-tokens.json ─┤                     scaffold-plan.md · qa-guardrails.md ·
-design.md  ──┘                     sprint-1-backlog.md · rationale.md`}
-      </pre>
+      <h2>From review to enforcement</h2>
+      <pre tabIndex={0}><code>{`review evidence
+      ↓
+candidate require-text / forbid-text rule
+      ↓
+read-only Git replay: broken fails · corrected passes
+      ↓
+verified rule → CI guard → file-relevant context → MCP`}</code></pre>
       <p>
-        Every rule in <code>spine.json</code> carries a{" "}
-        <code>source</code> pointer: <code>brief.md#section0/item3</code>,{" "}
-        <code>repo-profile#framework</code>,{" "}
-        <code>design:tokens.json#color/primary</code>, or{" "}
-        <code>inferred:&lt;reason&gt;</code>. Reviewers can audit{" "}
-        <em>why</em> a rule exists instead of trusting an LLM&apos;s
-        self-report.
+        The evidence trail remains local and reviewable. A replay validates a specific literal rule against specific commits; it does not rerun an agent or prove that an entire defect class is impossible.
       </p>
 
-      <h2>Core capabilities</h2>
+      <h2>v0.10 beta commands</h2>
       <ul className="features">
-        <li>
-          <strong>Agent instructions that reflect reality.</strong>
-          <span>
-            Generates <code>AGENTS.md</code>, <code>CLAUDE.md</code>,{" "}
-            <code>.github/copilot-instructions.md</code>, and{" "}
-            <code>.cursor/rules/project-spine.mdc</code> from your actual
-            brief and detected stack. Not generic boilerplate. Switch agents
-            without re-briefing.
-          </span>
-        </li>
-        <li>
-          <strong>Scaffold + QA + sprint-1 in one pass.</strong>
-          <span>
-            Route inventory, component plan, QA guardrails, and a sprint-1
-            backlog with acceptance criteria traced back to your goals. Every
-            generated item has a source pointer to the upstream input.
-          </span>
-        </li>
-        <li>
-          <strong>Drift-aware by construction.</strong>
-          <span>
-            <code>export-manifest.json</code> records sha256 of every input
-            and output. <code>spine drift check --fail-on any</code> turns
-            AGENTS.md into a CI-gated contract, not a README nobody reads.
-          </span>
-        </li>
-        <li>
-          <strong>Design tokens as first-class input.</strong>
-          <span>
-            DTCG or Tokens Studio JSON (<code>--tokens</code>) feeds brand
-            colours, spacing scales, and typography into{" "}
-            <code>spine.json</code>. Tokens drift is tracked separately so a
-            re-export from Figma shows up as <code>[input:tokens]</code>, not
-            a mystery hash change.
-          </span>
-        </li>
-        <li>
-          <strong>Six starter templates.</strong>
-          <span>
-            <code>saas-marketing</code>, <code>app-dashboard</code>,{" "}
-            <code>design-system</code>, <code>docs-portal</code>,{" "}
-            <code>api-service</code>, and <code>monorepo</code>. Each
-            contributes routes, components, QA, UX, a11y, and agent rules
-            additively, and you can save your own locally with{" "}
-            <code>spine template save</code>.
-          </span>
-        </li>
-        <li>
-          <strong>No account in the critical path.</strong>
-          <span>
-            The OSS CLI runs locally by default: compile, export, inspect,
-            templates, doctor, and drift checks do not upload your repo. The
-            only routed network command is <code>spine tokens pull</code>, and
-            that requires an explicit Figma token and file URL.
-          </span>
-        </li>
-        <li>
-          <strong>Agent skills for Claude Code, Codex, Cursor.</strong>
-          <span>
-            Ship <code>skills/</code> with six <code>SKILL.md</code> files that
-            teach your coding agent the active kickoff, drift, template, and
-            rationale-review flows, plus guardrails for dormant hosted-workspace
-            requests.{" "}
-            <code>./skills/install.sh</code> symlinks them into{" "}
-            <code>~/.claude/skills</code>.
-          </span>
-        </li>
+        {COMMANDS.map(([command, body]) => (
+          <li key={command}>
+            <strong><code>{command}</code></strong>
+            <span>{body}</span>
+          </li>
+        ))}
       </ul>
 
-      <h2>What it&apos;s not</h2>
+      <h2>Rule model</h2>
+      <p>
+        The beta intentionally supports deterministic <code>forbid-text</code> and <code>require-text</code> rules scoped by file globs. Each case can connect review evidence, a broken commit, a corrected commit, and replay results. This narrow model is easy to inspect, explain, and reproduce.
+      </p>
+
+      <h2>Replay and evaluation are different operations</h2>
       <ul className="features">
         <li>
-          <strong>Not a replacement for a real brief.</strong>
-          <span>
-            Generic input produces generic output. Spine compiles what you
-            write; it doesn&apos;t guess what you meant.
-          </span>
+          <strong><code>spine replay</code> is historical and read-only.</strong>
+          <span>It reads Git objects and evaluates literal rules. It does not check out commits, execute repository code, call a model, or require network access.</span>
         </li>
         <li>
-          <strong>Not a refactoring engine.</strong>
-          <span>
-            Spine reads your repo to detect stack and conventions. It never
-            rewrites your code. <code>AGENTS.md</code> is a contract with the
-            agent. Enforcement lives in the agent and in code review.
-          </span>
-        </li>
-        <li>
-          <strong>Not a replacement for human review.</strong>
-          <span>
-            Every compile surfaces warnings with source pointers so review is
-            faster, not skipped.
-          </span>
-        </li>
-        <li>
-          <strong>Not optimised for million-line monorepos yet.</strong>
-          <span>
-            First run under 30 seconds on a typical Next.js / Remix / library
-            repo. Very large trees (10k+ files) haven&apos;t been profiled.
-          </span>
+          <strong><code>spine evaluate</code> runs configured programs.</strong>
+          <span>It requires <code>--allow-execution</code>, creates temporary clones, and invokes the adapter you provide. That adapter may call an agent, a model, or the network and may incur usage costs.</span>
         </li>
       </ul>
+      <p>
+        Evaluation does not provide an OS sandbox. Review the adapter and repository before enabling execution. See the <a href={`${REPO}/blob/feat/repository-learning/docs/evaluation.md`}>evaluation contract</a> for the adapter schema, recorded outputs, and cleanup behavior.
+      </p>
 
-      <h2>See it in action</h2>
+      <h2>What remains</h2>
+      <ul className="features">
+        <li><strong>Compile and drift.</strong><span>The existing brief-to-agent-context compiler and drift checks remain available as secondary workflows.</span></li>
+        <li><strong>Local MCP.</strong><span>MCP clients can ask for relevant rule context without a hosted account or repository upload.</span></li>
+        <li><strong>Human review.</strong><span>Maintainers author and review candidate rules. Spine verifies their historical evidence before enforcement.</span></li>
+      </ul>
+
+      <h2>Boundaries</h2>
+      <ul className="features">
+        <li><strong>Replay does not rerun an agent.</strong><span>The separate opt-in evaluation command can execute a configured agent or evaluator with explicit consent.</span></li>
+        <li><strong>No universal prevention claim.</strong><span>A passing replay is evidence for the recorded case, not a guarantee against every future variation.</span></li>
+        <li><strong>No hosted fleet dependency.</strong><span>The v0.10 beta is a local CLI, local report, CI guard, and local MCP surface.</span></li>
+      </ul>
+
       <div className="cta-row">
-        <a href="https://github.com/PetriLahdelma/project-spine/tree/main/docs/sample-output">
-          Full sample output →
-        </a>
-        <a href="https://github.com/PetriLahdelma/project-spine/blob/main/PRD.md">
-          PRD →
-        </a>
-        <a href="https://github.com/PetriLahdelma/project-spine/blob/main/docs/positioning.md">
-          Positioning vs. Claude →
-        </a>
-        <Link href="/pricing">Pricing →</Link>
+        <Link href="/docs">Run the source build →</Link>
+        <a href={REPO}>Read the code →</a>
+        <a href={`${REPO}/issues`}>Share a failure case →</a>
       </div>
     </main>
   );

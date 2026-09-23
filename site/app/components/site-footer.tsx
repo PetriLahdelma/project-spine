@@ -12,8 +12,8 @@ export function SiteFooter() {
             <strong>Project Spine</strong>
           </Link>
           <span>
-            Context compiler for software projects. Deterministic, drift-aware,
-            portable across coding agents.
+            Turn reviewed failures into verified repository guardrails for
+            every coding agent.
           </span>
         </div>
 
@@ -31,11 +31,11 @@ export function SiteFooter() {
         <div className="site-footer__col">
           <h3>Resources</h3>
           <ul>
-            <li><a href="https://github.com/PetriLahdelma/project-spine/blob/main/PRD.md">PRD</a></li>
-            <li><a href="https://github.com/PetriLahdelma/project-spine/blob/main/docs/positioning.md">Positioning</a></li>
-            <li><a href="https://github.com/PetriLahdelma/project-spine/tree/main/docs/sample-output">Sample output</a></li>
-            <li><a href="https://github.com/PetriLahdelma/project-spine/blob/main/docs/research-citations.md">Research</a></li>
-            <li><a href="https://github.com/PetriLahdelma/project-spine/blob/main/docs/field-notes.md">Field notes</a></li>
+            <li><a href="https://github.com/PetriLahdelma/project-spine/blob/feat/repository-learning/docs/learning.md">Learning guide</a></li>
+            <li><a href="https://github.com/PetriLahdelma/project-spine/blob/feat/repository-learning/docs/evaluation.md">Evaluation guide</a></li>
+            <li><a href="https://github.com/PetriLahdelma/project-spine#readme">Source quickstart</a></li>
+            <li><a href="https://github.com/PetriLahdelma/project-spine/blob/main/docs/mcp.md">MCP setup</a></li>
+            <li><a href="https://github.com/PetriLahdelma/project-spine/blob/main/docs/drift.md">Compile + drift</a></li>
           </ul>
         </div>
 
@@ -45,7 +45,7 @@ export function SiteFooter() {
             <li><Link href="/about">About</Link></li>
             <li><a href="mailto:support@projectspine.dev">Contact</a></li>
             <li><a href="https://github.com/PetriLahdelma/project-spine" data-ps-event="github_click" data-ps-label="footer company">GitHub</a></li>
-            <li><a href="https://www.npmjs.com/package/project-spine" data-ps-event="npm_click" data-ps-label="footer company">npm</a></li>
+            <li><a href="https://www.npmjs.com/package/project-spine" data-ps-event="npm_click" data-ps-label="footer company">Current npm beta</a></li>
           </ul>
         </div>
 

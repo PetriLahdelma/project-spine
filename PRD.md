@@ -1,5 +1,10 @@
 # Project Spine — Product Requirements Document
 
+> **0.10 direction:** reviewed failure evidence, verified guardrails, scoped agent
+> context and reproducible replay. See the current [learning contract](docs/learning.md)
+> and [delivery plan](docs/repository-learning-delivery.md). The original compiler
+> specification below is historical; its hosted/commercial concepts are proposals.
+
 **Status:** v0.1 draft
 **Author:** Petri Lahdelma
 **Last updated:** 2026-04-18

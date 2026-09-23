@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     siteName: "Project Spine",
     title: "Pricing · Project Spine",
     description: "Free. Open source under MIT.",
-    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Project Spine" }],
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Project Spine — turn reviewed failures into verified guardrails" }],
   },
 };
 
@@ -22,18 +22,19 @@ export default function PricingPage() {
         <p className="eyebrow">Pricing</p>
         <h1>Free.</h1>
         <p className="lede">
-          Project Spine is a beta OSS CLI under the MIT license. It runs
-          offline, needs no account, and the full pipeline — compile, drift,
-          templates, exports, design tokens — is unlocked for everyone.
+          Project Spine is an MIT-licensed OSS CLI. Local evidence, Git replay,
+          literal guardrails, reports, CI checks, MCP context, compile, and
+          drift need no account or paid tier.
         </p>
         <p>
-          There is no paid tier today. If that ever changes, we&apos;ll announce
-          it in the open and the CLI will stay free.
+          The learning workflow is forthcoming in the next beta and can be
+          evaluated from source today. The published npm beta still exposes
+          the earlier compile-first surface.
         </p>
       </header>
 
       <div className="cta-row">
-        <a href="https://www.npmjs.com/package/project-spine">Install free →</a>
+        <Link href="/docs">Build from source →</Link>
         <Link href="/product">Product tour →</Link>
         <a href="mailto:support@projectspine.dev">Questions? Email →</a>
       </div>

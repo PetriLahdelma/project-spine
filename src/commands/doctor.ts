@@ -5,6 +5,13 @@ import { fileURLToPath } from "node:url";
 import { checkDrift } from "../drift/check.js";
 
 const ROUTED_COMMANDS = [
+  "demo",
+  "learn",
+  "replay",
+  "evaluate",
+  "guard",
+  "context",
+  "report",
   "init",
   "compile",
   "inspect",
@@ -68,8 +75,8 @@ export default defineCommand({
     const nodeMajor = Number.parseInt(process.versions.node.split(".")[0] ?? "0", 10);
     checks.push({
       name: "runtime",
-      status: nodeMajor >= 20 ? "pass" : "fail",
-      detail: `Node ${process.versions.node} (${nodeMajor >= 20 ? ">=20" : "requires >=20"})`,
+      status: nodeMajor >= 22 ? "pass" : "fail",
+      detail: `Node ${process.versions.node} (${nodeMajor >= 22 ? ">=22" : "requires >=22"})`,
     });
 
     checks.push({
@@ -87,7 +94,7 @@ export default defineCommand({
     checks.push({
       name: "network posture",
       status: "pass",
-      detail: "compile, inspect, export, template, explain, drift, and doctor do not require network access",
+      detail: "learning, replay, guard, context, demo and compile run locally; learn --from-pr, tokens pull and compile --enrich explicitly opt into network access",
     });
 
     try {

@@ -11,6 +11,27 @@ updates:
       runtime-deps:
         dependency-type: production
 
+  - package-ecosystem: npm
+    directory: "/site"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      site-runtime:
+        dependency-type: production
+      site-tooling:
+        dependency-type: development
+
+  - package-ecosystem: npm
+    directory: "/apps/desktop"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      desktop-tooling:
+        patterns:
+          - "*"
+
   - package-ecosystem: github-actions
     directory: "/"
     schedule:

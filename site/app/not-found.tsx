@@ -4,7 +4,7 @@ import { HeaderLogo } from "./components/header-logo";
 
 export const metadata: Metadata = {
   title: "404 · Project Spine",
-  description: "This page never compiled.",
+  description: "This route is not in the repository.",
 };
 
 export default function NotFound() {
@@ -18,13 +18,13 @@ export default function NotFound() {
       </Link>
 
       <div className="nf__inner">
-        <p className="nf__eyebrow">spine × compile error</p>
+        <p className="nf__eyebrow">spine × no evidence</p>
 
         <h1 className="nf__code" aria-label="404">
           4<span className="nf__code-null" aria-hidden>Ø</span>4
         </h1>
 
-        <p className="nf__headline">This page never compiled.</p>
+        <p className="nf__headline">This route is not in the repository.</p>
         <p className="nf__sub">
           Spine looked through every commit, every brief, every README — no context
           resolves to this URL. It may have been deleted, renamed, or simply

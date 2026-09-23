@@ -13,7 +13,7 @@ inputs:
   node-version:
     description: "Node.js version used to run the CLI."
     required: false
-    default: "20"
+    default: "22"
   repo-path:
     description: "Repo root. Must contain a .project-spine/ directory produced by a prior `spine compile`."
     required: false
@@ -36,25 +36,30 @@ runs:
   using: "composite"
   steps:
     - name: Set up Node
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
       with:
         node-version: ${{ inputs.node-version }}
 
     - name: Install project-spine
       shell: bash
-      run: npm install -g "project-spine@${{ inputs.version }}"
+      env:
+        INPUT_VERSION: ${{ inputs.version }}
+      run: npm install -g "project-spine@${INPUT_VERSION}"
 
     - name: Run spine drift check
       id: run
       shell: bash
+      env:
+        INPUT_FAIL_ON: ${{ inputs.fail-on }}
+        INPUT_JSON: ${{ inputs.json }}
+        INPUT_REPO_PATH: ${{ inputs.repo-path }}
       run: |
         set +e
-        FLAGS="--repo '${{ inputs.repo-path }}' --fail-on '${{ inputs.fail-on }}'"
-        if [ "${{ inputs.json }}" = "true" ]; then
-          FLAGS="$FLAGS --json"
+        args=(--repo "$INPUT_REPO_PATH" --fail-on "$INPUT_FAIL_ON")
+        if [ "$INPUT_JSON" = "true" ]; then
+          args+=(--json)
         fi
-        # shellcheck disable=SC2086
-        eval spine drift check $FLAGS
+        spine drift check "${args[@]}"
         EXIT_CODE=$?
         if [ $EXIT_CODE -eq 0 ]; then
           echo "clean=true" >> "$GITHUB_OUTPUT"

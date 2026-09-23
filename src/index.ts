@@ -19,3 +19,7 @@ export { renderArchitectureSummary } from "./reporters/architecture-summary.js";
 export { renderBriefSummary } from "./reporters/brief-summary.js";
 export { renderWarningsJson } from "./reporters/warnings.js";
 export { renderAllExports, writeAllExports, ALL_TARGETS } from "./exporters/index.js";
+export * from "./learning/index.js";
+export * from "./evaluation/index.js";
+export { fetchPullRequestEvidence, proposalFromPullRequest } from "./github/index.js";
+export { runLearningDemo } from "./demo.js";

@@ -1,0 +1,50 @@
+name: Project Spine Guard
+description: Check verified repository guardrails with historical evidence and a reviewable JSON report.
+author: Petri Lahdelma
+branding:
+  icon: shield
+  color: purple
+inputs:
+  repo-path:
+    description: Path to the checked-out repository, including its committed learning ledger
+    default: .
+  case-id:
+    description: Optional single case to check
+    default: ''
+outputs:
+  report-path:
+    description: JSON report file path
+    value: ${{ steps.guard.outputs.report-path }}
+  exit-code:
+    description: 0 passes; 1 violates a rule; 2 has incomplete coverage
+    value: ${{ steps.guard.outputs.exit-code }}
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      with:
+        node-version: '22'
+    - name: Build the pinned action source
+      shell: bash
+      working-directory: ${{ github.action_path }}
+      run: |
+        npm ci --ignore-scripts
+        npm run build
+    - name: Enforce verified guardrails
+      id: guard
+      shell: bash
+      env:
+        SPINE_ACTION_PATH: ${{ github.action_path }}
+        SPINE_REPO_PATH: ${{ inputs.repo-path }}
+        SPINE_CASE_ID: ${{ inputs.case-id }}
+      run: |
+        set +e
+        REPORT="$RUNNER_TEMP/spine-guard-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT.json"
+        ARGS=(guard --repo "$SPINE_REPO_PATH" --json)
+        if [ -n "$SPINE_CASE_ID" ]; then ARGS+=(--case "$SPINE_CASE_ID"); fi
+        node "$SPINE_ACTION_PATH/dist/cli.js" "${ARGS[@]}" > "$REPORT"
+        CODE=$?
+        echo "report-path=$REPORT" >> "$GITHUB_OUTPUT"
+        echo "exit-code=$CODE" >> "$GITHUB_OUTPUT"
+        cat "$REPORT"
+        exit "$CODE"

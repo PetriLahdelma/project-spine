@@ -55,7 +55,7 @@ New exporters live under `src/exporters/`. The contract: take a `SpineModel` and
 
 ### Why this is now beta
 
-The core pipeline (brief → `spine.json` → exports) is stable, tested end-to-end, and dogfooded against this repo's own brief. Versions now stay on `0.9.x-beta.N` while the public CLI gets wider evaluation: the compiler, drift checks, templates, Cursor export, MCP server, GitHub drift action, sample outputs, and package-surface checks are all ready to try, while the pre-1.0 line leaves room for interface polish.
+The `0.10.x-beta.N` train adds reviewed failure cases, deterministic replay, guard/context/report commands and optional agent evaluation. The existing compiler remains tested and supported. Beta leaves room to refine the case schema and evaluation contract from real use; see [learning](docs/learning.md), [evaluation](docs/evaluation.md) and [release gates](docs/production-readiness.md).
 
 The bar for `1.0.0` is external: agencies or dev-tool teams actively relying on Spine in real projects and asking for stability guarantees. Until then, each beta release is honest about what it is, and `@beta` on npm keeps the channel explicit.
 

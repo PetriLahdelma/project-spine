@@ -235,9 +235,9 @@ export async function generateMetadata({
       title,
       description,
       siteName: "Project Spine",
-      images: [{ url: "/og.png", width: 1200, height: 630, alt: "Project Spine" }],
+      images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Project Spine — turn reviewed failures into verified guardrails" }],
     },
-    twitter: { card: "summary_large_image", title, description, images: ["/og.png"] },
+    twitter: { card: "summary_large_image", title, description, images: ["/opengraph-image"] },
     keywords: [
       `${s.label} AGENTS.md`,
       `${s.label} CLAUDE.md`,
