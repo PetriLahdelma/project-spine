@@ -12,8 +12,11 @@
     "verify": "npm run typecheck && npm run build && node scripts/validate-build.mjs"
   },
   "devDependencies": {
-    "@types/node": "^25.9.1",
-    "electron": "^42.3.3",
+    "@types/node": "^22.20.4",
+    "electron": "^44.4.5",
     "typescript": "^6.0.3"
+  },
+  "engines": {
+    "node": ">=22.0.0"
   }
 }

@@ -1,6 +1,6 @@
 # Production readiness
 
-Project Spine is still on the `0.9.x-beta` train, but release work should
+Project Spine is on the `0.10.x-beta` train, and release work should
 behave like a production package: deterministic, evidence-backed, and easy to
 smoke test after publication.
 
@@ -22,9 +22,11 @@ CI/release/security workflows, provenance publishing, post-publish smoke tests,
 and required public docs. It does not generate files.
 
 The `stable:check` gate installs the packed package into a temporary project,
-runs `spine init` and `spine compile`, then verifies the stable-release claims:
-no hosted command leakage in help or the tarball, first package install/init/
-compile under 30 seconds, byte-identical `spine.json` on identical inputs,
+runs the full offline learning demo through the installed executable, then
+`spine init` and `spine compile`, and verifies the release claims:
+no hosted command leakage in help or the tarball, local init/compile under
+30 seconds (excluding registry installation and the separate learning demo),
+byte-identical `spine.json` on identical inputs,
 stable export hashes, drift failure on changed inputs, unified drift diffs for
 hand-edited exports, and non-empty rule source pointers.
 

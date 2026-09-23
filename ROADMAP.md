@@ -1,5 +1,20 @@
 # Roadmap
 
+## 0.10 — repository learning
+
+The current release direction is reviewed failures → candidate rules → historical
+proof → CI enforcement and scoped agent guidance. See [the learning guide](docs/learning.md)
+and [delivery acceptance criteria](docs/repository-learning-delivery.md).
+
+The implementation includes a local evidence ledger, deterministic historical
+replay, CLI/library/MCP surfaces, a source-built GitHub Action, offline demo,
+HTML/JSON reporting and an optional local agent evaluation adapter. Public failure
+corpora, independently measured model improvements, automatic semantic rule
+extraction, fleet administration and hosted accounts remain future work. Prioritize
+them only with reproducible cases and real usage evidence.
+
+The sections below preserve the original compiler roadmap and its decisions.
+
 Living doc. Moves when reality moves — which is often. Ground truth for what's *shipped* is [/changelog](https://projectspine.dev/changelog); this file is what's *next*.
 
 Priority bands:

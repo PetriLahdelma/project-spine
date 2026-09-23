@@ -30,7 +30,7 @@ or commit SHA when you need immutable CI.
 | Name | Default | What it does |
 |---|---|---|
 | `version` | `beta` | `project-spine` npm dist-tag or exact version. Pin to an exact semver for reproducibility. |
-| `node-version` | `20` | Node major version for the CLI. |
+| `node-version` | `22` | Node major version for the CLI. |
 | `repo-path` | `.` | Repo root. Must contain a `.project-spine/` directory produced by a prior `spine compile`. |
 | `fail-on` | `any` | One of `none` / `any` / `inputs` / `exports`. |
 | `json` | `false` | When `true`, emits the structured drift report as JSON into the job log. Useful for downstream steps that parse the output. |
@@ -73,7 +73,7 @@ or commit SHA when you need immutable CI.
 
 ## What it does under the hood
 
-1. Sets up Node (`actions/setup-node@v4`).
+1. Sets up Node 22 by default using the current `actions/setup-node` release.
 2. Installs `project-spine` globally at the requested version.
 3. Runs `spine drift check --repo <repo-path> --fail-on <fail-on>`.
 4. Sets the `clean` output based on the CLI exit code.
@@ -89,6 +89,6 @@ Pair this with a second step that calls `spine compile` when drift is caused by 
 
 ## Status
 
-- Beta, same train as the CLI (`0.9.x`).
+- Beta, same train as the CLI (`0.10.x`).
 - Not listed on GitHub Marketplace yet. Reference by full repo path: `PetriLahdelma/project-spine/.github/actions/drift-check@<ref>`.
 - License: MIT, same as the CLI.

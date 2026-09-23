@@ -15,7 +15,7 @@ export const COMPACT_BANNER = `█▀█ █▀█ █▀█ ▄▀█ █▀▀
 █▀▀ █▀▄ █ █ █▄█ █▀▀ █     █   ▄█ █▀▀ █ █ ▀█ █▀▀
 ▀   ▀ ▀ ▀▀▀  ▀  ▀▀▀ ▀▀▀   ▀   ▀▀ ▀   ▀ ▀  ▀ ▀▀▀`;
 
-export const TAGLINE = "the missing context layer for software delivery";
+export const TAGLINE = "turn reviewed failures into verified guardrails";
 
 /**
  * Print the banner suited to the current terminal width. Falls back to the

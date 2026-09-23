@@ -1,333 +1,142 @@
-<p align="center">
-  <img src="docs/branding/banner.png" alt="Project Spine" width="880" />
-</p>
-
-<p align="center"><em>the missing context layer for software delivery</em></p>
-
 # Project Spine
 
+**Turn reviewed failures into verified repository guardrails.**
+
 [![CI](https://github.com/PetriLahdelma/project-spine/actions/workflows/ci.yml/badge.svg)](https://github.com/PetriLahdelma/project-spine/actions/workflows/ci.yml)
-[![npm](https://img.shields.io/npm/v/project-spine?color=cb3837&label=npm)](https://www.npmjs.com/package/project-spine)
-[![downloads](https://img.shields.io/npm/dw/project-spine?color=cb3837&label=downloads)](https://www.npmjs.com/package/project-spine)
-[![install size](https://packagephobia.com/badge?p=project-spine)](https://packagephobia.com/result?p=project-spine)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
-[![Node.js](https://img.shields.io/badge/node-%E2%89%A520-43853d)](./package.json)
-[![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6)](./tsconfig.json)
-[![Status](https://img.shields.io/badge/status-beta-2ea44f)](./PRD.md)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](./CONTRIBUTING.md)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-**A context compiler for software projects.**
+Your team already learned why that change broke. Keep the lesson beside the code,
+prove it catches the original failure, and give the next agent the relevant rule.
 
-Project Spine turns a client brief, a repo, and optional design-system inputs into a machine-readable project operating layer: agent instructions, architecture summary, UX rules, scaffold decisions, QA guardrails, and a sprint-ready backlog — all in one pass, all in your repo.
-
-```
-brief.md ──┐
-repo/   ───┼──▶  spine.json ──▶  AGENTS.md + CLAUDE.md + copilot-instructions.md + project-spine.mdc
-design.md ─┘                    scaffold-plan.md, qa-guardrails.md, sprint-1-backlog.md,
-                                component-plan.md, route-inventory.md, rationale.md
+```text
+reviewed correction → candidate rule → broken/fixed replay → verified guardrail
+                                                                  ↓
+                                               CI checks + scoped agent context
 ```
 
-> **Status — v0.9.x (beta).** The CLI works end-to-end: brief + repo + optional design + optional template → canonical `spine.json` + generated exports. Drift detection, design-token ingestion, Cursor-native exports, MCP, the GitHub drift action, generated social assets, and agent skills for Claude Code / Codex / Cursor are all live. The compiler path is ready for public evaluation while templates and integrations continue to harden before 1.0.
+Project Spine is a local TypeScript CLI, library, GitHub Action and MCP server.
+It keeps the source of each rule and checks its historical evidence before use.
+The existing context compiler, design-token support and drift checks remain available.
 
-See the full product thinking in [PRD.md](./PRD.md), the research evidence in [docs/research-citations.md](./docs/research-citations.md), and the "why not just Claude?" moat analysis in [docs/positioning.md](./docs/positioning.md).
+## See the complete loop
 
----
+The repository contains the **0.10 beta implementation**. Build reproducibly from
+source with Node 22+ and Git. Published beta packages are listed on the releases page.
 
-## Why
-
-Developers save ~10 hours a week with AI tools and lose the same ~10 hours to fragmented context (Atlassian 2025 DevEx). Only ~5% of repositories contain AI configuration files ([arXiv, Oct 2025](https://arxiv.org/html/2510.21413v1)), and the ones that do tend to drift immediately. Practitioners consistently warn against auto-generated `AGENTS.md` / `CLAUDE.md` boilerplate — [Addy Osmani, March 2026](https://medium.com/@addyosmani/stop-using-init-for-agents-md-3086a333f380).
-
-The gap isn't more AI. It's a repo-native, drift-aware compiler that turns actual project intent (brief, code, design rules) into rules agents and humans can both trust. That's what Project Spine is.
-
----
-
-## Install
-
-```bash
-# from npm — the @beta tag tracks the current public beta train
-npm install -g project-spine@beta
-
-# or from source
-git clone https://github.com/PetriLahdelma/project-spine.git
+```sh
+git clone --branch main https://github.com/PetriLahdelma/project-spine.git
 cd project-spine
-npm install
+npm ci
 npm run build
-node dist/cli.js --help
+node dist/cli.js demo
 ```
 
-Requires Node ≥ 20.
+The offline demo creates real Git commits in a new fixture repository. It records a
+candidate rule, proves that the broken revision fails and the correction passes,
+then reintroduces the defect and catches it. The report includes file-level evidence.
+No account, model key or network connection is needed after installation.
 
-60-second demo — `init` → `compile` → `drift check` → `drift diff`:
+This is a labeled synthetic fixture, not an AI benchmark or a customer incident.
+Historical replay checks literal rules; it does not rerun an agent. The optional
+[evaluation adapter](docs/evaluation.md) runs configured agents in separate local
+clones and reports measured outcomes with and without guidance.
 
-<p align="center">
-  <img src="docs/demo/demo.gif" alt="Project Spine demo: spine init, compile, drift check, and drift diff" width="880" />
-</p>
+## Learn from your own correction
 
-Regenerate via [VHS](https://github.com/charmbracelet/vhs): `vhs docs/demo/demo.tape`. See [`docs/demo/`](./docs/demo/).
+After building, replace `spine` below with `node /absolute/path/to/dist/cli.js`,
+or run `npm link` from the checkout to install the command locally.
 
----
+```sh
+spine learn --case failure.json       # reviewed candidate, inactive
+spine replay tenant-query            # broken fails; correction passes
+spine guard                          # check the working tree
+spine context --files src/invoices.js # relevant verified guidance
+spine report --format html --out guard-report.html
+```
 
-## Quickstart
+Create a [failure case](docs/learning.md#record-a-real-failure) with explicit broken
+and corrected revisions and scoped `require-text` or `forbid-text` rules. Cases
+are immutable by id. Only replayed rules become active. Missing file coverage,
+edited evidence, or deletion of the original failing file cannot produce proof.
 
-```bash
-# 1. scaffold a brief from a preset
+```sh
+# Retrieve PR evidence using your authenticated GitHub CLI; no external writes.
+spine learn --from-pr https://github.com/OWNER/REPO/pull/123 --json
+
+# Inspect sources and resolved historical evidence.
+spine report --case tenant-query
+
+# Gate changes using an explicit base revision.
+spine guard --diff HEAD~1 --json
+```
+
+Literal checks are intentionally narrow. They do not understand control flow or
+prove security. For example, a comment may satisfy a required literal. Combine
+Spine with your tests and static analysis. We make no claim that a repository
+becomes immune to future failures.
+
+## Put the lesson where work happens
+
+| Surface | What it does |
+| --- | --- |
+| CLI and library | Learn, verify, enforce and inspect local evidence |
+| GitHub Action | Check committed rules and fail on violations or missing proof |
+| MCP | Retrieve verified context for the files an agent is editing |
+| HTML and JSON reports | Share inspectable findings and original provenance |
+| Optional evaluation adapter | Compare configured agent outcomes in separate clones |
+| Existing compiler | Generate portable project instructions from a brief and tokens |
+
+The [GitHub Action](action.yml) builds the same pinned source you review. It uses
+read-only repository permissions; fetch history and commit the learning ledger.
+[CI setup and exit codes](docs/learning.md#ci).
+
+For agents, run `spine-mcp` and use `spine_context` before edits, `spine_guard`
+afterward. All integrations use the same local evidence. [MCP setup](docs/mcp.md).
+
+## Still a context compiler
+
+```sh
 spine init --template saas-marketing
-
-# 2. compile brief + repo (+ optional template + optional tokens) into spine.json and exports
-spine compile --brief ./brief.md --repo . --template saas-marketing
-# or with a Figma / Tokens Studio JSON export:
-spine compile --brief ./brief.md --repo . --tokens ./tokens.json
-
-# 3. regenerate a subset without recompiling
-spine export --targets claude,copilot,cursor
-
-# 4. analyze any existing repo without a brief
-spine inspect --repo .
-
-# optional: inspect what Codex, Claude, Copilot, and Cursor will load
+spine compile --brief brief.md --repo .
 spine inspect --repo . --agent-files
-
-# 5. check drift between last compile and current state (CI-friendly)
 spine drift check --fail-on any
-
-# 6. verify local beta readiness
+spine drift diff
 spine doctor
-
-# 7. browse templates
-spine template list
-spine template show design-system
 ```
 
----
+The compiler still emits `spine.json`, `AGENTS.md`, `CLAUDE.md`, Copilot and Cursor
+instructions, source pointers, design rules and an export manifest. Existing
+workflows do not need migration. [Compiled examples](docs/sample-output/).
 
-## What you get
+## Develop and verify
 
-A single `spine compile` run writes **at least 21 files**:
-
-```
-./AGENTS.md                                  (agents.md convention — tool-discovery location)
-./CLAUDE.md                                  (Claude Code — uses @import to keep lean)
-./.github/copilot-instructions.md            (Copilot — self-contained)
-./.cursor/rules/project-spine.mdc            (Cursor — always-on project rule)
-./.cursor/rules/project-spine-*.mdc          (Cursor — scoped workspace rules for monorepos)
-
-./.project-spine/
-  spine.json                                 canonical machine-readable model (hashed)
-  brief.normalized.json                      parsed brief
-  repo-profile.json                          detected stack + conventions
-  warnings.json                              ambiguities, conflicts, missing fields
-  export-manifest.json                       hashed inventory used by `spine drift check`
-  exports/
-    AGENTS.md, CLAUDE.md, copilot-instructions.md, cursor-project-rule.mdc
-    architecture-summary.md                  detected stack at a glance
-    brief-summary.md                         normalized brief at a glance
-    scaffold-plan.md                         routes, components, sprint-1 seed
-    route-inventory.md                       route list with rationale
-    component-plan.md                        component buckets + usage rules
-    qa-guardrails.md                         actionable QA checklist + DoD
-    sprint-1-backlog.md                      sprint 1 backlog with acceptance criteria
-    rationale.md                             client-facing project rationale
-```
-
-See [docs/sample-output/](./docs/sample-output/) for real compiled examples — including [this repo compiled by itself](./docs/sample-output/project-spine/). Regenerate the template-backed proof pack with `npm run build && npm run samples:generate`.
-
----
-
-## Principles
-
-1. **Repo-native first.** Outputs live in files you can version, diff, and trust.
-2. **Useful without AI.** A human reviewer should want to keep the files.
-3. **Opinionated, not magical.** Good defaults, transparent reasoning, no black box.
-4. **Fast path to value.** First run under 30 seconds on a typical repo.
-5. **Drift-aware.** `spine drift check` flags input drift, hand-edited exports, and missing files. Generation is cheap; staying aligned is the moat.
-6. **Deterministic before enriched.** LLM calls (when they arrive) never load-bear.
-7. **Security by default.** No implicit network calls, no uninvited uploads.
-
----
-
-## How it works
-
-```
-┌────────────┐   ┌────────────┐   ┌──────────────┐   ┌──────────────┐
-│ brief.md   │──▶│  Brief     │──▶│   Rules      │──▶│  Exporters   │
-└────────────┘   │  parser    │   │  compiler    │   │  (MD + JSON) │
-┌────────────┐   └────────────┘   │  (merge,     │   └──────────────┘
-│ repo/      │──▶┌────────────┐──▶│  dedupe,     │
-└────────────┘   │ Repo       │   │  conflict    │
-┌────────────┐   │ analyzer   │   │  detection)  │
-│ design.md  │──▶└────────────┘──▶│              │
-└────────────┘                    └──────────────┘
-                                         │
-                                         ▼
-                                  ┌───────────────┐
-                                  │ spine.json    │
-                                  │ warnings.json │
-                                  └───────────────┘
-```
-
-Every rule in `spine.json` carries a `source` pointer — `brief.md#section0/item3`, `repo-profile#framework`, `template:saas-marketing/contributes#2`, or `inferred:...` — so reviewers can audit _why_ a rule exists, not just trust that it does.
-
----
-
-## Templates
-
-Six starter presets ship in the box:
-
-| Template         | Project type            | Contributes                                                                           |
-| ---------------- | ----------------------- | ------------------------------------------------------------------------------------- |
-| `saas-marketing` | Marketing site          | 7 routes, 7 components, LCP/CLS budgets, privacy guardrails                           |
-| `app-dashboard`  | Authenticated dashboard | role-gated routes, `PermissionGate`/`DataTable`/`AppShell`, PII scrubbing             |
-| `design-system`  | Library                 | zero routes, tokens/primitives/Storybook QA, ships its own `design-rules.md`          |
-| `docs-portal`    | Documentation site      | docs-specific routes, `TOC`/`CodeBlock`/`SearchBar`, broken-link QA                   |
-| `api-service`    | HTTP API (Node/TS)      | `/health` + `/ready` probes, `ErrorEnvelope`/`RequestContext`/`RateLimiter`, log + SLO QA |
-| `monorepo`       | pnpm / Turborepo / Nx   | `packages/*` + `apps/*` layout, `BuildGraph` + `ChangeGate`, affected-only CI rules   |
-
-Each template contributes routes, components, QA, UX, a11y, and agent rules — not just a brief scaffold. Every contributed rule is tagged `kind: "template"` in `spine.json` for traceability.
-
----
-
-## Agent skills (for Claude Code, Codex CLI, Cursor)
-
-The [`skills/`](./skills/) directory ships six agent skills for Project Spine: active workflows for kickoff, drift, project-local templates, and local rationale review; a hosted-workspace guardrail for dormant commands; plus an orientation skill that triggers on phrases like "new client project" or "AGENTS.md is stale".
-
-```bash
-# install into ~/.claude/skills (Claude Code)
-./skills/install.sh
-
-# also install into ~/.codex/skills (Codex CLI)
-./skills/install.sh --codex
-
-# preview without touching disk
-./skills/install.sh --dry-run
-```
-
-Each skill is a single `SKILL.md` with YAML frontmatter describing its trigger phrases. The installer symlinks them so edits land immediately. See [skills/README.md](./skills/README.md) for what each skill does and how they chain.
-
----
-
-## MCP server (`spine-mcp`)
-
-The npm install also drops a second binary on `PATH`: `spine-mcp`, a stdio MCP server that exposes `compile`, `doctor`, `drift check`, `drift diff`, `init`, and `tokens pull` as tools any MCP-speaking client can call — Claude Code, Cursor, Continue.
-
-Claude Code / Cursor config:
-
-```json
-{
-  "mcpServers": {
-    "project-spine": { "command": "spine-mcp" }
-  }
-}
-```
-
-Full setup notes + tool reference: [docs/mcp.md](./docs/mcp.md).
-
-For site analytics observability, use the public stream metadata plus Google's
-read-only GA4 MCP server. Setup notes: [docs/ga4-observability.md](./docs/ga4-observability.md).
-
----
-
-## Desktop wrapper
-
-The opt-in Electron wrapper in [apps/desktop](./apps/desktop/) runs `spine doctor`, `spine compile`, and `spine template list` against a local repo through the same public CLI surface. It is a private companion package, not part of the root npm tarball.
-
-```bash
-npm install --prefix apps/desktop
+```sh
+npm ci
+npm run typecheck
+npm test
 npm run build
-npm run verify --prefix apps/desktop
-npm start --prefix apps/desktop
+npm run pack:check
+npm run release:readiness
+npm run stable:check
 ```
 
-Security posture: the renderer loads local files only, Node integration is disabled, context isolation and sandboxing are enabled, IPC is whitelisted in preload, and CLI commands are spawned without a shell.
+The stable check installs the actual package tarball and exercises both the learning
+demo and the original compiler/drift workflow. Site and desktop checks are documented
+in [CONTRIBUTING.md](CONTRIBUTING.md). Dependency and CI runtime requirements are in
+the package manifests and workflows.
 
----
+## Contribute a failure, rule or adapter
 
-## GitHub Action: `spine drift check` in your CI
+A useful contribution contains a minimal broken/fixed history, the proposed rule,
+and a counterexample it must not reject. Remove private data from shared fixtures.
+Open a [case proposal](https://github.com/PetriLahdelma/project-spine/issues/new?template=learning_case.md)
+or a tested pull request. We welcome results that show a rule or guidance *does not*
+help as much as successful examples.
 
-Fail your own CI when `AGENTS.md` / `CLAUDE.md` / `copilot-instructions.md` drift from the brief or tokens. No release to Marketplace yet — reference by full repo path:
+No public failure corpus, adoption metrics or model-performance benchmark is claimed
+yet. The reproducible fixture and tests are the evidence shipped with this release.
 
-```yaml
-- uses: PetriLahdelma/project-spine/.github/actions/drift-check@main
-  with:
-    fail-on: any
-```
+[Learning guide](docs/learning.md) · [Evaluation guide](docs/evaluation.md) ·
+[Security](SECURITY.md) · [Contributing](CONTRIBUTING.md) · [Roadmap](ROADMAP.md)
 
-Use `@main` to track the current action. Pin the action ref to a release tag
-or commit SHA when you need immutable CI.
-
-Inputs, outputs, and more examples: [.github/actions/drift-check/README.md](./.github/actions/drift-check/README.md).
-
----
-
-## Roadmap
-
-What's shipped (beta train):
-
-- **v0.1–v0.2** — brief parser, repo inspector, deterministic exporters, the first 4 starter templates, `init` / `compile` / `inspect` / `export`.
-- **v0.3** — `spine drift check` with CI-friendly `--fail-on`, idempotent compile, hash manifest.
-- **v0.8** — agent skills for Claude Code, Codex CLI, and Cursor (`skills/install.sh`).
-- **v0.9** — `--tokens` import for DTCG and Tokens Studio design tokens. `spine tokens pull` pulls directly from Figma Variables on Enterprise plans; [Tokens Studio plugin export](./docs/tokens.md#tokens-studio-plugin-path-team--pro--starter-plans) is the path on Team / Pro / Starter.
-- **Desktop companion** — an opt-in Electron wrapper under `apps/desktop` for running the public CLI from a local GUI without changing the npm CLI package.
-
-What's next is TBD. Project Spine is positioned as pure OSS for now — the direction will be shaped by what agencies and dev-tool teams actually use it for. Open an issue, a discussion, or email with field notes and we'll fold it into the plan.
-
-See [PRD.md §16](./PRD.md#16-roadmap) for the original phasing; ground truth is the changelog at [/changelog](https://projectspine.dev/changelog).
-
----
-
-## Development
-
-```bash
-npm install
-npm run typecheck    # tsc --noEmit
-npm test             # vitest
-npm run build        # tsc → dist/
-```
-
-Project layout:
-
-```
-src/
-  analyzer/      stack + convention detection (§7.2 of the PRD)
-  brief/         Markdown + frontmatter brief parser (§7.1)
-  cli-client/    auth + API client for dormant hosted experiments
-  commands/      citty subcommands. Routed today:
-                 init, compile, inspect, export, template, explain, drift,
-                 tokens, doctor.
-                 Dormant hosted experiments are excluded from the public
-                 npm build while they remain unrouted:
-                 login, logout, whoami, workspace, publish, rationale.
-  compiler/      the rules compiler, hash, deterministic ID (§7.3)
-  design/        design-rules parser + DTCG / Tokens Studio ingestion
-  drift/         drift detection against the stored manifest
-  exporters/     one file per output target (§7.4 / §7.5)
-  llm/           opt-in LLM enrichment (never load-bearing)
-  model/         zod schemas for every artifact
-  reporters/     Markdown summaries
-  templates/     registry + manifest loader (§11)
-  ui/            CLI presentation helpers (banners, styling)
-templates/       bundled starter presets (§11)
-skills/          agent skills for Claude Code, Codex, Cursor
-examples/        sample briefs for tests and demos
-docs/
-  research-citations.md
-  sample-output/ a real compiled example
-PRD.md
-```
-
----
-
-## Contributing
-
-See [CONTRIBUTING.md](./CONTRIBUTING.md). This is a single-maintainer project right now; issues and sharp feedback are welcome. PRs get a warmer reception after an issue discussion.
-
-## Security
-
-See [SECURITY.md](./SECURITY.md) for how to report vulnerabilities.
-
-## License
-
-MIT. See [LICENSE](./LICENSE).
-
-## Stars over time
-
-[![Star history chart](https://api.star-history.com/svg?repos=PetriLahdelma/project-spine&type=Date)](https://star-history.com/#PetriLahdelma/project-spine&Date)
+MIT. Maintained by [Petri Lahdelma](https://github.com/PetriLahdelma).

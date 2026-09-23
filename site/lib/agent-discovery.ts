@@ -82,39 +82,37 @@ export const WELL_KNOWN_HEADERS: Record<string, string> = {
 
 export const HOME_MARKDOWN = `---
 title: Project Spine
-description: Deterministic context compiler for software projects.
-image: ${SITE}/og.png
+description: Verified repository guardrails from reviewed failures.
+image: ${SITE}/opengraph-image
 ---
 
 # Project Spine
 
-Project Spine is an offline-first context compiler for software projects. It
-turns one brief plus a repository and optional design-token inputs into a
-repo-native operating layer for coding agents and humans:
+Project Spine is a local, deterministic learning loop for repositories. It
+captures reviewed failures as explicit evidence, records maintainer-authored literal
+guardrails, verifies them against recorded Git history, and makes verified
+rules available to CI and coding agents.
 
-- AGENTS.md
-- CLAUDE.md
-- .github/copilot-instructions.md
-- .cursor/rules/project-spine.mdc
-- .project-spine/spine.json
-- scaffold plan, route inventory, component plan, QA guardrails, sprint backlog,
-  rationale, warnings, and export manifest
-
-## Install
+## Forthcoming beta source build
 
 \`\`\`bash
-npm install -g project-spine@beta
-spine doctor --strict
+git clone --branch main https://github.com/PetriLahdelma/project-spine.git
+cd project-spine && npm ci && npm run build
+node dist/cli.js demo
 \`\`\`
 
 ## Core commands
 
-- \`spine init --template saas-marketing\` creates a starter brief.
-- \`spine compile --brief ./brief.md --repo .\` writes deterministic exports.
-- \`spine drift check --fail-on any\` fails when inputs or exports drift.
-- \`spine drift diff\` prints unified patches for hand-edited exports.
-- \`spine inspect --repo .\` reads repo shape without compiling.
-- \`spine tokens pull\` explicitly imports design tokens when configured.
+- \`spine learn --case failure.json\` imports explicit local evidence.
+- \`spine replay <case-id>\` checks a rule against broken and corrected commits.
+- \`spine guard --diff HEAD~1 --json\` evaluates verified rules on a diff.
+- \`spine context --files 'src/a.ts'\` returns relevant verified rules.
+- \`spine report --format html --out report.html\` writes a local report.
+- \`spine demo\` creates and runs the synthetic tenant-query fixture.
+- \`spine evaluate <case-id> --adapter adapter.json --allow-execution --runs 1 --json\`
+  optionally executes a configured evaluator in temporary clones; it has no OS
+  sandbox and may use the network or incur model costs.
+- Existing compile and drift commands remain supported.
 
 ## Agent surfaces
 
@@ -127,16 +125,17 @@ Project Spine publishes agent-readable discovery documents:
 - \`${SITE}/.well-known/mcp/server-card.json\`
 - \`${SITE}/.well-known/agent-skills/index.json\`
 
-The npm package also includes \`spine-mcp\`, a stdio MCP server that exposes the
-compile, doctor, drift, init, and tokens workflows to MCP-speaking clients.
+The source build includes \`spine-mcp\`, a stdio MCP server that exposes learning,
+replay, guard, context, report, compile, doctor, drift, init, and tokens workflows.
 
 ## Project guarantees
 
 - MIT-licensed OSS CLI.
 - No telemetry, account, or implicit network call on compile paths.
-- Node 20 or newer.
-- Deterministic outputs: identical inputs produce identical bytes and hashes.
-- Drift-aware by default through \`.project-spine/export-manifest.json\`.
+- Node 22 or newer.
+- Read-only Git-object replay; no checkout or agent rerun.
+- Deterministic require-text and forbid-text rules scoped by file globs.
+- No claim that a verified rule prevents every future variation of a defect.
 
 ## Canonical links
 
@@ -151,12 +150,13 @@ compile, doctor, drift, init, and tokens workflows to MCP-speaking clients.
 
 export const LLMS_TXT = `# Project Spine
 
-> Deterministic context compiler that turns a client brief, a repo, and optional
-> design inputs into repo-native coding-agent instructions and project plans.
+> Local repository-learning CLI that turns reviewed failures into scoped,
+> historically verified literal guardrails for CI and coding agents.
 
-Project Spine is an offline-first Node/TypeScript CLI. It compiles durable
-project context into files coding agents already read: AGENTS.md, CLAUDE.md,
-GitHub Copilot instructions, Cursor rules, and a full .project-spine scaffold.
+Project Spine is an offline-first Node/TypeScript CLI. It records explicit
+failure evidence, verifies literal rules against Git objects, checks diffs in
+CI, and serves file-relevant context through a local MCP server. Its existing
+compile and drift surfaces remain available.
 
 ## Important URLs
 
@@ -166,7 +166,7 @@ GitHub Copilot instructions, Cursor rules, and a full .project-spine scaffold.
 - Changelog: ${SITE}/changelog
 - Security: ${SITE}/security
 - GitHub repository: https://github.com/PetriLahdelma/project-spine
-- npm package: https://www.npmjs.com/package/project-spine
+- Current npm beta (compile-first): https://www.npmjs.com/package/project-spine
 - MCP setup: https://github.com/PetriLahdelma/project-spine/blob/main/docs/mcp.md
 
 ## Agent discovery
@@ -179,24 +179,28 @@ GitHub Copilot instructions, Cursor rules, and a full .project-spine scaffold.
 - MCP server card: ${SITE}/.well-known/mcp/server-card.json
 - Agent skills index: ${SITE}/.well-known/agent-skills/index.json
 
-## Install
+## Forthcoming beta source build
 
 \`\`\`bash
-npm install -g project-spine@beta
-spine doctor --strict
+git clone --branch main https://github.com/PetriLahdelma/project-spine.git
+cd project-spine && npm ci && npm run build
+node dist/cli.js demo
 \`\`\`
 
 ## Use this when
 
-- You need a repo-native AGENTS.md, CLAUDE.md, Copilot instruction file, or
-  Cursor rule generated from a real brief.
-- You want deterministic project context instead of ad hoc agent prompts.
-- You need drift detection between a brief and generated agent files.
-- You want an MCP client to call Project Spine through \`spine-mcp\`.
+- You want to retain a reviewed failure as explicit repository evidence.
+- You need to verify a literal rule against broken and corrected commits.
+- You want deterministic CI checks and file-relevant context for coding agents.
+- You still use the existing compile and drift workflows.
 
 ## Do not assume
 
 - Do not upload a repository to Project Spine. The OSS CLI is local by default.
+- Do not describe replay as rerunning an AI agent; it reads Git objects.
+- Do not treat a passing replay as a universal prevention guarantee.
+- Do not run \`spine evaluate\` without explicit execution consent and a reviewed
+  adapter. It executes configured programs and is separate from replay.
 - Do not call hosted workspace flows unless the user explicitly configured the
   dormant hosted beta.
 - Do not edit generated exports by hand without running \`spine drift check\`
@@ -279,12 +283,15 @@ GitHub OAuth grant for hosted workspace sessions.
 No service account is required for the public CLI:
 
 \`\`\`bash
-npm install -g project-spine@beta
-spine doctor --strict
+git clone --branch main https://github.com/PetriLahdelma/project-spine.git
+cd project-spine && npm ci && npm run build
+node dist/cli.js demo
 \`\`\`
 
-The compile, inspect, export, drift, template, and doctor flows run locally.
-They do not require login and do not upload repository contents.
+The learning, replay, guard, context, report, compile, inspect, export, drift,
+template, and doctor flows run locally. The current npm beta provides the
+compile-first surface; the repository-learning beta is available from source
+until its matching release is published.
 
 ## MCP clients
 
@@ -323,13 +330,14 @@ Security: security@projectspine.dev
 
 export const PROJECT_SPINE_SKILL = `---
 name: project-spine
-description: Use when a user wants deterministic AGENTS.md, CLAUDE.md, Copilot instructions, Cursor rules, drift checks, or an MCP-driven Project Spine workflow for a repository.
+description: Use when a user wants to retain reviewed repository failures as verified literal guardrails, route relevant context to coding agents, or use deterministic compile and drift workflows.
 ---
 
 # Project Spine
 
-Project Spine compiles a project brief and repository into a deterministic
-operating layer for coding agents.
+Project Spine captures reviewed failures as explicit evidence, verifies scoped
+literal rules against Git history, and routes verified context to coding agents.
+Its deterministic compile and drift workflows remain supported.
 
 ## Install check
 
@@ -338,26 +346,29 @@ spine --version
 spine doctor --strict
 \`\`\`
 
-If the CLI is missing:
+For the repository-learning beta:
 
 \`\`\`bash
-npm install -g project-spine@beta
+git clone --branch main https://github.com/PetriLahdelma/project-spine.git
+cd project-spine && npm ci && npm run build
+node dist/cli.js demo
 \`\`\`
 
 ## Common flows
 
-- New project: run \`spine init --template <name>\`, edit \`brief.md\`, then run
-  \`spine compile --brief ./brief.md --repo .\`.
-- Existing project: inspect the repo, ensure the brief is real, then compile.
-- Before editing generated files: run \`spine drift check --fail-on any\`.
-- When drift appears: run \`spine drift diff\` and decide whether to recompile or
-  keep the local edit.
+- Learn: import an explicit case with \`spine learn --case failure.json\`.
+- Verify: run \`spine replay <case-id>\` against recorded Git refs.
+- Enforce: run \`spine guard --diff HEAD~1 --json\` in CI.
+- Route context: run \`spine context --files 'src/a.ts'\` or use MCP.
+- Existing project context: compile and drift commands remain available.
 - MCP client setup: use \`spine-mcp\` as a stdio server.
 
 ## Guardrails
 
-- Keep compile paths local and offline unless the user explicitly opts into a
-  networked command.
+- Keep learning, replay, guard, context, report, and compile paths local unless
+  the user explicitly opts into a networked command.
+- Treat replay as evidence for literal rules, not as an agent rerun or a
+  universal prevention guarantee.
 - Prefer updating \`brief.md\`, templates, or design rules before hand-editing
   generated agent files.
 - Always report the exact command and result used to verify drift, typecheck,
@@ -644,14 +655,14 @@ export function mcpServerCard(): Record<string, unknown> {
       name: "project-spine",
       version: PROJECT_SPINE_VERSION,
       description:
-        "Local stdio MCP server for compiling deterministic Project Spine agent instructions and checking drift.",
+        "Local stdio MCP server for repository learning, relevant verified context, deterministic compilation, and drift checks.",
       websiteUrl: SITE,
       package: "project-spine",
     },
     transport: {
       type: "stdio",
       command: "spine-mcp",
-      install: "npm install -g project-spine@beta",
+      install: "Build the beta from source; see https://projectspine.dev/docs",
     },
     capabilities: {
       tools: true,
@@ -659,6 +670,31 @@ export function mcpServerCard(): Record<string, unknown> {
       prompts: false,
     },
     tools: [
+      {
+        name: "spine_learn",
+        description: "Validate and store a reviewed failure-case JSON as an inactive candidate.",
+        readOnly: false,
+      },
+      {
+        name: "spine_replay",
+        description: "Verify a candidate against broken and corrected Git revisions without running repository code.",
+        readOnly: false,
+      },
+      {
+        name: "spine_context",
+        description: "Return verified guardrails relevant to a set of repository files.",
+        readOnly: true,
+      },
+      {
+        name: "spine_guard",
+        description: "Evaluate verified literal guardrails against repository files or a diff.",
+        readOnly: true,
+      },
+      {
+        name: "spine_report",
+        description: "Inspect repository learning evidence, provenance, verification, and current guard results.",
+        readOnly: true,
+      },
       {
         name: "spine_compile",
         description: "Compile a brief and repository into the Project Spine operating layer.",

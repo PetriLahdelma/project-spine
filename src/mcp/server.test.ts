@@ -10,12 +10,13 @@
  *   4. calling spine_init writes brief.md to a tmp dir and exits zero.
  */
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { mkdtemp, rm, access, constants as fsConstants } from "node:fs/promises";
+import { mkdtemp, rm, access, writeFile, constants as fsConstants } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { buildServer } from "./server.js";
+import { runLearningDemo } from "../demo.js";
 
 async function connect() {
   const server = buildServer();
@@ -44,10 +45,15 @@ describe("spine-mcp", () => {
       const names = listed.tools.map((t) => t.name).sort();
       expect(names).toEqual([
         "spine_compile",
+        "spine_context",
         "spine_doctor",
         "spine_drift_check",
         "spine_drift_diff",
+        "spine_guard",
         "spine_init",
+        "spine_learn",
+        "spine_replay",
+        "spine_report",
         "spine_tokens_pull",
       ]);
       // Annotations should be set on the readonly tools.
@@ -81,6 +87,24 @@ describe("spine-mcp", () => {
       await client.close();
       await server.close();
     }
+  }, 30_000);
+
+  it("serves verified context and fails an actual recurrence through MCP", async () => {
+    const demo = await runLearningDemo(join(work, "fixture"));
+    const { client, server } = await connect();
+    try {
+      const context = await client.callTool({ name: "spine_context", arguments: { repoPath: demo.repo, files: ["src/invoices.js"] } });
+      expect(context.isError).toBeFalsy();
+      expect((context.structuredContent as { instructions: unknown[] }).instructions).toHaveLength(1);
+      const guard = await client.callTool({ name: "spine_guard", arguments: { repoPath: demo.repo } });
+      expect(guard.isError).toBeFalsy();
+      await writeFile(join(demo.repo, "src/invoices.js"), "export const query = 'SELECT * FROM invoices';\n");
+      const failure = await client.callTool({ name: "spine_guard", arguments: { repoPath: demo.repo } });
+      expect(failure.isError).toBe(true);
+      expect((failure.structuredContent as { passed: boolean }).passed).toBe(false);
+      const report = await client.callTool({ name: "spine_report", arguments: { repoPath: demo.repo, caseId: demo.caseId } });
+      expect((report.structuredContent as { enforceable: boolean }).enforceable).toBe(true);
+    } finally { await client.close(); await server.close(); }
   }, 30_000);
 
   it("spine_init writes brief.md into the target repoPath", async () => {

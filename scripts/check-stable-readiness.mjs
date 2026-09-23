@@ -10,7 +10,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const cli = join(root, "dist", "cli.js");
 const checks = [];
 
-const routedCommands = ["init", "compile", "inspect", "export", "template", "explain", "drift", "tokens", "doctor"];
+const routedCommands = ["demo", "learn", "replay", "evaluate", "guard", "context", "report", "init", "compile", "inspect", "export", "template", "explain", "drift", "tokens", "doctor"];
 const dormantCommands = ["login", "logout", "whoami", "workspace", "publish", "rationale"];
 const dormantDistPrefixes = dormantCommands.map((command) => `dist/commands/${command}.`);
 
@@ -116,10 +116,11 @@ try {
   mkdirSync(join(work, "app"), { recursive: true });
   writeFileSync(join(work, "app", "page.tsx"), "export default function Page() { return <main>Hello</main>; }\n");
 
-  const started = performance.now();
   const tarball = join(packDir, packInfo.filename);
   mustRun("npm", ["install", tarball], work, 120_000);
   const spine = installedSpineBin(work);
+  // Measure local CLI work independently of registry latency and the separate demo.
+  const started = performance.now();
   mustRun(spine, ["init", "--template", "saas-marketing"], work);
   mustRun(
     spine,
@@ -139,7 +140,9 @@ try {
     work,
   );
   const firstRunMs = Math.round(performance.now() - started);
-  assertCheck("first package install/init/compile under 30s", firstRunMs < 30_000, `${firstRunMs}ms`);
+  assertCheck("first local init/compile under 30s", firstRunMs < 30_000, `${firstRunMs}ms`);
+  const demo = JSON.parse(mustRun(spine, ["demo", "--out", join(work, "learning-demo"), "--json"], work).stdout);
+  assertCheck("installed package proves historical failure and catches recurrence", demo.ok === true, "offline learning demo");
 
   const spineJsonPath = join(work, ".project-spine", "spine.json");
   const firstSpineJson = readFileSync(spineJsonPath, "utf8");

@@ -33,7 +33,7 @@ check("package name", pkg.name === "project-spine", `name=${pkg.name ?? "(missin
 check("package type", pkg.type === "module", `type=${pkg.type ?? "(missing)"}`);
 check("license", pkg.license === "MIT", `license=${pkg.license ?? "(missing)"}`);
 check("homepage", pkg.homepage === "https://projectspine.dev", `homepage=${pkg.homepage ?? "(missing)"}`);
-check("node engine", typeof pkg.engines?.node === "string" && pkg.engines.node.includes(">=20"), `node=${pkg.engines?.node ?? "(missing)"}`);
+check("node engine", typeof pkg.engines?.node === "string" && pkg.engines.node.includes(">=22"), `node=${pkg.engines?.node ?? "(missing)"}`);
 check("cli bin", bin.spine === "./dist/cli.js", `spine=${bin.spine ?? "(missing)"}`);
 check("mcp bin", bin["spine-mcp"] === "./dist/mcp/server.js", `spine-mcp=${bin["spine-mcp"] ?? "(missing)"}`);
 check("root export import", exportsMap["."]?.import === "./dist/index.js", `import=${exportsMap["."]?.import ?? "(missing)"}`);
@@ -78,11 +78,12 @@ const ci = [".github/workflows/ci.yml", ".github/actions/spine-ci/action.yml"]
   .filter((p) => existsSync(join(root, p)))
   .map(readText)
   .join("\n");
-check("ci node matrix", ci.includes("node: [20, 22]"), "CI must cover Node 20 and 22");
+check("ci node matrix", ci.includes("node: [22, 24]"), "CI must cover active Node LTS releases 22 and 24");
 check("ci pack check", ci.includes("npm run pack:check"), "CI must validate npm package surface");
 check("ci release readiness", ci.includes("npm run release:readiness"), "CI must run release readiness gate");
 check("ci stable readiness", ci.includes("npm run stable:check"), "CI must run stable readiness gate");
 check("ci site build", ci.includes("npm run build") && ci.includes("working-directory: site"), "CI must build marketing site");
+check("ci desktop verify", ci.includes("npm run verify") && ci.includes("working-directory: apps/desktop"), "CI must verify desktop wrapper");
 
 const drift = readText(".github/workflows/drift.yml");
 check("drift workflow", drift.includes("drift check --repo . --fail-on any"), "drift check must fail on any drift");

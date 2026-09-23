@@ -45,7 +45,7 @@ type NavigatorWithModelContext = Navigator & {
 const projectSpineTool: WebMcpTool = {
   name: "project_spine_getting_started",
   description:
-    "Return Project Spine install, MCP setup, and core CLI commands for compiling deterministic repo-native agent instructions.",
+    "Return Project Spine source-build, MCP setup, and core repository-learning commands.",
   inputSchema: {
     type: "object",
     properties: {},
@@ -54,7 +54,7 @@ const projectSpineTool: WebMcpTool = {
   async execute() {
     return {
       title: "Project Spine getting started",
-      install: "npm install -g project-spine@beta",
+      install: "git clone --branch main https://github.com/PetriLahdelma/project-spine.git && cd project-spine && npm ci && npm run build && node dist/cli.js demo",
       docs: "https://projectspine.dev/docs",
       mcp: {
         command: "spine-mcp",
@@ -67,11 +67,12 @@ const projectSpineTool: WebMcpTool = {
         },
       },
       coreCommands: [
-        "spine doctor --strict",
-        "spine init --template saas-marketing",
-        "spine compile --brief ./brief.md --repo .",
-        "spine drift check --fail-on any",
-        "spine drift diff",
+        "spine learn --case failure.json",
+        "spine replay <case-id>",
+        "spine guard --diff HEAD~1 --json",
+        "spine context --files 'src/a.ts'",
+        "spine report --format html --out report.html",
+        "spine demo",
       ],
     };
   },

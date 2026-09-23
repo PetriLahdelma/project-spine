@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     siteName: "Project Spine",
     title: "About · Project Spine",
     description: "Who makes Project Spine, why it exists, and how to get in touch.",
-    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Project Spine" }],
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Project Spine — turn reviewed failures into verified guardrails" }],
   },
 };
 
@@ -20,36 +20,31 @@ export default function AboutPage() {
     <main>
       <header className="page-header">
         <p className="eyebrow">About</p>
-        <h1>Built in the open, by a single maintainer.</h1>
+        <h1>Repositories should retain the lessons hidden in code review.</h1>
         <p className="lede">
-          Project Spine is a solo-maintainer beta project. I&apos;m
-          building it because the <code>AGENTS.md</code> files I kept handing
-          coding agents went stale the moment the brief moved, and no
-          existing tool treated that as a real problem.
+          Project Spine is a solo-maintainer beta project for teams building
+          with coding agents. It turns a reviewed failure into explicit
+          evidence, a narrow repository rule, and a historical replay that
+          shows whether the rule would have caught the recorded break.
         </p>
       </header>
 
       <h2>The problem</h2>
       <p>
-        Coding agents are now table stakes. Cursor, Claude Code, Copilot, and
-        Codex read the project-root agent file and treat it as load-bearing
-        instruction. In practice those files are generic boilerplate at worst
-        and hand-written once-and-never-updated at best. Nobody tracks when
-        they fall out of sync with the brief, the stack, or the design system.
-        Agencies running 15 concurrent client projects feel this most.
-        Every kickoff re-invents the same scaffold, and every re-kickoff
-        quietly drifts.
+        Valuable repository knowledge often appears once, in a pull-request
+        correction: do not call this helper in a background job; this file
+        must always register that handler; this path has a tenant boundary.
+        The review closes, the lesson disappears into history, and the next
+        coding agent starts with the same blind spot.
       </p>
 
       <h2>The approach</h2>
       <p>
-        Project Spine compiles a brief + repo + optional design tokens into a
-        canonical, content-addressable <code>spine.json</code>. Every rule
-        carries a source pointer so reviewers can audit <em>why</em> a rule
-        exists. A drift check in CI fails the build when the generated files
-        no longer match the inputs. The core CLI is deterministic and offline;
-        network access is limited to explicit opt-in commands such as Figma
-        token pull or LLM enrichment.
+        Project Spine keeps that correction as a source-linked case. It can
+        express deterministic require-text and forbid-text rules, replay them
+        against recorded broken and corrected commits, and enforce verified
+        rules in CI. Relevant rules can reach any coding agent through local
+        context and MCP. The existing compile and drift tools remain available.
       </p>
 
       <h2>The maintainer</h2>
@@ -100,8 +95,8 @@ export default function AboutPage() {
           <strong>Tracking.</strong>
           <span>
             Google Analytics is loaded for aggregate site measurement. The CLI
-            still runs offline for compile and drift, and repo contents are
-            not uploaded by the public workflow. Check the site&apos;s CSP; it&apos;s{" "}
+            learning, replay, guard, compile, and drift paths stay local, and
+            repo contents are not uploaded by the public workflow. Check the site&apos;s CSP; it&apos;s{" "}
             <a href="https://github.com/PetriLahdelma/project-spine/blob/main/SECURITY.md">
               documented
             </a>

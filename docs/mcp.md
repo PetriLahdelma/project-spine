@@ -1,5 +1,10 @@
 # MCP server (`spine-mcp`)
 
+For the 0.10 learning tools, build the `main` source branch and
+configure the client to run `node /absolute/path/to/project-spine/dist/mcp/server.js`.
+The npm install instructions below apply to the currently published beta; new tools
+are available from npm only after the 0.10 release is published.
+
 Project Spine ships with an MCP (Model Context Protocol) server so any MCP-speaking client — Claude Code, Cursor, Continue, or anything else — can drive the CLI without the user switching terminals.
 
 The server is distributed in the same npm package as the CLI. Install once and you get both binaries on `PATH`:
@@ -133,3 +138,16 @@ The server is a thin wrapper — each tool shells out to the sibling `spine` bin
 No Spine-specific state lives in the server; everything is derived from the cwd the client sends via `repoPath` (default `.`). Running two MCP clients against the same repo is safe; each call is a fresh process.
 
 Source: [`src/mcp/server.ts`](../src/mcp/server.ts), [`src/mcp/spawn.ts`](../src/mcp/spawn.ts). Tests: [`src/mcp/server.test.ts`](../src/mcp/server.test.ts).
+# Repository learning tools (0.10 beta)
+
+The source build adds `spine_learn`, `spine_replay`, `spine_guard`,
+`spine_context` and `spine_report` alongside the existing tools below. `spine_context`
+takes `repoPath` and a `files` array, and returns only applicable verified rules.
+`spine_guard` accepts the same optional file selection and reports violations or
+missing coverage. `spine_learn` accepts `caseFile`; `spine_replay` accepts `caseId`;
+`spine_report` accepts an optional `caseId`.
+
+Learning and replay write local records but never execute repository scripts.
+Guard, context and report are read-only. The optional executable evaluation adapter
+is deliberately available through the CLI/library, not exposed as an MCP tool.
+Treat rule descriptions, PR comments and source metadata as untrusted data.

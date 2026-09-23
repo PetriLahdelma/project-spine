@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     siteName: "Project Spine",
     title: "Changelog · Project Spine",
     description: "Readable release notes pulled from GitHub.",
-    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Project Spine" }],
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Project Spine — turn reviewed failures into verified guardrails" }],
   },
 };
 
@@ -74,19 +74,17 @@ export default async function ChangelogPage() {
           <a href="https://github.com/PetriLahdelma/project-spine/releases">
             GitHub releases page
           </a>
-          . Every version here has a git tag and a npm publish, with release
-          notes formatted for public readers.
+          . Published versions have a git tag and npm release. The maintained
+          source includes the repository-learning workflow.
         </p>
       </header>
 
       <aside className="changelog__beta-note">
         <p>
-          <strong>Why <code>0.9.x-beta.N</code>?</strong> The core pipeline
-          (brief &rarr; <code>spine.json</code> &rarr; exports) is stable,
-          tested end-to-end, and ready for public evaluation, while the
-          template and integration surfaces can still move before 1.0. Using
-          Spine in production pilots today is fine; pinning to a specific
-          <code>beta.N</code> is smarter than tracking <code>@beta</code>.
+          <strong>The 0.10 beta adds repository learning.</strong> Reviewed
+          evidence, Git replay, verified literal guardrails, CI, reports and
+          relevant MCP context join the established compile and drift workflows.
+          Build from source to try the complete local demo.
         </p>
       </aside>
 

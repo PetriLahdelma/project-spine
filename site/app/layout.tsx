@@ -33,12 +33,12 @@ const fraunces = Fraunces({
 export const dynamic = "force-dynamic";
 
 const description =
-  "Project Spine turns a client brief, a repo, and optional design inputs into a repo-native operating layer: AGENTS.md, CLAUDE.md, copilot-instructions, Cursor rules, scaffold plan, QA guardrails, and a sprint-1 backlog.";
+  "Project Spine turns reviewed failures into scoped literal guardrails, verifies them against Git history, enforces them in CI, and serves relevant context to coding agents.";
 const googleAnalyticsId = GOOGLE_ANALYTICS.measurementId;
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://projectspine.dev"),
-  title: "Project Spine · context compiler for software projects",
+  title: "Project Spine · verified repository guardrails from reviewed failures",
   description,
   applicationName: "Project Spine",
   authors: [{ name: "Petri Lahdelma", url: "https://github.com/PetriLahdelma" }],
@@ -60,16 +60,16 @@ export const metadata: Metadata = {
     type: "website",
     title: "Project Spine",
     description:
-      "The missing context layer for software delivery. Compile brief + repo + design into agent instructions, scaffold plan, QA guardrails, and a sprint-1 backlog.",
+      "Capture reviewed failures, verify literal guardrails against Git history, enforce them in CI, and serve relevant context to coding agents.",
     url: "https://projectspine.dev",
-    images: [{ url: "/og.png", width: 1200, height: 630, alt: "Project Spine" }],
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Project Spine — turn reviewed failures into verified guardrails" }],
     siteName: "Project Spine",
   },
   twitter: {
     card: "summary_large_image",
     title: "Project Spine",
-    description: "Context compiler for software projects.",
-    images: ["/og.png"],
+    description: "Verified repository guardrails from reviewed failures.",
+    images: ["/opengraph-image"],
   },
 };
 

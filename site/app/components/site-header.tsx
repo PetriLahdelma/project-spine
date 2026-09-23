@@ -10,11 +10,11 @@ const NAV: Array<{ label: string; href: string }> = [
 ];
 
 const PRODUCT_MENU: Array<{ label: string; href: string; desc: string }> = [
-  { label: "Overview", href: "/product", desc: "The compile pipeline and every capability." },
-  { label: "Drift detection", href: "https://github.com/PetriLahdelma/project-spine/blob/main/docs/drift.md", desc: "sha256-backed manifest, CI-friendly exit codes." },
-  { label: "Design tokens", href: "https://github.com/PetriLahdelma/project-spine/blob/main/docs/tokens.md", desc: "DTCG and Tokens Studio JSON, alias resolution." },
-  { label: "Agent skills", href: "https://github.com/PetriLahdelma/project-spine/tree/main/skills", desc: "Six SKILL.md files for Claude Code, Codex, Cursor." },
-  { label: "Security", href: "/security", desc: "CSP nonces, rate limits, hashed tokens, analytics disclosed." },
+  { label: "Overview", href: "/product", desc: "Evidence, literal rules, Git replay, and CI enforcement." },
+  { label: "Local quickstart", href: "/docs", desc: "Build the beta and run a failure case." },
+  { label: "Learning guide", href: "https://github.com/PetriLahdelma/project-spine/blob/main/docs/learning.md", desc: "Cases, replay, CI, context, and product boundaries." },
+  { label: "MCP", href: "https://github.com/PetriLahdelma/project-spine/blob/main/docs/mcp.md", desc: "Serve relevant repository context to any agent." },
+  { label: "Security", href: "/security", desc: "Local evidence, read-only replay, explicit network paths." },
 ];
 
 function GitHubIcon() {

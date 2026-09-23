@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-const COMMAND = "npm install -g project-spine@beta";
+const COMMAND = "git clone --branch main https://github.com/PetriLahdelma/project-spine.git && cd project-spine && npm ci && npm run build && node dist/cli.js demo";
 
 function CopyIcon() {
   return (
@@ -21,23 +21,23 @@ function CheckIcon() {
 }
 
 export function InstallCommand() {
-  const [copied, setCopied] = useState(false);
+  const [copyState, setCopyState] = useState<"idle" | "copied" | "error">("idle");
   async function copy() {
     try {
       await navigator.clipboard.writeText(COMMAND);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1400);
+      setCopyState("copied");
+      setTimeout(() => setCopyState("idle"), 1400);
     } catch {
-      // clipboard denied — no-op; users can still select the text manually.
+      setCopyState("error");
     }
   }
   return (
-    <div className="install-block" role="group" aria-label="Install the CLI">
+    <div className="install-block" role="group" aria-label="Build the beta from source">
       <div className="install-block__rail">
         <span className="install-block__dot install-block__dot--r" aria-hidden="true" />
         <span className="install-block__dot install-block__dot--y" aria-hidden="true" />
         <span className="install-block__dot install-block__dot--g" aria-hidden="true" />
-        <span className="install-block__caption">install the CLI</span>
+        <span className="install-block__caption">build the beta from source</span>
       </div>
       <div className="install-block__row">
         <code className="install-block__command" tabIndex={0}>
@@ -48,14 +48,17 @@ export function InstallCommand() {
           type="button"
           onClick={copy}
           className="install-block__copy"
-          aria-label={copied ? "Copied" : "Copy install command"}
+          aria-label={copyState === "copied" ? "Copied" : "Copy source build command"}
           data-ps-event="install_copy"
           data-ps-label="install block"
         >
-          {copied ? <CheckIcon /> : <CopyIcon />}
-          <span>{copied ? "Copied" : "Copy"}</span>
+          {copyState === "copied" ? <CheckIcon /> : <CopyIcon />}
+          <span>{copyState === "copied" ? "Copied" : copyState === "error" ? "Select command" : "Copy"}</span>
         </button>
       </div>
+      <p className="install-block__feedback" role="status" aria-live="polite">
+        {copyState === "error" ? "Clipboard access failed. Select and copy the command manually." : ""}
+      </p>
     </div>
   );
 }

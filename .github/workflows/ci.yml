@@ -9,6 +9,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   # Heavy compute on push-to-main runs on the self-hosted farm (both arches).
   test-farm:
@@ -16,13 +20,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: [20, 22]
+        node: [22, 24]
         runner:
           - [self-hosted, linux, arm64, project-spine, macmini]
           - [self-hosted, linux, amd64, project-spine, gaming-pc]
     runs-on: ${{ matrix.runner }}
+    timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: ./.github/actions/spine-ci
         with:
           node-version: ${{ matrix.node }}
@@ -45,10 +50,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: [20, 22]
+        node: [22, 24]
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: ./.github/actions/spine-ci
         with:
           node-version: ${{ matrix.node }}
@@ -66,9 +72,10 @@ jobs:
         runner:
           - [self-hosted, linux, amd64, project-spine, gaming-pc]
     runs-on: ${{ matrix.runner }}
+    timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 22
       - run: npm ci
@@ -81,9 +88,10 @@ jobs:
   site-hosted:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 22
           cache: npm
@@ -95,16 +103,51 @@ jobs:
       - run: npm run build
         working-directory: site
 
+  desktop-farm:
+    if: github.event_name != 'pull_request'
+    strategy:
+      matrix:
+        runner:
+          - [self-hosted, linux, amd64, project-spine, gaming-pc]
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+      - run: npm ci
+        working-directory: apps/desktop
+      - run: npm run verify
+        working-directory: apps/desktop
+
+  desktop-hosted:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: apps/desktop/package-lock.json
+      - run: npm ci
+        working-directory: apps/desktop
+      - run: npm run verify
+        working-directory: apps/desktop
+
   # Single stable required check: succeeds when the active legs passed (skipped is OK).
   gate:
-    needs: [test-farm, test-hosted, site-farm, site-hosted]
+    needs: [test-farm, test-hosted, site-farm, site-hosted, desktop-farm, desktop-hosted]
     if: always()
     runs-on: ubuntu-latest
     steps:
       - name: Require the active legs to have passed
         run: |
           for r in "${{ needs.test-farm.result }}" "${{ needs.test-hosted.result }}" \
-                   "${{ needs.site-farm.result }}" "${{ needs.site-hosted.result }}"; do
+                   "${{ needs.site-farm.result }}" "${{ needs.site-hosted.result }}" \
+                   "${{ needs.desktop-farm.result }}" "${{ needs.desktop-hosted.result }}"; do
             case "$r" in
               success|skipped) ;;
               *) echo "a required leg did not pass: $r"; exit 1 ;;

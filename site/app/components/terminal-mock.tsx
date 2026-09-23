@@ -7,7 +7,7 @@ type Props = { title?: string; children: React.ReactNode };
  */
 export function TerminalMock({ title = "~/acme-payroll — zsh", children }: Props) {
   return (
-    <div className="terminal" role="img" aria-label="Sample Project Spine compile output in a terminal">
+    <div className="terminal" role="img" aria-label="Sample Project Spine command output in a terminal">
       <div className="terminal__chrome">
         <span className="terminal__dot terminal__dot--r" aria-hidden="true" />
         <span className="terminal__dot terminal__dot--y" aria-hidden="true" />

@@ -1,607 +1,153 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { TerminalMock } from "../components/terminal-mock";
-import { InstallCommand } from "../components/install-command";
 import { HeroWordmark } from "../components/hero-wordmark";
-import { PROJECT_SPINE_VERSION } from "../../lib/project-version";
+import { LearningDemo } from "../components/learning-demo";
+import { InstallCommand } from "../components/install-command";
 
 const SITE = "https://projectspine.dev";
+const REPO = "https://github.com/PetriLahdelma/project-spine";
 
 export const metadata: Metadata = {
   alternates: { canonical: SITE },
-  keywords: [
-    "AGENTS.md",
-    "CLAUDE.md",
-    "copilot-instructions",
-    "Cursor rules",
-    "AI coding agent context",
-    "context compiler",
-    "spine.json",
-    "drift detection",
-    "Project Spine",
-    "agent instructions generator",
-  ],
+  title: "Project Spine · turn reviewed failures into verified repo guardrails",
+  description:
+    "Project Spine captures reviewed failures as scoped literal rules, verifies them against Git history, enforces them in CI, and serves relevant context to coding agents.",
+  keywords: ["coding agent guardrails", "AI code review", "repository rules", "Git replay", "AGENTS.md", "MCP server", "CI policy"],
 };
 
-const LANDING_JSON_LD = {
+const JSON_LD = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
   name: "Project Spine",
   applicationCategory: "DeveloperApplication",
   operatingSystem: "macOS, Linux, Windows",
-  description:
-    "Project Spine compiles a client brief, a repo, and optional design inputs into a repo-native operating layer: AGENTS.md, CLAUDE.md, copilot-instructions, Cursor rules, scaffold plan, QA guardrails, and a sprint-1 backlog — with drift detection.",
+  description: "A local, deterministic workflow for turning reviewed repository failures into evidence-backed literal guardrails.",
   url: SITE,
-  author: { "@type": "Organization", name: "Project Spine", url: SITE },
+  codeRepository: REPO,
   offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-  softwareVersion: PROJECT_SPINE_VERSION,
   license: "https://opensource.org/licenses/MIT",
 };
 
-async function fetchStars(): Promise<number | null> {
-  try {
-    const res = await fetch(
-      "https://api.github.com/repos/PetriLahdelma/project-spine",
-      {
-        headers: { Accept: "application/vnd.github+json" },
-        next: { revalidate: 3600 },
-      },
-    );
-    if (!res.ok) return null;
-    const data = (await res.json()) as { stargazers_count?: number };
-    return typeof data.stargazers_count === "number" ? data.stargazers_count : null;
-  } catch {
-    return null;
-  }
-}
+const LOOP = [
+  ["Capture", "Import a manual case file or GitHub review metadata. Evidence stays explicit and inspectable."],
+  ["Propose", "Create a scoped require-text or forbid-text rule with a file glob and source trail."],
+  ["Replay", "Read historical Git objects to prove the broken commit fails and the corrected commit passes."],
+  ["Enforce", "Run verified rules against a diff in CI, then serve only relevant context to any MCP client."],
+] as const;
 
-function GitHubIcon() {
+const SURFACES = [
+  ["Evidence ledger", "JSON cases connect the review, commits, rule, and replay result. No hidden model memory."],
+  ["Literal guardrails", "Deterministic forbid-text and require-text checks scoped by repository globs."],
+  ["Git replay", "Read-only historical verification. Spine inspects commits; it does not rerun an AI agent."],
+  ["CI guard", "Machine-readable output and diff-aware checks make verified rules useful on every pull request."],
+  ["Relevant context", "Ask for files and receive applicable rules through the CLI or local MCP server."],
+  ["Local reports", "Generate an HTML report that a maintainer can review, archive, or share with a team."],
+] as const;
+
+export default function Home() {
   return (
-    <svg role="img" aria-hidden="true" focusable="false" width={16} height={16} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
-    </svg>
-  );
-}
-function StarIcon() {
-  return (
-    <svg aria-hidden="true" focusable="false" width={11} height={11} viewBox="0 0 16 16" fill="currentColor">
-      <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.72 4.192a.75.75 0 0 1-1.088.791L8 12.347l-3.767 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.279l4.21-.612L7.327.668A.75.75 0 0 1 8 .25Z" />
-    </svg>
-  );
-}
-function XMark() {
-  return (
-    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
-      <path d="M3 3l8 8M11 3l-8 8" />
-    </svg>
-  );
-}
-function Check() {
-  return (
-    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M2.5 7.5l3 3 6-7" />
-    </svg>
-  );
-}
+    <main className="landing learning-landing">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }} />
 
-const FEATURES: Array<{ title: string; body: React.ReactNode }> = [
-  {
-    title: "Deterministic compile",
-    body: (
-      <>
-        Content-addressable <code>spine.json</code>. Same inputs, same hash.
-        Reviewers can prove why every rule exists.
-      </>
-    ),
-  },
-  {
-    title: "Drift-aware by construction",
-    body: (
-      <>
-        <code>export-manifest.json</code> plus{" "}
-        <code>spine drift check --fail-on any</code>. A contract, not a
-        comment.
-      </>
-    ),
-  },
-  {
-    title: "Portable across agents",
-    body: (
-      <>
-        Claude Code, Cursor, Copilot, Codex, Aider. One brief, every agent
-        file, zero re-briefing.
-      </>
-    ),
-  },
-  {
-    title: "Design tokens first-class",
-    body: (
-      <>
-        DTCG or Tokens Studio JSON. Aliases resolve. Tokens drift tracked
-        separately so Figma re-exports surface cleanly.
-      </>
-    ),
-  },
-  {
-    title: "Agent skills shipped",
-    body: (
-      <>
-        Six <code>SKILL.md</code> files teach Claude Code, Codex CLI, and
-        Cursor to drive Spine end-to-end. One-line install.
-      </>
-    ),
-  },
-];
-
-const TRUST_POINTS: Array<{ label: string; value: React.ReactNode }> = [
-  { label: "Offline by default", value: "No repo upload, no telemetry, no account." },
-  { label: "Deterministic", value: "Same inputs produce the same spine hash." },
-  {
-    label: "Beta proof",
-    value: (
-      <>
-        <code>spine doctor</code> verifies version, channel, runtime, and drift.
-      </>
-    ),
-  },
-  { label: "CI-native", value: "GitHub Action fails when exports drift." },
-];
-
-const COMPARISON_ROWS = [
-  {
-    tool: "Agent feedback tools",
-    focus: "Turn UI review into coding-agent tasks.",
-    spine: "Compiles the project operating layer those agents should obey.",
-  },
-  {
-    tool: "Rule libraries",
-    focus: "Collect reusable AI coding rules.",
-    spine: "Generates source-pointed rules from the actual brief, repo, template, and tokens.",
-  },
-  {
-    tool: "Context-sharing CLIs",
-    focus: "Expose docs and tasks to agents.",
-    spine: "Writes durable repo files and hashes them so drift is enforceable in CI.",
-  },
-  {
-    tool: "Agent orchestration",
-    focus: "Run agents in parallel workspaces.",
-    spine: "Gives every agent the same deterministic project contract before work starts.",
-  },
-];
-
-const CLAUDE_POINTS: React.ReactNode[] = [
-  <>
-    Different <code>AGENTS.md</code> every time you ask. Non-deterministic by
-    design.
-  </>,
-  <>No memory of the brief you signed three months ago.</>,
-  <>
-    Writes <code>CLAUDE.md</code> well. Doesn&apos;t own the Cursor or Copilot
-    project files.
-  </>,
-  <>No sha256 chain, no source pointers, no audit trail.</>,
-  <>Can&apos;t fail CI when your instructions drift from the brief.</>,
-];
-
-const SPINE_POINTS: React.ReactNode[] = [
-  <>
-    Same inputs produce the same <code>spine.json</code>. Byte-identical until
-    a real input changes.
-  </>,
-  <>
-    <code>export-manifest.json</code> hashes every input and output for
-    lifecycle drift.
-  </>,
-  <>
-    One source fans out to <code>AGENTS.md</code>, <code>CLAUDE.md</code>,{" "}
-    copilot-instructions, and <code>.cursor/rules/project-spine.mdc</code>.
-  </>,
-  <>
-    Every rule carries a source pointer back to{" "}
-    <code>brief.md#section0/item3</code>.
-  </>,
-  <>
-    <code>spine drift check --fail-on any</code> turns the contract into a CI
-    gate.
-  </>,
-];
-
-export default async function Home() {
-  const stars = await fetchStars();
-  return (
-    <main className="landing">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(LANDING_JSON_LD) }}
-      />
-      {/* Poster hero */}
-      <section className="poster-hero">
+      <section className="poster-hero learning-hero">
         <div className="poster-hero__inner">
-          <p className="poster-hero__eyebrow">beta · now with Figma tokens import</p>
+          <p className="poster-hero__eyebrow">v0.10 beta · local repository learning</p>
           <HeroWordmark line1="PROJECT" line2="SPINE" />
-          <h1 className="poster-hero__tagline">
-            Stop re-explaining your repo to coding agents.
-          </h1>
-        </div>
-      </section>
-
-      {/* Hero content band */}
-      <section className="hero-band">
-        <div className="hero-band__inner">
-          <p className="hero-band__lede">
-            Turn one brief into <code>AGENTS.md</code>, <code>CLAUDE.md</code>,
-            Copilot instructions, Cursor rules, a scaffold plan, QA guardrails,
-            and a sprint backlog. Then fail CI when those files drift from the
-            source of truth.
+          <h1 className="learning-hero__headline">Teach your repository from the fixes that mattered.</h1>
+          <p className="learning-hero__sub">
+            Capture a reviewed failure. Turn it into a literal guardrail. Verify it against the commits that broke and fixed the code. Enforce the proven rule for every agent after that.
           </p>
-          <div className="hero-band__install">
-            <InstallCommand />
-            <p className="hero-band__install-caption">
-              MIT-licensed, fully offline. Node 20+.
-            </p>
-          </div>
-          <div className="hero-band__ctas">
-            <a
-              href="https://github.com/PetriLahdelma/project-spine"
-              className="btn-primary"
-              target="_blank"
-              rel="noopener noreferrer"
-              data-ps-event="github_click"
-              data-ps-label="hero primary"
-            >
-              <GitHubIcon />
-              View on GitHub
-              {typeof stars === "number" && stars > 0 ? (
-                <span className="btn-secondary__count">
-                  <StarIcon />
-                  {stars.toLocaleString()}
-                </span>
-              ) : null}
-            </a>
-            <Link href="/docs" className="btn-secondary" data-ps-event="docs_click" data-ps-label="hero secondary">
-              Read the docs
-            </Link>
-          </div>
-          <dl className="trust-strip" aria-label="Project Spine trust guarantees">
-            {TRUST_POINTS.map((point) => (
-              <div key={point.label} className="trust-strip__item">
-                <dt>{point.label}</dt>
-                <dd>{point.value}</dd>
-              </div>
-            ))}
-          </dl>
-        </div>
-      </section>
-
-      {/* Terminal artifact */}
-      <section className="section section--tight" data-ps-view="demo_terminal_view" data-ps-label="homepage terminal proof">
-        <TerminalMock title="~/acme-payroll — spine compile">
-          <span className="tok-prompt">$ </span>
-          <span className="tok-command">spine compile --brief ./brief.md --repo . --tokens ./tokens.json</span>
-          {"\n\n"}
-          <span className="tok-success">✓</span>{" "}
-          <span>compiled spine for </span>
-          <span className="tok-accent">&quot;acme-payroll&quot;</span>
-          <span> v0.1.0</span>
-          {"\n"}
-          <span className="tok-key">  template: </span>
-          <span className="tok-val">   saas-marketing</span>
-          {"\n"}
-          <span className="tok-key">  hash: </span>
-          <span className="tok-val">       3333f867f40d3e43</span>
-          {"\n"}
-          <span className="tok-key">  project type:</span>
-          <span className="tok-val">saas-marketing</span>
-          {"\n"}
-          <span className="tok-key">  stack: </span>
-          <span className="tok-val">      next / tailwind / typescript</span>
-          {"\n"}
-          <span className="tok-key">  goals: </span>
-          <span className="tok-val">      5</span>
-          {"\n"}
-          <span className="tok-key">  qa rules: </span>
-          <span className="tok-val">   12</span>
-          {"\n"}
-          <span className="tok-key">  warnings: </span>
-          <span className="tok-val">   2 </span>
-          <span className="tok-dim">(0 error, 1 warn, 1 info)</span>
-          {"\n\n"}
-          <span className="tok-dim">wrote 21 files under ./.project-spine and repo root.</span>
-          {"\n\n"}
-          <span className="tok-prompt">$ </span>
-          <span className="tok-command">spine drift check --fail-on any</span>
-          {"\n"}
-          <span className="tok-success">✓ clean</span>
-          <span className="tok-dim"> · spine hash 3333f867f40d3e43 matches current.</span>
-          {"\n\n"}
-          <span className="tok-prompt">$ </span>
-          <span className="tok-command">spine doctor --strict</span>
-          {"\n"}
-          <span className="tok-success">[ok]</span>
-          <span> version          project-spine {PROJECT_SPINE_VERSION}</span>
-          {"\n"}
-          <span className="tok-success">[ok]</span>
-          <span> release channel  npm publish tag beta</span>
-          {"\n"}
-          <span className="tok-success">[ok]</span>
-          <span> local drift      clean</span>
-        </TerminalMock>
-      </section>
-
-      {/* Output */}
-      <section className="section">
-        <div className="section-header">
-          <div className="section-header__kicker">
-            <span className="section-header__num">01</span>
-            <span className="section-header__label">Output</span>
-          </div>
-          <h2>Twenty-one files, every agent, all drift-tracked.</h2>
-          <p className="sub">
-            Run <code>spine compile</code> once. Everything below is generated
-            with source pointers back to your brief, and hashed into a
-            manifest that catches drift in CI.
-          </p>
-        </div>
-        <div className="filetree">
-          <div className="filetree__header">
-            <strong>./</strong>
-            <span>spine.json · sha256 3333f867f40d3e43</span>
-          </div>
-          <ul className="filetree__list">
-            <li className="filetree__group-label">Repo root</li>
-            <li className="filetree__item">
-              <span className="filetree__icon filetree__icon--rule" aria-hidden="true" />
-              <span className="filetree__name">AGENTS.md</span>
-              <span className="filetree__sha">a41e2d0b9c6f7844</span>
-            </li>
-            <li className="filetree__item">
-              <span className="filetree__icon filetree__icon--rule" aria-hidden="true" />
-              <span className="filetree__name">CLAUDE.md</span>
-              <span className="filetree__sha">f0ce8847b1e29a71</span>
-            </li>
-            <li className="filetree__item">
-              <span className="filetree__icon filetree__icon--rule" aria-hidden="true" />
-              <span className="filetree__name">.github/copilot-instructions.md</span>
-              <span className="filetree__sha">92b4711f3e6c0d12</span>
-            </li>
-            <li className="filetree__item">
-              <span className="filetree__icon filetree__icon--rule" aria-hidden="true" />
-              <span className="filetree__name">.cursor/rules/project-spine.mdc</span>
-              <span className="filetree__sha">7bf46ac330f18d2e</span>
-            </li>
-            <li className="filetree__group-label">.project-spine/exports</li>
-            <li className="filetree__item">
-              <span className="filetree__icon" aria-hidden="true" />
-              <span className="filetree__name filetree__name--dim">scaffold-plan.md</span>
-              <span className="filetree__sha">c8d5faeb7a20e164</span>
-            </li>
-            <li className="filetree__item">
-              <span className="filetree__icon" aria-hidden="true" />
-              <span className="filetree__name filetree__name--dim">route-inventory.md</span>
-              <span className="filetree__sha">3b5f77102e9c41a8</span>
-            </li>
-            <li className="filetree__item">
-              <span className="filetree__icon" aria-hidden="true" />
-              <span className="filetree__name filetree__name--dim">component-plan.md</span>
-              <span className="filetree__sha">7ac2d1b9664fe083</span>
-            </li>
-            <li className="filetree__item">
-              <span className="filetree__icon" aria-hidden="true" />
-              <span className="filetree__name filetree__name--dim">qa-guardrails.md</span>
-              <span className="filetree__sha">4e6a0f51c9d7b312</span>
-            </li>
-            <li className="filetree__item">
-              <span className="filetree__icon" aria-hidden="true" />
-              <span className="filetree__name filetree__name--dim">sprint-1-backlog.md</span>
-              <span className="filetree__sha">51bc28a93f0e6d47</span>
-            </li>
-            <li className="filetree__item">
-              <span className="filetree__icon" aria-hidden="true" />
-              <span className="filetree__name filetree__name--dim">rationale.md</span>
-              <span className="filetree__sha">b920f47dc651e8a3</span>
-            </li>
-            <li className="filetree__item">
-              <span className="filetree__icon" aria-hidden="true" />
-              <span className="filetree__name filetree__name--dim">architecture-summary.md</span>
-              <span className="filetree__sha">ed7a1f30c9b842fc</span>
-            </li>
-            <li className="filetree__item">
-              <span className="filetree__icon" aria-hidden="true" />
-              <span className="filetree__name filetree__name--dim">export-manifest.json</span>
-              <span className="filetree__sha">drift-tracked</span>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      {/* Proof */}
-      <section className="section section--band">
-        <div className="section-header">
-          <div className="section-header__kicker">
-            <span className="section-header__num">02</span>
-            <span className="section-header__label">Proof</span>
-          </div>
-          <h2>Not a prompt. A contract you can audit.</h2>
-          <p className="sub">
-            The promise is visible in the artifacts themselves: source
-            pointers, drift diffs, and a local readiness command that proves
-            the public beta surface on your machine.
-          </p>
-        </div>
-        <div className="proof-grid">
-          <div className="proof-panel">
-            <p className="proof-panel__label">Generated rule</p>
-            <pre><code>{`- Use TypeScript strict mode.
-  source: repo-profile#language.strict
-
-- Keep LCP below 2.5s on mobile.
-  source: template:saas-marketing/qa#performance
-
-- Never remove visible focus states.
-  source: design-rules.md#accessibility`}</code></pre>
-          </div>
-          <div className="proof-panel">
-            <p className="proof-panel__label">CI drift failure</p>
-            <pre><code>{`$ spine drift diff
---- .project-spine/exports/AGENTS.md
-+++ AGENTS.md
-@@
-- Node >= 20 is required.
-+ Node >= 18 is fine.
-
-input drift: 0
-export hand-edits: 1
-next: update the brief or regenerate exports`}</code></pre>
+          <div className="learning-hero__actions">
+            <Link className="btn-on-cyan btn-on-cyan--primary" href="/docs">Run the local demo</Link>
+            <a className="btn-on-cyan btn-on-cyan--secondary" href={REPO}>Explore the source</a>
           </div>
         </div>
       </section>
 
-      {/* Claude vs Spine */}
-      <section className="section">
-        <div className="section-header">
-          <div className="section-header__kicker">
-            <span className="section-header__num">03</span>
-            <span className="section-header__label">The moat</span>
-          </div>
-          <h2>Why not just use Claude?</h2>
-          <p className="sub">
-            Claude Code writes an <code>AGENTS.md</code> when you ask it to.
-            Project Spine writes verifiable, versioned, portable agent
-            instructions, and tells you the moment they drift.
-          </p>
-        </div>
-        <div className="vs-grid">
-          <div className="vs-col vs-col--claude">
-            <p className="vs-col__label">Claude Code alone</p>
-            <h3>What you get by default</h3>
-            <ul>
-              {CLAUDE_POINTS.map((point, i) => (
-                <li key={i}>
-                  <XMark />
-                  <span>{point}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="vs-col vs-col--spine">
-            <p className="vs-col__label">Project Spine</p>
-            <h3>What you get by construction</h3>
-            <ul>
-              {SPINE_POINTS.map((point, i) => (
-                <li key={i}>
-                  <Check />
-                  <span>{point}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-        <div className="section-tail">
-          <a href="https://github.com/PetriLahdelma/project-spine/blob/main/docs/positioning.md">
-            Read the full moat analysis →
-          </a>
-        </div>
-      </section>
-
-      {/* Competitive position */}
-      <section className="section section--tight">
-        <div className="section-header">
-          <div className="section-header__kicker">
-            <span className="section-header__num">04</span>
-            <span className="section-header__label">Positioning</span>
-          </div>
-          <h2>Where Spine sits in the agent stack.</h2>
-          <p className="sub">
-            Spine is not another agent runner or task queue. It is the source
-            of truth those agents should start from before they touch the
-            repo.
-          </p>
-        </div>
-        <div className="comparison-table" role="table" aria-label="Project Spine competitive positioning">
-          <div className="comparison-table__row comparison-table__row--head" role="row">
-            <span role="columnheader">Category</span>
-            <span role="columnheader">What they do</span>
-            <span role="columnheader">What Spine owns</span>
-          </div>
-          {COMPARISON_ROWS.map((row) => (
-            <div key={row.tool} className="comparison-table__row" role="row">
-              <span role="cell">{row.tool}</span>
-              <span role="cell">{row.focus}</span>
-              <span role="cell">{row.spine}</span>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Features — editorial list */}
-      <section className="section">
-        <div className="section-header">
-          <div className="section-header__kicker">
-            <span className="section-header__num">05</span>
-            <span className="section-header__label">Capabilities</span>
-          </div>
-          <h2>Everything a real kickoff needs. Nothing you don&apos;t.</h2>
-          <p className="sub">
-            Public beta today — carrying the primitives agencies tell us they
-            need on day one of a new client project.
-          </p>
-        </div>
-        <div className="features-list">
-          {FEATURES.map((f, i) => (
-            <div key={f.title} className="feature-row">
-              <p className="feature-row__index">{String(i + 1).padStart(2, "0")}</p>
-              <h3>{f.title}</h3>
-              <p>{f.body}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Maintainer */}
-      <section className="section section--tight">
-        <blockquote className="maintainer-quote">
+      <section className="learning-demo-section" aria-labelledby="demo-title">
+        <div className="learning-demo-section__copy">
+          <p className="eyebrow">A failure becomes repository memory</p>
+          <h2 id="demo-title">One review. One replay. One rule your tools can check.</h2>
           <p>
-            Hi, I&apos;m Petri. Project Spine is a solo-maintainer project. I
-            started it because my <code>AGENTS.md</code> files kept going
-            stale the moment the brief moved, and no existing tool treated
-            that as a real problem. If you try Spine and it breaks, or you
-            disagree with a decision I made, email{" "}
-            <a href="mailto:support@projectspine.dev">support@projectspine.dev</a>
-            . I read every message.
+            Follow the complete v0.10 beta workflow. This preview is illustrative; the source build includes a seeded case you can run without credentials or network access.
           </p>
-          <footer>
-            <strong>Petri Lahdelma</strong> · maintainer ·{" "}
-            <Link href="/about">about the project</Link>
-          </footer>
-        </blockquote>
+          <Link href="/docs" className="text-link">Follow the source-build quickstart →</Link>
+        </div>
+        <LearningDemo />
       </section>
 
-      {/* Poster closer */}
-      <section className="poster-closer">
+      <section className="learning-loop section" aria-labelledby="loop-title">
+        <div className="section-header">
+          <p className="eyebrow">The learning loop</p>
+          <h2 id="loop-title">Evidence in. Verified guardrail out.</h2>
+          <p className="sub">Spine makes each step reviewable. The beta stays deliberately narrow so a passing replay means something concrete.</p>
+        </div>
+        <ol className="learning-loop__grid">
+          {LOOP.map(([title, body], index) => (
+            <li key={title}>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <h3>{title}</h3>
+              <p>{body}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section className="learning-proof" aria-labelledby="proof-title">
+        <div className="learning-proof__inner">
+          <div>
+            <p className="eyebrow">What replay proves</p>
+            <h2 id="proof-title">The rule matches the history you gave it.</h2>
+            <p>A verified rule failed on the recorded broken commit and passed on the recorded correction. That is strong evidence for a narrow check. It is not a promise that every future defect is prevented.</p>
+          </div>
+          <pre tabIndex={0}><code>{`$ spine replay tenant-query
+✓ broken    demo commit  required literal missing
+✓ corrected demo commit  required literal present
+
+verified: require "WHERE tenant_id = ?"
+scope:    src/invoices.js
+source:   manual review evidence`}</code></pre>
+        </div>
+      </section>
+
+      <section className="section" aria-labelledby="surfaces-title">
+        <div className="section-header">
+          <p className="eyebrow">The v0.10 beta surface</p>
+          <h2 id="surfaces-title">Small primitives that compose into a useful control loop.</h2>
+          <p className="sub">Compile and drift workflows remain available. Learning, replay, guard, context, reports, CI, and MCP form the new center of gravity.</p>
+        </div>
+        <div className="learning-capabilities">
+          {SURFACES.map(([title, body]) => (
+            <article key={title}><h3>{title}</h3><p>{body}</p></article>
+          ))}
+        </div>
+        <p className="learning-evaluation-note">
+          Need to test an actual configured agent or evaluator? <code>spine evaluate</code> is a separate, explicit execution path with different risks and costs. <a href={`${REPO}/blob/main/docs/evaluation.md`}>Read the evaluation contract →</a>
+        </p>
+      </section>
+
+      <section className="learning-install" aria-labelledby="install-title">
+        <div>
+          <p className="eyebrow">Try the learning loop today</p>
+          <h2 id="install-title">Clone it. Build it. Run the seeded case.</h2>
+          <p>Build from the maintained source and run the complete local demo. No account or model key required.</p>
+        </div>
+        <InstallCommand />
+        <div className="learning-install__links">
+          <Link href="/docs">Full quickstart</Link>
+          <a href={`${REPO}/issues`}>Open an issue</a>
+          <a href={`${REPO}/discussions`}>Discuss the model</a>
+        </div>
+      </section>
+
+      <section className="poster-closer learning-closer">
         <div className="poster-closer__inner">
-          <p className="poster-closer__eyebrow">§ START</p>
-          <h2 className="poster-closer__headline">
-            Ship your <em>AGENTS.md</em><br />like it&apos;s code.
-          </h2>
-          <p className="poster-closer__sub">
-            Free while in beta. MIT forever. Three commands and thirty seconds
-            to compile your first brief into an audit-ready operating layer.
-          </p>
+          <p className="poster-closer__eyebrow">§ KEEP THE CORRECTION</p>
+          <h2 className="poster-closer__headline">Your code review found it.<br /><em>Your repo should remember it.</em></h2>
+          <p className="poster-closer__sub">Local, deterministic, MIT licensed, and built for maintainers who work with more than one coding agent.</p>
           <div className="poster-closer__ctas">
-            <a
-              href="https://github.com/PetriLahdelma/project-spine"
-              className="btn-on-cyan btn-on-cyan--primary"
-              target="_blank"
-              rel="noopener noreferrer"
-              data-ps-event="github_click"
-              data-ps-label="poster closer"
-            >
-              View on GitHub
-            </a>
-            <Link href="/docs" className="btn-on-cyan btn-on-cyan--secondary" data-ps-event="docs_click" data-ps-label="poster closer">
-              Install the CLI
-            </Link>
+            <a className="btn-on-cyan btn-on-cyan--primary" href={REPO}>View on GitHub</a>
+            <Link className="btn-on-cyan btn-on-cyan--secondary" href="/product">See the product model</Link>
           </div>
         </div>
       </section>

@@ -70,10 +70,11 @@ const DORMANT_HOSTED_COMMAND_MODULES = [
 ];
 
 describe("spine --help", () => {
-  it("lists exactly the nine routed commands", async () => {
+  it("lists public learning and compiler commands", async () => {
     const { stdout, exitCode } = await spawn(["--help"]);
     expect(exitCode).toBe(0);
     for (const cmd of [
+      "demo", "learn", "replay", "evaluate", "guard", "context", "report",
       "init",
       "compile",
       "inspect",

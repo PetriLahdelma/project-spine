@@ -16,6 +16,7 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Verify NPM_TOKEN secret is set
         # Fails fast with a clear message rather than letting `npm publish`
@@ -28,13 +29,13 @@ jobs:
             exit 1
           fi
 
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           # Need full history so the release notes can diff against the previous tag.
           fetch-depth: 0
 
       - name: Set up Node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 22
           cache: npm
@@ -85,7 +86,6 @@ jobs:
       - name: Promote public npm dist-tags
         run: |
           VERSION="${GITHUB_REF_NAME#v}"
-          npm dist-tag add "project-spine@${VERSION}" latest
           npm dist-tag add "project-spine@${VERSION}" next
           npm dist-tag add "project-spine@${VERSION}" beta
         env:
@@ -104,7 +104,10 @@ jobs:
             git checkout main
             scripts/generate-changelog.sh > CHANGELOG.md
             git add CHANGELOG.md
-            git commit -m "chore: update CHANGELOG.md for ${GITHUB_REF_NAME}"
+            git commit -m "Keep release history aligned with ${GITHUB_REF_NAME}" \
+              -m "Regenerate the committed release mirror after successful package publication." \
+              -m "Confidence: high" -m "Scope-risk: narrow" \
+              -m "Tested: Release workflow verification and npm publication"
             git push origin main
           fi
 
@@ -133,9 +136,7 @@ jobs:
           echo "path=/tmp/notes.md" >> "$GITHUB_OUTPUT"
 
       - name: Create GitHub Release
-        # v3 runs on Node 24 — v2 was pinned to Node 20, which GitHub deprecated
-        # as an Actions runtime with removal in Sep 2026.
-        uses: softprops/action-gh-release@v3
+        uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
         with:
           body_path: ${{ steps.notes.outputs.path }}
           prerelease: ${{ contains(github.ref_name, 'beta') || contains(github.ref_name, 'rc') }}

@@ -80,3 +80,28 @@ We aim to coordinate on a fix timeline that works for both sides:
 - Medium/low: rolled into the next regular release, noted in the changelog.
 
 Credit is given in the release notes unless you'd prefer otherwise.
+# Repository learning and evaluation boundaries
+
+The 0.10 learning workflow uses strict versioned JSON, scoped literal rules, bounded
+reads and path validation. Historical replay reads Git objects and executes no
+repository scripts. Guardrail proof is checked again when consumed; modified or
+unverifiable evidence cannot silently activate a rule. A missing check is not a
+passing result. Reports escape source content, and candidate descriptions remain
+untrusted data rather than instructions to the host agent.
+
+Literal checks are not a security analysis. They can miss equivalent spellings and
+can match comments or dead code. A verified rule proves the selected literal
+distinguished two historical revisions, not that future code is safe.
+
+`spine evaluate` is different: the caller explicitly supplies `--allow-execution`
+for reviewed agent/evaluator argument arrays. Commands run in temporary clones
+with bounded output/time but **without an OS sandbox**. Programs retain the user's
+OS access and may use network/model credits. Use an independent evaluator outside
+the editable clone and a disposable environment for untrusted code. Only explicitly
+allowed environment names plus PATH/HOME are passed; saved credentials may still be
+discoverable through HOME. This operation is not exposed as an MCP tool.
+
+GitHub evidence import is explicit (`learn --from-pr`), uses authenticated `gh`
+argument arrays and never posts a review or pull request. Review imported content
+before writing a case. PR base/head metadata is not automatically treated as a
+broken/fixed pair.
