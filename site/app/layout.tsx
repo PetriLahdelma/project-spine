@@ -33,12 +33,12 @@ const fraunces = Fraunces({
 export const dynamic = "force-dynamic";
 
 const description =
-  "Project Spine turns reviewed failures into scoped literal guardrails, verifies them against Git history, enforces them in CI, and serves relevant context to coding agents.";
+  "Project Spine preserves reviewed fixes as evidence-backed guardrails, verifies them against Git history, checks the current tree, and serves relevant context to coding agents.";
 const googleAnalyticsId = GOOGLE_ANALYTICS.measurementId;
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://projectspine.dev"),
-  title: "Project Spine · verified repository guardrails from reviewed failures",
+  title: "Project Spine · keep the correction, prove the check",
   description,
   applicationName: "Project Spine",
   authors: [{ name: "Petri Lahdelma", url: "https://github.com/PetriLahdelma" }],
@@ -60,15 +60,15 @@ export const metadata: Metadata = {
     type: "website",
     title: "Project Spine",
     description:
-      "Capture reviewed failures, verify literal guardrails against Git history, enforce them in CI, and serve relevant context to coding agents.",
+      "Preserve reviewed fixes as evidence-backed guardrails, verify them against Git history, and check the current tree.",
     url: "https://projectspine.dev",
-    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Project Spine — turn reviewed failures into verified guardrails" }],
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Project Spine — keep the correction, prove the check" }],
     siteName: "Project Spine",
   },
   twitter: {
     card: "summary_large_image",
     title: "Project Spine",
-    description: "Verified repository guardrails from reviewed failures.",
+    description: "Keep the correction. Prove the check.",
     images: ["/opengraph-image"],
   },
 };

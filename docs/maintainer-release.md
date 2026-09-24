@@ -7,26 +7,33 @@ a stable release needs real external use and verified registry installation.
 
 ## Authentication and provenance
 
-The current workflow requires the repository secret `NPM_TOKEN`, supplied to npm
-as `NODE_AUTH_TOKEN`. A secret existing on GitHub does not prove it has permission
-to publish this package. Verify the npm account's package access and the token's
-package scope, expiry, publishing permissions and applicable 2FA policy.
+The release workflow is prepared for npm
+[trusted publishing](https://docs.npmjs.com/trusted-publishers/). It runs on a
+GitHub-hosted runner with Node 24, npm 11.20 and `id-token: write`; no `NPM_TOKEN`
+is required for `npm publish`. npm accepts this only after a package owner creates
+the matching trust relationship on npmjs.com:
 
-Use npm's current [granular token guidance](https://docs.npmjs.com/about-access-tokens/)
-and [token creation instructions](https://docs.npmjs.com/creating-and-viewing-access-tokens/).
-Legacy classic/Automation tokens are no longer supported. Do not copy a token into
-source, issues, PR descriptions, logs or chat. Store credentials only through the
-repository's secret-management interface or approved tooling.
+- package: `project-spine`
+- repository: `PetriLahdelma/project-spine`
+- workflow file: `release.yml`
+- GitHub environment: none
+- permission: direct publish
 
-[Trusted publishing](https://docs.npmjs.com/trusted-publishers/) is the preferred
-future direction for avoiding a stored publishing token. It is not configured by
-this guide: it requires an authorized npm-side trust relationship and coordinated
-workflow changes, including removing the current mandatory-token check. Do not
-claim it is enabled merely because the workflow has `id-token: write`.
+That npm-side setting cannot be established or verified by repository code alone.
+An OIDC-capable workflow is not proof that the package trust relationship exists.
+The workflow uses npm 11.20 because trusted publishing requires npm 11.5.1 or
+newer, and Node 24 exceeds npm's Node 22.14 minimum. Release dependency caches are
+disabled as recommended by npm.
 
-The workflow publishes with `--provenance` from GitHub Actions. Provenance needs a
-supported build environment; copying that command into an ordinary local terminal
-does not reproduce a CI attestation. Follow [npm's provenance requirements](https://docs.npmjs.com/generating-provenance-statements/).
+Trusted publishing handles `npm publish` and automatically generates provenance
+for a public package from this public repository. The workflow keeps the explicit
+`--provenance` flag so its intent remains visible. Copying that command into a
+local terminal does not reproduce the GitHub OIDC identity or attestation.
+
+OIDC does not authenticate `npm dist-tag add`. Publishing with `--tag beta` assigns
+`beta` atomically. Promoting the same version to `next` is a separate maintainer
+operation through the token-authenticated `npm dist-tags` workflow or an equivalent
+manual command with a compatible granular token. Never move `latest` for a beta.
 
 ## Prepare and publish
 
@@ -45,13 +52,16 @@ does not reproduce a CI attestation. Follow [npm's provenance requirements](http
    git push origin "refs/tags/v$SPINE_RELEASE_VERSION"
    ```
 
-5. Follow the Release workflow through publication, dist-tag updates, changelog
-   handling and GitHub Release creation. Do not equate a successful build with a
-   successful publication.
-6. Verify the exact registry version, `beta`/`next` tags and provenance, and run the
+5. Follow all three Release jobs. `package` creates the tested tarball, `publish`
+   verifies or publishes that exact integrity, and `github-release` attaches the
+   tarball and generated changelog. Do not equate a successful package job or
+   GitHub prerelease with successful npm publication.
+6. Verify the exact registry version, `beta` tag and provenance. Promote `next`
+   separately when policy requires it. Then run the
    [post-publish smoke workflow](../.github/workflows/post-publish-smoke.yml) for
-   that version if it did not run automatically. It exercises the demo plus the
-   original init/compile path. Keep the stable `latest` tag unchanged for a beta.
+   that version if it did not run automatically. It verifies the exact installed
+   version, the correction command and its execution-consent gate, the offline demo,
+   and the original init/compile path. Keep `latest` unchanged for a beta.
 
 Do not force-move a published version tag or reuse an npm version. Record why a
 release was made and what was tested in the release commit/notes.
@@ -62,25 +72,32 @@ Read the exact failed step before retrying. A package-not-found response on uplo
 can be an access/configuration problem; it is not proof that the package name is
 available. Check authentication and package access without printing credentials.
 Fix the identified cause, then check whether the version was published despite a
-later workflow failure before deciding how to resume. Blindly rerunning an npm
-publish after a partial success will not repair downstream changelog/release steps.
+later workflow failure before deciding how to resume. On retry, the workflow packs
+the tagged commit again and compares its name, version and SHA-512 integrity with
+the registry. A matching package skips the immutable publish operation; a mismatch
+fails loudly. It never treats an arbitrary registry response as success.
 
-GitHub prereleases may provide a tested package tarball while registry access is
-being repaired. Label the distribution accurately: a GitHub artifact is not an npm
-provenance-attested registry publication. Install and smoke-test the actual public
-download before advertising it. The registry and GitHub release can have different
-availability; consult their live state rather than assuming they match.
+The package job uploads the exact tested tarball as a workflow artifact before npm
+authentication is attempted. The GitHub release job also attaches it even when npm
+publication fails, and records that the registry was not verified. A GitHub asset
+is not an npm provenance-attested registry publication. Install and smoke-test the
+actual registry download before advertising npm availability.
+
+## Changelog source of truth
+
+Git tags and commit history are the machine source for
+`scripts/generate-changelog.sh`; GitHub Releases are the canonical human view used
+by the website. Every release run attaches `CHANGELOG.generated.md` and derives the
+release body from that generated file. The committed `CHANGELOG.md` is a reviewed
+snapshot and may be refreshed through a normal pull request, but the release job
+does not rewrite or push it.
 
 ## Compatibility with protected main
 
-The current workflow's **Commit CHANGELOG.md back to main** step pushes directly
-to `main` *after* publishing to npm. Requiring PRs/status checks for every main
-update can reject that push, leaving a published package with an unfinished workflow.
-
-Before enabling PR-only protection, change this step to a reviewed changelog PR or
-remove the direct write and publish the generated changelog as a release artifact.
-Do not solve the mismatch by silently granting broad bot bypass permissions. This
-guide documents the dependency; it does not change branch settings or release behavior.
+The release workflow never commits or pushes to `main`. Generated release files
+are workflow and GitHub Release artifacts, so PR-only branch protection needs no
+bot bypass. Changes to the committed changelog still follow the normal reviewed PR
+path.
 
 CI provides stable aggregate checks named `gate` and `security-gate`; the compiler
 drift workflow reports `drift`. Prefer these stable names over conditional farm or

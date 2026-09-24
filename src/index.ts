@@ -21,5 +21,7 @@ export { renderWarningsJson } from "./reporters/warnings.js";
 export { renderAllExports, writeAllExports, ALL_TARGETS } from "./exporters/index.js";
 export * from "./learning/index.js";
 export * from "./evaluation/index.js";
+export * from "./corrections/index.js";
 export { fetchPullRequestEvidence, proposalFromPullRequest } from "./github/index.js";
 export { runLearningDemo } from "./demo.js";
+export { createCorrectionDemo } from "./correction-demo.js";

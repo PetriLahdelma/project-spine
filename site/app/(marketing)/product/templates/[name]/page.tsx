@@ -213,7 +213,7 @@ export async function generateMetadata({
       title,
       description,
       siteName: "Project Spine",
-      images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Project Spine — turn reviewed failures into verified guardrails" }],
+      images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Project Spine — keep the correction, prove the check" }],
     },
     twitter: {
       card: "summary_large_image",

@@ -10,6 +10,20 @@ The primary job is to move a visitor from a familiar failure — a useful correc
 4. Enforce verified rules in CI and serve file-relevant context through CLI and MCP.
 5. Generate a local HTML report for review.
 
+The separate correction pilot preserves executable proof when a literal rule is
+insufficient. It captures user-reviewed, dependency-free JavaScript built-in test
+bytes plus an explicit source closure from a fixed commit. Verification transplants
+those recorded bytes onto the broken and fixed revisions and runs them in a
+digest-pinned Docker image with no network, a read-only root filesystem, a non-root
+user, and bounded resources. Execution requires explicit consent. Current-tree
+checks revalidate the same controls.
+
+Captured correction context is labelled candidate until controlled execution fails
+on the broken revision and passes on the fixed revision. The pilot does not infer or
+generate tests, repair failing tests, claim general bug prevention, or publish an
+agent-outcome benchmark. Its first slice is dependency-free JavaScript using
+`node:test`.
+
 An optional evaluation path can run a configured agent or evaluator with
 `spine evaluate <case-id> --adapter adapter.json --allow-execution --runs 1 --json`.
 Evaluation is separate from historical replay: it executes the provided adapter
@@ -18,11 +32,11 @@ or incur provider costs.
 
 The current learning workflow is the v0.10 beta. The source quickstart targets the default branch and includes the local demo. Do not claim an npm release is available before its publication has been verified.
 
-The site must not claim repository immunity, guaranteed prevention, autonomous semantic rule inference, agent reruns, adoption figures, benchmark results, cost savings, or a hosted fleet product. A passing replay means that a literal rule failed on a recorded broken commit and passed on a recorded correction.
+The site must not claim repository immunity, guaranteed prevention, autonomous semantic rule or test inference, real external case studies, adoption figures, benchmark results, cost savings, or a hosted fleet product. A passing replay means that a literal rule failed on a recorded broken commit and passed on a recorded correction. A verified correction means the recorded test failed and passed under the documented execution controls; it does not establish broader correctness.
 
 Existing compile, drift, templates, token, and export capabilities remain visible as supported secondary workflows.
 
-Primary conversion: run the source build and local demo. Secondary conversions: inspect GitHub, read the product boundaries, open an issue, and join a technical discussion.
+Primary conversion: run the source build and local literal demo. Secondary conversions: inspect GitHub, read the product boundaries, propose a correction pilot through `.github/ISSUE_TEMPLATE/learning_case.md`, open an issue, and join a technical discussion.
 
 ## Release promotion note
 

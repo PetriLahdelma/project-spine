@@ -82,7 +82,7 @@ export const WELL_KNOWN_HEADERS: Record<string, string> = {
 
 export const HOME_MARKDOWN = `---
 title: Project Spine
-description: Verified repository guardrails from reviewed failures.
+description: Keep reviewed corrections as evidence-backed repository guardrails.
 image: ${SITE}/opengraph-image
 ---
 
@@ -93,7 +93,13 @@ captures reviewed failures as explicit evidence, records maintainer-authored lit
 guardrails, verifies them against recorded Git history, and makes verified
 rules available to CI and coding agents.
 
-## Forthcoming beta source build
+The source-available correction pilot preserves user-reviewed, dependency-free
+JavaScript \`node:test\` bytes plus an explicit source-file list. It pairs the
+same reviewed test with each revision's own source in constrained, digest-pinned
+Docker containers. Linux and macOS with local Docker are supported. Check the
+release's distribution status before assuming npm availability.
+
+## Beta source build
 
 \`\`\`bash
 git clone --branch main https://github.com/PetriLahdelma/project-spine.git
@@ -157,6 +163,12 @@ Project Spine is an offline-first Node/TypeScript CLI. It records explicit
 failure evidence, verifies literal rules against Git objects, checks diffs in
 CI, and serves file-relevant context through a local MCP server. Its existing
 compile and drift surfaces remain available.
+
+The source-available correction pilot is a separate executable path for reviewed,
+dependency-free JavaScript \`node:test\` bytes and explicit source files. It
+requires local Docker on Linux/macOS and explicit execution consent. Check each
+release's distribution status for npm availability. No-execution correction
+context is always candidate; successful controls return verified guidance.
 
 ## Important URLs
 

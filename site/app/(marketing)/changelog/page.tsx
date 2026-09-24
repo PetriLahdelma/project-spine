@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     siteName: "Project Spine",
     title: "Changelog · Project Spine",
     description: "Readable release notes pulled from GitHub.",
-    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Project Spine — turn reviewed failures into verified guardrails" }],
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Project Spine — keep the correction, prove the check" }],
   },
 };
 

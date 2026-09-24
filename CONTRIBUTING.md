@@ -11,6 +11,12 @@ context to agents. The optional evaluator runs explicitly configured programs.
 Read the [learning guide](docs/learning.md) and [evaluation contract](docs/evaluation.md)
 for the boundaries; the original compiler specification in PRD.md is historical.
 
+The [executable correction pilot](docs/corrections.md) is separate: it preserves a
+reviewer-approved Node built-in test and runs it in restricted Docker containers
+against historical and current source. No model account is required. Start with a
+real correction you can share, or a counterexample that exposes a brittle check;
+see the [pilot goals and measurement rules](docs/growth-plan.md).
+
 ## Choose a starting point
 
 | Task | Starting point |
@@ -65,6 +71,7 @@ No publishing credentials should be added to a contributor's environment or PR.
 | Failure-case schema and evidence storage | [src/learning/model.ts](src/learning/model.ts), [storage.ts](src/learning/storage.ts) |
 | Historical replay, guard, context and HTML reports | [src/learning/engine.ts](src/learning/engine.ts) |
 | Configured-agent evaluation and controls | [src/evaluation/](src/evaluation/) |
+| Executable correction capture and container controls | [src/corrections/](src/corrections/), [correction quickstart](docs/corrections.md) |
 | GitHub PR evidence import | [src/github/](src/github/) |
 | CLI commands and offline demo | [src/commands/learning.ts](src/commands/learning.ts), [src/demo.ts](src/demo.ts) |
 | Agent tools and public library exports | [src/mcp/](src/mcp/), [src/index.ts](src/index.ts) |
@@ -109,6 +116,20 @@ npm run build
 
 The test harness builds the CLI when necessary. Tests that invoke Git use
 temporary repositories; keep fixtures isolated from the contributor's checkout.
+
+The executable correction tests are opt-in. On Linux/macOS with local Docker,
+explicitly pull the reviewed image from the [correction guide](docs/corrections.md),
+then run them serially so container-cleanup assertions are not competing with
+another correction run:
+
+```sh
+SPINE_DOCKER_TEST=1 npm test -- --maxWorkers=1 src/corrections src/correction-demo.test.ts
+node --test .github/scripts/release-registry-state.test.mjs
+```
+
+Do not run another Spine correction command during that container suite. It
+includes a real 30-second timeout case. The default unit suite does not run Docker;
+CI has a separate disposable hosted-runner job for these controls.
 
 For packaging, exports or release scripts, also run:
 

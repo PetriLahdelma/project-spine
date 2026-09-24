@@ -23,6 +23,7 @@ const main = defineCommand({
     description: `Project Spine — ${TAGLINE}.`,
   },
   subCommands: {
+    correction: () => import("./commands/correction.js").then((m) => m.default),
     demo: () => import("./commands/learning.js").then((m) => m.demoCommand),
     learn: () => import("./commands/learning.js").then((m) => m.learnCommand),
     replay: () => import("./commands/learning.js").then((m) => m.replayCommand),

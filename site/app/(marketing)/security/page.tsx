@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     siteName: "Project Spine",
     title: "Security · Project Spine",
     description: "How Project Spine handles repository evidence, Git objects, source code, and website data.",
-    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Project Spine — turn reviewed failures into verified guardrails" }],
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Project Spine — keep the correction, prove the check" }],
   },
 };
 
@@ -81,6 +81,12 @@ export default function SecurityPage() {
         <li>
           <strong>Rules are literal and reviewable.</strong>
           <span>The beta evaluates scoped require-text and forbid-text checks. It does not execute code from evidence or ask a remote model to decide whether a diff passes.</span>
+        </li>
+        <li>
+          <strong>Executable corrections require explicit consent.</strong>
+          <span>
+            The source-available correction pilot runs only user-reviewed, captured test and source bytes after <code>--allow-execution</code>. Execution uses a digest-pinned Docker image with networking disabled, a read-only root filesystem, a non-root user, and bounded resources. Current-tree checks revalidate those controls; no-execution correction context is always labelled candidate.
+          </span>
         </li>
         <li>
           <strong>Agent evaluation is an explicit execution boundary.</strong>

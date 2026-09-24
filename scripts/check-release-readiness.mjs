@@ -82,6 +82,7 @@ check("ci node matrix", ci.includes("node: [22, 24]"), "CI must cover active Nod
 check("ci pack check", ci.includes("npm run pack:check"), "CI must validate npm package surface");
 check("ci release readiness", ci.includes("npm run release:readiness"), "CI must run release readiness gate");
 check("ci stable readiness", ci.includes("npm run stable:check"), "CI must run stable readiness gate");
+check("ci release verifier tests", ci.includes("release-registry-state.test.mjs"), "CI must test immutable release verification");
 check("ci site build", ci.includes("npm run build") && ci.includes("working-directory: site"), "CI must build marketing site");
 check("ci desktop verify", ci.includes("npm run verify") && ci.includes("working-directory: apps/desktop"), "CI must verify desktop wrapper");
 
@@ -89,13 +90,30 @@ const drift = readText(".github/workflows/drift.yml");
 check("drift workflow", drift.includes("drift check --repo . --fail-on any"), "drift check must fail on any drift");
 
 const release = readText(".github/workflows/release.yml");
-check("release token guard", release.includes("Verify NPM_TOKEN secret is set"), "release must fail fast when NPM_TOKEN is absent");
+const releaseVerifier = readText(".github/scripts/release-registry-state.mjs");
 check("release package tag guard", release.includes("Verify tag matches package.json"), "release tag must match package version");
 check("release readiness gate", release.includes("npm run release:readiness"), "release workflow must run readiness check");
 check("release stable gate", release.includes("npm run stable:check"), "release workflow must run stable readiness check");
-check("release provenance permission", release.includes("id-token: write"), "npm provenance needs OIDC token permission");
-check("release provenance publish", release.includes("npm publish --provenance --tag beta --access public"), "npm publish must use provenance");
-check("release dist-tag promotion", release.includes("npm dist-tag add"), "release must promote public dist-tags");
+check("release verifier tests", release.includes("release-registry-state.test.mjs"), "release must test its registry integrity verifier");
+check("release hosted Node 24", release.includes("node-version: 24"), "trusted publishing must run on hosted Node 24");
+check("release npm 11", release.includes("npm install --global npm@11.20.0"), "trusted publishing needs npm >=11.5.1");
+check("release cache disabled", release.includes("package-manager-cache: false"), "release dependency caches must be disabled");
+check("release provenance permission", release.includes("id-token: write"), "trusted publishing needs OIDC token permission");
+check(
+  "release provenance publish",
+  release.includes("npm publish") && release.includes("--provenance --tag beta --access public"),
+  "npm publish must use provenance and assign beta atomically",
+);
+check("release has no token requirement", !release.includes("NPM_TOKEN"), "trusted publishing must not require a stored npm token");
+check("release exact tarball", release.includes("npm pack --json") && release.includes("release-registry-state.mjs"), "release must publish and verify one packed tarball");
+check("release retry integrity", release.includes("--require-published"), "retries must verify the registry tarball integrity");
+check(
+  "release local integrity",
+  releaseVerifier.includes('createHash("sha512")') && releaseVerifier.includes("basename(packed.filename)"),
+  "release verifier must hash local bytes and reject filename traversal",
+);
+check("release bundle artifact", release.includes("CHANGELOG.generated.md") && release.includes("actions/upload-artifact@"), "release must preserve generated changelog and tarball artifacts");
+check("release protected main", !release.includes("git push origin main"), "release must not push directly to protected main");
 
 const security = readText(".github/workflows/security.yml");
 check("security audit", security.includes("npm audit --audit-level=high"), "security workflow must run high-severity npm audit");
@@ -104,6 +122,10 @@ check("secret scan", security.toLowerCase().includes("gitleaks"), "security work
 const smoke = readText(".github/workflows/post-publish-smoke.yml");
 check("post publish smoke package", smoke.includes("project-spine"), "post-publish smoke must target project-spine");
 check("post publish smoke compile", smoke.includes("spine compile"), "post-publish smoke must compile through installed package");
+check("post publish requires registry", smoke.includes("after bounded retries") && !smoke.includes("Skip smoke"), "post-publish smoke must fail when npm visibility is missing");
+check("post publish exact version", smoke.includes("installed package/CLI version mismatch"), "post-publish smoke must verify the installed package and CLI version");
+check("post publish correction help", smoke.includes("Capture and prove reviewer-approved executable regression evidence"), "post-publish smoke must verify the installed correction command");
+check("post publish correction consent", smoke.includes("Correction demo requires explicit --allow-execution"), "post-publish smoke must prove correction execution requires consent");
 
 const failures = checks.filter((item) => !item.passed);
 if (failures.length > 0) {

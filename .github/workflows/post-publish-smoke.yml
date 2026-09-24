@@ -53,37 +53,67 @@ jobs:
 
           echo "version=$version" >> "$GITHUB_OUTPUT"
 
-      - name: Check package visibility on npm
-        id: registry
+      - name: Require exact package visibility on npm
         env:
           VERSION: ${{ steps.pkg.outputs.version }}
         run: |
-          if npm view "project-spine@$VERSION" version >/dev/null 2>&1; then
-            echo "available=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "available=false" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Skip smoke because package is not published
-        if: steps.registry.outputs.available != 'true'
-        run: |
-          echo "project-spine@${{ steps.pkg.outputs.version }} is not on npm."
-          echo "Skipping npm-registry smoke test."
+          node --input-type=module <<'NODE'
+          import { setTimeout as delay } from "node:timers/promises";
+          const expected = process.env.VERSION;
+          const url = `https://registry.npmjs.org/project-spine/${encodeURIComponent(expected)}`;
+          let lastFailure = "not found";
+          for (let attempt = 1; attempt <= 5; attempt += 1) {
+            try {
+              const response = await fetch(url, {
+                headers: { accept: "application/json" },
+                signal: AbortSignal.timeout(10_000),
+              });
+              if (response.ok) {
+                const metadata = await response.json();
+                if (metadata.name !== "project-spine" || metadata.version !== expected) {
+                  throw new Error(`registry returned ${metadata.name}@${metadata.version}, expected project-spine@${expected}`);
+                }
+                console.log(`registry exposed project-spine@${expected} (${attempt}/5)`);
+                process.exit(0);
+              }
+              const body = (await response.text()).slice(0, 300);
+              lastFailure = `HTTP ${response.status}: ${body}`;
+              if (response.status < 500 && response.status !== 404 && response.status !== 429) break;
+            } catch (error) {
+              lastFailure = error instanceof Error ? error.message : String(error);
+            }
+            if (attempt < 5) await delay(3000);
+          }
+          throw new Error(`project-spine@${expected} is not available from npm after bounded retries: ${lastFailure}`);
+          NODE
 
       - name: Install and compile from npm package
-        if: steps.registry.outputs.available == 'true'
         env:
           VERSION: ${{ steps.pkg.outputs.version }}
         run: |
           tmp="$(mktemp -d)"
           cd "$tmp"
-          npm init -y
-          npm install "project-spine@$VERSION"
-          npx spine --version
-          npx spine --help
-          npx spine demo --json
-          npx spine init --template saas-marketing
-          npx spine compile --brief ./brief.md --repo . --template saas-marketing --name "npm-smoke" --version "$VERSION"
+          npm init -y >/dev/null
+          npm install --ignore-scripts "project-spine@$VERSION"
+          INSTALLED_VERSION="$(node -p "require('./node_modules/project-spine/package.json').version")"
+          CLI_VERSION="$(npx --no-install spine --version)"
+          if [ "$INSTALLED_VERSION" != "$VERSION" ] || [ "$CLI_VERSION" != "$VERSION" ]; then
+            echo "::error::installed package/CLI version mismatch: package=$INSTALLED_VERSION cli=$CLI_VERSION expected=$VERSION"
+            exit 1
+          fi
+          npx --no-install spine --help
+          npx --no-install spine correction --help > correction-help.log 2>&1
+          grep -F "Capture and prove reviewer-approved executable regression evidence" correction-help.log
+          if npx --no-install spine correction demo \
+            --image "node:24-alpine@sha256:0000000000000000000000000000000000000000000000000000000000000000" \
+            > correction-no-consent.log 2>&1; then
+            echo "::error::correction demo executed without explicit consent"
+            exit 1
+          fi
+          grep -F "Correction demo requires explicit --allow-execution" correction-no-consent.log
+          npx --no-install spine demo --json
+          npx --no-install spine init --template saas-marketing
+          npx --no-install spine compile --brief ./brief.md --repo . --template saas-marketing --name "npm-smoke" --version "$VERSION"
           test -f .project-spine/spine.json
           test -f AGENTS.md
           test -f CLAUDE.md

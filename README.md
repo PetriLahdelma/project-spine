@@ -20,10 +20,25 @@ Project Spine is a local TypeScript CLI, library, GitHub Action and MCP server.
 It keeps the source of each rule and checks its historical evidence before use.
 The existing context compiler, design-token support and drift checks remain available.
 
+## Keep the correction, not just the comment
+
+The executable-check pilot adds `spine correction`: capture a reviewer-approved
+Node built-in test from the fixed commit, prove that the same test fails on the
+broken code and passes on the correction, then check later changes in restricted
+Docker containers. No automatic test generation or model calls are involved.
+
+Read the [correction quickstart](docs/corrections.md) for the synthetic behavioral
+demo, explicit execution consent and the deliberately narrow dependency-free
+JavaScript scope. The literal workflow below remains Docker-free and does not
+execute repository code. [Bring a real correction](https://github.com/PetriLahdelma/project-spine/issues/new?template=learning_case.md)
+to help evaluate the pilot; external adoption and improved agent outcomes have
+not yet been established.
+
 ## See the complete loop
 
 The repository contains the **0.10 beta implementation**. Build reproducibly from
-source with Node 22+ and Git. Published beta packages are listed on the releases page.
+source with Node 22.12+ (or Node 24) and Git. Check each release's distribution
+status before installing: a GitHub prerelease can exist before npm publication.
 
 ```sh
 git clone --branch main https://github.com/PetriLahdelma/project-spine.git

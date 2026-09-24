@@ -11,6 +11,9 @@ export default defineConfig({
     // them by default and would run each test twice — once against the real
     // repo and once against a stale copy. Exclude them wholesale.
     exclude: [
+      // Release verifier uses Node's built-in runner and is exercised explicitly
+      // by the shared CI action and release package job, not by Vitest.
+      ".github/scripts/release-registry-state.test.mjs",
       "**/node_modules/**",
       "**/dist/**",
       "**/.claude/worktrees/**",
