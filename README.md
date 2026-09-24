@@ -2,7 +2,7 @@
 
 # Project Spine
 
-**Turn reviewed failures into verified repository guardrails.**
+**Keep the correction. Prove the check.**
 
 [![CI](https://github.com/PetriLahdelma/project-spine/actions/workflows/ci.yml/badge.svg)](https://github.com/PetriLahdelma/project-spine/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -36,17 +36,17 @@ not yet been established.
 
 ## See the complete loop
 
-The repository contains the **0.10 beta implementation**. Build reproducibly from
-source with Node 22.12+ (or Node 24) and Git. Check each release's distribution
-status before installing: a GitHub prerelease can exist before npm publication.
+Run the verified GitHub Release beta artifact with Node 22.12+ (or Node 24) and
+Git. The command, version, literal demo and correction demo were checked against
+the downloaded asset digest. The install uses the network; the literal demo itself
+needs no account, model key or Docker. npm registry publication is a separate
+release step and is not claimed here.
 
 ```sh
-git clone --branch main https://github.com/PetriLahdelma/project-spine.git
-cd project-spine
-npm ci
-npm run build
-node dist/cli.js demo
+npx --yes --package=https://github.com/PetriLahdelma/project-spine/releases/download/v0.10.0-beta.3/project-spine-0.10.0-beta.3.tgz spine demo
 ```
+
+[GitHub Release asset](https://github.com/PetriLahdelma/project-spine/releases/download/v0.10.0-beta.3/project-spine-0.10.0-beta.3.tgz) · SHA-256 `ff0d733988e87cd0ee75029eea4599fd214c171896a3a40862d89b87928770a1`
 
 The offline demo creates real Git commits in a new fixture repository. It records a
 candidate rule, proves that the broken revision fails and the correction passes,
@@ -57,6 +57,16 @@ This is a labeled synthetic fixture, not an AI benchmark or a customer incident.
 Historical replay checks literal rules; it does not rerun an agent. The optional
 [evaluation adapter](docs/evaluation.md) runs configured agents in separate local
 clones and reports measured outcomes with and without guidance.
+
+Contributors can build the maintained source instead:
+
+```sh
+git clone --branch main https://github.com/PetriLahdelma/project-spine.git
+cd project-spine
+npm ci
+npm run build
+node dist/cli.js demo
+```
 
 ## Learn from your own correction
 
@@ -107,8 +117,7 @@ The [GitHub Action](action.yml) builds the same pinned source you review. It use
 read-only repository permissions; fetch history and commit the learning ledger.
 [CI setup and exit codes](docs/learning.md#ci).
 
-For agents, run `spine-mcp` and use `spine_context` before edits, `spine_guard`
-afterward. All integrations use the same local evidence. [MCP setup](docs/mcp.md).
+For agents, configure `npx --yes --package=https://github.com/PetriLahdelma/project-spine/releases/download/v0.10.0-beta.3/project-spine-0.10.0-beta.3.tgz spine-mcp`; no persistent global install is required. Use `spine_context` before edits and `spine_guard` afterward. All integrations use the same local evidence. [MCP setup](docs/mcp.md).
 
 ## Still a context compiler
 

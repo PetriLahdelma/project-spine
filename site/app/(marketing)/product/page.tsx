@@ -126,7 +126,7 @@ verified rule → CI guard → file-relevant context → MCP`}</code></pre>
       </ul>
 
       <div className="cta-row">
-        <Link href="/docs">Run the source build →</Link>
+        <Link href="/docs">Run the beta demo →</Link>
         <a href={REPO}>Read the code →</a>
         <a href={`${REPO}/issues`}>Share a failure case →</a>
       </div>

@@ -30,17 +30,19 @@ Evaluation is separate from historical replay: it executes the provided adapter
 inside temporary clones, has no OS sandbox, and may use the network, call models,
 or incur provider costs.
 
-The current learning workflow is the v0.10 beta. The source quickstart targets the default branch and includes the local demo. Do not claim an npm release is available before its publication has been verified.
+The current learning workflow is the v0.10 beta. The primary quickstart selects the verified GitHub Release tarball directly and runs the Docker-free literal demo. The public command, version, literal demo, correction demo, and downloaded asset digest were checked before activation. It requires Node 22.12+ and Git; the install uses the network, while the demo needs no account or model key. npm registry publication is a separate release step and must not be implied by GitHub artifact availability.
 
 The site must not claim repository immunity, guaranteed prevention, autonomous semantic rule or test inference, real external case studies, adoption figures, benchmark results, cost savings, or a hosted fleet product. A passing replay means that a literal rule failed on a recorded broken commit and passed on a recorded correction. A verified correction means the recorded test failed and passed under the documented execution controls; it does not establish broader correctness.
 
 Existing compile, drift, templates, token, and export capabilities remain visible as supported secondary workflows.
 
-Primary conversion: run the source build and local literal demo. Secondary conversions: inspect GitHub, read the product boundaries, propose a correction pilot through `.github/ISSUE_TEMPLATE/learning_case.md`, open an issue, and join a technical discussion.
+Primary conversion: run the one-command GitHub beta artifact literal demo. Secondary conversions: use the contributor source build, inspect GitHub, read the product boundaries, propose a correction pilot through `.github/ISSUE_TEMPLATE/learning_case.md`, open an issue, and join a technical discussion.
 
 ## Release promotion note
 
-Source links and quickstarts target `main`. Publish beta packages through the
-existing release workflow, verify registry installation and preserve the stable
-`latest` tag. Production copy must continue distinguishing historical replay from
-executable evaluation and illustrative preview from measured results.
+The primary quickstart targets the exact `v0.10.0-beta.3` GitHub Release asset.
+GitHub artifact availability does not establish npm publication. Publish npm beta
+packages through the trusted release workflow, verify registry installation and
+preserve the stable `latest` tag before adding any npm install claim. Production
+copy must continue distinguishing historical replay from executable evaluation and
+illustrative preview from measured results.

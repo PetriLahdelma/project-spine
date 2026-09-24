@@ -11,14 +11,16 @@ commit is broken, generate an assertion from a review, or measure agent performa
 
 ## First try
 
-Build the maintained source until the release notes confirm npm publication:
+The fastest Docker-free introduction is the literal replay demo from the verified
+GitHub Release beta artifact. The install uses the network and requires Node 22.12+
+(or Node 24) and Git. It needs no account or model key. npm registry publication is
+a separate release step and is not claimed here.
 
 ```sh
-git clone https://github.com/PetriLahdelma/project-spine.git
-cd project-spine
-npm ci
-npm run build
+npx --yes --package=https://github.com/PetriLahdelma/project-spine/releases/download/v0.10.0-beta.3/project-spine-0.10.0-beta.3.tgz spine demo
 ```
+
+[GitHub Release asset](https://github.com/PetriLahdelma/project-spine/releases/download/v0.10.0-beta.3/project-spine-0.10.0-beta.3.tgz) · SHA-256 `ff0d733988e87cd0ee75029eea4599fd214c171896a3a40862d89b87928770a1`
 
 The executable pilot targets Linux and macOS with a local Unix-socket Docker
 daemon (including Docker Desktop). Native Windows Docker contexts are not yet
@@ -30,7 +32,9 @@ pins the official Node 22 Alpine image used for the pilot's verification:
 ```sh
 SPINE_CHECK_IMAGE='node@sha256:c610fcdfb1d5b4740dd70c284ed3cb16bb857e0f7166196e36a5501df7a3aa32'
 docker pull "$SPINE_CHECK_IMAGE"
-node dist/cli.js correction demo --image "$SPINE_CHECK_IMAGE" --allow-execution
+npx --yes \
+  --package=https://github.com/PetriLahdelma/project-spine/releases/download/v0.10.0-beta.3/project-spine-0.10.0-beta.3.tgz \
+  spine correction demo --image "$SPINE_CHECK_IMAGE" --allow-execution
 ```
 
 The demo is **synthetic**. It creates a new Git repository containing a tenant
@@ -38,6 +42,16 @@ filter bug, its correction and a behavioral test. It is not a customer case stud
 an AI-agent benchmark or a security guarantee. Keep the printed fixture directory
 to inspect or experiment with it. The original `spine demo` remains available for
 a faster, Docker-free demonstration of literal replay.
+
+Contributors who need a persistent checkout can build the maintained source:
+
+```sh
+git clone https://github.com/PetriLahdelma/project-spine.git
+cd project-spine
+npm ci
+npm run build
+node dist/cli.js demo
+```
 
 ## Use a correction from your repository
 

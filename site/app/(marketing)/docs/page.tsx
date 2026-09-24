@@ -5,7 +5,7 @@ const REPO = "https://github.com/PetriLahdelma/project-spine";
 
 export const metadata: Metadata = {
   title: "Docs · Project Spine",
-  description: "Build Project Spine from source and run the repository learning workflow locally.",
+  description: "Run the Project Spine GitHub beta artifact demo, then use the literal and executable correction workflows locally.",
   alternates: { canonical: "https://projectspine.dev/docs" },
 };
 
@@ -16,19 +16,27 @@ export default function DocsPage() {
         <p className="eyebrow">Docs</p>
         <h1>Run the learning loop locally.</h1>
         <p className="lede">
-          Build the v0.10 beta from the maintained source and run the complete learning workflow. Development requires Node 22.12 or newer (or Node 24) and Git. The existing compiler and drift workflows remain supported.
+          Start with one verified GitHub Release artifact command. Node 22.12 or newer (or Node 24) and Git are required. The install uses the network; the literal demo needs no account, model key, or Docker. npm registry publication is a separate release step and is not claimed here.
         </p>
       </header>
 
-      <h2>Source build</h2>
+      <h2>One-command literal demo</h2>
+      <pre tabIndex={0}><code>{`npx --yes --package=https://github.com/PetriLahdelma/project-spine/releases/download/v0.10.0-beta.3/project-spine-0.10.0-beta.3.tgz spine demo`}</code></pre>
+      <p>
+        This installs the beta tarball from its GitHub Release, then creates a temporary Git fixture for the <code>tenant-query</code> case, verifies its historical correction, catches a reintroduced defect, and writes a local HTML report. It does not call a model or execute the fixture code.
+      </p>
+      <p>
+        <a href={`${REPO}/releases/download/v0.10.0-beta.3/project-spine-0.10.0-beta.3.tgz`}>GitHub Release asset</a>{" "}
+        · SHA-256 <code className="artifact-checksum">ff0d733988e87cd0ee75029eea4599fd214c171896a3a40862d89b87928770a1</code>
+      </p>
+
+      <h2>Contributor source build</h2>
       <pre tabIndex={0}><code>{`git clone --branch main https://github.com/PetriLahdelma/project-spine.git
 cd project-spine
 npm ci
 npm run build
 node dist/cli.js demo`}</code></pre>
-      <p>
-        <code>demo</code> creates a temporary Git fixture for the <code>tenant-query</code> case, verifies its historical correction, catches a reintroduced defect, and writes a local HTML report. It does not call a model or execute the fixture code.
-      </p>
+      <p>Use the source path when you plan to modify or inspect the implementation. The command examples below use <code>node dist/cli.js</code> from this built checkout; an installed release exposes the equivalent <code>spine</code> command.</p>
 
       <h2>Run a case</h2>
       <pre tabIndex={0}><code>{`# Import an explicit local case
@@ -93,8 +101,10 @@ node dist/cli.js report --format html --out report.html`}</code></pre>
       <pre tabIndex={0}><code>{`# Pre-pull and review the exact image digest first.
 docker pull <image@sha256:digest>
 
-# Fastest behavioral preview: a synthetic fixture.
-node dist/cli.js correction demo \
+# Synthetic behavioral preview using the same GitHub beta artifact.
+npx --yes \
+  --package=https://github.com/PetriLahdelma/project-spine/releases/download/v0.10.0-beta.3/project-spine-0.10.0-beta.3.tgz \
+  spine correction demo \
   --image <image@sha256:digest> \
   --allow-execution
 
