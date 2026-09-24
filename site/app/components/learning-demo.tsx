@@ -5,7 +5,7 @@ import { useState } from "react";
 const stages = [
   {
     id: "evidence",
-    label: "01 · Evidence",
+    label: "Evidence",
     command: "spine learn --case failure.json",
     status: "case tenant-query imported",
     lines: [
@@ -16,7 +16,7 @@ const stages = [
   },
   {
     id: "rule",
-    label: "02 · Guardrail",
+    label: "Guardrail",
     command: "spine learn --case failure.json",
     status: "candidate rule recorded",
     lines: [
@@ -27,7 +27,7 @@ const stages = [
   },
   {
     id: "replay",
-    label: "03 · Replay",
+    label: "Replay",
     command: "spine replay tenant-query",
     status: "historical replay verified",
     lines: [
@@ -38,7 +38,7 @@ const stages = [
   },
   {
     id: "enforce",
-    label: "04 · Enforce",
+    label: "Enforce",
     command: "spine guard --diff HEAD~1",
     status: "0 violations · 1 verified rule checked",
     lines: [
@@ -85,32 +85,36 @@ export function LearningDemo() {
               focusTab((index + direction + stages.length) % stages.length);
             }}
           >
-            {item.label}
+            <span className="learning-demo__step" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
+            <span>{item.label}</span>
           </button>
         ))}
       </div>
-      {stages.map((stage, index) => (
-        <div
-          key={stage.id}
-          className="learning-demo__panel"
-          role="tabpanel"
-          id={`learning-panel-${stage.id}`}
-          aria-labelledby={`learning-tab-${stage.id}`}
-          hidden={active !== index}
-          tabIndex={0}
-        >
-          <p className="learning-demo__command"><span>$</span> {stage.command}</p>
-          <p className="learning-demo__status"><span>✓</span> {stage.status}</p>
-          <dl>
-            {stage.lines.map(([key, value]) => (
-              <div key={key}>
-                <dt>{key}</dt>
-                <dd>{value}</dd>
-              </div>
-            ))}
-          </dl>
-        </div>
-      ))}
+      <div className="learning-demo__panels">
+        {stages.map((stage, index) => (
+          <div
+            key={stage.id}
+            className="learning-demo__panel"
+            role="tabpanel"
+            id={`learning-panel-${stage.id}`}
+            aria-labelledby={`learning-tab-${stage.id}`}
+            aria-hidden={active !== index}
+            inert={active !== index}
+            tabIndex={active === index ? 0 : -1}
+          >
+            <p className="learning-demo__command"><span aria-hidden="true">$</span><code>{stage.command}</code></p>
+            <p className="learning-demo__status"><span aria-hidden="true">✓</span><span>{stage.status}</span></p>
+            <dl>
+              {stage.lines.map(([key, value]) => (
+                <div key={key}>
+                  <dt>{key}</dt>
+                  <dd>{value}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        ))}
+      </div>
       <p className="learning-demo__note">
         The preview uses a seeded example. Spine stores local evidence and checks literal rules; it does not claim to infer every architectural mistake.
       </p>
