@@ -54,7 +54,8 @@ export function HeroWordmark({ line1, line2 }: Props) {
   return (
     <svg
       className="hero-wordmark"
-      viewBox="0 0 1400 900"
+      // Include the italic overhang and the full 115px shadow, with breathing room.
+      viewBox="-40 0 1640 940"
       preserveAspectRatio="xMidYMid meet"
       aria-hidden="true"
       focusable="false"
