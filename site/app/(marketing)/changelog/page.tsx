@@ -1,6 +1,8 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { renderMarkdown } from "../../../lib/markdown";
+import { ChangelogIndex } from "../../components/changelog-index";
+import type { ChangelogRelease } from "../../../lib/changelog";
 
 export const metadata: Metadata = {
   title: "Changelog · Project Spine",
@@ -42,8 +44,6 @@ async function fetchReleases(): Promise<Release[]> {
   }
 }
 
-type RenderedRelease = Release & { bodyHtml: string };
-
 function sanitizeReleaseBody(body: string): string {
   const product = "Product";
   const marketplace = "Hu" + "nt";
@@ -55,9 +55,12 @@ function sanitizeReleaseBody(body: string): string {
     .replaceAll(`${short} launch`, "Public launch");
 }
 
-async function renderBodies(releases: Release[]): Promise<RenderedRelease[]> {
+async function renderBodies(releases: Release[]): Promise<ChangelogRelease[]> {
   return Promise.all(
-    releases.map(async (r) => ({ ...r, bodyHtml: await renderMarkdown(sanitizeReleaseBody(r.body ?? "")) })),
+    releases.map(async ({ body, ...release }) => {
+      const searchText = sanitizeReleaseBody(body ?? "");
+      return { ...release, searchText, bodyHtml: await renderMarkdown(searchText) };
+    }),
   );
 }
 
@@ -65,7 +68,7 @@ export default async function ChangelogPage() {
   const releases = await fetchReleases();
   const rendered = await renderBodies(releases);
   return (
-    <main>
+    <main className="changelog-page">
       <header className="page-header">
         <p className="eyebrow">Changelog</p>
         <h1>What shipped, when, and what changed.</h1>
@@ -97,33 +100,7 @@ export default async function ChangelogPage() {
           directly.
         </p>
       ) : (
-        <ol className="changelog__list">
-          {rendered.map((r) => (
-            <li key={r.tag_name} className="changelog__item">
-              <div className="changelog__meta">
-                <h2 className="changelog__title">
-                  <a href={r.html_url}>{r.name || r.tag_name}</a>
-                </h2>
-                <span className="changelog__date">
-                  {r.published_at
-                    ? new Date(r.published_at).toLocaleDateString(undefined, {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })
-                    : "unknown"}
-                  {r.prerelease ? " · pre-release" : ""}
-                </span>
-              </div>
-              {r.bodyHtml ? (
-                <div
-                  className="changelog__body"
-                  dangerouslySetInnerHTML={{ __html: r.bodyHtml }}
-                />
-              ) : null}
-            </li>
-          ))}
-        </ol>
+        <ChangelogIndex releases={rendered} />
       )}
 
       <p className="changelog__footnote">
