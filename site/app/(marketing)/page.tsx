@@ -55,7 +55,7 @@ export default function Home() {
           <HeroWordmark line1="PROJECT" line2="SPINE" />
           <h1 className="learning-hero__headline">Teach your repository from the fixes that mattered.</h1>
           <p className="learning-hero__sub">
-            Capture a reviewed failure. Turn it into a literal guardrail. Verify it against the commits that broke and fixed the code. Enforce the proven rule for every agent after that.
+            Capture a reviewed failure. Turn it into a literal guardrail. Verify it against the commits that broke and fixed the code.
           </p>
           <div className="learning-hero__actions">
             <Link className="btn-on-cyan btn-on-cyan--primary" href="/docs">Run the local demo</Link>
@@ -110,7 +110,7 @@ source:   manual review evidence`}</code></pre>
         </div>
       </section>
 
-      <section className="section" aria-labelledby="surfaces-title">
+      <section className="section learning-surfaces" aria-labelledby="surfaces-title">
         <div className="section-header">
           <p className="eyebrow">The v0.10 beta surface</p>
           <h2 id="surfaces-title">Small primitives that compose into a useful control loop.</h2>
