@@ -1,123 +1,196 @@
 # Contributing to Project Spine
 
-Thanks for the interest. This is an early-stage project; the surface area is small on purpose. Keep contributions focused and the discussion sharp.
+Help a repository retain the lessons from a reviewed failure. Contributions can
+be code, clearer instructions, reproducible failure cases, test coverage or useful
+counterexamples. You do not need a model subscription, npm publishing access or
+production credentials to work on the core project.
 
-## Before you start
+The current product records maintainer-authored literal rules, verifies them
+against broken/corrected Git revisions, checks later changes and serves scoped
+context to agents. The optional evaluator runs explicitly configured programs.
+Read the [learning guide](docs/learning.md) and [evaluation contract](docs/evaluation.md)
+for the boundaries; the original compiler specification in PRD.md is historical.
 
-- Open an issue first for anything non-trivial. Bugfixes and small polish can go straight to a PR.
-- Read [PRD.md](./PRD.md) before proposing features — the MVP scope is deliberately narrow. "Useful for drift detection or kickoff" is the two-way test.
-- The codebase is TypeScript-strict. No `any`. Prefer `unknown` and narrow at the boundary.
+## Choose a starting point
 
-## Getting set up
+| Task | Starting point |
+| --- | --- |
+| Explain guard outcomes with runnable examples | [#87](https://github.com/PetriLahdelma/project-spine/issues/87) — good first issue |
+| Add focused HTML-report tests | [#88](https://github.com/PetriLahdelma/project-spine/issues/88) — good first issue |
+| Ship an offline evaluation-adapter example | [#89](https://github.com/PetriLahdelma/project-spine/issues/89) |
+| Preserve comma-containing filenames in CLI/MCP | [#90](https://github.com/PetriLahdelma/project-spine/issues/90) |
+| Verify Windows process-tree termination | [#91](https://github.com/PetriLahdelma/project-spine/issues/91) |
 
-```bash
+Check whether an issue is still open before starting; comment with your intended
+approach so others can coordinate. You can also browse current
+[good first issues](https://github.com/PetriLahdelma/project-spine/labels/good%20first%20issue)
+and [help wanted](https://github.com/PetriLahdelma/project-spine/labels/help%20wanted).
+Questions and documentation corrections are welcome. Small fixes can go directly
+to a pull request; discuss schema changes, new rule types, dependencies or execution
+policy changes in an issue first.
+
+## Run the product locally
+
+Prerequisites: **Node.js 22 or newer**, npm and Git. CI exercises Node 22 and 24
+on Linux. GitHub CLI (`gh`) is needed only for explicit PR evidence import.
+Windows-specific evaluation behavior is still being expanded; include your OS
+and Node/Git versions when reporting a platform problem.
+
+For a contribution, fork the repository on GitHub and clone your fork. To try the
+maintained source first:
+
+```sh
 git clone https://github.com/PetriLahdelma/project-spine.git
 cd project-spine
-npm install
+npm ci
+npm run build
+node dist/cli.js demo
+```
+
+The demo needs no account or network after installation. It creates a disposable
+Git fixture, verifies a reviewed correction, catches a reintroduced defect, and
+prints an HTML report path. Its data is synthetic. To use a chosen directory,
+pass `demo --out ./my-demo`; the directory must not already exist.
+
+Contributor setup uses the source checkout. Do not assume the npm beta and GitHub
+release have the same version: check the [release notes](https://github.com/PetriLahdelma/project-spine/releases).
+No publishing credentials should be added to a contributor's environment or PR.
+
+## Find the relevant code
+
+| Area | Files |
+| --- | --- |
+| Failure-case schema and evidence storage | [src/learning/model.ts](src/learning/model.ts), [storage.ts](src/learning/storage.ts) |
+| Historical replay, guard, context and HTML reports | [src/learning/engine.ts](src/learning/engine.ts) |
+| Configured-agent evaluation and controls | [src/evaluation/](src/evaluation/) |
+| GitHub PR evidence import | [src/github/](src/github/) |
+| CLI commands and offline demo | [src/commands/learning.ts](src/commands/learning.ts), [src/demo.ts](src/demo.ts) |
+| Agent tools and public library exports | [src/mcp/](src/mcp/), [src/index.ts](src/index.ts) |
+| Existing context compiler | [src/compiler/](src/compiler/), [src/analyzer/](src/analyzer/), [src/exporters/](src/exporters/) |
+| Starter templates | [templates/](templates/), [src/templates/](src/templates/) |
+| Marketing site | [site/app/](site/app/), [site/DESIGN.md](site/DESIGN.md) |
+| Optional desktop wrapper | [apps/desktop/](apps/desktop/) |
+
+## Contribute a failure case or adapter
+
+A useful case includes the observed failure, source attribution, explicit broken
+and corrected revisions, a narrowly scoped rule, and a valid counterexample that
+the rule must allow. Use the [case template](https://github.com/PetriLahdelma/project-spine/issues/new?template=learning_case.md)
+or adapt a temporary-repository fixture from [the learning tests](src/learning/learning.test.ts).
+Include permission/license information for external code. Remove private data and
+secrets; label synthetic examples as synthetic. Do not commit a nested `.git` directory.
+
+Cases stay inactive until deterministic replay succeeds. New tests should prove
+both the original failure and the correction, plus missing/deleted-file and false
+positive behavior where relevant. A literal match is not a security or semantic
+correctness guarantee. Do not present it as one.
+
+For an evaluation adapter, document its executable/argument arrays, environment
+requirements, outcome verifier, cleanup and possible provider costs. Start with an
+offline fixture from [the evaluation tests](src/evaluation/evaluate.test.ts). Keep
+the evaluator independent of edits the agent makes, preserve explicit execution
+opt-in, and never make CI require a paid model account. Negative results are useful:
+report failures and limitations alongside successful runs.
+
+## Verify your change
+
+For runtime code, run the relevant tests while iterating, then the root checks:
+
+```sh
+npm test -- src/learning/learning.test.ts
+# Or: npm test -- src/evaluation/evaluate.test.ts
+# Or: npm test -- src/commands/learning-e2e.test.ts src/mcp/server.test.ts
 npm run typecheck
 npm test
+npm run build
 ```
 
-Everything should pass on a fresh clone. If it doesn't on your machine, that's a bug — open an issue.
+The test harness builds the CLI when necessary. Tests that invoke Git use
+temporary repositories; keep fixtures isolated from the contributor's checkout.
 
-## Working agreement
+For packaging, exports or release scripts, also run:
 
-- **One concern per PR.** If you're fixing a bug and notice something else, open a separate PR or issue.
-- **Tests for new behavior.** Every new rule, detector, or export target gets at least one test. Determinism tests (identical inputs → identical output) are required for anything that touches the compiler or exporters.
-- **Source pointers stay honest.** Every generated rule in `spine.json` must trace back to a real input: `brief.md#...`, `repo-profile#...`, `design.md#...`, `template:name/...`, or `inferred:...`. Never invent sources.
-- **Deterministic before enriched.** The core pipeline (parser → analyzer → compiler → exporter) is deterministic and offline. LLM calls, if you introduce them, are opt-in and never load-bearing.
-- **No implicit network calls.** Reading the repo is allowed. Uploading it anywhere without the user opting in is not.
-- **Small files.** Every generated Markdown file should stay human-readable. If an export exceeds ~200 lines by default, break it up or restructure.
-
-## Commit and PR style
-
-- Commit messages: imperative subject, meaningful body for non-trivial changes (the *why*). Reference an issue if there is one.
-- PR description: link to the issue, describe the user-visible change, call out any behavior change that affects the spine hash or export content.
-- Keep PRs small enough to review in one sitting.
-
-## Adding a template
-
-1. Create `templates/<name>/template.yaml` with the manifest (see [src/templates/model.ts](./src/templates/model.ts)).
-2. Add `templates/<name>/brief.md` — a starter brief with prompts keyed to the template's project type.
-3. Optionally add `templates/<name>/design-rules.md`.
-4. Add a test in `src/templates/templates.test.ts` that asserts the template's contributions land in the compiled spine.
-5. Update the README template table.
-
-## Adding a detector (repo analyzer)
-
-New detectors live under `src/analyzer/`. The contract: take `(root, pkg)` and return a `Detection<T>` with `value`, `confidence`, and `evidence[]`. Confidence must be calibrated — don't return `1` unless you're certain. Add a fixture and a test.
-
-## Adding an exporter
-
-New exporters live under `src/exporters/`. The contract: take a `SpineModel` and return a string. No file I/O in the renderer — the orchestrator in `src/exporters/index.ts` handles writes. Add a test verifying non-empty output, stable content across identical inputs, and any invariants (e.g., "no rule traces leak into client-facing rationale").
-
-## Releasing
-
-### Why this is now beta
-
-The `0.10.x-beta.N` train adds reviewed failure cases, deterministic replay, guard/context/report commands and optional agent evaluation. The existing compiler remains tested and supported. Beta leaves room to refine the case schema and evaluation contract from real use; see [learning](docs/learning.md), [evaluation](docs/evaluation.md) and [release gates](docs/production-readiness.md).
-
-The bar for `1.0.0` is external: agencies or dev-tool teams actively relying on Spine in real projects and asking for stability guarantees. Until then, each beta release is honest about what it is, and `@beta` on npm keeps the channel explicit.
-
-### One-time setup
-
-Before the first automated release, add the `NPM_TOKEN` secret to the repository:
-
-1. [npmjs.com → Profile → Access Tokens](https://www.npmjs.com/settings/~/tokens) → Generate New Token → **Automation** type.
-2. Copy the token.
-3. In GitHub: `Settings → Secrets and variables → Actions → New repository secret`. Name: `NPM_TOKEN`. Value: the token from step 2.
-4. Verify: `gh api repos/PetriLahdelma/project-spine/actions/secrets` should list `NPM_TOKEN` (value is not returned, just the name).
-
-An **Automation** token is required because it bypasses 2FA for CI publishes. Publish tokens work for local manual publishes but will fail in the Action if 2FA is on the account.
-
-### Release flow
-
-Tag push is the contract. [.github/workflows/release.yml](./.github/workflows/release.yml) installs, typechecks, tests, builds, checks package surface, runs `release:readiness` and `stable:check`, verifies the tag matches `package.json`, publishes to npm with provenance and `--tag beta`, regenerates `CHANGELOG.md` from git tags, and creates a GitHub Release with notes diffed from the previous tag. A separate post-publish smoke workflow installs the published package from npm and runs `spine init` plus `spine compile`.
-
-From the maintainer's workstation:
-
-1. Bump `package.json` `version` (e.g. `npm version prerelease --preid=beta --no-git-tag-version`). `src/cli.ts` reads it at runtime — no second bump.
-2. `npm run build`, `npm run pack:check`, `npm run release:readiness`, and `npm run stable:check`.
-3. Verify `node dist/cli.js --version` prints the new value locally.
-4. Commit as `vX.Y.Z-beta.N: <short summary>` on a release branch, open a PR, squash-merge to `main`.
-5. Tag the merge commit: `git tag vX.Y.Z-beta.N && git push --tags`. The Action takes over from here.
-
-Prefer patch bumps for polish-only changes. Keep breaking changes out of the beta train or flag them in the PR description.
-
-**Fallback (manual publish)** — if the Action is red or npm access needs to happen offline:
-
-```bash
-npm run typecheck && npm test && npm run build && npm run pack:check && npm run release:readiness && npm run stable:check
-npm publish --provenance --tag beta --access public
-gh release create vX.Y.Z-beta.N --prerelease --notes "…"
+```sh
+npm run pack:check
+npm run release:readiness
+npm run stable:check
 ```
 
-The `NPM_TOKEN` secret is the only credential the Action needs. Rotate when a maintainer leaves.
+`stable:check` installs the package tarball into a temporary project and exercises
+both the learning demo and original compiler/drift workflow. It needs registry
+access to install dependencies. Documentation-only changes need valid links and
+tested commands, not artificial unit tests.
 
-## Site — accessibility and performance
+The site and desktop have separate lockfiles. From the repository root:
 
-Before shipping a change that touches `site/app/`:
+```sh
+# Site
+npm --prefix site ci
+npm --prefix site run typecheck
+npm --prefix site run build
+npm --prefix site run start -- --port 3000
+```
 
-- **axe**: 0 violations. Run against a local dev server via
-  `axe-core` injected through the browser, or drop the published URL
-  into [axe DevTools](https://www.deque.com/axe/devtools/). Homepage,
-  `/product`, `/pricing`, `/docs`, `/changelog`, `/security`, `/about`
-  must all come back clean.
-- **Lighthouse / PageSpeed**: real numbers only from a production build
-  or the deployed URL — localhost dev (Turbopack, HMR, uncompiled JS)
-  is pessimistic and noisy. Easiest path: paste
-  `https://projectspine.dev` (or a preview deploy) into
-  [PageSpeed Insights](https://pagespeed.web.dev/). Targets: LCP < 2.5s
-  mobile, CLS < 0.1, a11y 100.
-- Don't block a PR on a 2-point Lighthouse movement. Do block on a new
-  axe violation.
+With that server running, use another terminal for
+`node site/scripts/check-marketing-routes.mjs`. Check changed UI at desktop/mobile
+widths, keyboard navigation, focus and reduced motion. Follow [site/DESIGN.md](site/DESIGN.md).
+Use a production build for performance measurements; report observed results rather
+than invented scores. Accessibility changes should not introduce new axe violations.
 
-## Non-goals for contributions
+```sh
+# Desktop build/contract checks (no GUI launch required)
+npm --prefix apps/desktop ci
+npm --prefix apps/desktop run verify
+```
 
-- Making this "another AI coding tool." It isn't.
-- Making it do everything. It's a context compiler.
-- Replacing the design system tool. Consume its exports, don't become one.
+For manual desktop use, build the root CLI first, then run
+`npm --prefix apps/desktop start`. Report GUI testing separately from build checks.
 
-## Code of conduct
+## Keep the change reviewable
 
-See [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md).
+- Keep one concern per PR and reuse existing dependencies and helpers.
+- Use strict TypeScript; validate untrusted input with `unknown` and narrowing.
+- Preserve immutable cases, honest source pointers, path boundaries, bounded reads,
+  missing-coverage failures and the distinction between replay and execution.
+- Keep deterministic compiler/export output stable for identical inputs.
+- Network access and executing repository/agent programs must remain explicit.
+- Never put credentials, private incident data or fabricated benchmark claims in a PR.
+
+For an existing compiler extension, add a focused fixture alongside its current
+tests. Templates live in `templates/<name>/template.yaml` with a `brief.md` and
+optional `design-rules.md`; test contributions in [templates.test.ts](src/templates/templates.test.ts).
+Exporters render a model to text; filesystem writes belong to their orchestrator.
+
+## Submit your pull request
+
+Push a topic branch to your fork and open a PR against `main`. Link the issue,
+explain the user-visible change and why it helps, list the commands you ran, and
+state anything not tested. Include before/after images for visual changes and
+sample output for CLI/report changes. Call out schema, hash, exit-code or generated
+output changes so maintainers can assess compatibility.
+
+Commit subjects explain why the change is needed. Native Git trailers can record
+constraints and verification; for example:
+
+```text
+Keep guard outcomes understandable on the first run
+
+Add a disposable walkthrough showing the difference between a violation and
+missing coverage, using output from the built CLI.
+
+Confidence: high
+Scope-risk: narrow
+Tested: All documented commands on Node 22
+Not-tested: Windows
+```
+
+AI-assisted contributions are welcome when the submitter understands and verifies
+the change. Include reproducible evidence, review the diff, and do not submit
+unvalidated generated code or examples as if they were observed results.
+
+Release credentials, tags and publishing are maintainer responsibilities. See
+[the maintainer release guide](docs/maintainer-release.md) and
+[production readiness](docs/production-readiness.md).
+
+Follow the [code of conduct](CODE_OF_CONDUCT.md). Report security vulnerabilities
+privately using [SECURITY.md](SECURITY.md), not a public issue.

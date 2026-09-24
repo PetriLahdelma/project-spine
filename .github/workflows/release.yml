@@ -2,7 +2,7 @@ name: Release
 
 # Fires when a version tag is pushed (e.g. `git tag v0.9.2-beta.0 && git push --tags`).
 # Flow: install -> typecheck -> test -> build -> readiness -> `npm publish --provenance --tag beta` -> GitHub Release.
-# Manual release steps still documented in CONTRIBUTING.md as the fallback path.
+# Maintainer setup and recovery are documented in docs/maintainer-release.md.
 
 on:
   push:
@@ -25,7 +25,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           if [ -z "$NPM_TOKEN" ]; then
-            echo "::error::NPM_TOKEN repository secret is not set. See CONTRIBUTING.md § One-time setup."
+            echo "::error::NPM_TOKEN repository secret is not set. See docs/maintainer-release.md for authentication setup."
             exit 1
           fi
 
