@@ -1,8 +1,9 @@
 # Correction pilot launch kit
 
-Status: draft. Do not publish this as a validated adoption story. Confirm the
-release installation, replace source-build instructions only with verified package
-commands, and attach a real recording before submitting it to a community.
+Status: draft. Do not publish this as a validated adoption story. The pinned npm
+beta and [hosted smoke](https://github.com/PetriLahdelma/project-spine/actions/runs/36006984429)
+are verified; attach a real recording and complete the remaining launch gate
+before submitting it to a community.
 
 ## Technical introduction
 
@@ -55,7 +56,7 @@ Use only with an existing contact or a maintainer who has opted in:
 
 ## Launch gate
 
-- [ ] Public package/artifact installed and demo exercised on a clean machine.
+- [x] `project-spine@0.10.0-beta.3` installed and exercised by hosted smoke.
 - [ ] CLI and runtime requirements match the actual release.
 - [ ] Recording contains actual output and labels synthetic data.
 - [ ] At least three permissioned real case studies before claiming real-world proof.

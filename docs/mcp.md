@@ -1,18 +1,21 @@
 # MCP server (`spine-mcp`)
 
-For the 0.10 learning tools, build the `main` source branch and
-configure the client to run `node /absolute/path/to/project-spine/dist/mcp/server.js`.
-The npm install instructions below apply to the currently published beta; new tools
-are available from npm only after the 0.10 release is published.
+The `0.10.0-beta.3` package includes the learning tools and both `spine` and
+`spine-mcp` binaries. Pin the beta explicitly because npm's unqualified `latest`
+tag still points to `0.9.2-beta.2`.
 
 Project Spine ships with an MCP (Model Context Protocol) server so any MCP-speaking client — Claude Code, Cursor, Continue, or anything else — can drive the CLI without the user switching terminals.
 
-The server is distributed in the same npm package as the CLI. Install once and you get both binaries on `PATH`:
+Run the exact package without a persistent global install:
 
 ```bash
-npm install -g project-spine@beta
-which spine spine-mcp
+npx --yes --package=project-spine@0.10.0-beta.3 spine-mcp
 ```
+
+The process speaks MCP over stdio, so it normally waits for a client rather than
+printing interactive output. A global `npm install -g project-spine@0.10.0-beta.3`
+also installs both binaries when a managed environment requires commands on
+`PATH`.
 
 ## What it exposes
 
@@ -45,7 +48,8 @@ Add an `mcpServers` entry to `~/.claude.json` (or the project-local `.claude/cla
 {
   "mcpServers": {
     "project-spine": {
-      "command": "spine-mcp"
+      "command": "npx",
+      "args": ["--yes", "--package=project-spine@0.10.0-beta.3", "spine-mcp"]
     }
   }
 }
@@ -53,7 +57,8 @@ Add an `mcpServers` entry to `~/.claude.json` (or the project-local `.claude/cla
 
 Restart Claude Code. The tools appear as `mcp__project-spine__spine_compile`, etc.
 
-If `spine-mcp` isn't on `PATH` (e.g. a managed Node install), use the absolute path:
+If you deliberately use a global install and `spine-mcp` is not on `PATH`, use
+its absolute path instead:
 
 ```json
 {
@@ -73,7 +78,8 @@ Add to Cursor's `mcp.json`:
 {
   "mcpServers": {
     "project-spine": {
-      "command": "spine-mcp"
+      "command": "npx",
+      "args": ["--yes", "--package=project-spine@0.10.0-beta.3", "spine-mcp"]
     }
   }
 }
@@ -87,7 +93,13 @@ In `~/.continue/config.json`:
 {
   "experimental": {
     "modelContextProtocolServers": [
-      { "transport": { "type": "stdio", "command": "spine-mcp" } }
+      {
+        "transport": {
+          "type": "stdio",
+          "command": "npx",
+          "args": ["--yes", "--package=project-spine@0.10.0-beta.3", "spine-mcp"]
+        }
+      }
     ]
   }
 }
@@ -95,7 +107,8 @@ In `~/.continue/config.json`:
 
 ### Any other stdio-MCP client
 
-The server uses the standard MCP stdio transport. `command: "spine-mcp"` with no arguments works everywhere.
+The server uses standard MCP stdio transport. Configure `npx` as the command and
+`["--yes", "--package=project-spine@0.10.0-beta.3", "spine-mcp"]` as its arguments.
 
 ## Typical usage patterns
 
@@ -120,7 +133,8 @@ The agent reads `spine://manifest` and summarizes. No tool call required; resour
 ## Troubleshooting
 
 **`Cannot find module .../dist/cli.js`**
-The CLI bundle is missing. Reinstall: `npm install -g project-spine@beta`.
+The CLI bundle is missing. Reinstall the pinned beta:
+`npm install -g project-spine@0.10.0-beta.3`.
 
 **Tool calls hang or timeout**
 Each call has a 2-minute hard cap. If `spine_compile` is legitimately slow, try `spine_compile` directly from a terminal once so the first-run warm-up (template expansion, repo scan) is cached.
@@ -140,9 +154,10 @@ No Spine-specific state lives in the server; everything is derived from the cwd 
 Source: [`src/mcp/server.ts`](../src/mcp/server.ts), [`src/mcp/spawn.ts`](../src/mcp/spawn.ts). Tests: [`src/mcp/server.test.ts`](../src/mcp/server.test.ts).
 # Repository learning tools (0.10 beta)
 
-The source build adds `spine_learn`, `spine_replay`, `spine_guard`,
-`spine_context` and `spine_report` alongside the existing tools below. `spine_context`
-takes `repoPath` and a `files` array, and returns only applicable verified rules.
+The published `0.10.0-beta.3` package includes `spine_learn`, `spine_replay`,
+`spine_guard`, `spine_context` and `spine_report` alongside the compiler tools
+listed above. `spine_context` takes `repoPath` and a `files` array, and returns
+only applicable verified rules.
 `spine_guard` accepts the same optional file selection and reports violations or
 missing coverage. `spine_learn` accepts `caseFile`; `spine_replay` accepts `caseId`;
 `spine_report` accepts an optional `caseId`.

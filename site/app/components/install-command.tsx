@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-const COMMAND = "npx --yes --package=https://github.com/PetriLahdelma/project-spine/releases/download/v0.10.0-beta.3/project-spine-0.10.0-beta.3.tgz spine demo";
+const COMMAND = "npx --yes --package=project-spine@0.10.0-beta.3 spine demo";
 
 function CopyIcon() {
   return (
@@ -32,12 +32,12 @@ export function InstallCommand() {
     }
   }
   return (
-    <div className="install-block" role="group" aria-label="Run the verified GitHub beta artifact demo">
+    <div className="install-block" role="group" aria-label="Run the verified npm beta demo">
       <div className="install-block__rail">
         <span className="install-block__dot install-block__dot--r" aria-hidden="true" />
         <span className="install-block__dot install-block__dot--y" aria-hidden="true" />
         <span className="install-block__dot install-block__dot--g" aria-hidden="true" />
-        <span className="install-block__caption">run the verified GitHub beta artifact</span>
+        <span className="install-block__caption">run the verified npm beta</span>
       </div>
       <div className="install-block__row">
         <code className="install-block__command" tabIndex={0}>
@@ -48,7 +48,7 @@ export function InstallCommand() {
           type="button"
           onClick={copy}
           className="install-block__copy"
-          aria-label={copyState === "copied" ? "Copied" : "Copy verified GitHub beta demo command"}
+          aria-label={copyState === "copied" ? "Copied" : "Copy verified npm beta demo command"}
           data-ps-event="install_copy"
           data-ps-label="install block"
         >

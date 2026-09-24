@@ -5,7 +5,7 @@ const REPO = "https://github.com/PetriLahdelma/project-spine";
 
 export const metadata: Metadata = {
   title: "Docs · Project Spine",
-  description: "Run the Project Spine GitHub beta artifact demo, then use the literal and executable correction workflows locally.",
+  description: "Run the published Project Spine npm beta demo, then use the literal and executable correction workflows locally.",
   alternates: { canonical: "https://projectspine.dev/docs" },
 };
 
@@ -16,14 +16,14 @@ export default function DocsPage() {
         <p className="eyebrow">Docs</p>
         <h1>Run the learning loop locally.</h1>
         <p className="lede">
-          Start with one verified GitHub Release artifact command. Node 22.12 or newer (or Node 24) and Git are required. The install uses the network; the literal demo needs no account, model key, or Docker. npm registry publication is a separate release step and is not claimed here.
+          Start with one exact, published npm beta command. Node 22.12 or newer (or Node 24) and Git are required. The install uses the network; the literal demo needs no account, model key, or Docker.
         </p>
       </header>
 
       <h2>One-command literal demo</h2>
-      <pre tabIndex={0}><code>{`npx --yes --package=https://github.com/PetriLahdelma/project-spine/releases/download/v0.10.0-beta.3/project-spine-0.10.0-beta.3.tgz spine demo`}</code></pre>
+      <pre tabIndex={0}><code>{`npx --yes --package=project-spine@0.10.0-beta.3 spine demo`}</code></pre>
       <p>
-        This installs the beta tarball from its GitHub Release, then creates a temporary Git fixture for the <code>tenant-query</code> case, verifies its historical correction, catches a reintroduced defect, and writes a local HTML report. It does not call a model or execute the fixture code.
+        This installs the exact npm beta, then creates a temporary Git fixture for the <code>tenant-query</code> case, verifies its historical correction, catches a reintroduced defect, and writes a local HTML report. It does not call a model or execute the fixture code.
       </p>
       <p>
         <a href={`${REPO}/releases/download/v0.10.0-beta.3/project-spine-0.10.0-beta.3.tgz`}>GitHub Release asset</a>{" "}
@@ -96,14 +96,14 @@ node dist/cli.js report --format html --out report.html`}</code></pre>
 
       <h2>Executable correction pilot</h2>
       <p>
-        The correction pilot is a separate workflow for a user-reviewed, dependency-free JavaScript <code>node:test</code> that checks behavior a literal rule cannot express. It is available from source for Linux and macOS with local Docker. Check the release’s distribution status before assuming it is available from npm.
+        The correction pilot is a separate workflow for a user-reviewed, dependency-free JavaScript <code>node:test</code> that checks behavior a literal rule cannot express. It is available in the published beta for Linux and macOS with local Docker.
       </p>
       <pre tabIndex={0}><code>{`# Pre-pull and review the exact image digest first.
 docker pull <image@sha256:digest>
 
-# Synthetic behavioral preview using the same GitHub beta artifact.
+# Synthetic behavioral preview using the same exact npm beta.
 npx --yes \
-  --package=https://github.com/PetriLahdelma/project-spine/releases/download/v0.10.0-beta.3/project-spine-0.10.0-beta.3.tgz \
+  --package=project-spine@0.10.0-beta.3 \
   spine correction demo \
   --image <image@sha256:digest> \
   --allow-execution

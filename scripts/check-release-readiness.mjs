@@ -123,7 +123,7 @@ check("secret scan", security.toLowerCase().includes("gitleaks"), "security work
 const smoke = readText(".github/workflows/post-publish-smoke.yml");
 check("post publish smoke package", smoke.includes("project-spine"), "post-publish smoke must target project-spine");
 check("post publish smoke compile", smoke.includes("spine compile"), "post-publish smoke must compile through installed package");
-check("post publish requires registry", smoke.includes("after bounded retries") && !smoke.includes("Skip smoke"), "post-publish smoke must fail when npm visibility is missing");
+check("post publish requires registry", smoke.includes('import { fetchRegistryMetadata } from "./.github/scripts/release-registry-state.mjs"') && smoke.includes("fetchRegistryMetadata(url, { requirePublished: true })") && !smoke.includes("Skip smoke"), "post-publish smoke must use the shared fail-closed visibility check");
 check("post publish exact version", smoke.includes("installed package/CLI version mismatch"), "post-publish smoke must verify the installed package and CLI version");
 check("post publish correction help", smoke.includes("Capture and prove reviewer-approved executable regression evidence"), "post-publish smoke must verify the installed correction command");
 check("post publish correction consent", smoke.includes("Correction demo requires explicit --allow-execution"), "post-publish smoke must prove correction execution requires consent");

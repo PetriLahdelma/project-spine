@@ -15,7 +15,8 @@ The [executable correction pilot](docs/corrections.md) is separate: it preserves
 reviewer-approved Node built-in test and runs it in restricted Docker containers
 against historical and current source. No model account is required. Start with a
 real correction you can share, or a counterexample that exposes a brittle check;
-see the [pilot goals and measurement rules](docs/growth-plan.md).
+see the [five-maintainer pilot runbook](docs/pilot-runbook.md) and
+[pilot goals and measurement rules](docs/growth-plan.md).
 
 ## Choose a starting point
 

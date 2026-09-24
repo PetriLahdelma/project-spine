@@ -67,9 +67,9 @@ export default async function NewWorkspacePage({
           <ol style={{ margin: 0, paddingLeft: 20, color: "var(--ink-soft)", fontSize: 15, lineHeight: 1.65 }}>
             <li>You land on your workspace dashboard as the owner.</li>
             <li>
-              You run the versioned GitHub Release artifact or build the CLI from
+              You run the exact published npm beta or build the CLI from
               source, then use the local <code>init</code>, <code>compile</code>, template,
-              and drift commands. npm registry publication is separate.
+              and drift commands.
             </li>
             <li>
               Run <code>spine template save --location project --name ...</code> to

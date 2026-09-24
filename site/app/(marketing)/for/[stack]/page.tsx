@@ -295,12 +295,12 @@ export default async function StackPage({
       <h2>Get started</h2>
       <TerminalMock title={`~ — spine inspect --repo .`}>
         <span className="tok-prompt">$ </span>
-        <span className="tok-command">npx --yes --package=https://github.com/PetriLahdelma/project-spine/releases/download/v0.10.0-beta.3/project-spine-0.10.0-beta.3.tgz spine inspect --repo .</span>
+        <span className="tok-command">npx --yes --package=project-spine@0.10.0-beta.3 spine inspect --repo .</span>
         {"\n"}
         <span className="tok-success">✓</span> detected <span className="tok-accent">{s.runtime}</span>
         {"\n"}
         <span className="tok-prompt">$ </span>
-        <span className="tok-command">npx --yes --package=https://github.com/PetriLahdelma/project-spine/releases/download/v0.10.0-beta.3/project-spine-0.10.0-beta.3.tgz spine compile --brief ./brief.md --repo .</span>
+        <span className="tok-command">npx --yes --package=project-spine@0.10.0-beta.3 spine compile --brief ./brief.md --repo .</span>
         {"\n"}
         <span className="tok-success">✓</span> wrote <span className="tok-accent">AGENTS.md</span>, <span className="tok-accent">CLAUDE.md</span>, <span className="tok-accent">copilot-instructions.md</span>, <span className="tok-accent">project-spine.mdc</span>
       </TerminalMock>

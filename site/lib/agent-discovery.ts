@@ -1,6 +1,6 @@
 export const SITE = "https://projectspine.dev";
 export const PROJECT_SPINE_VERSION = process.env["NEXT_PUBLIC_PROJECT_SPINE_VERSION"] ?? "0.10.0-beta.3";
-const GITHUB_BETA_PACKAGE = "https://github.com/PetriLahdelma/project-spine/releases/download/v0.10.0-beta.3/project-spine-0.10.0-beta.3.tgz";
+export const NPM_BETA_PACKAGE = "project-spine@0.10.0-beta.3";
 
 export const CONTENT_SIGNAL = "ai-train=no, search=yes, ai-input=yes";
 export const GOOGLE_ANALYTICS = {
@@ -97,29 +97,29 @@ rules available to CI and coding agents.
 The source-available correction pilot preserves user-reviewed, dependency-free
 JavaScript \`node:test\` bytes plus an explicit source-file list. It pairs the
 same reviewed test with each revision's own source in constrained, digest-pinned
-Docker containers. Linux and macOS with local Docker are supported. Check the
-release's distribution status before assuming npm availability.
+Docker containers. Linux and macOS with local Docker are supported.
 
-## GitHub beta artifact quickstart
+## npm beta quickstart
 
 \`\`\`bash
-npx --yes --package=https://github.com/PetriLahdelma/project-spine/releases/download/v0.10.0-beta.3/project-spine-0.10.0-beta.3.tgz spine demo
+npx --yes --package=${NPM_BETA_PACKAGE} spine demo
 \`\`\`
 
-This command downloads the verified GitHub Release artifact over the network.
-It requires Node 22.12+ and Git. The literal demo needs no account, model key, or
-Docker. npm registry publication is separate and is not claimed here.
+This command downloads the exact published npm beta over the network. It requires
+Node 22.12+ and Git. The literal demo needs no account, model key, or Docker. The
+matching GitHub Release asset remains available as a reproducibility reference.
+GitHub Release asset: https://github.com/PetriLahdelma/project-spine/releases/download/v0.10.0-beta.3/project-spine-0.10.0-beta.3.tgz
 Asset SHA-256: \`ff0d733988e87cd0ee75029eea4599fd214c171896a3a40862d89b87928770a1\`.
 
 ## Core commands
 
-- \`npx --yes --package=${GITHUB_BETA_PACKAGE} spine learn --case failure.json\` imports explicit local evidence.
-- \`npx --yes --package=${GITHUB_BETA_PACKAGE} spine replay <case-id>\` checks a rule against broken and corrected commits.
-- \`npx --yes --package=${GITHUB_BETA_PACKAGE} spine guard --diff HEAD~1 --json\` evaluates verified rules on a diff.
-- \`npx --yes --package=${GITHUB_BETA_PACKAGE} spine context --files 'src/a.ts'\` returns relevant verified rules.
-- \`npx --yes --package=${GITHUB_BETA_PACKAGE} spine report --format html --out report.html\` writes a local report.
-- \`npx --yes --package=${GITHUB_BETA_PACKAGE} spine demo\` creates and runs the synthetic tenant-query fixture.
-- \`npx --yes --package=${GITHUB_BETA_PACKAGE} spine evaluate <case-id> --adapter adapter.json --allow-execution --runs 1 --json\`
+- \`npx --yes --package=${NPM_BETA_PACKAGE} spine learn --case failure.json\` imports explicit local evidence.
+- \`npx --yes --package=${NPM_BETA_PACKAGE} spine replay <case-id>\` checks a rule against broken and corrected commits.
+- \`npx --yes --package=${NPM_BETA_PACKAGE} spine guard --diff HEAD~1 --json\` evaluates verified rules on a diff.
+- \`npx --yes --package=${NPM_BETA_PACKAGE} spine context --files 'src/a.ts'\` returns relevant verified rules.
+- \`npx --yes --package=${NPM_BETA_PACKAGE} spine report --format html --out report.html\` writes a local report.
+- \`npx --yes --package=${NPM_BETA_PACKAGE} spine demo\` creates and runs the synthetic tenant-query fixture.
+- \`npx --yes --package=${NPM_BETA_PACKAGE} spine evaluate <case-id> --adapter adapter.json --allow-execution --runs 1 --json\`
   optionally executes a configured evaluator in temporary clones; it has no OS
   sandbox and may use the network or incur model costs.
 - Existing compile and drift commands remain supported.
@@ -135,7 +135,7 @@ Project Spine publishes agent-readable discovery documents:
 - \`${SITE}/.well-known/mcp/server-card.json\`
 - \`${SITE}/.well-known/agent-skills/index.json\`
 
-The GitHub beta artifact includes \`spine-mcp\`, a stdio MCP server that exposes learning,
+The npm beta includes \`spine-mcp\`, a stdio MCP server that exposes learning,
 replay, guard, context, report, compile, doctor, drift, init, and tokens workflows.
 
 ## Project guarantees
@@ -170,9 +170,9 @@ compile and drift surfaces remain available.
 
 The source-available correction pilot is a separate executable path for reviewed,
 dependency-free JavaScript \`node:test\` bytes and explicit source files. It
-requires local Docker on Linux/macOS and explicit execution consent. Check each
-release's distribution status for npm availability. No-execution correction
-context is always candidate; successful controls return verified guidance.
+requires local Docker on Linux/macOS and explicit execution consent.
+No-execution correction context is always candidate; successful controls return
+verified guidance.
 
 ## Important URLs
 
@@ -182,7 +182,7 @@ context is always candidate; successful controls return verified guidance.
 - Changelog: ${SITE}/changelog
 - Security: ${SITE}/security
 - GitHub repository: https://github.com/PetriLahdelma/project-spine
-- npm package page (registry publication is separate): https://www.npmjs.com/package/project-spine
+- npm package page: https://www.npmjs.com/package/project-spine
 - MCP setup: https://github.com/PetriLahdelma/project-spine/blob/main/docs/mcp.md
 
 ## Agent discovery
@@ -195,15 +195,16 @@ context is always candidate; successful controls return verified guidance.
 - MCP server card: ${SITE}/.well-known/mcp/server-card.json
 - Agent skills index: ${SITE}/.well-known/agent-skills/index.json
 
-## GitHub beta artifact quickstart
+## npm beta quickstart
 
 \`\`\`bash
-npx --yes --package=https://github.com/PetriLahdelma/project-spine/releases/download/v0.10.0-beta.3/project-spine-0.10.0-beta.3.tgz spine demo
+npx --yes --package=${NPM_BETA_PACKAGE} spine demo
 \`\`\`
 
 The verified command uses the network and requires Node 22.12+ and Git. The literal demo
-needs no account, model key, or Docker. This is a GitHub Release beta artifact;
-npm registry publication is a separate release step and is not claimed here.
+needs no account, model key, or Docker. It selects the exact published npm beta; the
+matching GitHub Release asset remains available as a reproducibility reference.
+GitHub Release asset: https://github.com/PetriLahdelma/project-spine/releases/download/v0.10.0-beta.3/project-spine-0.10.0-beta.3.tgz
 Asset SHA-256: \`ff0d733988e87cd0ee75029eea4599fd214c171896a3a40862d89b87928770a1\`.
 
 ## Use this when
@@ -302,17 +303,16 @@ GitHub OAuth grant for hosted workspace sessions.
 No service account is required for the public CLI:
 
 \`\`\`bash
-npx --yes --package=https://github.com/PetriLahdelma/project-spine/releases/download/v0.10.0-beta.3/project-spine-0.10.0-beta.3.tgz spine demo
+npx --yes --package=${NPM_BETA_PACKAGE} spine demo
 \`\`\`
 
-The command downloads a versioned GitHub Release beta artifact. It does not
-register an account or issue a credential. npm registry publication is a separate
-release step and is not claimed here.
+The command downloads the exact published npm beta. It does not register an
+account or issue a credential.
 
 ## MCP clients
 
 No persistent global install is required. Configure the stdio MCP server with
-the same versioned GitHub beta package selector:
+the same exact npm beta package selector:
 
 \`\`\`json
 {
@@ -321,7 +321,7 @@ the same versioned GitHub beta package selector:
       "command": "npx",
       "args": [
         "--yes",
-        "--package=https://github.com/PetriLahdelma/project-spine/releases/download/v0.10.0-beta.3/project-spine-0.10.0-beta.3.tgz",
+        "--package=${NPM_BETA_PACKAGE}",
         "spine-mcp"
       ]
     }
@@ -365,27 +365,27 @@ Its deterministic compile and drift workflows remain supported.
 ## Version check
 
 \`\`\`bash
-npx --yes --package=${GITHUB_BETA_PACKAGE} spine --version
-npx --yes --package=${GITHUB_BETA_PACKAGE} spine doctor --strict
+npx --yes --package=${NPM_BETA_PACKAGE} spine --version
+npx --yes --package=${NPM_BETA_PACKAGE} spine doctor --strict
 \`\`\`
 
 For the repository-learning beta demo:
 
 \`\`\`bash
-npx --yes --package=https://github.com/PetriLahdelma/project-spine/releases/download/v0.10.0-beta.3/project-spine-0.10.0-beta.3.tgz spine demo
+npx --yes --package=${NPM_BETA_PACKAGE} spine demo
 \`\`\`
 
-This selects a GitHub Release tarball directly. Do not infer npm registry
-publication from the GitHub artifact.
+This selects the exact published npm beta. The matching versioned GitHub Release
+asset and checksum provide a secondary reproducibility path.
 
 ## Common flows
 
-- Learn: import an explicit case with \`npx --yes --package=${GITHUB_BETA_PACKAGE} spine learn --case failure.json\`.
-- Verify: run \`npx --yes --package=${GITHUB_BETA_PACKAGE} spine replay <case-id>\` against recorded Git refs.
-- Enforce: run \`npx --yes --package=${GITHUB_BETA_PACKAGE} spine guard --diff HEAD~1 --json\` in CI.
-- Route context: run \`npx --yes --package=${GITHUB_BETA_PACKAGE} spine context --files 'src/a.ts'\` or use MCP.
+- Learn: import an explicit case with \`npx --yes --package=${NPM_BETA_PACKAGE} spine learn --case failure.json\`.
+- Verify: run \`npx --yes --package=${NPM_BETA_PACKAGE} spine replay <case-id>\` against recorded Git refs.
+- Enforce: run \`npx --yes --package=${NPM_BETA_PACKAGE} spine guard --diff HEAD~1 --json\` in CI.
+- Route context: run \`npx --yes --package=${NPM_BETA_PACKAGE} spine context --files 'src/a.ts'\` or use MCP.
 - Existing project context: compile and drift commands remain available.
-- MCP client setup: use \`npx --yes --package=${GITHUB_BETA_PACKAGE} spine-mcp\` as a stdio server. This does not create a persistent global install.
+- MCP client setup: use \`npx --yes --package=${NPM_BETA_PACKAGE} spine-mcp\` as a stdio server. This does not create a persistent global install.
 
 ## Guardrails
 
@@ -686,8 +686,8 @@ export function mcpServerCard(): Record<string, unknown> {
     transport: {
       type: "stdio",
       command: "npx",
-      args: ["--yes", `--package=${GITHUB_BETA_PACKAGE}`, "spine-mcp"],
-      install: "No persistent global install; npx selects the versioned GitHub beta artifact.",
+      args: ["--yes", `--package=${NPM_BETA_PACKAGE}`, "spine-mcp"],
+      install: "No persistent global install; npx selects the exact published npm beta.",
     },
     capabilities: {
       tools: true,

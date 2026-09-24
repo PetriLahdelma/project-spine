@@ -273,10 +273,10 @@ export default async function TemplatePage({
       <h2>Get started</h2>
       <TerminalMock title={`~ — spine init --template ${t.name}`}>
         <span className="tok-prompt">$ </span>
-        <span className="tok-command">{"npx --yes --package=https://github.com/PetriLahdelma/project-spine/releases/download/v0.10.0-beta.3/project-spine-0.10.0-beta.3.tgz spine init --template "}{t.name}</span>
+        <span className="tok-command">{"npx --yes --package=project-spine@0.10.0-beta.3 spine init --template "}{t.name}</span>
         {"\n"}
         <span className="tok-prompt">$ </span>
-        <span className="tok-command">{"npx --yes --package=https://github.com/PetriLahdelma/project-spine/releases/download/v0.10.0-beta.3/project-spine-0.10.0-beta.3.tgz spine compile --brief ./brief.md --repo . --template "}{t.name}</span>
+        <span className="tok-command">{"npx --yes --package=project-spine@0.10.0-beta.3 spine compile --brief ./brief.md --repo . --template "}{t.name}</span>
         {"\n"}
         <span className="tok-success">✓</span> wrote <span className="tok-accent">spine.json</span>
         {"\n"}

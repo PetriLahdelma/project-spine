@@ -58,33 +58,14 @@ jobs:
           VERSION: ${{ steps.pkg.outputs.version }}
         run: |
           node --input-type=module <<'NODE'
-          import { setTimeout as delay } from "node:timers/promises";
+          import { fetchRegistryMetadata } from "./.github/scripts/release-registry-state.mjs";
           const expected = process.env.VERSION;
           const url = `https://registry.npmjs.org/project-spine/${encodeURIComponent(expected)}`;
-          let lastFailure = "not found";
-          for (let attempt = 1; attempt <= 5; attempt += 1) {
-            try {
-              const response = await fetch(url, {
-                headers: { accept: "application/json" },
-                signal: AbortSignal.timeout(10_000),
-              });
-              if (response.ok) {
-                const metadata = await response.json();
-                if (metadata.name !== "project-spine" || metadata.version !== expected) {
-                  throw new Error(`registry returned ${metadata.name}@${metadata.version}, expected project-spine@${expected}`);
-                }
-                console.log(`registry exposed project-spine@${expected} (${attempt}/5)`);
-                process.exit(0);
-              }
-              const body = (await response.text()).slice(0, 300);
-              lastFailure = `HTTP ${response.status}: ${body}`;
-              if (response.status < 500 && response.status !== 404 && response.status !== 429) break;
-            } catch (error) {
-              lastFailure = error instanceof Error ? error.message : String(error);
-            }
-            if (attempt < 5) await delay(3000);
+          const metadata = await fetchRegistryMetadata(url, { requirePublished: true });
+          if (metadata.name !== "project-spine" || metadata.version !== expected) {
+            throw new Error(`registry returned ${metadata.name}@${metadata.version}, expected project-spine@${expected}`);
           }
-          throw new Error(`project-spine@${expected} is not available from npm after bounded retries: ${lastFailure}`);
+          console.log(`registry exposed project-spine@${expected}`);
           NODE
 
       - name: Install and compile from npm package

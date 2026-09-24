@@ -36,17 +36,18 @@ not yet been established.
 
 ## See the complete loop
 
-Run the verified GitHub Release beta artifact with Node 22.12+ (or Node 24) and
-Git. The command, version, literal demo and correction demo were checked against
-the downloaded asset digest. The install uses the network; the literal demo itself
-needs no account, model key or Docker. npm registry publication is a separate
-release step and is not claimed here.
+Run the exact published beta with Node 22.12+ (or Node 24) and Git. The install
+uses the network; the literal demo itself needs no account, model key or Docker.
+The version is pinned because npm's unqualified `latest` tag still points to the
+older `0.9.2-beta.2` release.
 
 ```sh
-npx --yes --package=https://github.com/PetriLahdelma/project-spine/releases/download/v0.10.0-beta.3/project-spine-0.10.0-beta.3.tgz spine demo
+npx --yes --package=project-spine@0.10.0-beta.3 spine demo
 ```
 
-[GitHub Release asset](https://github.com/PetriLahdelma/project-spine/releases/download/v0.10.0-beta.3/project-spine-0.10.0-beta.3.tgz) · SHA-256 `ff0d733988e87cd0ee75029eea4599fd214c171896a3a40862d89b87928770a1`
+For reproducibility or registry-independent installation, the identical
+[GitHub Release asset](https://github.com/PetriLahdelma/project-spine/releases/download/v0.10.0-beta.3/project-spine-0.10.0-beta.3.tgz)
+has SHA-256 `ff0d733988e87cd0ee75029eea4599fd214c171896a3a40862d89b87928770a1`.
 
 The offline demo creates real Git commits in a new fixture repository. It records a
 candidate rule, proves that the broken revision fails and the correction passes,
@@ -117,7 +118,10 @@ The [GitHub Action](action.yml) builds the same pinned source you review. It use
 read-only repository permissions; fetch history and commit the learning ledger.
 [CI setup and exit codes](docs/learning.md#ci).
 
-For agents, configure `npx --yes --package=https://github.com/PetriLahdelma/project-spine/releases/download/v0.10.0-beta.3/project-spine-0.10.0-beta.3.tgz spine-mcp`; no persistent global install is required. Use `spine_context` before edits and `spine_guard` afterward. All integrations use the same local evidence. [MCP setup](docs/mcp.md).
+For agents, configure `npx --yes --package=project-spine@0.10.0-beta.3 spine-mcp`;
+no persistent global install is required. Use `spine_context` before edits and
+`spine_guard` afterward. All integrations use the same local evidence.
+[MCP setup](docs/mcp.md).
 
 ## Still a context compiler
 
