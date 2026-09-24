@@ -360,7 +360,8 @@
   background: var(--poster-blue);
   box-shadow: 12px 12px 0 var(--poster-pink);
 }
-.learning-install > div:first-child { max-width: 700px; margin-bottom: 30px; }
+.learning-install > div:first-child { margin-bottom: 30px; }
+.learning-install > div:first-child p { max-width: 700px; }
 .learning-install .install-block { max-width: none; }
 .learning-install .eyebrow,
 .learning-install h2,
