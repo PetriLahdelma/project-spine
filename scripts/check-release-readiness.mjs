@@ -101,9 +101,10 @@ check("release cache disabled", release.includes("package-manager-cache: false")
 check("release provenance permission", release.includes("id-token: write"), "trusted publishing needs OIDC token permission");
 check(
   "release provenance publish",
-  release.includes("npm publish") && release.includes("--provenance --tag beta --access public"),
+  release.includes('npm publish "./release-artifacts/${{ needs.package.outputs.tarball }}" --provenance --tag beta --access public'),
   "npm publish must use provenance and assign beta atomically",
 );
+check("release local tarball dry run", release.includes('npm publish "./release-artifacts/${{ steps.bundle.outputs.tarball }}" --dry-run --ignore-scripts --tag beta --access public'), "prove npm resolves the release artifact as a local tarball before publication");
 check("release has no token requirement", !release.includes("NPM_TOKEN"), "trusted publishing must not require a stored npm token");
 check("release exact tarball", release.includes("npm pack --json") && release.includes("release-registry-state.mjs"), "release must publish and verify one packed tarball");
 check("release retry integrity", release.includes("--require-published"), "retries must verify the registry tarball integrity");
