@@ -114,6 +114,9 @@ jobs:
           appendFileSync(process.env.GITHUB_OUTPUT, `integrity=${packed.integrity}\n`);
           NODE
 
+      - name: Dry-run the exact local tarball publish
+        run: npm publish "./release-artifacts/${{ steps.bundle.outputs.tarball }}" --dry-run --ignore-scripts --tag beta --access public
+
       - name: Upload immutable release bundle
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
@@ -162,7 +165,7 @@ jobs:
 
       - name: Publish exact tarball through npm trusted publishing
         if: steps.before.outputs.published != 'true'
-        run: npm publish "release-artifacts/${{ needs.package.outputs.tarball }}" --provenance --tag beta --access public
+        run: npm publish "./release-artifacts/${{ needs.package.outputs.tarball }}" --provenance --tag beta --access public
 
       - name: Verify published tarball integrity
         id: verify
