@@ -1,3 +1,5 @@
+![Project Spine](docs/branding/readme-banner.jpg)
+
 # Project Spine
 
 **Turn reviewed failures into verified repository guardrails.**
