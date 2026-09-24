@@ -31,8 +31,10 @@ policy changes in an issue first.
 
 ## Run the product locally
 
-Prerequisites: **Node.js 22 or newer**, npm and Git. CI exercises Node 22 and 24
-on Linux. GitHub CLI (`gh`) is needed only for explicit PR evidence import.
+Prerequisites for development: **Node.js 22.12+ or Node 24**, npm and Git. Vitest 5
+requires the newer Node 22 minor; `.nvmrc` selects the current 22.x release. CI
+exercises Node 22 and 24 on Linux. The published CLI's runtime floor remains Node
+22.0. GitHub CLI (`gh`) is needed only for explicit PR evidence import.
 Windows-specific evaluation behavior is still being expanded; include your OS
 and Node/Git versions when reporting a platform problem.
 
@@ -123,6 +125,11 @@ tested commands, not artificial unit tests.
 
 The site and desktop have separate lockfiles. From the repository root:
 
+All three projects use TypeScript 7. The site explicitly uses Next's TypeScript CLI
+integration, including generated route validation. TypeScript 7.0 does not expose
+the legacy compiler API; editor-only Next language-service plugin diagnostics are
+not covered by these build checks. No TypeScript 6 compatibility package is bundled.
+
 ```sh
 # Site
 npm --prefix site ci
@@ -150,6 +157,9 @@ For manual desktop use, build the root CLI first, then run
 
 - Keep one concern per PR and reuse existing dependencies and helpers.
 - Use strict TypeScript; validate untrusted input with `unknown` and narrowing.
+- Keep `@types/node` on major 22 while Node 22 is the minimum supported runtime.
+  Newer type majors can allow APIs unavailable to consumers. Dependabot continues
+  compatible type updates; revisit the major only when the runtime policy changes.
 - Preserve immutable cases, honest source pointers, path boundaries, bounded reads,
   missing-coverage failures and the distinction between replay and execution.
 - Keep deterministic compiler/export output stable for identical inputs.
