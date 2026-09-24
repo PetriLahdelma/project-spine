@@ -69,9 +69,9 @@ export default function Home() {
           <p className="eyebrow">A failure becomes repository memory</p>
           <h2 id="demo-title">One review. One replay. One rule your tools can check.</h2>
           <p>
-            Follow the complete v0.10 beta workflow. This preview is illustrative; the source build includes a seeded case you can run without credentials or network access.
+            Follow the complete v0.10 beta workflow. This preview is illustrative; the verified GitHub beta artifact includes a seeded literal case you can run without an account, model key, or Docker.
           </p>
-          <Link href="/docs" className="text-link">Follow the source-build quickstart →</Link>
+          <Link href="/docs" className="text-link">Run the one-command quickstart →</Link>
         </div>
         <LearningDemo />
       </section>
@@ -155,13 +155,15 @@ source:   manual review evidence`}</code></pre>
 
       <section className="learning-install" aria-labelledby="install-title">
         <div>
-          <p className="eyebrow">Try the learning loop today</p>
-          <h2 id="install-title">Clone it. Build it. Run the seeded case.</h2>
-          <p>Build from the maintained source and run the complete local demo. No account or model key required.</p>
+          <p className="eyebrow">Try the literal loop first</p>
+          <h2 id="install-title">One command. A complete broken-to-fixed proof.</h2>
+          <p>The command downloads the verified GitHub beta artifact, then runs the Docker-free literal demo. It needs Node 22.12+ and Git, and uses the network only to install the artifact. No account or model key required.</p>
         </div>
         <InstallCommand />
         <div className="learning-install__links">
           <Link href="/docs">Full quickstart</Link>
+          <a href={`${REPO}/releases/download/v0.10.0-beta.3/project-spine-0.10.0-beta.3.tgz`}>GitHub release asset</a>
+          <a href={`${REPO}#develop-and-verify`}>Contributor source build</a>
           <a href={`${REPO}/issues/new?template=learning_case.md`}>Join the correction pilot</a>
           <a href={`${REPO}/issues`}>Open an issue</a>
           <a href={`${REPO}/discussions`}>Discuss the model</a>

@@ -573,6 +573,8 @@ code {
   border-radius: 4px;
 }
 
+.artifact-checksum { overflow-wrap: anywhere; }
+
 pre code {
   background: transparent;
   color: inherit;

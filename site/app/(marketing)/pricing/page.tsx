@@ -27,14 +27,15 @@ export default function PricingPage() {
           drift need no account or paid tier.
         </p>
         <p>
-          The v0.10 beta learning workflow is available from the maintained
-          source. Optional evaluation adapters may use billable third-party
+          The v0.10 beta learning workflow is available as a versioned GitHub
+          Release artifact. npm registry publication is separate and is not
+          claimed here. Optional evaluation adapters may use billable third-party
           model services; Spine itself requires no subscription.
         </p>
       </header>
 
       <div className="cta-row">
-        <Link href="/docs">Build from source →</Link>
+        <Link href="/docs">Run the beta demo →</Link>
         <Link href="/product">Product tour →</Link>
         <a href="mailto:support@projectspine.dev">Questions? Email →</a>
       </div>

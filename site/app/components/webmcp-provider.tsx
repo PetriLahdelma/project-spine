@@ -4,14 +4,16 @@ import { useEffect } from "react";
 
 type WebMcpResult = {
   title: string;
-  install: string;
+  trial: string;
   docs: string;
   mcp: {
     command: string;
+    args: string[];
     config: {
       mcpServers: {
         "project-spine": {
           command: string;
+          args: string[];
         };
       };
     };
@@ -45,7 +47,7 @@ type NavigatorWithModelContext = Navigator & {
 const projectSpineTool: WebMcpTool = {
   name: "project_spine_getting_started",
   description:
-    "Return Project Spine source-build, MCP setup, and core repository-learning commands.",
+    "Return the Project Spine GitHub beta trial, reusable npx MCP setup, and fully prefixed repository-learning commands.",
   inputSchema: {
     type: "object",
     properties: {},
@@ -54,25 +56,27 @@ const projectSpineTool: WebMcpTool = {
   async execute() {
     return {
       title: "Project Spine getting started",
-      install: "git clone --branch main https://github.com/PetriLahdelma/project-spine.git && cd project-spine && npm ci && npm run build && node dist/cli.js demo",
+      trial: "npx --yes --package=https://github.com/PetriLahdelma/project-spine/releases/download/v0.10.0-beta.3/project-spine-0.10.0-beta.3.tgz spine demo",
       docs: "https://projectspine.dev/docs",
       mcp: {
-        command: "spine-mcp",
+        command: "npx",
+        args: ["--yes", "--package=https://github.com/PetriLahdelma/project-spine/releases/download/v0.10.0-beta.3/project-spine-0.10.0-beta.3.tgz", "spine-mcp"],
         config: {
           mcpServers: {
             "project-spine": {
-              command: "spine-mcp",
+              command: "npx",
+              args: ["--yes", "--package=https://github.com/PetriLahdelma/project-spine/releases/download/v0.10.0-beta.3/project-spine-0.10.0-beta.3.tgz", "spine-mcp"],
             },
           },
         },
       },
       coreCommands: [
-        "spine learn --case failure.json",
-        "spine replay <case-id>",
-        "spine guard --diff HEAD~1 --json",
-        "spine context --files 'src/a.ts'",
-        "spine report --format html --out report.html",
-        "spine demo",
+        "npx --yes --package=https://github.com/PetriLahdelma/project-spine/releases/download/v0.10.0-beta.3/project-spine-0.10.0-beta.3.tgz spine learn --case failure.json",
+        "npx --yes --package=https://github.com/PetriLahdelma/project-spine/releases/download/v0.10.0-beta.3/project-spine-0.10.0-beta.3.tgz spine replay <case-id>",
+        "npx --yes --package=https://github.com/PetriLahdelma/project-spine/releases/download/v0.10.0-beta.3/project-spine-0.10.0-beta.3.tgz spine guard --diff HEAD~1 --json",
+        "npx --yes --package=https://github.com/PetriLahdelma/project-spine/releases/download/v0.10.0-beta.3/project-spine-0.10.0-beta.3.tgz spine context --files 'src/a.ts'",
+        "npx --yes --package=https://github.com/PetriLahdelma/project-spine/releases/download/v0.10.0-beta.3/project-spine-0.10.0-beta.3.tgz spine report --format html --out report.html",
+        "npx --yes --package=https://github.com/PetriLahdelma/project-spine/releases/download/v0.10.0-beta.3/project-spine-0.10.0-beta.3.tgz spine demo",
       ],
     };
   },

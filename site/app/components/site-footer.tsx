@@ -33,7 +33,7 @@ export function SiteFooter() {
           <ul>
             <li><a href="https://github.com/PetriLahdelma/project-spine/blob/main/docs/learning.md">Learning guide</a></li>
             <li><a href="https://github.com/PetriLahdelma/project-spine/blob/main/docs/evaluation.md">Evaluation guide</a></li>
-            <li><a href="https://github.com/PetriLahdelma/project-spine#readme">Source quickstart</a></li>
+            <li><Link href="/docs">Beta quickstart</Link></li>
             <li><a href="https://github.com/PetriLahdelma/project-spine/blob/main/docs/mcp.md">MCP setup</a></li>
             <li><a href="https://github.com/PetriLahdelma/project-spine/blob/main/docs/drift.md">Compile + drift</a></li>
           </ul>
@@ -45,7 +45,7 @@ export function SiteFooter() {
             <li><Link href="/about">About</Link></li>
             <li><a href="mailto:support@projectspine.dev">Contact</a></li>
             <li><a href="https://github.com/PetriLahdelma/project-spine" data-ps-event="github_click" data-ps-label="footer company">GitHub</a></li>
-            <li><a href="https://www.npmjs.com/package/project-spine" data-ps-event="npm_click" data-ps-label="footer company">Current npm beta</a></li>
+            <li><a href="https://www.npmjs.com/package/project-spine" data-ps-event="npm_click" data-ps-label="footer company">npm package</a></li>
           </ul>
         </div>
 
