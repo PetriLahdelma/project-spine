@@ -11,16 +11,18 @@ commit is broken, generate an assertion from a review, or measure agent performa
 
 ## First try
 
-The fastest Docker-free introduction is the literal replay demo from the verified
-GitHub Release beta artifact. The install uses the network and requires Node 22.12+
-(or Node 24) and Git. It needs no account or model key. npm registry publication is
-a separate release step and is not claimed here.
+The fastest Docker-free introduction is the literal replay demo from the exact
+published beta. The install uses the network and requires Node 22.12+ (or Node 24)
+and Git. It needs no account or model key. The version is pinned because npm's
+unqualified `latest` tag still points to `0.9.2-beta.2`.
 
 ```sh
-npx --yes --package=https://github.com/PetriLahdelma/project-spine/releases/download/v0.10.0-beta.3/project-spine-0.10.0-beta.3.tgz spine demo
+npx --yes --package=project-spine@0.10.0-beta.3 spine demo
 ```
 
-[GitHub Release asset](https://github.com/PetriLahdelma/project-spine/releases/download/v0.10.0-beta.3/project-spine-0.10.0-beta.3.tgz) · SHA-256 `ff0d733988e87cd0ee75029eea4599fd214c171896a3a40862d89b87928770a1`
+For reproducibility or registry-independent installation, the identical
+[GitHub Release asset](https://github.com/PetriLahdelma/project-spine/releases/download/v0.10.0-beta.3/project-spine-0.10.0-beta.3.tgz)
+has SHA-256 `ff0d733988e87cd0ee75029eea4599fd214c171896a3a40862d89b87928770a1`.
 
 The executable pilot targets Linux and macOS with a local Unix-socket Docker
 daemon (including Docker Desktop). Native Windows Docker contexts are not yet
@@ -33,7 +35,7 @@ pins the official Node 22 Alpine image used for the pilot's verification:
 SPINE_CHECK_IMAGE='node@sha256:c610fcdfb1d5b4740dd70c284ed3cb16bb857e0f7166196e36a5501df7a3aa32'
 docker pull "$SPINE_CHECK_IMAGE"
 npx --yes \
-  --package=https://github.com/PetriLahdelma/project-spine/releases/download/v0.10.0-beta.3/project-spine-0.10.0-beta.3.tgz \
+  --package=project-spine@0.10.0-beta.3 \
   spine correction demo --image "$SPINE_CHECK_IMAGE" --allow-execution
 ```
 
@@ -163,3 +165,6 @@ that should fail through the [case issue form](https://github.com/PetriLahdelma/
 Include permission, attribution, CLI version, image digest, commands, raw results
 after secret review and any onboarding friction. Negative results are useful.
 See the [pilot gates](growth-plan.md) before making adoption or benchmark claims.
+Maintainers running permissioned trials should use the
+[five-maintainer pilot runbook](pilot-runbook.md) so timing, assistance and
+follow-up outcomes are recorded consistently without collecting telemetry.

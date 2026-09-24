@@ -77,6 +77,14 @@ the tagged commit again and compares its name, version and SHA-512 integrity wit
 the registry. A matching package skips the immutable publish operation; a mismatch
 fails loudly. It never treats an arbitrary registry response as success.
 
+After a successful publish, public registry metadata can lag. Release verification
+and post-publish smoke share a bounded reader: up to 13 requests, 10 seconds apart,
+with a 10-second timeout per request (at most 250 seconds). Preflight 404s still
+return immediately; authentication errors and integrity mismatches still fail.
+If visibility exceeds that window, inspect the exact version before retrying the
+failed job. A matching immutable version is verified without publishing it again;
+do not move the tag or replace the artifact.
+
 The package job uploads the exact tested tarball as a workflow artifact before npm
 authentication is attempted. The GitHub release job also attaches it even when npm
 publication fails, and records that the registry was not verified. A GitHub asset

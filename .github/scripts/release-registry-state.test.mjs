@@ -177,3 +177,59 @@ test("returns matching registry metadata on success", async () => {
   assert.deepEqual(metadata, expected);
   assert.equal(calls, 1);
 });
+
+test("post-publish visibility tolerates two minutes of propagation with bounded requests", async () => {
+  let calls = 0;
+  const waits = [];
+  const expected = { name: "project-spine", version: "1.2.3" };
+  const metadata = await fetchRegistryMetadata("https://registry.example/project-spine/1.2.3", {
+    requirePublished: true,
+    fetchImpl: async (_url, options) => {
+      assert.ok(options.signal instanceof AbortSignal);
+      calls += 1;
+      return calls === 13 ? registryResponse(200, expected) : registryResponse(404, {});
+    },
+    delayImpl: async (milliseconds) => { waits.push(milliseconds); },
+  });
+  assert.deepEqual(metadata, expected);
+  assert.equal(calls, 13);
+  assert.deepEqual(waits, Array(12).fill(10_000));
+});
+
+test("post-publish visibility still fails after its complete retry budget", async () => {
+  let calls = 0;
+  const waits = [];
+  await assert.rejects(fetchRegistryMetadata("https://registry.example/project-spine/1.2.3", {
+    requirePublished: true,
+    fetchImpl: async () => { calls += 1; return registryResponse(404, {}); },
+    delayImpl: async (milliseconds) => { waits.push(milliseconds); },
+  }), /not exposed.*\(13\/13\)/);
+  assert.equal(calls, 13);
+  assert.deepEqual(waits, Array(12).fill(10_000));
+});
+
+test("post-publish retries transient failures without weakening authentication failures", async () => {
+  for (const failure of [429, 503, "network"]) {
+    let calls = 0;
+    const waits = [];
+    const metadata = await fetchRegistryMetadata("https://registry.example/project-spine/1.2.3", {
+      requirePublished: true,
+      fetchImpl: async () => {
+        calls += 1;
+        if (calls === 2) return registryResponse(200, { version: "1.2.3" });
+        if (failure === "network") throw new Error("connection interrupted");
+        return registryResponse(failure, {});
+      },
+      delayImpl: async (milliseconds) => { waits.push(milliseconds); },
+    });
+    assert.equal(metadata.version, "1.2.3");
+    assert.deepEqual(waits, [10_000]);
+  }
+  for (const status of [400, 401, 403]) {
+    await assert.rejects(fetchRegistryMetadata("https://registry.example/project-spine/1.2.3", {
+      requirePublished: true,
+      fetchImpl: async () => registryResponse(status, {}),
+      delayImpl: async () => { assert.fail("non-retryable failures must not wait"); },
+    }), new RegExp(`HTTP ${status}`));
+  }
+});

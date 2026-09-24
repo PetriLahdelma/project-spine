@@ -27,10 +27,10 @@ export default function PricingPage() {
           drift need no account or paid tier.
         </p>
         <p>
-          The v0.10 beta learning workflow is available as a versioned GitHub
-          Release artifact. npm registry publication is separate and is not
-          claimed here. Optional evaluation adapters may use billable third-party
-          model services; Spine itself requires no subscription.
+          The v0.10 beta learning workflow is published to npm at an exact
+          version and mirrored by a versioned GitHub Release asset. Optional
+          evaluation adapters may use billable third-party model services;
+          Spine itself requires no subscription.
         </p>
       </header>
 

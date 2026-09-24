@@ -69,7 +69,7 @@ export default function Home() {
           <p className="eyebrow">A failure becomes repository memory</p>
           <h2 id="demo-title">One review. One replay. One rule your tools can check.</h2>
           <p>
-            Follow the complete v0.10 beta workflow. This preview is illustrative; the verified GitHub beta artifact includes a seeded literal case you can run without an account, model key, or Docker.
+            Follow the complete v0.10 beta workflow. This preview is illustrative; the published npm beta includes a seeded literal case you can run without an account, model key, or Docker.
           </p>
           <Link href="/docs" className="text-link">Run the one-command quickstart →</Link>
         </div>
@@ -157,7 +157,7 @@ source:   manual review evidence`}</code></pre>
         <div>
           <p className="eyebrow">Try the literal loop first</p>
           <h2 id="install-title">One command. A complete broken-to-fixed proof.</h2>
-          <p>The command downloads the verified GitHub beta artifact, then runs the Docker-free literal demo. It needs Node 22.12+ and Git, and uses the network only to install the artifact. No account or model key required.</p>
+          <p>The command downloads the exact published npm beta, then runs the Docker-free literal demo. It needs Node 22.12+ and Git, and uses the network only to install the package. No account or model key required.</p>
         </div>
         <InstallCommand />
         <div className="learning-install__links">

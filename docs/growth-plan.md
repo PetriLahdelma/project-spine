@@ -55,6 +55,8 @@ a participant or linking a private project. A consented, redacted record should 
 Count distinct external repositories, not executions. Report eligible denominators
 and unknown follow-ups. A four-week cohort is not mature until four weeks have
 elapsed. Do not silently collect CLI telemetry or upload repository contents.
+Use the [five-maintainer pilot runbook](pilot-runbook.md) for the executable
+commands, consent boundary, local record template and follow-up procedure.
 
 ## Case-study standard
 

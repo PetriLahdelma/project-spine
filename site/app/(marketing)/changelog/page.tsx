@@ -87,7 +87,7 @@ export default async function ChangelogPage() {
           <strong>The 0.10 beta adds repository learning.</strong> Reviewed
           evidence, Git replay, verified literal guardrails, CI, reports and
           relevant MCP context join the established compile and drift workflows.
-          Use the versioned GitHub Release artifact to try the complete local demo.
+          Use the exact published npm beta to try the complete local demo.
         </p>
       </aside>
 

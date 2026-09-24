@@ -58,7 +58,11 @@ export async function fetchRegistryMetadata(
     requirePublished = false,
     fetchImpl = globalThis.fetch,
     delayImpl = (milliseconds) => new Promise((resolveDelay) => setTimeout(resolveDelay, milliseconds)),
-    attempts = requirePublished ? 5 : 3,
+    // npm may accept a publish before its public metadata has propagated.
+    // Allow two minutes of propagation waits; with request timeouts the bound
+    // is 250 seconds, below the publish job's ten-minute timeout.
+    attempts = requirePublished ? 13 : 3,
+    retryDelayMs = requirePublished ? 10_000 : 2000,
     timeoutMs = 10_000,
   } = {},
 ) {
@@ -72,7 +76,7 @@ export async function fetchRegistryMetadata(
       });
     } catch (error) {
       lastError = error instanceof Error ? error : new Error(String(error));
-      if (attempt < attempts) await delayImpl(2000);
+      if (attempt < attempts) await delayImpl(retryDelayMs);
       continue;
     }
     if (response.status === 404) {
@@ -85,7 +89,7 @@ export async function fetchRegistryMetadata(
       lastError = new Error(`registry request failed with HTTP ${response.status}: ${body}`);
       if (response.status < 500 && response.status !== 429) throw lastError;
     }
-    if (attempt < attempts) await delayImpl(2000);
+    if (attempt < attempts) await delayImpl(retryDelayMs);
   }
   throw lastError ?? new Error("registry request failed");
 }
