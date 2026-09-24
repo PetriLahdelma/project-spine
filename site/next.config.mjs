@@ -9,6 +9,11 @@ import rootPackage from "../package.json" with { type: "json" };
 // doesn't need per-request variance.
 const nextConfig = {
   reactStrictMode: true,
+  // TypeScript 7 ships a native CLI, not the legacy compiler API.
+  // Keep Next's generated-route checks on its supported CLI integration.
+  experimental: {
+    useTypeScriptCli: true,
+  },
   env: {
     NEXT_PUBLIC_PROJECT_SPINE_VERSION: rootPackage.version,
   },
