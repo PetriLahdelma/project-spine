@@ -1085,8 +1085,8 @@ footer a {
 }
 .changelog__channels input:checked + span {
   border-color: var(--ink);
-  background: #dcefff;
-  color: var(--ink);
+  background: var(--ink);
+  color: #fff;
   font-weight: 650;
 }
 .changelog__channels label:hover span { border-color: var(--ink); }
@@ -1116,6 +1116,7 @@ footer a {
 }
 .changelog__index-links ol { list-style: none; padding: 0; margin: 0; }
 .changelog__index-links a {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -1127,7 +1128,22 @@ footer a {
 .changelog__index-links a > span { font-size: 13px; font-weight: 600; overflow-wrap: anywhere; }
 .changelog__index-links time { color: #596675; font-size: 11px; }
 .changelog__index-links a:hover { background: #eaf0f6; color: var(--ink); }
-.changelog__index-links a[aria-current="location"] { background: #dcefff; color: var(--ink); box-shadow: inset 3px 0 var(--poster-blue); }
+.changelog__index-links a[aria-current="location"] {
+  padding-right: 32px;
+  background: #eaf0f6;
+  color: var(--ink);
+}
+.changelog__index-links a[aria-current="location"]::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  transform: translateY(-50%);
+}
 .changelog__browser :is(a, button, input, select):focus-visible,
 .changelog__channels input:focus-visible + span,
 .changelog__index-title:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 3px; }
