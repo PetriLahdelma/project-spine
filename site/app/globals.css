@@ -93,11 +93,7 @@
   align-items: center;
   gap: clamp(44px, 7vw, 96px);
   border-bottom: 1px solid var(--line);
-  background:
-    linear-gradient(90deg, rgba(255, 121, 222, 0.08) 0 1px, transparent 1px 100%),
-    linear-gradient(0deg, rgba(30, 155, 255, 0.08) 0 1px, transparent 1px 100%),
-    #fff;
-  background-size: 44px 44px;
+  background: #fff;
 }
 
 .learning-demo-section > * {
