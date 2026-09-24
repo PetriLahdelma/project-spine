@@ -138,9 +138,27 @@ jobs:
       - run: npm run verify
         working-directory: apps/desktop
 
+  correction-docker:
+    # Disposable hosted runners only: never send fork code to the private farm.
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - run: npm ci
+      - name: Pull the reviewed correction runtime explicitly
+        run: docker pull node@sha256:c610fcdfb1d5b4740dd70c284ed3cb16bb857e0f7166196e36a5501df7a3aa32
+      - name: Exercise real container controls and hostile failure cases
+        run: npm test -- --maxWorkers=1 src/corrections src/correction-demo.test.ts
+        env:
+          SPINE_DOCKER_TEST: '1'
+
   # Single stable required check: succeeds when the active legs passed (skipped is OK).
   gate:
-    needs: [test-farm, test-hosted, site-farm, site-hosted, desktop-farm, desktop-hosted]
+    needs: [test-farm, test-hosted, site-farm, site-hosted, desktop-farm, desktop-hosted, correction-docker]
     if: always()
     runs-on: ubuntu-latest
     steps:
@@ -148,7 +166,8 @@ jobs:
         run: |
           for r in "${{ needs.test-farm.result }}" "${{ needs.test-hosted.result }}" \
                    "${{ needs.site-farm.result }}" "${{ needs.site-hosted.result }}" \
-                   "${{ needs.desktop-farm.result }}" "${{ needs.desktop-hosted.result }}"; do
+                   "${{ needs.desktop-farm.result }}" "${{ needs.desktop-hosted.result }}" \
+                   "${{ needs.correction-docker.result }}"; do
             case "$r" in
               success|skipped) ;;
               *) echo "a required leg did not pass: $r"; exit 1 ;;

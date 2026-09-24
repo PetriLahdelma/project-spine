@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "Project Spine — turn reviewed failures into verified guardrails";
+export const alt = "Project Spine — keep the correction, prove the check";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -51,7 +51,7 @@ export default function OpenGraphImage() {
               letterSpacing: "-0.06em",
             }}
           >
-            Turn reviewed failures into verified guardrails.
+            Keep the correction. Prove the check.
           </div>
           <div style={{ display: "flex", marginTop: 30, gap: 16, alignItems: "center" }}>
             {["LEARN", "REPLAY", "GUARD"].map((label, index) => (

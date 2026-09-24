@@ -10,7 +10,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const cli = join(root, "dist", "cli.js");
 const checks = [];
 
-const routedCommands = ["demo", "learn", "replay", "evaluate", "guard", "context", "report", "init", "compile", "inspect", "export", "template", "explain", "drift", "tokens", "doctor"];
+const routedCommands = ["correction", "demo", "learn", "replay", "evaluate", "guard", "context", "report", "init", "compile", "inspect", "export", "template", "explain", "drift", "tokens", "doctor"];
 const dormantCommands = ["login", "logout", "whoami", "workspace", "publish", "rationale"];
 const dormantDistPrefixes = dormantCommands.map((command) => `dist/commands/${command}.`);
 
@@ -119,6 +119,10 @@ try {
   const tarball = join(packDir, packInfo.filename);
   mustRun("npm", ["install", tarball], work, 120_000);
   const spine = installedSpineBin(work);
+  const correctionHelp = mustRun(spine, ["correction", "--help"], work);
+  assertCheck("installed correction workflow is available", ["capture", "verify", "check", "context"].every((name) => correctionHelp.stdout.includes(name)), "packaged correction subcommands");
+  const correctionConsent = run(spine, ["correction", "verify", "--case", "missing-case.json"], work);
+  assertCheck("installed correction execution requires consent", correctionConsent.status !== 0 && /allow-execution|consent|allowExecution/i.test(correctionConsent.stderr + correctionConsent.stdout), "missing opt-in fails before repository or Docker execution");
   // Measure local CLI work independently of registry latency and the separate demo.
   const started = performance.now();
   mustRun(spine, ["init", "--template", "saas-marketing"], work);

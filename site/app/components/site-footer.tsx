@@ -12,8 +12,8 @@ export function SiteFooter() {
             <strong>Project Spine</strong>
           </Link>
           <span>
-            Turn reviewed failures into verified repository guardrails for
-            every coding agent.
+            Keep reviewed fixes as verified repository guardrails for every
+            coding agent.
           </span>
         </div>
 

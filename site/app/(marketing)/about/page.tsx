@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     siteName: "Project Spine",
     title: "About · Project Spine",
     description: "Who makes Project Spine, why it exists, and how to get in touch.",
-    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Project Spine — turn reviewed failures into verified guardrails" }],
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Project Spine — keep the correction, prove the check" }],
   },
 };
 

@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import { checkDrift } from "../drift/check.js";
 
 const ROUTED_COMMANDS = [
+  "correction",
   "demo",
   "learn",
   "replay",
@@ -94,7 +95,7 @@ export default defineCommand({
     checks.push({
       name: "network posture",
       status: "pass",
-      detail: "learning, replay, guard, context, demo and compile run locally; learn --from-pr, tokens pull and compile --enrich explicitly opt into network access",
+      detail: "literal replay and demo do not execute repository code; correction checks require explicit Docker execution consent and a pre-pulled image; learn --from-pr, tokens pull and compile --enrich explicitly opt into network access",
     });
 
     try {

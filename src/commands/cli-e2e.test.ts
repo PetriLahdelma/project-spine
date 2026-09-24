@@ -74,7 +74,7 @@ describe("spine --help", () => {
     const { stdout, exitCode } = await spawn(["--help"]);
     expect(exitCode).toBe(0);
     for (const cmd of [
-      "demo", "learn", "replay", "evaluate", "guard", "context", "report",
+      "correction", "demo", "learn", "replay", "evaluate", "guard", "context", "report",
       "init",
       "compile",
       "inspect",

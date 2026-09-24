@@ -17,6 +17,8 @@ runs:
       shell: bash
     - run: npm run typecheck
       shell: bash
+    - run: node --test .github/scripts/release-registry-state.test.mjs
+      shell: bash
     - run: npm run build
       shell: bash
     - run: npm test

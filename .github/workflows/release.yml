@@ -1,55 +1,56 @@
 name: Release
 
-# Fires when a version tag is pushed (e.g. `git tag v0.9.2-beta.0 && git push --tags`).
-# Flow: install -> typecheck -> test -> build -> readiness -> `npm publish --provenance --tag beta` -> GitHub Release.
-# Maintainer setup and recovery are documented in docs/maintainer-release.md.
-
+# A version tag packages one reviewed commit, publishes that exact tarball to
+# npm through trusted publishing, then attaches the same tarball and generated
+# changelog to a GitHub prerelease.
 on:
   push:
     tags:
       - "v[0-9]+.[0-9]+.[0-9]+*"
 
 permissions:
-  contents: write # needed to create the GitHub Release
-  id-token: write # needed for npm provenance attestations
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
-  publish:
+  package:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    outputs:
+      version: ${{ steps.bundle.outputs.version }}
+      tarball: ${{ steps.bundle.outputs.tarball }}
+      integrity: ${{ steps.bundle.outputs.integrity }}
     steps:
-      - name: Verify NPM_TOKEN secret is set
-        # Fails fast with a clear message rather than letting `npm publish`
-        # return a cryptic 401 ten minutes into the workflow.
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          if [ -z "$NPM_TOKEN" ]; then
-            echo "::error::NPM_TOKEN repository secret is not set. See docs/maintainer-release.md for authentication setup."
-            exit 1
-          fi
-
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          # Need full history so the release notes can diff against the previous tag.
           fetch-depth: 0
 
       - name: Set up Node
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: 22
-          cache: npm
-          # registry-url + the NODE_AUTH_TOKEN env var on the publish step is
-          # all that's needed to authenticate npm publish. `always-auth` was
-          # recognised on older setup-node versions but setup-node@v6 drops
-          # it — leaving it in surfaced as an "Unexpected input" warning.
+          node-version: 24
           registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+
+      - name: Use trusted-publishing-compatible npm
+        run: npm install --global npm@11.20.0
+
+      - name: Report release toolchain
+        run: |
+          node --version
+          npm --version
 
       - name: Install
         run: npm ci
 
       - name: Typecheck
         run: npm run typecheck
+
+      - name: Release workflow tests
+        run: node --test .github/scripts/release-registry-state.test.mjs
 
       - name: Test
         run: npm test
@@ -67,6 +68,7 @@ jobs:
         run: npm run stable:check
 
       - name: Verify tag matches package.json
+        id: version
         run: |
           TAG="${GITHUB_REF_NAME#v}"
           PKG="$(node -p "require('./package.json').version")"
@@ -74,70 +76,153 @@ jobs:
             echo "::error::tag $GITHUB_REF_NAME does not match package.json version $PKG"
             exit 1
           fi
+          echo "version=$PKG" >> "$GITHUB_OUTPUT"
 
-      - name: Regenerate CHANGELOG.md
-        run: scripts/generate-changelog.sh > CHANGELOG.md
-
-      - name: Publish to npm
-        run: npm publish --provenance --tag beta --access public
+      - name: Generate changelog and release notes
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Promote public npm dist-tags
+          VERSION: ${{ steps.version.outputs.version }}
         run: |
-          VERSION="${GITHUB_REF_NAME#v}"
-          npm dist-tag add "project-spine@${VERSION}" next
-          npm dist-tag add "project-spine@${VERSION}" beta
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Commit CHANGELOG.md back to main
-        # CHANGELOG.md is a generated mirror of git tags. Regenerate and push
-        # it back to main after a successful npm publish so npm consumers and
-        # GitHub readers both see the same history.
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if git diff --quiet CHANGELOG.md; then
-            echo "CHANGELOG.md already up to date."
-          else
-            git checkout main
-            scripts/generate-changelog.sh > CHANGELOG.md
-            git add CHANGELOG.md
-            git commit -m "Keep release history aligned with ${GITHUB_REF_NAME}" \
-              -m "Regenerate the committed release mirror after successful package publication." \
-              -m "Confidence: high" -m "Scope-risk: narrow" \
-              -m "Tested: Release workflow verification and npm publication"
-            git push origin main
+          mkdir -p release-artifacts
+          scripts/generate-changelog.sh > release-artifacts/CHANGELOG.generated.md
+          awk -v heading="## [v${VERSION}]" '
+            index($0, heading) == 1 { printing = 1 }
+            printing && /^## / && index($0, heading) != 1 { exit }
+            printing { print }
+          ' release-artifacts/CHANGELOG.generated.md > release-artifacts/release-notes.md
+          if [ ! -s release-artifacts/release-notes.md ]; then
+            echo "::error::generated changelog has no section for v${VERSION}"
+            exit 1
           fi
-
-      - name: Build release notes
-        id: notes
-        run: |
-          PREV="$(git tag --sort=-v:refname | grep -v "^${GITHUB_REF_NAME}$" | head -n 1)"
           {
-            echo "## What changed"
             echo ""
-            if [ -n "$PREV" ]; then
-              git log --pretty=format:'- %s (%h)' "$PREV..${GITHUB_REF_NAME}"
-            else
-              git log --pretty=format:'- %s (%h)' "${GITHUB_REF_NAME}" | head -n 50
-            fi
-            echo ""
-            echo ""
-            echo "## Install"
-            echo ""
-            echo '```bash'
-            echo "npm install -g project-spine@${GITHUB_REF_NAME#v}"
-            echo '```'
-            echo ""
-            echo "Or grab the latest beta via \`npm install -g project-spine@beta\`."
-          } > /tmp/notes.md
-          echo "path=/tmp/notes.md" >> "$GITHUB_OUTPUT"
+            echo "The full changelog generated from Git tags and commit history is attached to this release."
+          } >> release-artifacts/release-notes.md
 
-      - name: Create GitHub Release
+      - name: Pack the release tarball once
+        id: bundle
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          npm pack --json --pack-destination release-artifacts > release-artifacts/npm-pack.json
+          node --input-type=module <<'NODE'
+          import { appendFileSync, readFileSync } from "node:fs";
+          const [packed] = JSON.parse(readFileSync("release-artifacts/npm-pack.json", "utf8"));
+          if (!packed?.filename || !packed?.integrity) throw new Error("npm pack did not return filename and integrity");
+          if (packed.version !== process.env.VERSION) throw new Error(`packed ${packed.version}, expected ${process.env.VERSION}`);
+          appendFileSync(process.env.GITHUB_OUTPUT, `version=${packed.version}\n`);
+          appendFileSync(process.env.GITHUB_OUTPUT, `tarball=${packed.filename}\n`);
+          appendFileSync(process.env.GITHUB_OUTPUT, `integrity=${packed.integrity}\n`);
+          NODE
+
+      - name: Upload immutable release bundle
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: release-bundle-${{ github.ref_name }}
+          path: release-artifacts/
+          if-no-files-found: error
+          retention-days: 30
+
+  publish:
+    needs: package
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      id-token: write
+    outputs:
+      registry-verified: ${{ steps.verify.outputs.published }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+
+      - name: Use trusted-publishing-compatible npm
+        run: npm install --global npm@11.20.0
+
+      - name: Download release bundle
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: release-bundle-${{ github.ref_name }}
+          path: release-artifacts
+
+      - name: Compare with any existing registry version
+        id: before
+        run: |
+          node .github/scripts/release-registry-state.mjs \
+            --pack-json release-artifacts/npm-pack.json \
+            --tarball-dir release-artifacts \
+            --package project-spine \
+            --version "${{ needs.package.outputs.version }}" \
+            --output "$GITHUB_OUTPUT"
+
+      - name: Publish exact tarball through npm trusted publishing
+        if: steps.before.outputs.published != 'true'
+        run: npm publish "release-artifacts/${{ needs.package.outputs.tarball }}" --provenance --tag beta --access public
+
+      - name: Verify published tarball integrity
+        id: verify
+        run: |
+          node .github/scripts/release-registry-state.mjs \
+            --pack-json release-artifacts/npm-pack.json \
+            --tarball-dir release-artifacts \
+            --package project-spine \
+            --version "${{ needs.package.outputs.version }}" \
+            --require-published \
+            --output "$GITHUB_OUTPUT"
+
+  github-release:
+    needs: [package, publish]
+    if: always() && needs.package.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - name: Download release bundle
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: release-bundle-${{ github.ref_name }}
+          path: release-artifacts
+
+      - name: Record registry status without overstating publication
+        env:
+          PUBLISH_RESULT: ${{ needs.publish.result }}
+          REGISTRY_VERIFIED: ${{ needs.publish.outputs.registry-verified }}
+          VERSION: ${{ needs.package.outputs.version }}
+        run: |
+          cp release-artifacts/release-notes.md release-artifacts/release-notes.final.md
+          {
+            echo ""
+            echo "## Distribution status"
+            echo ""
+            if [ "$PUBLISH_RESULT" = "success" ] && [ "$REGISTRY_VERIFIED" = "true" ]; then
+              printf 'npm registry publication for %s was verified against the attached tarball integrity.\n' "project-spine@${VERSION}"
+              echo "New publications use the beta tag; verify live dist-tags separately."
+              echo ""
+              echo "## Install"
+              echo ""
+              echo '```bash'
+              echo "npm install -g project-spine@${VERSION}"
+              echo '```'
+            else
+              echo "npm registry publication was not verified in this workflow run."
+              echo "The attached tarball passed the release gates, but it must not be described as published on npm."
+            fi
+          } >> release-artifacts/release-notes.final.md
+
+      - name: Create or update GitHub prerelease
         uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
         with:
-          body_path: ${{ steps.notes.outputs.path }}
-          prerelease: ${{ contains(github.ref_name, 'beta') || contains(github.ref_name, 'rc') }}
+          body_path: release-artifacts/release-notes.final.md
+          files: |
+            release-artifacts/${{ needs.package.outputs.tarball }}
+            release-artifacts/CHANGELOG.generated.md
+          fail_on_unmatched_files: true
+          overwrite_files: ${{ needs.publish.result == 'success' && needs.publish.outputs.registry-verified == 'true' }}
+          prerelease: ${{ contains(github.ref_name, 'beta') || contains(github.ref_name, 'rc') || contains(github.ref_name, 'alpha') }}
           generate_release_notes: false

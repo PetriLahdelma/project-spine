@@ -9,9 +9,9 @@ const REPO = "https://github.com/PetriLahdelma/project-spine";
 
 export const metadata: Metadata = {
   alternates: { canonical: SITE },
-  title: "Project Spine · turn reviewed failures into verified repo guardrails",
+  title: "Project Spine · keep the correction, prove the check",
   description:
-    "Project Spine captures reviewed failures as scoped literal rules, verifies them against Git history, enforces them in CI, and serves relevant context to coding agents.",
+    "Project Spine preserves reviewed fixes as evidence-backed guardrails, verifies them against Git history, checks the current tree, and serves relevant context to coding agents.",
   keywords: ["coding agent guardrails", "AI code review", "repository rules", "Git replay", "AGENTS.md", "MCP server", "CI policy"],
 };
 
@@ -21,7 +21,7 @@ const JSON_LD = {
   name: "Project Spine",
   applicationCategory: "DeveloperApplication",
   operatingSystem: "macOS, Linux, Windows",
-  description: "A local, deterministic workflow for turning reviewed repository failures into evidence-backed literal guardrails.",
+  description: "A local workflow for turning reviewed repository fixes into evidence-backed literal and executable guardrails.",
   url: SITE,
   codeRepository: REPO,
   offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
@@ -53,9 +53,9 @@ export default function Home() {
         <div className="poster-hero__inner">
           <p className="poster-hero__eyebrow">v0.10 beta · local repository learning</p>
           <HeroWordmark line1="PROJECT" line2="SPINE" />
-          <h1 className="learning-hero__headline">Teach your repository from the fixes that mattered.</h1>
+          <h1 className="learning-hero__headline">Keep the correction. Prove the check.</h1>
           <p className="learning-hero__sub">
-            Capture a reviewed failure. Turn it into a literal guardrail. Verify it against the commits that broke and fixed the code.
+            Preserve a reviewed regression test. Prove it fails on the broken code and passes on the fix. Check later changes under constrained local execution.
           </p>
           <div className="learning-hero__actions">
             <Link className="btn-on-cyan btn-on-cyan--primary" href="/docs">Run the local demo</Link>
@@ -110,6 +110,33 @@ source:   manual review evidence`}</code></pre>
         </div>
       </section>
 
+      <section className="learning-proof" aria-labelledby="correction-title">
+        <div className="learning-proof__inner">
+          <div>
+            <p className="eyebrow">Executable correction pilot</p>
+            <h2 id="correction-title">Keep the test that proved the fix.</h2>
+            <p>
+              The source-available correction pilot captures a user-reviewed Node built-in test from an explicit fixed commit. Verification pairs those same test bytes with each revision’s own source files and runs both in constrained Docker containers.
+            </p>
+            <p>
+              A correction stays a candidate until the broken revision fails, the fixed revision passes, and the execution controls succeed. The first pilot is intentionally narrow: dependency-free JavaScript using <code>node:test</code>.
+            </p>
+          </div>
+          <div>
+            <p className="eyebrow">Why not just write a test?</p>
+            <h2>Write the test. Keep its evidence.</h2>
+            <p>
+              Spine does not replace your normal test suite. It keeps the reviewed test, source-file scope, broken/fixed proof, and execution policy together. Reports fingerprint each tested snapshot; current-tree checks rerun the correction under the same controls.
+            </p>
+            <p>
+              Context can surface an unverified correction as a candidate, but only a successful controlled run is labelled verified.
+            </p>
+            <a className="text-link" href={`${REPO}/blob/main/docs/corrections.md`}>Read the correction model →</a>{" "}
+            <a className="text-link" href={`${REPO}/issues/new?template=learning_case.md`}>Propose a pilot case →</a>
+          </div>
+        </div>
+      </section>
+
       <section className="section learning-surfaces" aria-labelledby="surfaces-title">
         <div className="section-header">
           <p className="eyebrow">The v0.10 beta surface</p>
@@ -135,6 +162,7 @@ source:   manual review evidence`}</code></pre>
         <InstallCommand />
         <div className="learning-install__links">
           <Link href="/docs">Full quickstart</Link>
+          <a href={`${REPO}/issues/new?template=learning_case.md`}>Join the correction pilot</a>
           <a href={`${REPO}/issues`}>Open an issue</a>
           <a href={`${REPO}/discussions`}>Discuss the model</a>
         </div>

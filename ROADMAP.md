@@ -1,5 +1,13 @@
 # Roadmap
 
+## Current priority — correction-to-check pilot
+
+The [growth plan](docs/growth-plan.md) is the current operating plan: make the
+release easy to try, capture reviewer-approved executable checks, verify them in
+restricted containers, and earn repeat use from five external maintainers. Real
+case studies and agent-outcome benchmarks remain unverified external milestones.
+The compiler-era priorities below are historical, not the active launch backlog.
+
 ## 0.10 — repository learning
 
 The current release direction is reviewed failures → candidate rules → historical
