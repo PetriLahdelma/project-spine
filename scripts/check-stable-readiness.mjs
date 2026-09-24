@@ -5,6 +5,8 @@ import { dirname, join, resolve } from "node:path";
 import { tmpdir } from "node:os";
 import { performance } from "node:perf_hooks";
 import { fileURLToPath } from "node:url";
+import { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const cli = join(root, "dist", "cli.js");
@@ -60,6 +62,33 @@ function readJson(path) {
 
 function installedSpineBin(projectRoot) {
   return join(projectRoot, "node_modules", ".bin", process.platform === "win32" ? "spine.cmd" : "spine");
+}
+
+async function installedMcpTools(projectRoot) {
+  const installedPackage = join(projectRoot, "node_modules", "project-spine");
+  const command = process.platform === "win32"
+    ? process.execPath
+    : join(projectRoot, "node_modules", ".bin", "spine-mcp");
+  const args = process.platform === "win32"
+    ? [join(installedPackage, "dist", "mcp", "server.js")]
+    : [];
+  const transport = new StdioClientTransport({ command, args, cwd: projectRoot, stderr: "pipe" });
+  const client = new Client({ name: "stable-readiness", version: "0.0.0" });
+  let stderr = "";
+  transport.stderr?.on("data", (chunk) => {
+    stderr += String(chunk);
+  });
+  try {
+    await client.connect(transport, { timeout: 10_000 });
+    const listed = await client.listTools(undefined, { timeout: 10_000 });
+    return listed.tools.map((tool) => tool.name);
+  } catch (error) {
+    throw new Error(
+      `installed spine-mcp handshake failed: ${error instanceof Error ? error.message : String(error)}${stderr ? `\n${stderr}` : ""}`,
+    );
+  } finally {
+    await client.close().catch(() => {});
+  }
 }
 
 function exportHashes(projectRoot) {
@@ -123,6 +152,12 @@ try {
   assertCheck("installed correction workflow is available", ["capture", "verify", "check", "context"].every((name) => correctionHelp.stdout.includes(name)), "packaged correction subcommands");
   const correctionConsent = run(spine, ["correction", "verify", "--case", "missing-case.json"], work);
   assertCheck("installed correction execution requires consent", correctionConsent.status !== 0 && /allow-execution|consent|allowExecution/i.test(correctionConsent.stderr + correctionConsent.stdout), "missing opt-in fails before repository or Docker execution");
+  const mcpTools = await installedMcpTools(work);
+  assertCheck(
+    "installed spine-mcp initializes and lists tools",
+    mcpTools.includes("spine_doctor") && mcpTools.includes("spine_guard"),
+    `${mcpTools.length} tools listed through installed bin`,
+  );
   // Measure local CLI work independently of registry latency and the separate demo.
   const started = performance.now();
   mustRun(spine, ["init", "--template", "saas-marketing"], work);

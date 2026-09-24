@@ -10,7 +10,7 @@
  *
  * Entry point for the `spine-mcp` bin. See docs/mcp.md for client setup.
  */
-import { readFileSync } from "node:fs";
+import { readFileSync, realpathSync } from "node:fs";
 import { join, resolve as resolvePath, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
@@ -348,8 +348,21 @@ async function main(): Promise<void> {
   // diagnostics if we ever need them.
 }
 
+export function isDirectEntrypoint(moduleUrl = import.meta.url, argv1 = process.argv[1]): boolean {
+  if (!argv1) return false;
+  try {
+    const modulePath = realpathSync(fileURLToPath(moduleUrl));
+    const invokedPath = realpathSync(resolvePath(argv1));
+    return process.platform === "win32"
+      ? modulePath.toLowerCase() === invokedPath.toLowerCase()
+      : modulePath === invokedPath;
+  } catch {
+    return false;
+  }
+}
+
 // Only run when invoked as a binary. Allows importing buildServer() from tests.
-const invokedDirectly = import.meta.url === `file://${process.argv[1]}`;
+const invokedDirectly = isDirectEntrypoint();
 if (invokedDirectly) {
   main().catch((err) => {
     process.stderr.write(`[spine-mcp] fatal: ${err instanceof Error ? err.stack ?? err.message : String(err)}\n`);
